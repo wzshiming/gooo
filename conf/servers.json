@@ -1,0 +1,25 @@
+{
+    "devel":{
+        "files":[
+             {"host":"127.0.0.1", "port":6000}
+        ]
+        ,"Gate":[
+             {"host":"127.0.0.1", "port":6001,"clientport":6002,"control":true}
+        ]
+        ,"Connect":[
+             {"host":"127.0.0.1", "port":4000,"clientport":3000,"control":true}
+            ,{"host":"127.0.0.1", "port":4001,"clientport":3001,"control":true}
+        ]
+        ,"Connect_old":[
+             {"host":"127.0.0.1", "port":4005,"clientport":3005,"control":true}
+        ]
+        ,"Random":[
+             {"host":"127.0.0.1", "port":4010,"control":true}
+            ,{"host":"127.0.0.1", "port":4011,"control":true}
+        ]
+        ,"Information":[
+             {"host":"127.0.0.1", "port":4020,"control":true}
+        ]
+        
+    }
+}
