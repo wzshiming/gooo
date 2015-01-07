@@ -2,12 +2,12 @@ package main
 
 import (
 	//"bufio"
-	"gooo/connser"
 	"encoding/binary"
+	"gooo/connser"
 	//"fmt"
-	"gooo/protocol"
-	"gooo/encoder"
 	"connect/iorange"
+	"gooo/encoder"
+	"gooo/protocol"
 	"log"
 	"runtime"
 	"time"
@@ -53,7 +53,7 @@ func main() {
 	ior := iorange.NewIORange(1024)
 	ttt := &test{}
 	for i := 0; i < 100; i++ {
-		connser.NewClientTCP("121.42.149.4:3000", ior, ttt)
+		connser.NewClientTCP("127.0.0.1:3005", ior, ttt)
 	}
 	log.Printf("end\n")
 	time.Sleep(time.Second * 120)
