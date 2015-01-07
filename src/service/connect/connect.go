@@ -1,14 +1,14 @@
 package main
 
 import (
-	"connect/handel"
-	"connect/iorange"
 	"fmt"
 	"gooo/configs"
 	"gooo/connser"
 	"gooo/helper"
 	"gooo/protocol"
 	"log"
+	"service/connect/handel"
+	"service/connect/iorange"
 )
 
 type Connect struct {

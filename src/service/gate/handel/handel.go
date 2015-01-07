@@ -1,25 +1,22 @@
 package handel
 
 import (
-	"gooo/connser"
-	"log"
-	"gooo/protocol"
 	"gooo/configs"
-	"gate/route"
-
+	"gooo/connser"
+	"gooo/protocol"
+	"log"
+	"service/gate/route"
 )
 
 type Handel struct {
-	Server   *route.MethodServer
+	Server *route.MethodServer
 }
 
 func NewHandel(conf *configs.Configs) *Handel {
 	return &Handel{
-		Server:  route.NewMethodServer("Connect",conf),
+		Server: route.NewMethodServer("Connect", conf),
 	}
 }
-
-
 
 func (h *Handel) Join(c *connser.Connect) {
 	log.Printf("%v join\n", c.RemoteAddr())
@@ -33,7 +30,7 @@ func (h *Handel) Mess(c *connser.Connect, msg []byte) {
 
 	var reply protocol.GateResponse
 	h.Server.CallByName("Status.Join", protocol.GateRequest{
-		Id:      c.ToUint(),
+		Id: c.ToUint(),
 	}, &reply)
 	c.Write(reply.Response)
 	//c.Close()

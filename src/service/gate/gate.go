@@ -1,13 +1,13 @@
 package main
 
 import (
-	"connect/iorange"
-	"gate/handel"
 	"gooo/configs"
 	"gooo/connser"
 	"gooo/helper"
 	"gooo/protocol"
 	"log"
+	"service/connect/iorange"
+	"service/gate/handel"
 )
 
 type Gate struct {

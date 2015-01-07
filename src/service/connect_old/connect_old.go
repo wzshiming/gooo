@@ -1,20 +1,20 @@
 package main
 
 import (
+	"fmt"
 	"gooo/configs"
 	"gooo/connser"
-	"gooo/protocol"
 	"gooo/helper"
-	"connect/iorange"
-	"connect/handel"
+	"gooo/protocol"
 	"log"
-	"fmt"
+	"service/connect/handel"
+	"service/connect/iorange"
 )
 
 type Connect struct {
-	hand   *handel.Handel
-	auth   *handel.Auth
-	caddr   string
+	hand  *handel.Handel
+	auth  *handel.Auth
+	caddr string
 }
 
 func NewConnect() *Connect {
@@ -48,21 +48,21 @@ func (s *Connect) Init(args protocol.InitRequest, reply *int) error {
 		ser := connser.NewServer(s.hand, iorange.NewIORange(1024))
 		go ser.StartTCP(port)
 
-		s.caddr = fmt.Sprintf("127.0.0.1%s",port)
+		s.caddr = fmt.Sprintf("127.0.0.1%s", port)
 	}
 	return nil
 }
 
-func (s *Connect) Join(args protocol.GateRequest,reply *protocol.GateResponse) error {
+func (s *Connect) Join(args protocol.GateRequest, reply *protocol.GateResponse) error {
 	defer func() {
 		if err := recover(); err != nil {
 			log.Println("Join error: ", err)
 		}
 	}()
-	id := []byte(fmt.Sprintf("%d",args.Id))
-	reg := []byte(fmt.Sprintf("%s %d",s.caddr,args.Id))
+	id := []byte(fmt.Sprintf("%d", args.Id))
+	reg := []byte(fmt.Sprintf("%s %d", s.caddr, args.Id))
 	*reply = protocol.GateResponse{
-		Sum: s.hand.Len(),
+		Sum:      s.hand.Len(),
 		Response: reg,
 	}
 
