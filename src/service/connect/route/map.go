@@ -4,40 +4,49 @@ import (
 	"encoding/binary"
 	"errors"
 	"fmt"
-	"gooo/balance"
+	//"gooo/balance"
 	"gooo/configs"
-	"gooo/protocol"
-	"gooo/session"
+	//"gooo/protocol"
+	"gooo/router"
+	//"gooo/session"
 	"log"
-	"net/rpc"
+	//"net/rpc"
 	//"sync"
 )
 
 type MethodServer struct {
-	Client  []*rpc.Client
-	Name    string
-	Methods [][]string
-	bal     balance.Balances
+	caller  router.CallServer
+	methods [][]string
 }
 
-func NewMethodServer(name string, cs, ms int) *MethodServer {
-	return &MethodServer{
-		Name:    name,
-		Client:  make([]*rpc.Client, cs),
-		Methods: make([][]string, ms),
-		bal:     balance.NewBalance(cs),
+func NewMethodServer(typ string, conf *configs.Configs) *MethodServer {
+	fr := conf.Rc.Devel
+	s := MethodServer{
+		caller:  *router.NewCallServer(typ, conf),
+		methods: make([][]string, len(fr)),
 	}
+
+	i := 0
+	for k1, v1 := range fr[typ] {
+		s.methods[i] = make([]string, len(v1))
+		for k2, v2 := range v1 {
+			s.methods[i][k2] = fmt.Sprintf("%v.%v", k1, v2)
+		}
+		i++
+	}
+	return &s
 }
 
-func (self *MethodServer) Call(name string, args, reply interface{}) (err error) {
+func (s *MethodServer) Call(c2 uint8, c3 uint16, args, reply interface{}) error {
 	defer func() {
 		if err := recover(); err != nil {
-			log.Println("Call error: ", err)
+			log.Fatal("MethodServer Call:", err)
 		}
 	}()
-	return self.Client[self.bal.Allot()].Call(name, args, reply)
+	return s.caller.Call(s.methods[c2][c3], args, reply)
 }
 
+/*
 func (self *MethodServer) CallsBy(clients []session.Unique, name string, args []byte, reply interface{}) (err error) {
 	defer func() {
 		if err := recover(); err != nil {
@@ -62,45 +71,27 @@ func (self *MethodServer) CallsBy(clients []session.Unique, name string, args []
 	}
 	return
 }
+*/
+type MethodServers []MethodServer
 
-type MapMethodServer []MethodServer
+func NewMethodServers(conf *configs.Configs) *MethodServers {
+	fr := conf.Rc.Devel
+	s := make(MethodServers, len(fr))
+	i := 0
+	for k, _ := range fr {
+		s[i] = *NewMethodServer(k, conf)
+		i++
+	}
+	return &s
+}
 
-func (self *MapMethodServer) Call(msg []byte, args, reply interface{}) error {
+func (s *MethodServers) Call(msg []byte, args, reply interface{}) error {
 	c1 := msg[0]
 	c2 := msg[1]
 	c3 := binary.BigEndian.Uint16(msg[2:4])
-	s := (*self)[c1]
-	if c1 >= byte(len(*self)) || c2 >= byte(len(s.Methods)) || c3 >= uint16(len(s.Methods[c2])) {
+	ss := (*s)[c1]
+	if c1 >= byte(len(*s)) {
 		return errors.New("call index error")
 	}
-	return s.Call(s.Methods[c2][c3], args, reply)
-}
-
-func NewMapMethodServer(conf *configs.Configs) *MapMethodServer {
-	fr := conf.Rc.Devel
-	fs := conf.Sc.Devel
-	defer func() {
-		if err := recover(); err != nil {
-			log.Fatal("Servers Configs file error:", err)
-		}
-	}()
-	s := make(MapMethodServer, len(fr))
-	for i1, server := range fr {
-		serverName := server.Name
-		serverHosts := fs[serverName]
-		//NewMethodServer(serverName,len(serverHosts),len(server.Class))
-		s[i1] = *NewMethodServer(serverName, len(serverHosts), len(server.Class))
-		for i2, serverAddr := range serverHosts {
-			s[i1].Client[i2] = serverAddr.Conn
-			log.Println(conf.Name, "Register", fmt.Sprintf("%v_%v", serverName, i2))
-		}
-		for i2, class := range server.Class {
-			className := class.Name
-			s[i1].Methods[i2] = make([]string, len(class.Methods))
-			for i3, methodName := range class.Methods {
-				s[i1].Methods[i2][i3] = fmt.Sprintf("%v.%v", className, methodName)
-			}
-		}
-	}
-	return &s
+	return ss.Call(c2, c3, args, reply)
 }

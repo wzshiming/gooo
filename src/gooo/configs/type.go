@@ -6,14 +6,7 @@ import (
 )
 
 type RouteConfig struct {
-	Devel []struct {
-		Name  string `json: name`
-		Class []struct {
-			Name    string   `json: name`
-			Methods []string `json: methods`
-		} `json: class`
-		Conn *rpc.Client
-	} `json: devel`
+	Devel map[string]map[string][]string `json: devel`
 }
 
 type ServersConfig struct {

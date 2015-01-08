@@ -11,14 +11,14 @@ import (
 )
 
 type Handel struct {
-	Server   *route.MapMethodServer
+	Server   *route.MethodServers
 	session  map[uint]*session.Session
 	sessLock sync.Mutex
 }
 
 func NewHandel(conf *configs.Configs) *Handel {
 	return &Handel{
-		Server:  route.NewMapMethodServer(conf),
+		Server:  route.NewMethodServers(conf),
 		session: make(map[uint]*session.Session),
 	}
 }
@@ -62,10 +62,12 @@ func (h *Handel) Mess(c *connser.Connect, msg []byte) {
 	s := h.Get(id)
 	//log.Printf("%v msg  %v\n", c.RemoteAddr(),msg)
 	var reply protocol.RpcResponse
+
 	err := h.Server.Call(msg[:4], protocol.RpcRequest{
 		Request: msg[4:],
 		Session: s,
 	}, &reply)
+
 	if err != nil {
 		log.Println(err)
 		return

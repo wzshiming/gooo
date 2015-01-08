@@ -23,7 +23,7 @@ type test struct {
 }
 
 func (h *test) Join(c *connser.Connect) {
-	log.Printf("%v %v Join\n", c.ToUint(), c.Conn.RemoteAddr())
+	log.Printf("%v %v Join gate\n", c.ToUint(), c.Conn.RemoteAddr())
 
 	c.Write([]byte{0, 0})
 
@@ -52,7 +52,7 @@ type test2 struct {
 
 func (h *test2) Join(c *connser.Connect) {
 	c.Write(h.hand)
-	log.Printf("%v %v Join\n", c.ToUint(), c.Conn.RemoteAddr())
+	log.Printf("%v %v Join Connect\n", c.ToUint(), c.Conn.RemoteAddr())
 	sms := make([]byte, 1024)
 	sms[0] = 1
 	sms[1] = 1
@@ -62,13 +62,14 @@ func (h *test2) Join(c *connser.Connect) {
 	//fmt.Printf("%s",b)
 	copy(sms[4:], b)
 	s := len(b) + 4
+	c.Write(sms[:s])
 	//time.Sleep(100)
-	go func() {
-		for i := 0; i != 10000; i++ {
-			//time.Sleep(1)
-			c.Write(sms[:s])
-		}
-	}()
+	//go func() {
+	//	for i := 0; i != 10000; i++ {
+	//		//time.Sleep(1)
+	//		c.Write(sms[:s])
+	//	}
+	//}()
 }
 func (h *test2) Mess(c *connser.Connect, msg []byte) {
 	log.Printf("%v %v Mess  %v\n", c.ToUint(), c.Conn.RemoteAddr(), msg)

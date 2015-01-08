@@ -1,23 +1,13 @@
 {
-    "devel": [
-        {
-            "name": "Master",
-            "class": []
-        },
-        {
-            "name": "Random",
-            "class": [
-                {},
-                {
-                    "name" : "Random",
-                    "methods" : [
-                        "",
-                        "Range100",
-                        "Range100Spacing"
-                    ]
-                }
-            ]  
+    "devel": {
+        "Master": {},
+        "Random": {
+            "name" : ["Random"],
+            "Random" : [
+                "",
+                "Range100",
+                "Range100Spacing"
+            ]
         }
-        
-    ]
+    }
 }
