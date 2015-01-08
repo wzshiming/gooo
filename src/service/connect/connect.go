@@ -24,8 +24,7 @@ func NewConnect() *Connect {
 func (s *Connect) Send(args protocol.SendRequest, reply *protocol.SendResponse) error {
 	for _, v := range args.Clients {
 
-		b := connser.ToConnect(v)
-		c := s.hand.Get(b)
+		c := s.hand.Get(v)
 		if c != nil {
 			c.Conn().Write(args.Data)
 		}

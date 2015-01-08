@@ -12,30 +12,30 @@ import (
 
 type Handel struct {
 	Server   *route.MapMethodServer
-	session  map[*connser.Connect]*session.Session
+	session  map[uint]*session.Session
 	sessLock sync.Mutex
 }
 
 func NewHandel(conf *configs.Configs) *Handel {
 	return &Handel{
 		Server:  route.NewMapMethodServer(conf),
-		session: make(map[*connser.Connect]*session.Session),
+		session: make(map[uint]*session.Session),
 	}
 }
 
-func (h *Handel) Get(u *connser.Connect) *session.Session {
+func (h *Handel) Get(u uint) *session.Session {
 	h.sessLock.Lock()
 	defer h.sessLock.Unlock()
 	return h.session[u]
 }
 
-func (h *Handel) Set(u *connser.Connect, v *session.Session) {
+func (h *Handel) Set(u uint, v *session.Session) {
 	h.sessLock.Lock()
 	defer h.sessLock.Unlock()
 	h.session[u] = v
 }
 
-func (h *Handel) Del(u *connser.Connect) {
+func (h *Handel) Del(u uint) {
 	h.sessLock.Lock()
 	defer h.sessLock.Unlock()
 	delete(h.session, u)
@@ -49,21 +49,22 @@ func (h *Handel) Len() int {
 
 func (h *Handel) Join(c *connser.Connect) {
 	log.Printf("%v %v join\n", c.ToUint(), c.RemoteAddr())
-	h.Set(c, session.NewSession(c))
+	h.Set(c.ToUint(), session.NewSession(c))
 }
+
 func (h *Handel) Mess(c *connser.Connect, msg []byte) {
 	defer func() {
 		if err := recover(); err != nil {
 			log.Printf("Client %v Mess error: %v", c.RemoteAddr(), err)
 		}
 	}()
-	s := h.Get(c)
+	id := c.ToUint()
+	s := h.Get(id)
 	//log.Printf("%v msg  %v\n", c.RemoteAddr(),msg)
 	var reply protocol.RpcResponse
 	err := h.Server.Call(msg[:4], protocol.RpcRequest{
 		Request: msg[4:],
 		Session: s,
-		Id:      c.ToUint(),
 	}, &reply)
 	if err != nil {
 		log.Println(err)
@@ -73,7 +74,7 @@ func (h *Handel) Mess(c *connser.Connect, msg []byte) {
 		c.Write(reply.Response)
 	}
 	if reply.Data != nil {
-		s := h.Get(c)
+		s := h.Get(id)
 		s.Lock()
 		defer s.Unlock()
 		//log.Println(reply.Data)
@@ -85,7 +86,7 @@ func (h *Handel) Mess(c *connser.Connect, msg []byte) {
 	//log.Printf("%s\n", reply)
 }
 func (h *Handel) Exit(c *connser.Connect) {
-	h.Del(c)
+	h.Del(c.ToUint())
 	log.Printf("%d  %v is quiting\n", h.Len(), c.RemoteAddr())
 }
 func (h *Handel) Timeout(c *connser.Connect) {

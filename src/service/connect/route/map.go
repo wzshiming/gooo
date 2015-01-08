@@ -1,13 +1,15 @@
 package route
 
 import (
-	"gooo/configs"
 	"encoding/binary"
+	"errors"
 	"fmt"
+	"gooo/balance"
+	"gooo/configs"
+	"gooo/protocol"
+	"gooo/session"
 	"log"
 	"net/rpc"
-	"errors"
-    "gooo/balance"
 	//"sync"
 )
 
@@ -15,25 +17,50 @@ type MethodServer struct {
 	Client  []*rpc.Client
 	Name    string
 	Methods [][]string
-    bal     balance.Balances
+	bal     balance.Balances
 }
 
-func NewMethodServer(name string, cs, ms int)* MethodServer{
-    return &MethodServer{
-        Name:    name,
-        Client:  make([]*rpc.Client, cs),
-        Methods: make([][]string, ms),
-        bal:     balance.NewBalance(cs),
-    }
+func NewMethodServer(name string, cs, ms int) *MethodServer {
+	return &MethodServer{
+		Name:    name,
+		Client:  make([]*rpc.Client, cs),
+		Methods: make([][]string, ms),
+		bal:     balance.NewBalance(cs),
+	}
 }
 
-func (self *MethodServer) Call(name string,args, reply interface{}) error {
+func (self *MethodServer) Call(name string, args, reply interface{}) (err error) {
 	defer func() {
 		if err := recover(); err != nil {
 			log.Println("Call error: ", err)
 		}
 	}()
 	return self.Client[self.bal.Allot()].Call(name, args, reply)
+}
+
+func (self *MethodServer) CallsBy(clients []session.Unique, name string, args []byte, reply interface{}) (err error) {
+	defer func() {
+		if err := recover(); err != nil {
+			log.Println("CallsBy error: ", err)
+		}
+	}()
+	size := len(self.Client)
+	cs := make([][]uint, size)
+	var sr protocol.SendRequest
+	sr.Data = args
+	for _, v := range clients {
+		if v.Server < uint(size) {
+			cs[v.Server] = append(cs[v.Server], v.Id)
+		}
+	}
+
+	for i := 0; i != size; i++ {
+		go self.Client[i].Call(name, protocol.SendRequest{
+			Clients: cs[i],
+			Data:    args,
+		}, reply)
+	}
+	return
 }
 
 type MapMethodServer []MethodServer
@@ -61,8 +88,8 @@ func NewMapMethodServer(conf *configs.Configs) *MapMethodServer {
 	for i1, server := range fr {
 		serverName := server.Name
 		serverHosts := fs[serverName]
-        //NewMethodServer(serverName,len(serverHosts),len(server.Class))
-		s[i1] = *NewMethodServer(serverName,len(serverHosts),len(server.Class))
+		//NewMethodServer(serverName,len(serverHosts),len(server.Class))
+		s[i1] = *NewMethodServer(serverName, len(serverHosts), len(server.Class))
 		for i2, serverAddr := range serverHosts {
 			s[i1].Client[i2] = serverAddr.Conn
 			log.Println(conf.Name, "Register", fmt.Sprintf("%v_%v", serverName, i2))

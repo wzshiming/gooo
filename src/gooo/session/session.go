@@ -5,12 +5,10 @@ import (
 	"gooo/encoder"
 	"time"
 	//"encoding/json"
+	"gooo/configs"
 	"gooo/connser"
-	"gooo/uniq"
 	"sync"
 )
-
-var uni = uniq.NewUniq()
 
 type Session struct {
 	sync.Mutex
@@ -18,8 +16,7 @@ type Session struct {
 	ConnectTime    time.Time              `json: c`
 	LastPacketTime time.Time              `json: l`
 	Dirtycount     uint                   `json: i`
-	ServerId       uint                   `json: s`
-	Uniq           uint                   `json: u`
+	Uniq           Unique                 `json: u`
 	conn           *connser.Connect
 }
 
@@ -30,7 +27,7 @@ func NewSession(conn *connser.Connect) *Session {
 		LastPacketTime: time.Now(),
 		Dirtycount:     0,
 		conn:           conn,
-		Uniq:           uni(),
+		Uniq:           NewUnique(uint(configs.Id), conn.ToUint()),
 	}
 }
 
