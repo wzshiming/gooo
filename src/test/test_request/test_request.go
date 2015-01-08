@@ -6,6 +6,7 @@ import (
 	"gooo/connser"
 	//"fmt"
 	"gooo/encoder"
+	"gooo/helper"
 	"gooo/protocol"
 	"log"
 	"runtime"
@@ -14,6 +15,7 @@ import (
 )
 
 type test struct {
+	helper.HandelInterface
 }
 
 func (h *test) Join(c *connser.Connect) {
@@ -34,18 +36,6 @@ func (h *test) Join(c *connser.Connect) {
 			c.Write(sms[:s])
 		}
 	}()
-}
-func (h *test) Mess(c *connser.Connect, msg []byte) {
-	log.Printf("%v %v Mess  %v\n", c.ToUint(), c.Conn.RemoteAddr(), msg)
-}
-func (h *test) Exit(c *connser.Connect) {
-	log.Printf("%v %v Exit\n", c.ToUint(), c.Conn.RemoteAddr())
-}
-func (h *test) Timeout(c *connser.Connect) {
-	log.Printf("%v %v Timeout\n", c.ToUint(), c.Conn.RemoteAddr())
-}
-func (h *test) Recover(c *connser.Connect, err error) {
-	log.Printf("%v error %v\n", c.Conn.RemoteAddr(), err)
 }
 
 func main() {

@@ -6,6 +6,7 @@ import (
 	//"fmt"
 	"gooo/connser"
 	"gooo/encoder"
+	"gooo/helper"
 	"gooo/protocol"
 	"log"
 	"runtime"
@@ -20,33 +21,24 @@ var (
 )
 
 type test struct {
+	helper.HandelInterface
 }
 
 func (h *test) Join(c *connser.Connect) {
 	log.Printf("%v %v Join gate\n", c.ToUint(), c.Conn.RemoteAddr())
-
 	c.Write([]byte{0, 0})
-
 }
+
 func (h *test) Mess(c *connser.Connect, msg []byte) {
 	log.Printf("%v %v Mess  %v\n", c.ToUint(), c.Conn.RemoteAddr(), msg)
 	ss := strings.Split(string(msg), " ")
 	log.Println(ss[0], ss[1])
 	connser.NewClientTCP(ss[0], Ior, &test2{hand: []byte(ss[1])})
 	log.Printf("mess end ")
-	//c.Close()
-}
-func (h *test) Exit(c *connser.Connect) {
-	log.Printf("%v %v Exit\n", c.ToUint(), c.Conn.RemoteAddr())
-}
-func (h *test) Timeout(c *connser.Connect) {
-	log.Printf("%v %v Timeout\n", c.ToUint(), c.Conn.RemoteAddr())
-}
-func (h *test) Recover(c *connser.Connect, err error) {
-	log.Printf("%v error %v\n", c.Conn.RemoteAddr(), err)
 }
 
 type test2 struct {
+	helper.HandelInterface
 	hand []byte
 }
 
@@ -62,26 +54,17 @@ func (h *test2) Join(c *connser.Connect) {
 	//fmt.Printf("%s",b)
 	copy(sms[4:], b)
 	s := len(b) + 4
-	c.Write(sms[:s])
-	//time.Sleep(100)
-	//go func() {
-	//	for i := 0; i != 10000; i++ {
-	//		//time.Sleep(1)
-	//		c.Write(sms[:s])
-	//	}
-	//}()
+	//c.Write(sms[:s])
+	time.Sleep(100)
+	go func() {
+		for i := 0; i != 10000; i++ {
+			//time.Sleep(1)
+			c.Write(sms[:s])
+		}
+	}()
 }
 func (h *test2) Mess(c *connser.Connect, msg []byte) {
-	log.Printf("%v %v Mess  %v\n", c.ToUint(), c.Conn.RemoteAddr(), msg)
-}
-func (h *test2) Exit(c *connser.Connect) {
-	log.Printf("%v %v Exit\n", c.ToUint(), c.Conn.RemoteAddr())
-}
-func (h *test2) Timeout(c *connser.Connect) {
-	log.Printf("%v %v Timeout\n", c.ToUint(), c.Conn.RemoteAddr())
-}
-func (h *test2) Recover(c *connser.Connect, err error) {
-	log.Printf("%v error %v\n", c.Conn.RemoteAddr(), err)
+	log.Printf("%v Mess Test %v\n", c.Conn.RemoteAddr(), msg)
 }
 
 func main() {

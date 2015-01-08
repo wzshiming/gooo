@@ -59,7 +59,7 @@ func (s *Connect) Join(args protocol.GateRequest, reply *protocol.GateResponse) 
 		}
 	}()
 	id := []byte(fmt.Sprintf("%d", args.Id))
-	reg := []byte(fmt.Sprintf("%s %d", s.caddr, args.Id))
+	reg := []byte(fmt.Sprintf("%s %s", s.caddr, id))
 	*reply = protocol.GateResponse{
 		Sum:      s.hand.Len(),
 		Response: reg,

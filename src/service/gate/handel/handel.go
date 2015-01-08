@@ -32,6 +32,6 @@ func (h *Handel) Mess(c *connser.Connect, msg []byte) {
 		Id: c.ToUint(),
 	}, &reply)
 	c.Write(reply.Response)
-	//c.Close()
+	c.Close()
 
 }
