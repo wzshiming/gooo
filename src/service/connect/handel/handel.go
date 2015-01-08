@@ -3,6 +3,7 @@ package handel
 import (
 	"gooo/configs"
 	"gooo/connser"
+	"gooo/helper"
 	"gooo/protocol"
 	"gooo/session"
 	"log"
@@ -11,6 +12,7 @@ import (
 )
 
 type Handel struct {
+	helper.HandelInterface
 	Server   *route.MethodServers
 	session  map[uint]*session.Session
 	sessLock sync.Mutex
@@ -90,11 +92,4 @@ func (h *Handel) Mess(c *connser.Connect, msg []byte) {
 func (h *Handel) Exit(c *connser.Connect) {
 	h.Del(c.ToUint())
 	log.Printf("%d  %v is quiting\n", h.Len(), c.RemoteAddr())
-}
-func (h *Handel) Timeout(c *connser.Connect) {
-	log.Printf("%v Timeout\n", c.RemoteAddr())
-}
-
-func (h *Handel) Recover(c *connser.Connect, err error) {
-	log.Printf("%v error %v\n", c.RemoteAddr(), err)
 }
