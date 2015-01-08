@@ -6,7 +6,6 @@ import (
 	"gooo/connser"
 	"gooo/helper"
 	"gooo/protocol"
-	"log"
 	"service/connect/handel"
 	"service/connect/iorange"
 )
@@ -52,29 +51,8 @@ func (s *Connect) Init(args protocol.InitRequest, reply *int) error {
 	return nil
 }
 
-func (s *Connect) Join(args protocol.GateRequest, reply *protocol.GateResponse) error {
-	defer func() {
-		if err := recover(); err != nil {
-			log.Println("Join error: ", err)
-		}
-	}()
-	id := []byte(fmt.Sprintf("%d", args.Id))
-	reg := []byte(fmt.Sprintf("%s %d", s.caddr, args.Id))
-	*reply = protocol.GateResponse{
-		Sum:      s.hand.Len(),
-		Response: reg,
-	}
-
-	s.auth.Register(id)
-	return nil
-}
-
 func main() {
-	defer func() {
-		if err := recover(); err != nil {
-			log.Println(err)
-		}
-	}()
+	defer helper.Recover()
 
 	h := helper.NewHandeln()
 	c := NewConnect()

@@ -1,8 +1,8 @@
 package main
 
 import (
-	"gooo/protocol"
 	"gooo/encoder"
+	"gooo/protocol"
 
 	"gooo/configs"
 	"gooo/helper"
@@ -42,6 +42,7 @@ func (r *Information) Init(args protocol.InitRequest, reply *int) error {
 }
 
 func main() {
+	defer helper.Recover()
 	h := helper.NewHandeln()
 	c := NewInformation()
 	h.Register(c)

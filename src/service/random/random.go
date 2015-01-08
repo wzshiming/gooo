@@ -2,9 +2,9 @@ package main
 
 import (
 	"gooo/configs"
+	"gooo/encoder"
 	"gooo/helper"
 	"gooo/protocol"
-	"gooo/encoder"
 	"log"
 	"math/rand"
 	"net/rpc"
@@ -107,6 +107,7 @@ func (r *Random) Init(args protocol.InitRequest, reply *int) error {
 }
 
 func main() {
+	defer helper.Recover()
 	h := helper.NewHandeln()
 	c := NewRandom()
 	h.Register(c)

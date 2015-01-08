@@ -5,9 +5,9 @@ import (
 	//"log"
 	"gooo/configs"
 	//"reflect"
+	"fmt"
 	"gooo/helper"
 	"gooo/protocol"
-	"fmt"
 	//"log"
 	//"time"
 )
@@ -36,6 +36,7 @@ func (m *Master) None(args int, reply *int) error {
 //}
 
 func main() {
+	defer helper.Recover()
 	//Build("./configs/Servers.json")
 	mm := map[string][]byte{
 		"master":  helper.OpenFile("./configs/master.json"),

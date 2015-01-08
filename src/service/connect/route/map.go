@@ -7,9 +7,10 @@ import (
 	//"gooo/balance"
 	"gooo/configs"
 	//"gooo/protocol"
+	"gooo/helper"
 	"gooo/router"
 	//"gooo/session"
-	"log"
+	//"log"
 	//"net/rpc"
 	//"sync"
 )
@@ -38,11 +39,7 @@ func NewMethodServer(typ string, conf *configs.Configs) *MethodServer {
 }
 
 func (s *MethodServer) Call(c2 uint8, c3 uint16, args, reply interface{}) error {
-	defer func() {
-		if err := recover(); err != nil {
-			log.Fatal("MethodServer Call:", err)
-		}
-	}()
+	defer helper.Recover()
 	return s.caller.Call(s.methods[c2][c3], args, reply)
 }
 
@@ -89,9 +86,10 @@ func (s *MethodServers) Call(msg []byte, args, reply interface{}) error {
 	c1 := msg[0]
 	c2 := msg[1]
 	c3 := binary.BigEndian.Uint16(msg[2:4])
-	ss := (*s)[c1]
+
 	if c1 >= byte(len(*s)) {
 		return errors.New("call index error")
 	}
+	ss := (*s)[c1]
 	return ss.Call(c2, c3, args, reply)
 }

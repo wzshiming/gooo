@@ -22,18 +22,17 @@ func NewAuth(e connser.EventHandel) *Auth {
 	}
 }
 
-func (h *Auth) Register(b []byte) {
+func (h *Auth) Register(b string) {
 	h.regLock.Lock()
 	defer h.regLock.Unlock()
-	h.reg[string(b)] = true
+	h.reg[b] = true
 }
 
-func (h *Auth) Cancel(b []byte) bool {
+func (h *Auth) Cancel(b string) bool {
 	h.regLock.Lock()
 	defer h.regLock.Unlock()
-	s := string(b)
-	if h.reg[s] == true {
-		delete(h.reg, s)
+	if h.reg[b] == true {
+		delete(h.reg, b)
 		return true
 	}
 	return false
@@ -41,12 +40,12 @@ func (h *Auth) Cancel(b []byte) bool {
 
 func (h *Auth) Mess(c *connser.Connect, msg []byte) {
 
-	if h.Cancel(msg) {
+	if h.Cancel(string(msg)) {
 		c.Bc = h.hand
 		c.Bc.Join(c)
-		log.Println(configs.Name, "join", string(msg))
+		log.Println(configs.Name, "join", c.ToUint(), string(msg))
 	} else {
 		c.Close()
-		log.Println(configs.Name, "not join", string(msg))
+		log.Println(configs.Name, "not join", c.ToUint(), string(msg))
 	}
 }

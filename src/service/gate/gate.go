@@ -5,7 +5,6 @@ import (
 	"gooo/connser"
 	"gooo/helper"
 	"gooo/protocol"
-	"log"
 	"service/connect/iorange"
 	"service/gate/handel"
 )
@@ -32,11 +31,7 @@ func (s *Gate) Init(args protocol.InitRequest, reply *int) error {
 }
 
 func main() {
-	defer func() {
-		if err := recover(); err != nil {
-			log.Println(err)
-		}
-	}()
+	defer helper.Recover()
 
 	h := helper.NewHandeln()
 	c := NewGate()

@@ -24,6 +24,7 @@ func (h *Handel) Mess(c *connser.Connect, msg []byte) {
 	defer func() {
 		if err := recover(); err != nil {
 			log.Printf("Client %v Mess error: %v", c.RemoteAddr(), err)
+			helper.RecoverInfo()
 		}
 	}()
 
@@ -33,5 +34,4 @@ func (h *Handel) Mess(c *connser.Connect, msg []byte) {
 	}, &reply)
 	c.Write(reply.Response)
 	c.Close()
-
 }

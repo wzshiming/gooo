@@ -1,16 +1,10 @@
 package router
 
 import (
-	//"encoding/binary"
-	//"errors"
-	//"fmt"
 	"gooo/balance"
 	"gooo/configs"
-	//"gooo/protocol"
-	//"gooo/session"
-	"log"
+	"gooo/helper"
 	"net/rpc"
-	//"sync"
 )
 
 type CallServer struct {
@@ -38,12 +32,13 @@ func NewCallServer(tye string, conf *configs.Configs) *CallServer {
 }
 
 func (s *CallServer) Call(method string, args, reply interface{}) (err error) {
-	defer func() {
-		if err := recover(); err != nil {
-			log.Println("CallServer.Call error: ", err)
-		}
-	}()
+	defer helper.Recover()
 	return s.Client[s.bal.Allot()].Call(method, args, reply)
+}
+
+func (s *CallServer) CallBy(index int, method string, args, reply interface{}) (err error) {
+	defer helper.Recover()
+	return s.Client[index].Call(method, args, reply)
 }
 
 type CallServers map[string]*CallServer

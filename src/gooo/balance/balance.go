@@ -17,14 +17,15 @@ func NewBalance(size int) *Balance {
 	}
 }
 
-func (b *Balance) Allot() int {
+func (b *Balance) Allot() (i int) {
 	b.lock.Lock()
 	defer b.lock.Unlock()
-	if b.i == b.size {
+	i = 0
+	if b.i != b.size {
+		i = b.i
+		b.i++
+	} else {
 		b.i = 0
-		return 0
 	}
-	i := b.i
-	b.i++
-	return i
+	return
 }

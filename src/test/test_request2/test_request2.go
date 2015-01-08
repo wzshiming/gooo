@@ -70,7 +70,7 @@ func (h *test2) Mess(c *connser.Connect, msg []byte) {
 func main() {
 	runtime.GOMAXPROCS(runtime.NumCPU())
 
-	for i := 0; i < 5; i++ {
+	for i := 0; i < 100; i++ {
 		connser.NewClientTCP("127.0.0.1:6002", Ior, T1)
 	}
 	log.Printf("end\n")

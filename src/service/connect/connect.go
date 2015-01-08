@@ -6,7 +6,7 @@ import (
 	"gooo/connser"
 	"gooo/helper"
 	"gooo/protocol"
-	"log"
+	"gooo/session"
 	"service/connect/handel"
 	"service/connect/iorange"
 )
@@ -15,10 +15,13 @@ type Connect struct {
 	hand  *handel.Handel
 	auth  *handel.Auth
 	caddr string
+	uniq  func() uint
 }
 
 func NewConnect() *Connect {
-	return &Connect{}
+	return &Connect{
+		uniq: session.NewUniqUint(),
+	}
 }
 
 func (s *Connect) Send(args protocol.SendRequest, reply *protocol.SendResponse) error {
@@ -53,28 +56,19 @@ func (s *Connect) Init(args protocol.InitRequest, reply *int) error {
 }
 
 func (s *Connect) Join(args protocol.GateRequest, reply *protocol.GateResponse) error {
-	defer func() {
-		if err := recover(); err != nil {
-			log.Println("Join error: ", err)
-		}
-	}()
-	id := []byte(fmt.Sprintf("%d", args.Id))
+	defer helper.Recover()
+	id := fmt.Sprintln(s.uniq())
 	reg := []byte(fmt.Sprintf("%s %s", s.caddr, id))
+	s.auth.Register(id)
 	*reply = protocol.GateResponse{
 		Sum:      s.hand.Len(),
 		Response: reg,
 	}
-
-	s.auth.Register(id)
 	return nil
 }
 
 func main() {
-	defer func() {
-		if err := recover(); err != nil {
-			log.Println(err)
-		}
-	}()
+	defer helper.Recover()
 
 	h := helper.NewHandeln()
 	c := NewConnect()
