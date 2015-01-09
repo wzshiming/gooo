@@ -14,10 +14,10 @@ type CallServer struct {
 }
 
 func NewCallServer(tye string, conf *configs.Configs) *CallServer {
-	if tye == conf.Type {
+	if tye == configs.Type {
 		return nil
 	}
-	fs := conf.Sc.Devel
+	fs := conf.Sc
 	servers := fs[tye]
 	s := CallServer{
 		Type:   tye,
@@ -44,7 +44,7 @@ func (s *CallServer) CallBy(index int, method string, args, reply interface{}) (
 type CallServers map[string]*CallServer
 
 func NewCallServers(conf *configs.Configs) *CallServers {
-	fs := conf.Sc.Devel
+	fs := conf.Sc
 	s := make(CallServers, len(fs))
 	for k, _ := range fs {
 		cs := NewCallServer(k, conf)

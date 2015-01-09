@@ -35,7 +35,7 @@ func (i *Information) Versions(args protocol.RpcRequest, reply *protocol.RpcResp
 
 func (r *Information) Init(args protocol.InitRequest, reply *int) error {
 	if args.State == 1 {
-		r.conf = configs.NewConfigs(&args.Conf)
+		r.conf = &args.Conf
 		r.conf.StartConnect()
 	}
 	return nil
@@ -46,7 +46,6 @@ func main() {
 	h := helper.NewHandeln()
 	c := NewInformation()
 	h.Register(c)
-	h.RegisterName("Status", c)
 	helper.EchoPortInfo(configs.Name, configs.Port)
 	h.Start(configs.Port)
 }

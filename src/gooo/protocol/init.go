@@ -1,10 +1,11 @@
 package protocol
 
 import (
-//"time"
+	//"time"
+	"gooo/configs"
 )
 
 type InitRequest struct {
-	Conf  map[string][]byte `json: conf`
-	State int               `json: state`
+	Conf  configs.Configs `json: conf`
+	State int             `json: state`
 }

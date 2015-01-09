@@ -29,7 +29,7 @@ func (h *Handel) Mess(c *connser.Connect, msg []byte) {
 	}()
 
 	var reply protocol.GateResponse
-	h.Server.Call("Status.Join", protocol.GateRequest{
+	h.Server.Call("Connect.Join", protocol.GateRequest{
 		Id: c.ToUint(),
 	}, &reply)
 	c.Write(reply.Response)

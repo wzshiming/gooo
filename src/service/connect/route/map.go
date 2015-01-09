@@ -7,7 +7,7 @@ import (
 	//"gooo/balance"
 	"gooo/configs"
 	//"gooo/protocol"
-	"gooo/helper"
+	//"gooo/helper"
 	"gooo/router"
 	//"gooo/session"
 	//"log"
@@ -21,7 +21,7 @@ type MethodServer struct {
 }
 
 func NewMethodServer(typ string, conf *configs.Configs) *MethodServer {
-	fr := conf.Rc.Devel
+	fr := conf.Rc
 	s := MethodServer{
 		caller:  *router.NewCallServer(typ, conf),
 		methods: make([][]string, len(fr)),
@@ -39,8 +39,14 @@ func NewMethodServer(typ string, conf *configs.Configs) *MethodServer {
 }
 
 func (s *MethodServer) Call(c2 uint8, c3 uint16, args, reply interface{}) error {
-	defer helper.Recover()
-	return s.caller.Call(s.methods[c2][c3], args, reply)
+	if c2 >= uint8(len(s.methods)) {
+		return errors.New("MethodServer Call index c2 error")
+	}
+	m := s.methods[c2]
+	if c3 >= uint16(len(m)) {
+		return errors.New("MethodServer Call index c3 error")
+	}
+	return s.caller.Call(m[c3], args, reply)
 }
 
 /*
@@ -72,7 +78,7 @@ func (self *MethodServer) CallsBy(clients []session.Unique, name string, args []
 type MethodServers []MethodServer
 
 func NewMethodServers(conf *configs.Configs) *MethodServers {
-	fr := conf.Rc.Devel
+	fr := conf.Rc
 	s := make(MethodServers, len(fr))
 	i := 0
 	for k, _ := range fr {
@@ -88,7 +94,7 @@ func (s *MethodServers) Call(msg []byte, args, reply interface{}) error {
 	c3 := binary.BigEndian.Uint16(msg[2:4])
 
 	if c1 >= byte(len(*s)) {
-		return errors.New("call index error")
+		return errors.New("MethodServers Call index c1 error")
 	}
 	ss := (*s)[c1]
 	return ss.Call(c2, c3, args, reply)

@@ -19,9 +19,9 @@ func NewGate() *Gate {
 
 func (s *Gate) Init(args protocol.InitRequest, reply *int) error {
 	if args.State == 1 {
-		conf := configs.NewConfigs(&args.Conf)
+		conf := &args.Conf
 		conf.StartConnect()
-		port := helper.GetPort(conf.Sc.Devel[configs.Type][configs.Id].ClientPort)
+		port := helper.GetPort(conf.Sc[configs.Type][configs.Id].ClientPort)
 		helper.EchoPublicPortInfo(configs.Name, port)
 		s.handel = handel.NewHandel(conf)
 		ser := connser.NewServer(s.handel, iorange.NewIORange(1024))
@@ -36,7 +36,6 @@ func main() {
 	h := helper.NewHandeln()
 	c := NewGate()
 	h.Register(c)
-	h.RegisterName("Status", c)
 	helper.EchoPortInfo(configs.Name, configs.Port)
 	h.Start(configs.Port)
 }

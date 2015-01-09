@@ -98,7 +98,7 @@ func (r *Random) Range100Spacing(args protocol.RpcRequest, reply *protocol.RpcRe
 
 func (r *Random) Init(args protocol.InitRequest, reply *int) error {
 	if args.State == 1 {
-		r.conf = configs.NewConfigs(&args.Conf)
+		r.conf = &args.Conf
 		r.conf.StartConnect()
 		sc = helper.NewConn("127.0.0.1:4000")
 
@@ -111,7 +111,7 @@ func main() {
 	h := helper.NewHandeln()
 	c := NewRandom()
 	h.Register(c)
-	h.RegisterName("Status", c)
+
 	helper.EchoPortInfo(configs.Name, configs.Port)
 	h.Start(configs.Port)
 }

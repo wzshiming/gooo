@@ -21,11 +21,10 @@ func (b *Balance) Allot() (i int) {
 	b.lock.Lock()
 	defer b.lock.Unlock()
 	i = 0
-	if b.i != b.size {
-		i = b.i
-		b.i++
-	} else {
+	if b.i == b.size {
 		b.i = 0
 	}
+	i = b.i
+	b.i++
 	return
 }

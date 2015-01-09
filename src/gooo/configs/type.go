@@ -5,25 +5,20 @@ import (
 	//"log"
 )
 
-type RouteConfig struct {
-	Devel map[string]map[string][]string `json: devel`
-}
+type RouteConfig map[string]map[string][]string
 
-type ServersConfig struct {
-	Devel map[string][]struct {
-		Name       string `json: name`
-		Host       string `json: host`
-		Port       int    `json: port`
-		ClientPort int    `json: clientport`
-		Control    bool   `json: control`
-		Conn       *rpc.Client
-	} `json: devel`
+type ServerConfig struct {
+	Name       string `json: name`
+	Host       string `json: host`
+	Port       int    `json: port`
+	ClientPort int    `json: clientport`
+	Control    bool   `json: control`
+	Conn       *rpc.Client
 }
+type ServersConfig map[string][]ServerConfig
 
 type MasterConfig struct {
-	Devel struct {
-		Name string `json: name`
-		Host string `json: host`
-		Port int    `json: port`
-	} `json: devel`
+	Name string `json: name`
+	Host string `json: host`
+	Port int    `json: port`
 }

@@ -1,8 +1,8 @@
 package configs
 
 import (
-	"gooo/helper"
 	"fmt"
+	"gooo/helper"
 	"log"
 	"net/rpc"
 	"os"
@@ -10,13 +10,9 @@ import (
 )
 
 type Configs struct {
-	Sc   ServersConfig
-	Rc   RouteConfig
-	Mc   MasterConfig
-	Type string
-	Name string
-	Port string
-	Id   int
+	Sc ServersConfig
+	Rc RouteConfig
+	Mc MasterConfig
 }
 
 func NewConfigs(m *map[string][]byte) *Configs {
@@ -29,18 +25,14 @@ func NewConfigs(m *map[string][]byte) *Configs {
 	var mc MasterConfig
 	helper.GetConfig((*m)["master"], &mc)
 	return &Configs{
-		Sc:   sc,
-		Rc:   rc,
-		Mc:   mc,
-		Name: Name,
-		Type: Type,
-		Port: Port,
-		Id:   Id,
+		Sc: sc,
+		Rc: rc,
+		Mc: mc,
 	}
 }
 
 func (c *Configs) StartServers() {
-	csd := c.Sc.Devel
+	csd := c.Sc
 	for k1, v1 := range csd {
 		b := fmt.Sprintf("./%s", helper.ToLower(k1))
 		for k2, v2 := range v1 {
@@ -65,28 +57,27 @@ func (c *Configs) StartServers() {
 }
 
 func (c *Configs) AllConnect() (t []*rpc.Client) {
-	csd := c.Sc.Devel
+	csd := c.Sc
 	for k1, v1 := range csd {
 		for k2, v2 := range v1 {
-			Name := fmt.Sprintf("%v_%v", k1, k2)
-			if Name != c.Name && v2.Control {
+			name := fmt.Sprintf("%v_%v", k1, k2)
+			if name != Name && v2.Control {
 				t = append(t, v2.Conn)
 			}
-
 		}
 	}
 	return
 }
 
 func (c *Configs) StartConnect() {
-	csd := c.Sc.Devel
+	csd := c.Sc
 	for k1, v1 := range csd {
 		for k2, v2 := range v1 {
 			name := fmt.Sprintf("%v_%v", k1, k2)
 			addr := fmt.Sprintf("%v:%v", v2.Host, v2.Port)
-			if name != c.Name && v2.Control {
-				c.Sc.Devel[k1][k2].Conn = helper.NewConn(addr)
-				log.Println(c.Name, "connect to", addr, name)
+			if name != Name && v2.Control {
+				c.Sc[k1][k2].Conn = helper.NewConn(addr)
+				log.Println(Name, "connect to", addr, name)
 			}
 		}
 	}

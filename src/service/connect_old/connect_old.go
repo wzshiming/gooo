@@ -36,9 +36,9 @@ func (s *Connect) Send(args protocol.SendRequest, reply *protocol.SendResponse) 
 
 func (s *Connect) Init(args protocol.InitRequest, reply *int) error {
 	if args.State == 1 {
-		conf := configs.NewConfigs(&args.Conf)
+		conf := &args.Conf
 		conf.StartConnect()
-		port := helper.GetPort(conf.Sc.Devel[configs.Type][configs.Id].ClientPort)
+		port := helper.GetPort(conf.Sc[configs.Type][configs.Id].ClientPort)
 		helper.EchoPublicPortInfo(configs.Name, port)
 		s.hand = handel.NewHandel(conf)
 		s.auth = handel.NewAuth(s.hand)
@@ -56,8 +56,7 @@ func main() {
 
 	h := helper.NewHandeln()
 	c := NewConnect()
-	h.Register(c)
-	h.RegisterName("Status", c)
+	h.RegisterName("Connect_old", c)
 	helper.EchoPortInfo(configs.Name, configs.Port)
 	h.Start(configs.Port)
 }
