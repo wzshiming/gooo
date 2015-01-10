@@ -18,6 +18,7 @@ import (
 type MethodServer struct {
 	caller  router.CallServer
 	methods [][]string
+	typ     string
 }
 
 func NewMethodServer(typ string, conf *configs.Configs) *MethodServer {
@@ -25,6 +26,7 @@ func NewMethodServer(typ string, conf *configs.Configs) *MethodServer {
 	s := MethodServer{
 		caller:  *router.NewCallServer(typ, conf),
 		methods: make([][]string, len(fr)),
+		typ:     typ,
 	}
 
 	i := 0
@@ -47,6 +49,14 @@ func (s *MethodServer) Call(c2 uint8, c3 uint16, args, reply interface{}) error 
 		return errors.New("MethodServer Call index c3 error")
 	}
 	return s.caller.Call(m[c3], args, reply)
+}
+
+func (s *MethodServer) Type() string {
+	return s.typ
+}
+
+func (s *MethodServer) Methods() [][]string {
+	return s.methods
 }
 
 /*

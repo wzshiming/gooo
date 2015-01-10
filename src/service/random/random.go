@@ -5,15 +5,18 @@ import (
 	"gooo/encoder"
 	"gooo/helper"
 	"gooo/protocol"
+	"gooo/router"
 	"log"
 	"math/rand"
-	"net/rpc"
 	"reflect"
+	connprtc "service/connect/protocol"
+	randprtc "service/random/protocol"
 	"time"
 )
 
 type Random struct {
 	conf *configs.Configs
+	call *router.CallServer
 	//helper.Control
 	r  *rand.Rand
 	ch chan int
@@ -34,7 +37,7 @@ func NewRandom() (random *Random) {
 }
 
 func (r *Random) Range100(args protocol.RpcRequest, reply *protocol.RpcResponse) error {
-	var p protocol.RandRequest
+	var p randprtc.RandRequest
 	encoder.Decode(args.Request, &p)
 	if p.Size == 0 {
 		p.Size = 1
@@ -43,7 +46,7 @@ func (r *Random) Range100(args protocol.RpcRequest, reply *protocol.RpcResponse)
 	for i := 0; i != p.Size; i++ {
 		t[i] = <-r.ch
 	}
-	ret := protocol.RandResponse{
+	ret := randprtc.RandResponse{
 		Rands: t,
 	}
 	res, _ := encoder.Encode(ret)
@@ -55,16 +58,14 @@ func (r *Random) Range100(args protocol.RpcRequest, reply *protocol.RpcResponse)
 	return nil
 }
 
-var sc *rpc.Client
-
 func (r *Random) Range100Spacing(args protocol.RpcRequest, reply *protocol.RpcResponse) error {
-	var p protocol.SpacingRequest
+	var p randprtc.SpacingRequest
 	encoder.Decode(args.Request, &p)
 	if p.Size == 0 {
 		p.Size = 1
 	}
-	b := protocol.SendRequest{
-		Clients: []uint{args.Id},
+	b := connprtc.SendRequest{
+		Clients: []uint{args.Session.Uniq.Id},
 	}
 	sess := args.Session.Data
 	vv := reflect.ValueOf(sess["size"])
@@ -74,15 +75,17 @@ func (r *Random) Range100Spacing(args protocol.RpcRequest, reply *protocol.RpcRe
 	tmp, _ := sess["size"].(float64)
 	rss := int(tmp)
 	log.Println(rss)
-	var re protocol.SendResponse
+	var re connprtc.SendResponse
+	//args.Session.Uniq.Server
 	for i := 0; i != p.Size; i++ {
 		time.Sleep(time.Duration(p.Space))
-		ret := protocol.RandResponse{
+		ret := randprtc.RandResponse{
 			Rands: []int{<-r.ch, rss},
 		}
 		res, _ := encoder.Encode(ret)
 		b.Data = res
-		sc.Call("Connect.Send", b, &re)
+		r.call.CallBySession(args.Session, "Connect.Send", b, &re)
+		//sc.Call("Connect.Send", b, &re)
 		//log.Println("ret",b)
 	}
 
@@ -100,8 +103,7 @@ func (r *Random) Init(args protocol.InitRequest, reply *int) error {
 	if args.State == 1 {
 		r.conf = &args.Conf
 		r.conf.StartConnect()
-		sc = helper.NewConn("127.0.0.1:4000")
-
+		r.call = router.NewCallServer("Connect", r.conf)
 	}
 	return nil
 }

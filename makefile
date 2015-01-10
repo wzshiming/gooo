@@ -11,7 +11,6 @@ MAKE         := make
 MKDIR        := -mkdir -p
 GO 			 := go
 FILES_SERV 	 := $(notdir $(wildcard ./src/service/*/*.go))
-
 FILES_TEST   := $(notdir $(wildcard ./src/test/*/*.go))
 PRE_FILES    := $(FILES:%.go=%)
 ECHO 		 := echo
@@ -19,7 +18,7 @@ ECHO 		 := echo
 
 .PHONY: install build run clean elses
 
-all: clean install run
+all: install clean_pkg run
 
 install:
 	@$(ECHO) installing...
@@ -32,7 +31,10 @@ run:
 	@$(ECHO) running...
 	@$(CD) $(BUILD_DIR) && ./master
 
-clean:
-	@$(ECHO) cleaning...
-	@$(RM) $(BUILD_DIR) pkg
+clean_pkg:
+	@$(ECHO) pkg cleaning...
+	@$(RM) pkg
 
+clean:clean_pkg
+	@$(ECHO) cleaning...
+	@$(RM) $(BUILD_DIR)

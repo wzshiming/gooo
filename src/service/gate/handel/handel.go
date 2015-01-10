@@ -4,9 +4,9 @@ import (
 	"gooo/configs"
 	"gooo/connser"
 	"gooo/helper"
-	"gooo/protocol"
 	"gooo/router"
 	"log"
+	connprot "service/connect/protocol"
 )
 
 type Handel struct {
@@ -28,8 +28,8 @@ func (h *Handel) Mess(c *connser.Connect, msg []byte) {
 		}
 	}()
 
-	var reply protocol.GateResponse
-	h.Server.Call("Connect.Join", protocol.GateRequest{
+	var reply connprot.JoinResponse
+	h.Server.Call("Connect.Join", connprot.JoinRequest{
 		Id: c.ToUint(),
 	}, &reply)
 	c.Write(reply.Response)

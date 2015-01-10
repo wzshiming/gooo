@@ -8,6 +8,7 @@ import (
 	"gooo/protocol"
 	"service/connect/handel"
 	"service/connect/iorange"
+	connprot "service/connect/protocol"
 )
 
 type Connect struct {
@@ -20,7 +21,7 @@ func NewConnect() *Connect {
 	return &Connect{}
 }
 
-func (s *Connect) Send(args protocol.SendRequest, reply *protocol.SendResponse) error {
+func (s *Connect) Send(args connprot.SendRequest, reply *connprot.SendResponse) error {
 	for _, v := range args.Clients {
 
 		c := s.hand.Get(v)
@@ -28,7 +29,7 @@ func (s *Connect) Send(args protocol.SendRequest, reply *protocol.SendResponse) 
 			c.Conn().Write(args.Data)
 		}
 	}
-	*reply = protocol.SendResponse{
+	*reply = connprot.SendResponse{
 		Error: 0,
 	}
 	return nil

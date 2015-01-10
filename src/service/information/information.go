@@ -1,11 +1,11 @@
 package main
 
 import (
-	"gooo/encoder"
-	"gooo/protocol"
-
 	"gooo/configs"
+	"gooo/encoder"
 	"gooo/helper"
+	"gooo/protocol"
+	infoprot "service/information/protocol"
 )
 
 type Information struct {
@@ -20,9 +20,9 @@ func NewInformation() (info *Information) {
 }
 
 func (i *Information) Versions(args protocol.RpcRequest, reply *protocol.RpcResponse) error {
-	var p protocol.VersionsRequest
+	var p infoprot.VersionsRequest
 	encoder.Decode(args.Request, &p)
-	var r protocol.VersionsResponse
+	var r infoprot.VersionsResponse
 
 	res, _ := encoder.Encode(r)
 	*reply = protocol.RpcResponse{

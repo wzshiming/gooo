@@ -7,10 +7,10 @@ import (
 	//"fmt"
 	"gooo/encoder"
 	"gooo/helper"
-	"gooo/protocol"
 	"log"
 	"runtime"
 	"service/connect/iorange"
+	randprtc "service/random/protocol"
 	"time"
 )
 
@@ -25,7 +25,7 @@ func (h *test) Join(c *connser.Connect) {
 	sms[1] = 1
 	binary.BigEndian.PutUint16(sms[2:4], 1)
 
-	b, _ := encoder.Encode(protocol.RandRequest{10})
+	b, _ := encoder.Encode(randprtc.RandRequest{10})
 	//fmt.Printf("%s",b)
 	copy(sms[4:], b)
 	s := len(b) + 4

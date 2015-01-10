@@ -15,6 +15,7 @@ type ServerConfig struct {
 	Control    bool   `json: control`
 	Conn       *rpc.Client
 }
+
 type ServersConfig map[string][]ServerConfig
 
 type MasterConfig struct {

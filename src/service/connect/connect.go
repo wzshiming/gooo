@@ -9,6 +9,7 @@ import (
 	"gooo/session"
 	"service/connect/handel"
 	"service/connect/iorange"
+	connprot "service/connect/protocol"
 )
 
 type Connect struct {
@@ -22,20 +23,6 @@ func NewConnect() *Connect {
 	return &Connect{
 		uniq: session.NewUniqUint(),
 	}
-}
-
-func (s *Connect) Send(args protocol.SendRequest, reply *protocol.SendResponse) error {
-	for _, v := range args.Clients {
-
-		c := s.hand.Get(v)
-		if c != nil {
-			c.Conn().Write(args.Data)
-		}
-	}
-	*reply = protocol.SendResponse{
-		Error: 0,
-	}
-	return nil
 }
 
 func (s *Connect) Init(args protocol.InitRequest, reply *int) error {
@@ -55,12 +42,25 @@ func (s *Connect) Init(args protocol.InitRequest, reply *int) error {
 	return nil
 }
 
-func (s *Connect) Join(args protocol.GateRequest, reply *protocol.GateResponse) error {
+func (s *Connect) Send(args connprot.SendRequest, reply *connprot.SendResponse) error {
+	for _, v := range args.Clients {
+		c := s.hand.Get(v)
+		if c != nil {
+			c.Conn().Write(args.Data)
+		}
+	}
+	*reply = connprot.SendResponse{
+		Error: 0,
+	}
+	return nil
+}
+
+func (s *Connect) Join(args connprot.JoinRequest, reply *connprot.JoinResponse) error {
 	defer helper.Recover()
 	id := fmt.Sprintln(s.uniq())
 	reg := []byte(fmt.Sprintf("%s %s", s.caddr, id))
 	s.auth.Register(id)
-	*reply = protocol.GateResponse{
+	*reply = connprot.JoinResponse{
 		Sum:      s.hand.Len(),
 		Response: reg,
 	}
