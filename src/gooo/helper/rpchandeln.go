@@ -11,6 +11,7 @@ import (
 
 type Handeln struct {
 	Server *rpc.Server
+	listen net.Listener
 }
 
 func NewHandeln() *Handeln {
@@ -36,12 +37,17 @@ func (h *Handeln) Start(port string) {
 	if err != nil {
 		log.Fatalf("net.Listen(): %v\n", err)
 	}
-	defer lis.Close()
+	h.listen = lis
+	defer h.listen.Close()
 	for {
-		conn, err := lis.Accept()
+		conn, err := h.listen.Accept()
 		if err != nil {
 			log.Fatalf("lis.Accept(): %v\n", err)
 		}
 		go h.Server.ServeCodec(jsonrpc.NewServerCodec(conn))
 	}
+}
+
+func (h *Handeln) Stop() {
+	h.listen.Close()
 }

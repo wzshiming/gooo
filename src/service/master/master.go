@@ -12,13 +12,31 @@ import (
 )
 
 type Master struct {
+	conf *configs.Configs
 }
 
-func NewMaster() *Master {
-	return &Master{}
+func NewMaster(conf *configs.Configs) *Master {
+	return &Master{
+		conf: conf,
+	}
 }
 
-func (m *Master) None(args int, reply *int) error {
+func (m *Master) Stop(args int, reply *int) error {
+	if args == 222 {
+		for k1, v1 := range m.conf.Sc {
+			for k2, v2 := range v1 {
+				if v2.Conn == nil {
+					log.Printf("%v_%v Not connect\n", k1, k2)
+					continue
+				}
+				var b int
+				err := v2.Conn.Call("Status.Stop", 222, &b)
+				if err != nil {
+					log.Println(err)
+				}
+			}
+		}
+	}
 	return nil
 }
 
@@ -77,7 +95,7 @@ func main() {
 	//	}
 	//}
 
-	master := NewMaster()
+	master := NewMaster(conf)
 	h.Register(master)
 	helper.EchoPortInfo(configs.Name, configs.Port)
 	h.Start(configs.Port)

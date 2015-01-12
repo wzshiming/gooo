@@ -58,6 +58,7 @@ func main() {
 	h := helper.NewHandeln()
 	c := NewConnect()
 	h.RegisterName("Connect_old", c)
+	h.Register(helper.NewStatus(h))
 	helper.EchoPortInfo(configs.Name, configs.Port)
 	h.Start(configs.Port)
 }

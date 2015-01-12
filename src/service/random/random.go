@@ -113,7 +113,7 @@ func main() {
 	h := helper.NewHandeln()
 	c := NewRandom()
 	h.Register(c)
-
+	h.Register(helper.NewStatus(h))
 	helper.EchoPortInfo(configs.Name, configs.Port)
 	h.Start(configs.Port)
 }
