@@ -1,11 +1,17 @@
-{
-    "Master": {},
-    "Random": {
-        "Name" : ["Random"],
-        "Random" : [
-            "",
-            "Range100",
-            "Range100Spacing"
+[
+    {}
+    ,{
+        "name": "Random"
+        ,"map": [
+            {}
+            ,{
+                "name": "Random"
+                ,"map": [
+                    ""
+                    ,"Range100"
+                    ,"Range100Spacing"
+                ]
+            }
         ]
-    }  
-}
+    }
+]

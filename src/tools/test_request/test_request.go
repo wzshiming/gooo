@@ -31,7 +31,7 @@ func (h *test) Join(c *connser.Connect) {
 	s := len(b) + 4
 	//time.Sleep(100)
 	go func() {
-		for i := 0; i != 100000; i++ {
+		for i := 0; i != 1; i++ {
 			//time.Sleep(1)
 			c.Write(sms[:s])
 		}
@@ -42,7 +42,7 @@ func main() {
 	runtime.GOMAXPROCS(runtime.NumCPU())
 	ior := iorange.NewIORange(1024)
 	ttt := &test{}
-	for i := 0; i < 100; i++ {
+	for i := 0; i != 1; i++ {
 		connser.NewClientTCP("127.0.0.1:3005", ior, ttt)
 	}
 	log.Printf("end\n")

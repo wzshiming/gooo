@@ -18,24 +18,23 @@ import (
 type MethodServer struct {
 	caller  router.CallServer
 	methods [][]string
-	typ     string
+	name    string
 }
 
-func NewMethodServer(typ string, conf *configs.Configs) *MethodServer {
+func NewMethodServer(index int, conf *configs.Configs) *MethodServer {
 	fr := conf.Rc
+	fri := fr[index]
 	s := MethodServer{
-		caller:  *router.NewCallServer(typ, conf),
+		caller:  *router.NewCallServer(fri.Name, conf),
 		methods: make([][]string, len(fr)),
-		typ:     typ,
+		name:    fri.Name,
 	}
 
-	i := 0
-	for k1, v1 := range fr[typ] {
-		s.methods[i] = make([]string, len(v1))
-		for k2, v2 := range v1 {
-			s.methods[i][k2] = fmt.Sprintf("%v.%v", k1, v2)
+	for k1, v1 := range fri.Map {
+		s.methods[k1] = make([]string, len(v1.Map))
+		for k2, v2 := range v1.Map {
+			s.methods[k1][k2] = fmt.Sprintf("%v.%v", v1.Name, v2)
 		}
-		i++
 	}
 	return &s
 }
@@ -52,7 +51,7 @@ func (s *MethodServer) Call(c2 uint8, c3 uint16, args, reply interface{}) error 
 }
 
 func (s *MethodServer) Type() string {
-	return s.typ
+	return s.name
 }
 
 func (s *MethodServer) Methods() [][]string {
@@ -90,10 +89,8 @@ type MethodServers []MethodServer
 func NewMethodServers(conf *configs.Configs) *MethodServers {
 	fr := conf.Rc
 	s := make(MethodServers, len(fr))
-	i := 0
 	for k, _ := range fr {
-		s[i] = *NewMethodServer(k, conf)
-		i++
+		s[k] = *NewMethodServer(k, conf)
 	}
 	return &s
 }

@@ -5,7 +5,15 @@ import (
 	//"log"
 )
 
-type RouteConfig map[string]map[string][]string
+//type RouteConfig map[string]map[string][]string
+
+type RouteConfig []struct {
+	Name string `json: name`
+	Map  []struct {
+		Name string   `json: name`
+		Map  []string `json: map`
+	} `json: map`
+}
 
 type ServerConfig struct {
 	Name       string `json: name`
