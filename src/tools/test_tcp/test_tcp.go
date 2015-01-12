@@ -1,7 +1,7 @@
 package main
 
 import (
-	"encoding/binary"
+	//"encoding/binary"
 	"fmt"
 	"gooo/connser"
 	"gooo/helper"
@@ -35,12 +35,14 @@ func (h *Handel) Mess(c *connser.Connect, msg []byte) {
 			helper.RecoverInfo()
 		}
 	}()
-	c1 := msg[0]
-	c2 := msg[1]
-	c3 := binary.BigEndian.Uint16(msg[2:4])
+	c0 := msg[0]
+	c1 := msg[1]
+	c2 := msg[2]
+	c3 := msg[3]
 	log.Println("from:", c.RemoteAddr().String())
+	log.Println("flag:", c0)
 	log.Println("type:", c1)
-	log.Println("subtype:", c2)
+	log.Println("sub:", c2)
 	log.Println("code:", c3)
 	log.Println("info:", string(msg[4:]))
 	//h.HandelInterface.Mess(c, msg)

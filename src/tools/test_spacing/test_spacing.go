@@ -2,7 +2,7 @@ package main
 
 import (
 	//"bufio"
-	"encoding/binary"
+	//"encoding/binary"
 	//"fmt"
 	"gooo/configs"
 	"gooo/connser"
@@ -61,9 +61,10 @@ func (h *test2) Join(c *connser.Connect) {
 	log.Printf("%v %v Join Connect\n", c.ToUint(), c.Conn.RemoteAddr())
 
 	sms := make([]byte, 1024)
-	sms[0] = 1
 	sms[1] = 1
-	binary.BigEndian.PutUint16(sms[2:4], 2)
+	sms[2] = 1
+	sms[3] = 2
+	//binary.BigEndian.PutUint16(sms[2:4], 1)
 
 	b, _ := encoder.Encode(randprtc.RandRequest{10})
 	//fmt.Printf("%s",b)

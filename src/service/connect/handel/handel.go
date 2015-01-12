@@ -76,7 +76,7 @@ func (h *Handel) Mess(c *connser.Connect, msg []byte) {
 		return
 	}
 	if reply.Error == 0 && len(reply.Response) != 0 {
-		c.Write(reply.Response)
+		c.Write(append(msg[:4], reply.Response...))
 	}
 	if reply.Data != nil {
 		s := h.Get(id)

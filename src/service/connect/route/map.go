@@ -1,7 +1,7 @@
 package route
 
 import (
-	"encoding/binary"
+	//"encoding/binary"
 	"errors"
 	"fmt"
 	//"gooo/balance"
@@ -39,12 +39,12 @@ func NewMethodServer(index int, conf *configs.Configs) *MethodServer {
 	return &s
 }
 
-func (s *MethodServer) Call(c2 uint8, c3 uint16, args, reply interface{}) error {
+func (s *MethodServer) Call(c2 uint8, c3 uint8, args, reply interface{}) error {
 	if c2 >= uint8(len(s.methods)) {
 		return errors.New("MethodServer Call index c2 error")
 	}
 	m := s.methods[c2]
-	if c3 >= uint16(len(m)) {
+	if c3 >= uint8(len(m)) {
 		return errors.New("MethodServer Call index c3 error")
 	}
 	return s.caller.Call(m[c3], args, reply)
@@ -96,9 +96,10 @@ func NewMethodServers(conf *configs.Configs) *MethodServers {
 }
 
 func (s *MethodServers) Call(msg []byte, args, reply interface{}) error {
-	c1 := msg[0]
-	c2 := msg[1]
-	c3 := binary.BigEndian.Uint16(msg[2:4])
+	c1 := msg[1]
+	c2 := msg[2]
+	c3 := msg[3]
+	//c3 := binary.BigEndian.Uint16(msg[2:4])
 
 	if c1 >= byte(len(*s)) {
 		return errors.New("MethodServers Call index c1 error")
