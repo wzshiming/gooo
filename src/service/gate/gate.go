@@ -20,7 +20,7 @@ func NewGate() *Gate {
 func (s *Gate) Init(args protocol.InitRequest, reply *int) error {
 	if args.State == 1 {
 		conf := &args.Conf
-		conf.StartConnect()
+		//conf.StartConnect()
 		port := helper.GetPort(conf.Sc[configs.Type][configs.Id].ClientPort)
 		helper.EchoPublicPortInfo(configs.Name, port)
 		s.handel = handel.NewHandel(conf)

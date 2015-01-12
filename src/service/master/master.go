@@ -28,7 +28,7 @@ func (m *Master) Stop(args int, reply *int) error {
 					continue
 				}
 				var b int
-				err := v2.Conn.Call("Status.Stop", 222, &b)
+				err := v2.Conn().Call("Status.Stop", 222, &b)
 				if err != nil {
 					log.Println(err)
 				}
@@ -66,7 +66,7 @@ func main() {
 	configs.Port = helper.GetPort(conf.Mc.Port)
 
 	conf.StartServers()
-	conf.StartConnect()
+	//conf.StartConnect()
 	var b int
 	m := protocol.InitRequest{
 		Conf:  *conf,
@@ -78,7 +78,7 @@ func main() {
 				log.Printf("%v_%v Not connect\n", k1, k2)
 				continue
 			}
-			err := v2.Conn.Call(fmt.Sprintf("%v.Init", k1), m, &b)
+			err := v2.Conn().Call(fmt.Sprintf("%v.Init", k1), m, &b)
 			if err != nil {
 				log.Println(err)
 			}

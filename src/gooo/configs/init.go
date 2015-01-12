@@ -42,10 +42,9 @@ func (c *Configs) StartServers() {
 				args = append(args, "-p", fmt.Sprintf("%d", v2.Port))
 			}
 
-			if v2.Control {
-				args = append(args, "-i", fmt.Sprintf("%d", k2))
-				args = append(args, "-t", fmt.Sprintf("%s", k1))
-			}
+			args = append(args, "-i", fmt.Sprintf("%d", k2))
+			args = append(args, "-t", fmt.Sprintf("%s", k1))
+
 			args = append(args, "&")
 			//Control
 			//fmt.Println(args)
@@ -58,30 +57,24 @@ func (c *Configs) StartServers() {
 	time.Sleep(time.Second)
 }
 
-func (c *Configs) AllConnect() (t []*rpc.Client) {
-	csd := c.Sc
-	for k1, v1 := range csd {
-		for k2, v2 := range v1 {
-			name := fmt.Sprintf("%v_%v", k1, k2)
-			if name != Name && v2.Control {
-				t = append(t, v2.Conn)
-			}
-		}
-	}
-	return
-}
+//func (c *Configs) AllConnect() (t []*rpc.Client) {
+//	csd := c.Sc
+//	for k1, v1 := range csd {
+//		for k2, v2 := range v1 {
+//			name := fmt.Sprintf("%v_%v", k1, k2)
+//			if name != Name && v2.Control {
+//				t = append(t, v2.Conn)
+//			}
+//		}
+//	}
+//	return
+//}
 
-func (c *Configs) StartConnect() {
-	csd := c.Sc
-	for k1, v1 := range csd {
-		for k2, v2 := range v1 {
-			name := fmt.Sprintf("%v_%v", k1, k2)
-			addr := fmt.Sprintf("%v:%v", v2.Host, v2.Port)
-			if name != Name && v2.Control {
-				c.Sc[k1][k2].Conn = helper.NewConn(addr)
-				log.Println(Name, "connect to", addr, name)
-			}
-		}
+func (s *ServerConfig) Conn() *rpc.Client {
+	if s.conn == nil {
+		addr := fmt.Sprintf("%v:%v", s.Host, s.Port)
+		log.Println(Name, "connect to", addr)
+		return helper.NewConn(addr)
 	}
-	return
+	return s.conn
 }

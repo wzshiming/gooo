@@ -16,12 +16,10 @@ type RouteConfig []struct {
 }
 
 type ServerConfig struct {
-	Name       string `json: name`
 	Host       string `json: host`
 	Port       int    `json: port`
 	ClientPort int    `json: clientport`
-	Control    bool   `json: control`
-	Conn       *rpc.Client
+	conn       *rpc.Client
 }
 
 type ServersConfig map[string][]ServerConfig

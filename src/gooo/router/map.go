@@ -25,7 +25,7 @@ func NewCallServer(tye string, conf *configs.Configs) *CallServer {
 		bal:    balance.NewBalance(len(servers)),
 	}
 	for k, server := range servers {
-		s.Client[k] = server.Conn
+		s.Client[k] = server.Conn()
 		//log.Println(conf.Name, "Register", fmt.Sprintf("%v_%v", server.Name, k))
 	}
 	return &s

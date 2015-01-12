@@ -36,7 +36,7 @@ func (i *Information) Versions(args protocol.RpcRequest, reply *protocol.RpcResp
 func (r *Information) Init(args protocol.InitRequest, reply *int) error {
 	if args.State == 1 {
 		r.conf = &args.Conf
-		r.conf.StartConnect()
+		//r.conf.StartConnect()
 	}
 	return nil
 }

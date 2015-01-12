@@ -102,7 +102,7 @@ func (r *Random) Range100Spacing(args protocol.RpcRequest, reply *protocol.RpcRe
 func (r *Random) Init(args protocol.InitRequest, reply *int) error {
 	if args.State == 1 {
 		r.conf = &args.Conf
-		r.conf.StartConnect()
+		//r.conf.StartConnect()
 		r.call = router.NewCallServer("Connect", r.conf)
 	}
 	return nil
