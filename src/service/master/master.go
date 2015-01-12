@@ -7,8 +7,6 @@ import (
 	"fmt"
 	"gooo/helper"
 	"gooo/protocol"
-	//"log"
-	//"time"
 )
 
 type Master struct {
@@ -69,7 +67,6 @@ func main() {
 
 	conf.StartServers()
 	conf.StartConnect()
-
 	var b int
 	m := protocol.InitRequest{
 		Conf:  *conf,

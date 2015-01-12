@@ -15,6 +15,7 @@ import (
 	"time"
 )
 
+var startTime = time.Now()
 var (
 	Ior = iorange.NewIORange(1024)
 	T1  = &test{}
@@ -64,7 +65,7 @@ func (h *test2) Join(c *connser.Connect) {
 	//c.Write(sms[:s])
 	time.Sleep(100)
 	go func() {
-		for i := 0; i != 100; i++ {
+		for i := 0; i != 1000; i++ {
 			//time.Sleep(1)
 			c.Write(sms[:s])
 		}
@@ -74,6 +75,10 @@ func (h *test2) Mess(c *connser.Connect, msg []byte) {
 	//log.Printf("%v Mess Test %v\n", c.Conn.RemoteAddr(), msg)
 	gj++
 	log.Printf("%d %d\r\n", gi, gj)
+	if gj == 100000 {
+		log.Println(time.Now().Sub(startTime))
+
+	}
 }
 
 func main() {

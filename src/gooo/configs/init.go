@@ -7,6 +7,7 @@ import (
 	"net/rpc"
 	"os"
 	"os/exec"
+	"time"
 )
 
 type Configs struct {
@@ -45,7 +46,7 @@ func (c *Configs) StartServers() {
 				args = append(args, "-i", fmt.Sprintf("%d", k2))
 				args = append(args, "-t", fmt.Sprintf("%s", k1))
 			}
-
+			args = append(args, "&")
 			//Control
 			//fmt.Println(args)
 			cmd := exec.Command(b, args...)
@@ -54,6 +55,7 @@ func (c *Configs) StartServers() {
 			go cmd.Run()
 		}
 	}
+	time.Sleep(time.Second)
 }
 
 func (c *Configs) AllConnect() (t []*rpc.Client) {
