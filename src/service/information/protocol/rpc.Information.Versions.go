@@ -5,9 +5,9 @@ import (
 )
 
 type VersionsRequest struct {
-	Version string `json: version`
+	Version string `json:"version"`
 }
 
 type VersionsResponse struct {
-	Versions []string `json: versions`
+	Versions []string `json:"versions"`
 }

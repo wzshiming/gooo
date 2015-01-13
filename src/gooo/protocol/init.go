@@ -6,6 +6,6 @@ import (
 )
 
 type InitRequest struct {
-	Conf  configs.Configs `json: conf`
-	State int             `json: state`
+	Conf  configs.Configs `json:"conf"`
+	State int             `json:"state"`
 }

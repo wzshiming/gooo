@@ -12,11 +12,11 @@ import (
 
 type Session struct {
 	sync.Mutex
-	Data           map[string]interface{} `json: d`
-	ConnectTime    time.Time              `json: c`
-	LastPacketTime time.Time              `json: l`
-	Dirtycount     uint                   `json: i`
-	Uniq           Unique                 `json: u`
+	Data           map[string]interface{} `json:"d"`
+	ConnectTime    time.Time              `json:"c"`
+	LastPacketTime time.Time              `json:"l"`
+	Dirtycount     uint                   `json:"i"`
+	Uniq           Unique                 `json:"u"`
 	conn           *connser.Connect
 }
 
