@@ -14,4 +14,21 @@
             }
         ]
     }
+    ,{
+        "name": "Auth"
+        ,"map": [
+            {}
+            ,{
+                "name": "Auth"
+                ,"map": [
+                    ""
+                    ,"Unregister"
+                    ,"Register"
+                    ,"LogIn"
+                    ,"LogOut"
+                    ,"ChangePwd"
+                ]
+            }
+        ]
+    }
 ]

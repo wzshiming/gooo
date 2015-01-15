@@ -1,6 +1,7 @@
 package handel
 
 import (
+	"fmt"
 	"gooo/configs"
 	"gooo/connser"
 	"gooo/helper"
@@ -72,21 +73,23 @@ func (h *Handel) Mess(c *connser.Connect, msg []byte) {
 	}, &reply)
 
 	if err != nil {
-		log.Println(err)
+		//log.Println(err)
+		c.Write(append(msg[:4], []byte(fmt.Sprintf("{\"e\":\"%s\"}", err.Error()))...))
 		return
 	}
 	if reply.Error == 0 && len(reply.Response) != 0 {
 		c.Write(append(msg[:4], reply.Response...))
+		return
 	}
-	if reply.Data != nil {
-		s := h.Get(id)
-		s.Lock()
-		defer s.Unlock()
-		//log.Println(reply.Data)
-		for k, v := range *reply.Data {
-			s.Data[k] = v
-		}
-	}
+	//if reply.Data != nil {
+	//	s := h.Get(id)
+	//	s.Lock()
+	//	defer s.Unlock()
+	//	//log.Println(reply.Data)
+	//	for k, v := range *reply.Data {
+	//		s.Data[k] = v
+	//	}
+	//}
 
 	//log.Printf("%s\n", reply)
 }

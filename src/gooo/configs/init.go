@@ -14,6 +14,7 @@ type Configs struct {
 	Sc ServersConfig
 	Rc RouteConfig
 	Mc MasterConfig
+	Dc DataBaseConfig
 }
 
 func NewConfigs(m *map[string][]byte) *Configs {
@@ -25,10 +26,15 @@ func NewConfigs(m *map[string][]byte) *Configs {
 
 	var mc MasterConfig
 	helper.GetConfig((*m)["master"], &mc)
+
+	var dc DataBaseConfig
+	helper.GetConfig((*m)["database"], &dc)
+
 	return &Configs{
 		Sc: sc,
 		Rc: rc,
 		Mc: mc,
+		Dc: dc,
 	}
 }
 
@@ -77,4 +83,21 @@ func (s *ServerConfig) Conn() *rpc.Client {
 		return helper.NewConn(addr)
 	}
 	return s.conn
+}
+
+func (s *RouteConfig) FindIndex(c1, c2, c3 string) (i1, i2, i3 uint8) {
+	for k1, v1 := range *s {
+		if v1.Name == c1 {
+			for k2, v2 := range v1.Map {
+				if v2.Name == c2 {
+					for k3, v3 := range v2.Map {
+						if v3 == c3 {
+							return uint8(k1), uint8(k2), uint8(k3)
+						}
+					}
+				}
+			}
+		}
+	}
+	return 255, 255, 255
 }

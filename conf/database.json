@@ -1,0 +1,6 @@
+{
+    "Users":{
+        "dialect":"mysql",
+        "source":"yugioh:YuGiOh2015@tcp(mohegame.com:39979)/YuGiOh?charset=utf8&parseTime=True"
+    }
+}

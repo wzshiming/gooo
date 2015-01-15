@@ -29,3 +29,8 @@ type MasterConfig struct {
 	Host string `json:"host"`
 	Port int    `json:"port"`
 }
+
+type DataBaseConfig map[string]struct {
+	Dialect string `json:"dialect"`
+	Source  string `json:"source"`
+}

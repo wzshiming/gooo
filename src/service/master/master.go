@@ -54,9 +54,10 @@ func main() {
 	defer helper.Recover()
 	//Build("./configs/Servers.json")
 	mm := map[string][]byte{
-		"master":  helper.OpenFile("./configs/master.json"),
-		"servers": helper.OpenFile("./configs/servers.json"),
-		"route":   helper.OpenFile("./configs/route.json"),
+		"master":   helper.OpenFile("./configs/master.json"),
+		"servers":  helper.OpenFile("./configs/servers.json"),
+		"route":    helper.OpenFile("./configs/route.json"),
+		"database": helper.OpenFile("./configs/database.json"),
 	}
 
 	h := helper.NewHandeln()

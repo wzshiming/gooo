@@ -24,3 +24,15 @@ func RecoverInfo() {
 		log.Printf("file: %v, line: %v, func: %v", file, line, f)
 	}
 }
+
+func MsgInfo(msg []byte) {
+	c0 := msg[0]
+	c1 := msg[1]
+	c2 := msg[2]
+	c3 := msg[3]
+	log.Println("flag:", c0)
+	log.Println("type:", c1)
+	log.Println("sub:", c2)
+	log.Println("code:", c3)
+	log.Println("info:", string(msg[4:]))
+}
