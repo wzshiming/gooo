@@ -8,7 +8,7 @@ import (
 	"gooo/router"
 	"log"
 	"math/rand"
-	"reflect"
+	//"reflect"
 	connprtc "service/connect/protocol"
 	randprtc "service/random/protocol"
 	"time"
@@ -67,32 +67,28 @@ func (r *Random) Range100Spacing(args protocol.RpcRequest, reply *protocol.RpcRe
 	b := connprtc.SendRequest{
 		Clients: []uint{args.Session.Uniq.Id},
 	}
-	sess := args.Session.Data
-	vv := reflect.ValueOf(sess["size"])
-	log.Println(vv)
-	log.Println(args.Id, sess)
-	log.Println(sess["size"])
-	tmp, _ := sess["size"].(float64)
-	rss := int(tmp)
-	log.Println(rss)
+	var t struct {
+		Size int `json:"size"`
+	}
+	encoder.Decode(args.Session.Data, &t)
+	log.Println(t)
 	var re connprtc.SendResponse
 	//args.Session.Uniq.Server
 	for i := 0; i != p.Size; i++ {
 		time.Sleep(time.Duration(p.Space))
 		ret := randprtc.RandResponse{
-			Rands: []int{<-r.ch, rss},
+			Rands: []int{<-r.ch, t.Size},
 		}
 		res, _ := encoder.Encode(ret)
 		b.Data = res
 		r.call.CallBySession(args.Session, "Connect.Send", b, &re)
-		//sc.Call("Connect.Send", b, &re)
-		//log.Println("ret",b)
+
 	}
 
 	*reply = protocol.RpcResponse{
 		Error: "",
 		Data: &map[string]interface{}{
-			"size": rss + 1,
+			"size": t.Size + 1,
 		},
 	}
 	//log.Println(t)

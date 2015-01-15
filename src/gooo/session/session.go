@@ -12,17 +12,17 @@ import (
 
 type Session struct {
 	sync.Mutex
-	Data           map[string]interface{} `json:"d"`
-	ConnectTime    time.Time              `json:"c"`
-	LastPacketTime time.Time              `json:"l"`
-	Dirtycount     uint                   `json:"i"`
-	Uniq           Unique                 `json:"u"`
+	Data           []byte    `json:"d"`
+	ConnectTime    time.Time `json:"c"`
+	LastPacketTime time.Time `json:"l"`
+	Dirtycount     uint      `json:"i"`
+	Uniq           Unique    `json:"u"`
 	conn           *connser.Connect
 }
 
 func NewSession(conn *connser.Connect) *Session {
 	return &Session{
-		Data:           make(map[string]interface{}, 1024),
+		Data:           []byte("{}"),
 		ConnectTime:    time.Now(),
 		LastPacketTime: time.Now(),
 		Dirtycount:     0,

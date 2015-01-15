@@ -46,7 +46,7 @@ func (s *Connect) Send(args connprot.SendRequest, reply *connprot.SendResponse) 
 	for _, v := range args.Clients {
 		c := s.hand.Get(v)
 		if c != nil {
-			c.Conn().Write(args.Data)
+			c.Conn().Write(append([]byte{255, 255, 255, 255}, args.Data...))
 		}
 	}
 	*reply = connprot.SendResponse{

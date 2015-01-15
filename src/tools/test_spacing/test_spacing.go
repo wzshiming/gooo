@@ -18,9 +18,10 @@ import (
 
 var (
 	mm = map[string][]byte{
-		"master":  helper.OpenFile("./configs/master.json"),
-		"servers": helper.OpenFile("./configs/servers.json"),
-		"route":   helper.OpenFile("./configs/route.json"),
+		"master":   helper.OpenFile("./configs/master.json"),
+		"servers":  helper.OpenFile("./configs/servers.json"),
+		"route":    helper.OpenFile("./configs/route.json"),
+		"database": helper.OpenFile("./configs/database.json"),
 	}
 
 	conf = configs.NewConfigs(&mm)
@@ -60,10 +61,12 @@ func (h *test2) Join(c *connser.Connect) {
 	c.Write(h.hand)
 	log.Printf("%v %v Join Connect\n", c.ToUint(), c.Conn.RemoteAddr())
 
+	c1, c2, c3 := conf.Rc.FindIndex("Random", "Random", "Range100Spacing")
 	sms := make([]byte, 1024)
-	sms[1] = 1
-	sms[2] = 1
-	sms[3] = 2
+	sms[1] = c1
+	sms[2] = c2
+	sms[3] = c3
+	log.Println(sms[:4])
 	//binary.BigEndian.PutUint16(sms[2:4], 1)
 
 	b, _ := encoder.Encode(randprtc.RandRequest{10})

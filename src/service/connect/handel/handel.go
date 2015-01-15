@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"gooo/configs"
 	"gooo/connser"
+	"gooo/encoder"
 	"gooo/helper"
 	"gooo/protocol"
 	"gooo/session"
@@ -93,8 +94,13 @@ func (h *Handel) Mess(c *connser.Connect, msg []byte) {
 			c.Write(append(msg[:4], OkInfo()...))
 		}
 		if reply.Data != nil {
+			var t map[string]interface{}
+			encoder.Decode(s.Data, &t)
 			for k, v := range *reply.Data {
-				s.Data[k] = v
+				t[k] = v
+			}
+			if b, err := encoder.Encode(t); err == nil {
+				s.Data = b
 			}
 		}
 	}

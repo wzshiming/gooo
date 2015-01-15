@@ -2,10 +2,6 @@ package protocol
 
 import ()
 
-type OkResponse struct {
-	Ok bool `json:"ok"`
-}
-
 type RegisterRequest struct {
 	Username string `json:"u"`
 	Password string `json:"p"`
