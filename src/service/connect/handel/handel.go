@@ -55,6 +55,14 @@ func (h *Handel) Join(c *connser.Connect) {
 	h.Set(c.ToUint(), session.NewSession(c))
 }
 
+func ErrorInfo(s string) []byte {
+	return []byte(fmt.Sprintf("{\"e\":\"%s\"}", s))
+}
+
+func OkInfo() []byte {
+	return []byte("{\"e\":\"\"}")
+}
+
 func (h *Handel) Mess(c *connser.Connect, msg []byte) {
 	defer func() {
 		if err := recover(); err != nil {
@@ -64,6 +72,8 @@ func (h *Handel) Mess(c *connser.Connect, msg []byte) {
 	}()
 	id := c.ToUint()
 	s := h.Get(id)
+	s.Lock()
+	defer s.Unlock()
 	//log.Printf("%v msg  %v\n", c.RemoteAddr(),msg)
 	var reply protocol.RpcResponse
 
@@ -73,25 +83,22 @@ func (h *Handel) Mess(c *connser.Connect, msg []byte) {
 	}, &reply)
 
 	if err != nil {
-		//log.Println(err)
-		c.Write(append(msg[:4], []byte(fmt.Sprintf("{\"e\":\"%s\"}", err.Error()))...))
-		return
+		c.Write(append(msg[:4], ErrorInfo(err.Error())...))
+	} else {
+		if reply.Error != "" {
+			c.Write(append(msg[:4], ErrorInfo(reply.Error)...))
+		} else if len(reply.Response) != 0 {
+			c.Write(append(msg[:4], reply.Response...))
+		} else {
+			c.Write(append(msg[:4], OkInfo()...))
+		}
+		if reply.Data != nil {
+			for k, v := range *reply.Data {
+				s.Data[k] = v
+			}
+		}
 	}
-	if reply.Error == 0 && len(reply.Response) != 0 {
-		c.Write(append(msg[:4], reply.Response...))
-		return
-	}
-	//if reply.Data != nil {
-	//	s := h.Get(id)
-	//	s.Lock()
-	//	defer s.Unlock()
-	//	//log.Println(reply.Data)
-	//	for k, v := range *reply.Data {
-	//		s.Data[k] = v
-	//	}
-	//}
-
-	//log.Printf("%s\n", reply)
+	return
 }
 func (h *Handel) Exit(c *connser.Connect) {
 	h.Del(c.ToUint())

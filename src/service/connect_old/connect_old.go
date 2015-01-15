@@ -23,7 +23,6 @@ func NewConnect() *Connect {
 
 func (s *Connect) Send(args connprot.SendRequest, reply *connprot.SendResponse) error {
 	for _, v := range args.Clients {
-
 		c := s.hand.Get(v)
 		if c != nil {
 			c.Conn().Write(args.Data)

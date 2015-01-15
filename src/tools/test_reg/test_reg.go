@@ -31,7 +31,7 @@ func (h *test) Mess(c *connser.Connect, msg []byte) {
 }
 func (h *test) Join(c *connser.Connect) {
 	log.Printf("%v %v Join\n", c.ToUint(), c.Conn.RemoteAddr())
-	c1, c2, c3 := conf.Rc.FindIndex("Auth", "Auth", "Register")
+	c1, c2, c3 := conf.Rc.FindIndex("Auth", "Auth", "ChangePwd")
 	sms := make([]byte, 1024)
 	sms[1] = c1
 	sms[2] = c2
@@ -39,9 +39,10 @@ func (h *test) Join(c *connser.Connect) {
 	log.Println(sms[:4])
 	//binary.BigEndian.PutUint16(sms[2:4], 1)
 
-	b, _ := encoder.Encode(authprtc.RegisterRequest{
-		Username: "hallo1",
-		Password: "nopwdss",
+	b, _ := encoder.Encode(authprtc.ChangePwdRequest{
+		Username:    "hallo1",
+		Password:    "yougeegge",
+		NewPassword: "aaaaaaa",
 	})
 	//fmt.Printf("%s",b)
 	copy(sms[4:], b)

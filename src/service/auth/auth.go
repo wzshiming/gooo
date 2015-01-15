@@ -1,6 +1,7 @@
 package main
 
 import (
+	"log"
 	//"database/sql"
 	//"fmt"
 	"errors"
@@ -23,54 +24,42 @@ type Auth struct {
 func NewAuth() *Auth {
 	return &Auth{}
 }
-
-func (r *Auth) Register(args protocol.RpcRequest, reply *protocol.RpcResponse) (err error) {
+func (r *Auth) all() {
+	var users []authprtc.User
+	r.db.Find(&users)
+	log.Println(users)
+}
+func (r *Auth) Register(args protocol.RpcRequest, reply *protocol.RpcResponse) error {
 	var p authprtc.RegisterRequest
 	encoder.Decode(args.Request, &p)
-
 	if len(p.Password) <= 6 {
 		return errors.New("密码太短")
 	}
-
-	err = r.db.Create(authprtc.User{
+	if err := r.db.Create(authprtc.User{
 		Username: p.Username,
 		Password: p.Password,
-	}).Error
-	if err != nil {
+	}).Error; err != nil {
 		return errors.New("用户名已存在")
-	}
-
-	ret := authprtc.OkResponse{true}
-	res, _ := encoder.Encode(ret)
-	*reply = protocol.RpcResponse{
-		Response: res,
 	}
 	return nil
 }
 
-func (r *Auth) ChangePwd(args protocol.RpcRequest, reply *protocol.RpcResponse) (err error) {
-	//var p authprtc.RegisterRequest
-	//encoder.Decode(args.Request, &p)
-
-	//if len(p.NewPassword) <= 6 {
-	//	return errors.New("新密码太短")
-	//}
-	//var ouser authprtc.User
-
-	////err = r.db.Where("Username = ?", p.Username).First(&ouser)
-	//err = r.db.Updta(authprtc.User{
-	//	Username: p.Username,
-	//	Password: p.Password,
-	//}).Error
-	//if err != nil {
-	//	return errors.New("用户名已存在")
-	//}
-
-	//ret := authprtc.OkResponse{true}
-	//res, _ := encoder.Encode(ret)
-	//*reply = protocol.RpcResponse{
-	//	Response: res,
-	//}
+func (r *Auth) ChangePwd(args protocol.RpcRequest, reply *protocol.RpcResponse) error {
+	var p authprtc.ChangePwdRequest
+	encoder.Decode(args.Request, &p)
+	if len(p.NewPassword) <= 6 {
+		return errors.New("新密码太短")
+	}
+	var ouser authprtc.User
+	if err := r.db.Where(&authprtc.User{
+		Username: p.Username,
+	}).First(&ouser).Error; err != nil {
+		return errors.New("用户不存在")
+	}
+	if ouser.Password != p.Password {
+		return errors.New("密码错误")
+	}
+	r.db.Model(&ouser).Update(&authprtc.User{Password: p.NewPassword})
 	return nil
 }
 
@@ -79,6 +68,20 @@ func (r *Auth) Unregister(args protocol.RpcRequest, reply *protocol.RpcResponse)
 }
 
 func (r *Auth) LogIn(args protocol.RpcRequest, reply *protocol.RpcResponse) error {
+	var p authprtc.LogInRequest
+	encoder.Decode(args.Request, &p)
+	var ouser authprtc.User
+	if err := r.db.Where(&authprtc.User{Username: p.Username}).First(&ouser).Error; err != nil {
+		return errors.New("用户不存在")
+	}
+	if ouser.Password != p.Password {
+		return errors.New("密码错误")
+	}
+	*reply = protocol.RpcResponse{
+		Data: &map[string]interface{}{
+			"UserId": ouser.Id,
+		},
+	}
 	return nil
 }
 

@@ -26,7 +26,7 @@ func (i *Information) Versions(args protocol.RpcRequest, reply *protocol.RpcResp
 
 	res, _ := encoder.Encode(r)
 	*reply = protocol.RpcResponse{
-		Error:    0,
+		Error:    "",
 		Response: res,
 	}
 	//log.Println(t)

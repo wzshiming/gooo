@@ -6,17 +6,13 @@ import (
 )
 
 type RpcRequest struct {
-	Request []byte           `json:"request"`
-	Session *session.Session `json:"session"`
-	Id      uint             `json:"id"`
+	Request []byte           `json:"r"`
+	Session *session.Session `json:"s"`
+	Id      uint             `json:"i"`
 }
 
 type RpcResponse struct {
-	Error    int                     `json:"error"`
-	Data     *map[string]interface{} `json:"data"`
-	Response []byte                  `json:"response"`
-}
-
-type OkResponse struct {
-	Error int `json:"error"`
+	Error    string                  `json:"e"`
+	Data     *map[string]interface{} `json:"d"`
+	Response []byte                  `json:"r"`
 }

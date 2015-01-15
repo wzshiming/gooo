@@ -51,7 +51,7 @@ func (r *Random) Range100(args protocol.RpcRequest, reply *protocol.RpcResponse)
 	}
 	res, _ := encoder.Encode(ret)
 	*reply = protocol.RpcResponse{
-		Error:    0,
+		Error:    "",
 		Response: res,
 	}
 	//log.Println(t)
@@ -90,7 +90,7 @@ func (r *Random) Range100Spacing(args protocol.RpcRequest, reply *protocol.RpcRe
 	}
 
 	*reply = protocol.RpcResponse{
-		Error: 0,
+		Error: "",
 		Data: &map[string]interface{}{
 			"size": rss + 1,
 		},
