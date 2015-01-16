@@ -18,14 +18,15 @@ ECHO 		 := echo
 
 .PHONY: install build run clean elses
 
-all: install clean_pkg run
+all: install run clean_pkg
 
 install:
 	@$(ECHO) installing...
-	@$(MKDIR) $(BUILD_DIR) $(BUILD_DIR)/configs $(BUILD_DIR)/static $(BUILD_DIR)/log
-	@$(CP) ./conf/*.json $(BUILD_DIR)/configs
+	@$(MKDIR) $(BUILD_DIR) $(BUILD_DIR)/conf $(BUILD_DIR)/static $(BUILD_DIR)/log $(BUILD_DIR)/i18n
+	@$(CP) ./conf/*.json $(BUILD_DIR)/conf
+	@$(CP) ./i18n/*.json $(BUILD_DIR)/i18n
 	@$(ECHO) $(foreach tar, $(FILES_SERV:%.go=%),`$(GO) install service/$(tar)` ) > /dev/null
-	@$(ECHO) $(foreach tar, $(FILES_TEST:%.go=%),`$(GO) install tools/$(tar)` ) > /dev/null
+	@$(ECHO) $(foreach tar, $(FILES_TEST:%.go=%),`$(GO) install tools/$(tar)` ) & > /dev/null
 
 run: 
 	@$(ECHO) running...

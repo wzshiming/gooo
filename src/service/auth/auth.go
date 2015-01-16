@@ -4,8 +4,9 @@ import (
 	"log"
 
 	"errors"
-	//_ "github.com/go-sql-driver/mysql"
+	_ "github.com/go-sql-driver/mysql"
 	"github.com/jinzhu/gorm"
+	i18n "github.com/kortem/lingo"
 	//_ "github.com/lib/pq"
 	"gooo/configs"
 	"gooo/encoder"
@@ -17,11 +18,13 @@ import (
 type Auth struct {
 	conf *configs.Configs
 	db   gorm.DB
+	i18n *i18n.L
 }
 
 func NewAuth() *Auth {
-	return &Auth{}
+	return &Auth{i18n: i18n.New("zh_CN", "i18n")}
 }
+
 func (r *Auth) all() {
 	var users []authprtc.User
 	r.db.Find(&users)
@@ -30,14 +33,19 @@ func (r *Auth) all() {
 func (r *Auth) Register(args protocol.RpcRequest, reply *protocol.RpcResponse) error {
 	var p authprtc.RegisterRequest
 	encoder.Decode(args.Request, &p)
+	var d struct {
+		Language string
+	}
+	encoder.Decode(args.Session.Data, &d)
+	Trans := r.i18n.TranslationsForLocale(d.Language)
 	if len(p.Password) <= 6 {
-		return errors.New("密码太短")
+		return errors.New(Trans.Value("auth.pwdshort"))
 	}
 	if err := r.db.Create(authprtc.User{
 		Username: p.Username,
 		Password: p.Password,
 	}).Error; err != nil {
-		return errors.New("用户名已存在")
+		return errors.New(Trans.Value("auth.userexists"))
 	}
 	return nil
 }
@@ -45,35 +53,57 @@ func (r *Auth) Register(args protocol.RpcRequest, reply *protocol.RpcResponse) e
 func (r *Auth) ChangePwd(args protocol.RpcRequest, reply *protocol.RpcResponse) error {
 	var p authprtc.ChangePwdRequest
 	encoder.Decode(args.Request, &p)
+	var d struct {
+		UserId   int64
+		Language string
+	}
+
+	encoder.Decode(args.Session.Data, &d)
+	Trans := r.i18n.TranslationsForLocale(d.Language)
+
 	if len(p.NewPassword) <= 6 {
-		return errors.New("新密码太短")
+		return errors.New(Trans.Value("auth.newpwdshort"))
 	}
 	var ouser authprtc.User
 	if err := r.db.Where(&authprtc.User{
 		Username: p.Username,
 	}).First(&ouser).Error; err != nil {
-		return errors.New("用户不存在")
+		return errors.New(Trans.Value("auth.usernotexists"))
 	}
 	if ouser.Password != p.Password {
-		return errors.New("密码错误")
+		return errors.New(Trans.Value("auth.pwderr"))
 	}
 	r.db.Model(&ouser).Update(&authprtc.User{Password: p.NewPassword})
 	return nil
 }
 
 func (r *Auth) Unregister(args protocol.RpcRequest, reply *protocol.RpcResponse) error {
-	return errors.New("敬请期待")
+	var d struct {
+		Language string
+	}
+	encoder.Decode(args.Session.Data, &d)
+	Trans := r.i18n.TranslationsForLocale(d.Language)
+	return errors.New(Trans.Value("none"))
 }
 
 func (r *Auth) LogIn(args protocol.RpcRequest, reply *protocol.RpcResponse) error {
 	var p authprtc.LogInRequest
 	encoder.Decode(args.Request, &p)
+	var d struct {
+		Language string
+		UserId   int64
+	}
+	encoder.Decode(args.Session.Data, &d)
+	Trans := r.i18n.TranslationsForLocale(d.Language)
+	if d.UserId != 0 {
+		return errors.New(Trans.Value("auth.islogin"))
+	}
 	var ouser authprtc.User
 	if err := r.db.Where(&authprtc.User{Username: p.Username}).First(&ouser).Error; err != nil {
-		return errors.New("用户不存在")
+		return errors.New(Trans.Value("auth.usernotexists"))
 	}
 	if ouser.Password != p.Password {
-		return errors.New("密码错误")
+		return errors.New(Trans.Value("auth.pwderr"))
 	}
 	*reply = protocol.RpcResponse{
 		Data: &map[string]interface{}{
@@ -84,12 +114,14 @@ func (r *Auth) LogIn(args protocol.RpcRequest, reply *protocol.RpcResponse) erro
 }
 
 func (r *Auth) LogOut(args protocol.RpcRequest, reply *protocol.RpcResponse) error {
-	var p struct {
-		UserId int64
+	var d struct {
+		UserId   int64
+		Language string
 	}
-	encoder.Decode(args.Session.Data, &p)
-	if p.UserId == 0 {
-		return errors.New("你没有登入")
+	encoder.Decode(args.Session.Data, &d)
+	Trans := r.i18n.TranslationsForLocale(d.Language)
+	if d.UserId == 0 {
+		return errors.New(Trans.Value("auth.nologin"))
 	}
 	*reply = protocol.RpcResponse{
 		Data: &map[string]interface{}{

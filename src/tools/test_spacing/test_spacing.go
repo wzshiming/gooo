@@ -17,14 +17,7 @@ import (
 )
 
 var (
-	mm = map[string][]byte{
-		"master":   helper.OpenFile("./configs/master.json"),
-		"servers":  helper.OpenFile("./configs/servers.json"),
-		"route":    helper.OpenFile("./configs/route.json"),
-		"database": helper.OpenFile("./configs/database.json"),
-	}
-
-	conf = configs.NewConfigs(&mm)
+	conf = configs.NewConfigsFrom("./conf")
 
 	Ior = iorange.NewIORange(1024)
 	T1  = &test{}

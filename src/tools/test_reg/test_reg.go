@@ -17,7 +17,7 @@ import (
 	"time"
 )
 
-var conf = configs.NewConfigsFrom("./configs")
+var conf = configs.NewConfigsFrom("./conf")
 
 type test struct {
 	helper.HandelInterface
@@ -29,14 +29,14 @@ func (h *test) Mess(c *connser.Connect, msg []byte) {
 
 func (h *test) Join(c *connser.Connect) {
 	log.Printf("%v %v Join\n", c.ToUint(), c.Conn.RemoteAddr())
-	b := route.ClientRequestForm(conf, "Auth", "Auth", "ChangePwd", authprtc.ChangePwdRequest{
-		Username:    "hallo1",
-		Password:    "aaaaaaa",
-		NewPassword: "aaasssss",
+	b := route.ClientRequestForm(conf, "Auth", "Auth", "LogIn", authprtc.LogInRequest{
+		Username: "hallo1",
+		Password: "aaasssss",
+		//NewPassword: "aaasssss",
 	})
 
 	c.Write(b)
-
+	c.Write(b)
 }
 
 func main() {

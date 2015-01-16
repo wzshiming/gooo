@@ -52,10 +52,9 @@ func (m *Master) Stop(args int, reply *int) error {
 
 func main() {
 	defer helper.Recover()
-	//Build("./configs/Servers.json")
 	h := helper.NewHandeln()
 
-	conf := configs.NewConfigsFrom("./configs")
+	conf := configs.NewConfigsFrom("./conf")
 	configs.Name = conf.Mc.Name
 	configs.Port = helper.GetPort(conf.Mc.Port)
 
