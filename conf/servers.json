@@ -1,13 +1,6 @@
 {
-    "Gate":[
-         {"host":"127.0.0.1", "port":6001,"clientport":6002}
-    ]
-    ,"Connect":[
-         {"host":"127.0.0.1", "port":4000,"clientport":3000}
-        ,{"host":"127.0.0.1", "port":4001,"clientport":3001}
-    ]
-    ,"Connect_old":[
-         {"host":"127.0.0.1", "port":4005,"clientport":3005}
+    "Connect":[
+         {"host":"127.0.0.1", "port":4000,"clientport":3005}
     ]
     ,"Random":[
          {"host":"127.0.0.1", "port":4010}
@@ -17,6 +10,6 @@
          {"host":"127.0.0.1", "port":4020}
     ]
     ,"Auth":[
-         {"host":"127.0.0.1", "port":7000}
+         {"host":"127.0.0.1", "port":5000}
     ]
 }

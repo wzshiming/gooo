@@ -8,6 +8,7 @@
     ,"auth": {
         "nologin": "你没有登入"
         ,"islogin": "你已经登入"
+        ,"inlogin": "该账号已在别处登入"
         ,"pwdshort": "密码太短"
         ,"newpwdshort": "新密码太短"
         ,"usernotexists": "该用户不存在"

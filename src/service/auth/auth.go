@@ -1,24 +1,26 @@
 package main
 
 import (
-	"log"
-
 	"errors"
 	_ "github.com/go-sql-driver/mysql"
 	"github.com/jinzhu/gorm"
 	i18n "github.com/kortem/lingo"
+	"log"
 	//_ "github.com/lib/pq"
 	"gooo/configs"
 	"gooo/encoder"
 	"gooo/helper"
 	"gooo/protocol"
+	"gooo/router"
 	authprtc "service/auth/protocol"
+	connprtc "service/connect/protocol"
 )
 
 type Auth struct {
-	conf *configs.Configs
-	db   gorm.DB
-	i18n *i18n.L
+	conf     *configs.Configs
+	db       gorm.DB
+	i18n     *i18n.L
+	conncall *router.CallServer
 }
 
 func NewAuth() *Auth {
@@ -78,12 +80,33 @@ func (r *Auth) ChangePwd(args protocol.RpcRequest, reply *protocol.RpcResponse) 
 }
 
 func (r *Auth) Unregister(args protocol.RpcRequest, reply *protocol.RpcResponse) error {
+	var p authprtc.LogInRequest
+	encoder.Decode(args.Request, &p)
 	var d struct {
 		Language string
+		UserId   int64
 	}
 	encoder.Decode(args.Session.Data, &d)
 	Trans := r.i18n.TranslationsForLocale(d.Language)
-	return errors.New(Trans.Value("none"))
+	if d.UserId != 0 {
+		return errors.New(Trans.Value("auth.islogin"))
+	}
+	var ouser authprtc.User
+	if err := r.db.Where(&authprtc.User{Username: p.Username}).First(&ouser).Error; err != nil {
+		return errors.New(Trans.Value("auth.usernotexists"))
+	}
+	if ouser.Password != p.Password {
+		return errors.New(Trans.Value("auth.pwderr"))
+	}
+	var gonli connprtc.GetOnlineResponse
+	r.conncall.CallBySession(args.Session, "Connect.GetOnline", connprtc.GetOnlineRequest{
+		UserId: ouser.Id,
+	}, &gonli)
+	if gonli.Online {
+		return errors.New(Trans.Value("auth.inlogin"))
+	}
+	r.db.Delete(ouser)
+	return nil
 }
 
 func (r *Auth) LogIn(args protocol.RpcRequest, reply *protocol.RpcResponse) error {
@@ -105,6 +128,18 @@ func (r *Auth) LogIn(args protocol.RpcRequest, reply *protocol.RpcResponse) erro
 	if ouser.Password != p.Password {
 		return errors.New(Trans.Value("auth.pwderr"))
 	}
+	var gonli connprtc.GetOnlineResponse
+	r.conncall.CallBySession(args.Session, "Connect.GetOnline", connprtc.GetOnlineRequest{
+		UserId: ouser.Id,
+	}, &gonli)
+	if gonli.Online {
+		return errors.New(Trans.Value("auth.inlogin"))
+	}
+	var sonli connprtc.SetOnlineResponse
+	r.conncall.CallBySession(args.Session, "Connect.SetOnline", connprtc.SetOnlineRequest{
+		UserId: ouser.Id,
+		Online: true,
+	}, &sonli)
 	*reply = protocol.RpcResponse{
 		Data: &map[string]interface{}{
 			"UserId": ouser.Id,
@@ -123,6 +158,11 @@ func (r *Auth) LogOut(args protocol.RpcRequest, reply *protocol.RpcResponse) err
 	if d.UserId == 0 {
 		return errors.New(Trans.Value("auth.nologin"))
 	}
+	var sonli connprtc.SetOnlineResponse
+	r.conncall.CallBySession(args.Session, "Connect.SetOnline", connprtc.SetOnlineRequest{
+		UserId: d.UserId,
+		Online: false,
+	}, &sonli)
 	*reply = protocol.RpcResponse{
 		Data: &map[string]interface{}{
 			"UserId": 0,
@@ -136,6 +176,7 @@ func (r *Auth) Init(args protocol.InitRequest, reply *int) (err error) {
 		r.conf = &args.Conf
 		us := r.conf.Dc["Users"]
 		r.db, err = gorm.Open(us.Dialect, us.Source)
+		r.conncall = router.NewCallServer("Connect", r.conf)
 	}
 	return nil
 }

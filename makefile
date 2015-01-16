@@ -18,7 +18,7 @@ ECHO 		 := echo
 
 .PHONY: install build run clean elses
 
-all: install run clean_pkg
+all: clean_pkg install run
 
 install:
 	@$(ECHO) installing...

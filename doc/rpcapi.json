@@ -1,0 +1,31 @@
+
+//Unregister 注销  code 2 1 1
+{
+    "u":"",   //Username  用户名
+    "p":""    //Password  密码
+}
+
+//Register 注册 code 2 1 2
+{
+    "u":"",   //Username 用户名
+    "p":"",   //Password 密码
+    "e":""    //Email    邮箱 暂时没作用
+}
+
+//LogIn 登入  code 2 1 3
+{
+    "u":"",   //Username 用户名
+    "p":""    //Password 密码
+}
+
+//LogOut 登出 code 2 1 4
+{
+	"l":true  //
+}
+
+//ChangePwd 改密码 code 2 1 5
+{
+    "u":"",   //Username     用户名
+    "p":"",   //Password     密码
+    "n":""    //NewPassword  新密码
+}
