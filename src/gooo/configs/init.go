@@ -17,6 +17,16 @@ type Configs struct {
 	Dc DataBaseConfig
 }
 
+func NewConfigsFrom(dir string) *Configs {
+	mm := map[string][]byte{}
+	ss := []string{"master", "servers", "route", "database"}
+	for _, v := range ss {
+		mm[v] = helper.OpenFile(fmt.Sprintf("%s/%s.json", dir, v))
+	}
+
+	return NewConfigs(&mm)
+}
+
 func NewConfigs(m *map[string][]byte) *Configs {
 	var sc ServersConfig
 	helper.GetConfig((*m)["servers"], &sc)

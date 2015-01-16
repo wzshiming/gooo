@@ -2,17 +2,15 @@ package main
 
 import (
 	"log"
-	//"database/sql"
-	//"fmt"
+
 	"errors"
-	_ "github.com/go-sql-driver/mysql"
+	//_ "github.com/go-sql-driver/mysql"
 	"github.com/jinzhu/gorm"
-	_ "github.com/lib/pq"
+	//_ "github.com/lib/pq"
 	"gooo/configs"
 	"gooo/encoder"
 	"gooo/helper"
 	"gooo/protocol"
-	//"log"
 	authprtc "service/auth/protocol"
 )
 
@@ -64,7 +62,7 @@ func (r *Auth) ChangePwd(args protocol.RpcRequest, reply *protocol.RpcResponse) 
 }
 
 func (r *Auth) Unregister(args protocol.RpcRequest, reply *protocol.RpcResponse) error {
-	return nil
+	return errors.New("敬请期待")
 }
 
 func (r *Auth) LogIn(args protocol.RpcRequest, reply *protocol.RpcResponse) error {
@@ -86,6 +84,18 @@ func (r *Auth) LogIn(args protocol.RpcRequest, reply *protocol.RpcResponse) erro
 }
 
 func (r *Auth) LogOut(args protocol.RpcRequest, reply *protocol.RpcResponse) error {
+	var p struct {
+		UserId int64
+	}
+	encoder.Decode(args.Session.Data, &p)
+	if p.UserId == 0 {
+		return errors.New("你没有登入")
+	}
+	*reply = protocol.RpcResponse{
+		Data: &map[string]interface{}{
+			"UserId": 0,
+		},
+	}
 	return nil
 }
 
@@ -94,9 +104,6 @@ func (r *Auth) Init(args protocol.InitRequest, reply *int) (err error) {
 		r.conf = &args.Conf
 		us := r.conf.Dc["Users"]
 		r.db, err = gorm.Open(us.Dialect, us.Source)
-		//r.db.DropTable(&authprtc.User{})
-		//r.db.CreateTable(&authprtc.User{})
-		//r.db.Model(&authprtc.User{}).AddUniqueIndex("idx_user_username", "username")
 	}
 	return nil
 }

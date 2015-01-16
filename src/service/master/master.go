@@ -53,16 +53,9 @@ func (m *Master) Stop(args int, reply *int) error {
 func main() {
 	defer helper.Recover()
 	//Build("./configs/Servers.json")
-	mm := map[string][]byte{
-		"master":   helper.OpenFile("./configs/master.json"),
-		"servers":  helper.OpenFile("./configs/servers.json"),
-		"route":    helper.OpenFile("./configs/route.json"),
-		"database": helper.OpenFile("./configs/database.json"),
-	}
-
 	h := helper.NewHandeln()
 
-	conf := configs.NewConfigs(&mm)
+	conf := configs.NewConfigsFrom("./configs")
 	configs.Name = conf.Mc.Name
 	configs.Port = helper.GetPort(conf.Mc.Port)
 

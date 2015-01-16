@@ -6,21 +6,18 @@ import (
 	"gooo/connser"
 	//"fmt"
 	"gooo/configs"
-	"gooo/encoder"
+	//"gooo/encoder"
 	"gooo/helper"
+
 	"log"
 	"runtime"
 	authprtc "service/Auth/protocol"
 	"service/connect/iorange"
+	"service/connect/route"
 	"time"
 )
 
-var conf = configs.NewConfigs(&map[string][]byte{
-	"master":   helper.OpenFile("./configs/master.json"),
-	"servers":  helper.OpenFile("./configs/servers.json"),
-	"route":    helper.OpenFile("./configs/route.json"),
-	"database": helper.OpenFile("./configs/database.json"),
-})
+var conf = configs.NewConfigsFrom("./configs")
 
 type test struct {
 	helper.HandelInterface
@@ -29,25 +26,16 @@ type test struct {
 func (h *test) Mess(c *connser.Connect, msg []byte) {
 	helper.MsgInfo(msg)
 }
+
 func (h *test) Join(c *connser.Connect) {
 	log.Printf("%v %v Join\n", c.ToUint(), c.Conn.RemoteAddr())
-	c1, c2, c3 := conf.Rc.FindIndex("Auth", "Auth", "ChangePwd")
-	sms := make([]byte, 1024)
-	sms[1] = c1
-	sms[2] = c2
-	sms[3] = c3
-	log.Println(sms[:4])
-	//binary.BigEndian.PutUint16(sms[2:4], 1)
-
-	b, _ := encoder.Encode(authprtc.ChangePwdRequest{
+	b := route.ClientRequestForm(conf, "Auth", "Auth", "ChangePwd", authprtc.ChangePwdRequest{
 		Username:    "hallo1",
-		Password:    "yougeegge",
-		NewPassword: "aaaaaaa",
+		Password:    "aaaaaaa",
+		NewPassword: "aaasssss",
 	})
-	//fmt.Printf("%s",b)
-	copy(sms[4:], b)
-	s := len(b) + 4
-	c.Write(sms[:s])
+
+	c.Write(b)
 
 }
 
