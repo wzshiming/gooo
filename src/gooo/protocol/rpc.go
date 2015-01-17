@@ -8,7 +8,6 @@ import (
 type RpcRequest struct {
 	Request []byte           `json:"r"`
 	Session *session.Session `json:"s"`
-	Id      uint             `json:"i"`
 }
 
 type RpcResponse struct {

@@ -5,14 +5,14 @@ import (
 )
 
 type RandRequest struct {
-	Size int `json:s`
+	Size int `json:"s"`
 }
 
 type RandResponse struct {
-	Rands []int `json:r`
+	Rands []int `json:"r"`
 }
 
 type SpacingRequest struct {
-	Size  int `json:s`
-	Space int `json:p`
+	Size  int `json:"s"`
+	Space int `json:"p"`
 }

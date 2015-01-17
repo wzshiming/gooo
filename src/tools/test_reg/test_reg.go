@@ -1,14 +1,9 @@
 package main
 
 import (
-	//"bufio"
-	//"encoding/binary"
-	"gooo/connser"
-	//"fmt"
 	"gooo/configs"
-	//"gooo/encoder"
+	"gooo/connser"
 	"gooo/helper"
-
 	"log"
 	"runtime"
 	authprtc "service/Auth/protocol"

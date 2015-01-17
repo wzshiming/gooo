@@ -6,7 +6,7 @@ import (
 	"gooo/helper"
 	"gooo/protocol"
 	"gooo/router"
-	"log"
+	//"log"
 	"math/rand"
 	//"reflect"
 	connprtc "service/connect/protocol"
@@ -68,12 +68,12 @@ func (r *Random) Range100Spacing(args protocol.RpcRequest, reply *protocol.RpcRe
 		Clients: []uint{args.Session.Uniq.Id},
 	}
 	var t struct {
-		Size int `json:"size"`
+		Size int
 	}
 	encoder.Decode(args.Session.Data, &t)
-	log.Println(t)
+
 	var re connprtc.SendResponse
-	//args.Session.Uniq.Server
+
 	for i := 0; i != p.Size; i++ {
 		time.Sleep(time.Duration(p.Space))
 		ret := randprtc.RandResponse{
@@ -82,13 +82,11 @@ func (r *Random) Range100Spacing(args protocol.RpcRequest, reply *protocol.RpcRe
 		res, _ := encoder.Encode(ret)
 		b.Data = res
 		r.call.CallBySession(args.Session, "Connect.Send", b, &re)
-
 	}
 
 	*reply = protocol.RpcResponse{
-		Error: "",
 		Data: &map[string]interface{}{
-			"size": t.Size + 1,
+			"Size": t.Size + 1,
 		},
 	}
 	//log.Println(t)

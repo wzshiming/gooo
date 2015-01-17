@@ -1,40 +1,36 @@
 package main
 
 import (
-	//"bufio"
-	//"encoding/binary"
+	"gooo/configs"
 	"gooo/connser"
-	//"fmt"
-	"gooo/encoder"
 	"gooo/helper"
 	"log"
 	"runtime"
 	"service/connect/iorange"
+	"service/connect/route"
 	randprtc "service/random/protocol"
 	"time"
 )
+
+var conf = configs.NewConfigsFrom("./conf")
 
 type test struct {
 	helper.HandelInterface
 }
 
+func (h *test) Mess(c *connser.Connect, msg []byte) {
+	helper.MsgInfo(msg)
+}
+
 func (h *test) Join(c *connser.Connect) {
 	log.Printf("%v %v Join\n", c.ToUint(), c.Conn.RemoteAddr())
-	sms := make([]byte, 1024)
-	sms[1] = 1
-	sms[2] = 1
-	sms[3] = 1
-	//binary.BigEndian.PutUint16(sms[2:4], 1)
+	b := route.ClientRequestForm(conf, "Random", "Random", "Range100", randprtc.RandRequest{
+		Size: 10,
+	})
 
-	b, _ := encoder.Encode(randprtc.RandRequest{10})
-	//fmt.Printf("%s",b)
-	copy(sms[4:], b)
-	s := len(b) + 4
-	//time.Sleep(100)
 	go func() {
-		for i := 0; i != 1; i++ {
-			//time.Sleep(1)
-			c.Write(sms[:s])
+		for i := 0; i != 100; i++ {
+			c.Write(b)
 		}
 	}()
 }
@@ -43,7 +39,7 @@ func main() {
 	runtime.GOMAXPROCS(runtime.NumCPU())
 	ior := iorange.NewIORange(1024)
 	ttt := &test{}
-	for i := 0; i != 1; i++ {
+	for i := 0; i != 100; i++ {
 		connser.NewClientTCP("127.0.0.1:3005", ior, ttt)
 	}
 	log.Printf("end\n")
