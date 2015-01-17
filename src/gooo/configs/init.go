@@ -73,6 +73,26 @@ func (c *Configs) StartServers() {
 	time.Sleep(time.Second)
 }
 
+func (c *Configs) Foreach(class, method string, m, b interface{}) {
+	for k1, v1 := range c.Sc {
+		for k2, v2 := range v1 {
+			if v2.Conn == nil {
+				log.Printf("%v_%v Not connect\n", k1, k2)
+				continue
+			}
+			var err error
+			if class == "" {
+				err = v2.Conn().Call(fmt.Sprintf("%v.%s", k1, method), m, &b)
+			} else {
+				err = v2.Conn().Call(fmt.Sprintf("%s.%s", class, method), m, &b)
+			}
+			if err != nil {
+				log.Println(err)
+			}
+		}
+	}
+}
+
 //func (c *Configs) AllConnect() (t []*rpc.Client) {
 //	csd := c.Sc
 //	for k1, v1 := range csd {

@@ -4,13 +4,14 @@ import (
 	//"encoding/binary"
 	"fmt"
 	"gooo/connser"
+	"gooo/handeln"
 	"gooo/helper"
 	"log"
 	"service/connect/iorange"
 )
 
 type Handel struct {
-	helper.HandelInterface
+	handeln.HandelInterface
 }
 
 func NewHandel() *Handel {

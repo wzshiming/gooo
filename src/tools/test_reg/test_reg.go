@@ -3,6 +3,7 @@ package main
 import (
 	"gooo/configs"
 	"gooo/connser"
+	"gooo/handeln"
 	"gooo/helper"
 	"log"
 	"runtime"
@@ -15,7 +16,7 @@ import (
 var conf = configs.NewConfigsFrom("./conf")
 
 type test struct {
-	helper.HandelInterface
+	handeln.HandelInterface
 }
 
 func (h *test) Mess(c *connser.Connect, msg []byte) {

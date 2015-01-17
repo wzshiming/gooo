@@ -5,6 +5,4 @@ type SendRequest struct {
 	Data    []byte `json:d`
 }
 
-type SendResponse struct {
-	Error int `json:e`
-}
+type SendResponse int

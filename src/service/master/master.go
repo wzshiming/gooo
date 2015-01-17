@@ -2,38 +2,31 @@ package main
 
 import (
 	"gooo/configs"
-	"log"
+	//"log"
 	//"reflect"
-	"fmt"
+	//"fmt"
+	"gooo/handeln"
 	"gooo/helper"
 	"gooo/protocol"
 )
 
 type Master struct {
 	conf *configs.Configs
+	hand *handeln.Handeln
 }
 
-func NewMaster(conf *configs.Configs) *Master {
+func NewMaster(conf *configs.Configs, hand *handeln.Handeln) *Master {
 	return &Master{
 		conf: conf,
+		hand: hand,
 	}
 }
 
-func (m *Master) Stop(args int, reply *int) error {
+func (s *Master) Stop(args int, reply *int) error {
 	if args == 222 {
-		for k1, v1 := range m.conf.Sc {
-			for k2, v2 := range v1 {
-				if v2.Conn == nil {
-					log.Printf("%v_%v Not connect\n", k1, k2)
-					continue
-				}
-				var b int
-				err := v2.Conn().Call("Status.Stop", 222, &b)
-				if err != nil {
-					log.Println(err)
-				}
-			}
-		}
+		var b int
+		s.conf.Foreach("Status", "Stop", 222, &b)
+		s.hand.Stop()
 	}
 	return nil
 }
@@ -52,8 +45,6 @@ func (m *Master) Stop(args int, reply *int) error {
 
 func main() {
 	defer helper.Recover()
-	h := helper.NewHandeln()
-
 	conf := configs.NewConfigsFrom("./conf")
 	configs.Name = conf.Mc.Name
 	configs.Port = helper.GetPort(conf.Mc.Port)
@@ -65,27 +56,11 @@ func main() {
 		Conf:  *conf,
 		State: 1,
 	}
-	for k1, v1 := range conf.Sc {
-		for k2, v2 := range v1 {
-			if v2.Conn == nil {
-				log.Printf("%v_%v Not connect\n", k1, k2)
-				continue
-			}
-			err := v2.Conn().Call(fmt.Sprintf("%v.Init", k1), m, &b)
-			if err != nil {
-				log.Println(err)
-			}
-		}
+	conf.Foreach("", "Init", m, &b)
+	conf.Foreach("", "Start", m, &b)
 
-	}
-	//for _, v := range conf.AllConnect() {
-	//	err := v.Call("Status.Init", m, &b)
-	//	if err != nil {
-	//		fmt.Println(err)
-	//	}
-	//}
-
-	master := NewMaster(conf)
+	h := handeln.NewHandeln()
+	master := NewMaster(conf, h)
 	h.Register(master)
 	helper.EchoPortInfo(configs.Name, configs.Port)
 	h.Start(configs.Port)

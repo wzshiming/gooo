@@ -3,6 +3,7 @@ package main
 import (
 	"gooo/configs"
 	"gooo/encoder"
+	"gooo/handeln"
 	"gooo/helper"
 	"gooo/protocol"
 	"gooo/router"
@@ -104,10 +105,10 @@ func (r *Random) Init(args protocol.InitRequest, reply *int) error {
 
 func main() {
 	defer helper.Recover()
-	h := helper.NewHandeln()
+	h := handeln.NewHandeln()
 	c := NewRandom()
 	h.Register(c)
-	h.Register(helper.NewStatus(h))
+	h.Register(handeln.NewStatus(h))
 	helper.EchoPortInfo(configs.Name, configs.Port)
 	h.Start(configs.Port)
 }

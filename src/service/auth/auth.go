@@ -5,6 +5,7 @@ import (
 	_ "github.com/go-sql-driver/mysql"
 	"github.com/jinzhu/gorm"
 	i18n "github.com/kortem/lingo"
+	"gooo/handeln"
 	"log"
 	//_ "github.com/lib/pq"
 	"gooo/configs"
@@ -182,10 +183,10 @@ func (r *Auth) Init(args protocol.InitRequest, reply *int) (err error) {
 }
 func main() {
 	defer helper.Recover()
-	h := helper.NewHandeln()
+	h := handeln.NewHandeln()
 	c := NewAuth()
 	h.Register(c)
-	h.Register(helper.NewStatus(h))
+	h.Register(handeln.NewStatus(h))
 	helper.EchoPortInfo(configs.Name, configs.Port)
 	h.Start(configs.Port)
 }

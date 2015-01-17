@@ -3,6 +3,7 @@ package main
 import (
 	"gooo/configs"
 	"gooo/connser"
+	"gooo/handeln"
 	"gooo/helper"
 	"gooo/protocol"
 	"service/connect/handel"
@@ -12,6 +13,7 @@ import (
 
 type Connect struct {
 	hand *handel.Handel
+	conf *configs.Configs
 	//auth  *handel.Auth
 }
 
@@ -25,9 +27,6 @@ func (s *Connect) Send(args connprot.SendRequest, reply *connprot.SendResponse) 
 		if c != nil {
 			c.Conn().Write(append([]byte{255, 255, 255, 255}, args.Data...))
 		}
-	}
-	*reply = connprot.SendResponse{
-		Error: 0,
 	}
 	return nil
 }
@@ -76,17 +75,20 @@ func (s *Connect) GetSession(args connprot.GetSessionRequest, reply *connprot.Ge
 //	return nil
 //}
 
-func (s *Connect) Init(args protocol.InitRequest, reply *int) error {
+func (s *Connect) Start(args protocol.InitRequest, reply *int) error {
 	if args.State == 1 {
-		conf := &args.Conf
-		//conf.StartConnect()
-		port := helper.GetPort(conf.Sc[configs.Type][configs.Id].ClientPort)
+		port := helper.GetPort(s.conf.Sc[configs.Type][configs.Id].ClientPort)
 		helper.EchoPublicPortInfo(configs.Name, port)
-		s.hand = handel.NewHandel(conf)
-		//s.auth = handel.NewAuth(s.hand)
-
 		ser := connser.NewServer(s.hand, iorange.NewIORange(1024))
 		go ser.StartTCP(port)
+	}
+	return nil
+}
+
+func (s *Connect) Init(args protocol.InitRequest, reply *int) error {
+	if args.State == 1 {
+		s.conf = &args.Conf
+		s.hand = handel.NewHandel(s.conf)
 	}
 	return nil
 }
@@ -94,10 +96,10 @@ func (s *Connect) Init(args protocol.InitRequest, reply *int) error {
 func main() {
 	defer helper.Recover()
 
-	h := helper.NewHandeln()
+	h := handeln.NewHandeln()
 	c := NewConnect()
 	h.Register(c)
-	h.Register(helper.NewStatus(h))
+	h.Register(handeln.NewStatus(h))
 	helper.EchoPortInfo(configs.Name, configs.Port)
 	h.Start(configs.Port)
 }

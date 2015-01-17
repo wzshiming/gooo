@@ -1,90 +1,19 @@
 package handel
 
 import (
-	"fmt"
 	"gooo/configs"
 	"gooo/connser"
 	"gooo/encoder"
+	"gooo/handeln"
 	"gooo/helper"
 	"gooo/protocol"
 	"gooo/session"
 	"log"
 	"service/connect/route"
-	"sync"
 )
 
-type Sessions struct {
-	sync.Mutex
-	Map map[uint]*session.Session
-}
-
-func NewSessions(size int) *Sessions {
-	return &Sessions{
-		Map: make(map[uint]*session.Session, size),
-	}
-}
-
-func (h *Sessions) Get(u uint) *session.Session {
-	h.Lock()
-	defer h.Unlock()
-	return h.Map[u]
-}
-
-func (h *Sessions) Set(u uint, v *session.Session) {
-	h.Lock()
-	defer h.Unlock()
-	h.Map[u] = v
-}
-
-func (h *Sessions) Del(u uint) {
-	h.Lock()
-	defer h.Unlock()
-	delete(h.Map, u)
-}
-
-func (h *Sessions) Len() int {
-	h.Lock()
-	defer h.Unlock()
-	return len(h.Map)
-}
-
-type Onlines struct {
-	sync.Mutex
-	Map map[int64]bool
-}
-
-func NewOnlines(size int) *Onlines {
-	return &Onlines{
-		Map: make(map[int64]bool, size),
-	}
-}
-
-func (h *Onlines) Get(u int64) bool {
-	h.Lock()
-	defer h.Unlock()
-	return h.Map[u]
-}
-
-func (h *Onlines) Set(u int64, v bool) {
-	h.Lock()
-	defer h.Unlock()
-	h.Map[u] = v
-}
-
-func (h *Onlines) Del(u int64) {
-	h.Lock()
-	defer h.Unlock()
-	delete(h.Map, u)
-}
-
-func (h *Onlines) Len() int {
-	h.Lock()
-	defer h.Unlock()
-	return len(h.Map)
-}
-
 type Handel struct {
-	helper.HandelInterface
+	handeln.HandelInterface
 	Server  *route.MethodServers
 	Session *Sessions
 	Online  *Onlines
@@ -101,14 +30,6 @@ func NewHandel(conf *configs.Configs) *Handel {
 func (h *Handel) Join(c *connser.Connect) {
 	log.Printf("%v %v join\n", c.ToUint(), c.RemoteAddr())
 	h.Session.Set(c.ToUint(), session.NewSession(c))
-}
-
-func ErrorInfo(s string) []byte {
-	return []byte(fmt.Sprintf("{\"e\":\"%s\"}", s))
-}
-
-func OkInfo() []byte {
-	return []byte("{\"e\":\"\"}")
 }
 
 func (h *Handel) Mess(c *connser.Connect, msg []byte) {
