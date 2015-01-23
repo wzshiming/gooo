@@ -15,13 +15,15 @@ import (
 	"gooo/router"
 	authprtc "service/auth/protocol"
 	connprtc "service/connect/protocol"
+	offlprot "service/offline/protocol"
 )
 
 type Auth struct {
 	conf     *configs.Configs
 	db       gorm.DB
 	i18n     *i18n.L
-	conncall *router.CallServer
+	callconn *router.CallServer
+	calloffl *router.CallServer
 }
 
 func NewAuth() *Auth {
@@ -100,7 +102,7 @@ func (r *Auth) Unregister(args protocol.RpcRequest, reply *protocol.RpcResponse)
 		return errors.New(Trans.Value("auth.pwderr"))
 	}
 	var gonli connprtc.GetOnlineResponse
-	r.conncall.CallBySession(args.Session, "Connect.GetOnline", connprtc.GetOnlineRequest{
+	r.callconn.CallBySession(args.Session, "Connect.GetOnline", connprtc.GetOnlineRequest{
 		UserId: ouser.Id,
 	}, &gonli)
 	if gonli.Online {
@@ -130,21 +132,32 @@ func (r *Auth) LogIn(args protocol.RpcRequest, reply *protocol.RpcResponse) erro
 		return errors.New(Trans.Value("auth.pwderr"))
 	}
 	var gonli connprtc.GetOnlineResponse
-	r.conncall.CallBySession(args.Session, "Connect.GetOnline", connprtc.GetOnlineRequest{
+	r.callconn.CallBySession(args.Session, "Connect.GetOnline", connprtc.GetOnlineRequest{
 		UserId: ouser.Id,
 	}, &gonli)
 	if gonli.Online {
 		return errors.New(Trans.Value("auth.inlogin"))
 	}
 	var sonli connprtc.SetOnlineResponse
-	r.conncall.CallBySession(args.Session, "Connect.SetOnline", connprtc.SetOnlineRequest{
+	r.callconn.CallBySession(args.Session, "Connect.SetOnline", connprtc.SetOnlineRequest{
 		UserId: ouser.Id,
 		Online: true,
 	}, &sonli)
-	*reply = protocol.RpcResponse{
-		Data: &map[string]interface{}{
-			"UserId": ouser.Id,
-		},
+	var rr offlprot.ReconnectionResponse
+	err := r.calloffl.Call("Offline.Reconnection", offlprot.ReconnectionRequest{
+		UserId: ouser.Id,
+	}, &rr)
+	if err == nil {
+		*reply = protocol.RpcResponse{
+			Coverage: rr.Data,
+			Response: []byte("{\"s\":\"Reconnection\"}"),
+		}
+	} else {
+		*reply = protocol.RpcResponse{
+			Data: &map[string]interface{}{
+				"UserId": ouser.Id,
+			},
+		}
 	}
 	return nil
 }
@@ -160,7 +173,7 @@ func (r *Auth) LogOut(args protocol.RpcRequest, reply *protocol.RpcResponse) err
 		return errors.New(Trans.Value("auth.nologin"))
 	}
 	var sonli connprtc.SetOnlineResponse
-	r.conncall.CallBySession(args.Session, "Connect.SetOnline", connprtc.SetOnlineRequest{
+	r.callconn.CallBySession(args.Session, "Connect.SetOnline", connprtc.SetOnlineRequest{
 		UserId: d.UserId,
 		Online: false,
 	}, &sonli)
@@ -177,7 +190,8 @@ func (r *Auth) Init(args protocol.InitRequest, reply *int) (err error) {
 		r.conf = &args.Conf
 		us := r.conf.Dc["Users"]
 		r.db, err = gorm.Open(us.Dialect, us.Source)
-		r.conncall = router.NewCallServer("Connect", r.conf)
+		r.callconn = router.NewCallServer("Connect", r.conf)
+		r.calloffl = router.NewCallServer("Offline", r.conf)
 	}
 	return nil
 }

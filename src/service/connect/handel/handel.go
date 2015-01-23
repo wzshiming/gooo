@@ -7,23 +7,29 @@ import (
 	"gooo/handeln"
 	"gooo/helper"
 	"gooo/protocol"
+	"gooo/router"
 	"gooo/session"
 	"log"
 	"service/connect/route"
+	offlprot "service/offline/protocol"
 )
 
 type Handel struct {
 	handeln.HandelInterface
-	Server  *route.MethodServers
-	Session *Sessions
-	Online  *Onlines
+	Server   *route.MethodServers
+	Session  *Sessions
+	Online   *Onlines
+	Conf     *configs.Configs
+	calloffl *router.CallServer
 }
 
 func NewHandel(conf *configs.Configs, size uint64) *Handel {
 	return &Handel{
-		Server:  route.NewMethodServers(conf),
-		Session: NewSessions(size),
-		Online:  NewOnlines(size),
+		Server:   route.NewMethodServers(conf),
+		Session:  NewSessions(size),
+		Online:   NewOnlines(size),
+		Conf:     conf,
+		calloffl: router.NewCallServer("Offline", conf),
 	}
 }
 
@@ -61,7 +67,9 @@ func (h *Handel) Mess(c *connser.Connect, msg []byte) {
 		} else {
 			c.Write(append(msg[:4], OkInfo()...))
 		}
-		if reply.Data != nil {
+		if reply.Coverage != nil {
+			s.Data = reply.Coverage
+		} else if reply.Data != nil {
 			var t map[string]interface{}
 			encoder.Decode(s.Data, &t)
 			for k, v := range *reply.Data {
@@ -75,6 +83,13 @@ func (h *Handel) Mess(c *connser.Connect, msg []byte) {
 	return
 }
 func (h *Handel) Exit(c *connser.Connect) {
+	id := c.ToUint64()
+	s := h.Session.Get(id)
+	var r offlprot.InterruptResponse
+	h.calloffl.Call("Offline.Interrupt", offlprot.InterruptRequest{
+		Data: s.Data,
+	}, &r)
 	h.Session.Del(c.ToUint64())
+	h.Online.Del(r.UserId)
 	log.Printf("%d  %v is quiting\n", h.Session.Len(), c.RemoteAddr())
 }

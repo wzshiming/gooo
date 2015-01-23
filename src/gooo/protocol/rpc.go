@@ -13,5 +13,6 @@ type RpcRequest struct {
 type RpcResponse struct {
 	Error    string                  `json:"e"`
 	Data     *map[string]interface{} `json:"d"`
+	Coverage []byte                  `json:"c"`
 	Response []byte                  `json:"r"`
 }
