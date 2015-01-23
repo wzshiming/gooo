@@ -77,17 +77,21 @@ func (c *Configs) Foreach(class, method string, m, b interface{}) {
 	for k1, v1 := range c.Sc {
 		for k2, v2 := range v1 {
 			if v2.Conn == nil {
-				log.Printf("%v_%v Not connect\n", k1, k2)
+				log.Printf("%s_%d Not connect\n", k1, k2)
 				continue
 			}
 			var err error
+			var t string
 			if class == "" {
-				err = v2.Conn().Call(fmt.Sprintf("%v.%s", k1, method), m, &b)
+				t = fmt.Sprintf("%v.%s", k1, method)
+				err = v2.Conn().Call(t, m, &b)
+
 			} else {
+				t = fmt.Sprintf("%s.%s", class, method)
 				err = v2.Conn().Call(fmt.Sprintf("%s.%s", class, method), m, &b)
 			}
 			if err != nil {
-				log.Println(err)
+				log.Printf("Can't Call %s from %s_%d %s:%d", t, k1, k2, v2.Host, v2.Port)
 			}
 		}
 	}
@@ -110,7 +114,7 @@ func (s *ServerConfig) Conn() *rpc.Client {
 	if s.conn == nil {
 		addr := fmt.Sprintf("%v:%v", s.Host, s.Port)
 		log.Println(Name, "connect to", addr)
-		return helper.NewConn(addr)
+		s.conn = helper.NewConn(addr)
 	}
 	return s.conn
 }
