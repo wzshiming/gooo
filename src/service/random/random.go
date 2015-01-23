@@ -66,7 +66,7 @@ func (r *Random) Range100Spacing(args protocol.RpcRequest, reply *protocol.RpcRe
 		p.Size = 1
 	}
 	b := connprtc.SendRequest{
-		Clients: []uint{args.Session.Uniq.Id},
+		Clients: []uint64{args.Session.Uniq.Id},
 	}
 	var t struct {
 		Size int

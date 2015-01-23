@@ -57,10 +57,10 @@ func EchoPublicPortInfo(name, port string) {
 	log.Printf("%s Server starts from public port %s\n", name, port)
 }
 
-func FlagVar() (name, port, typ string, id int) {
+func FlagVar() (name, port, typ string, id uint64) {
 	inputType := flag.String("t", "", "Type")
 	inputPort := flag.Int("p", 0, "Port")
-	inputId := flag.Int("i", 0, "Id")
+	inputId := flag.Uint64("i", 0, "Id")
 	flag.Parse()
 	name = fmt.Sprintf("%s", *inputType)
 	port = fmt.Sprintf(":%d", *inputPort)

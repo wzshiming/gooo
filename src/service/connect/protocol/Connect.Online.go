@@ -1,7 +1,7 @@
 package protocol
 
 type GetOnlineRequest struct {
-	UserId int64 `json:u`
+	UserId uint64 `json:u`
 }
 
 type GetOnlineResponse struct {
@@ -9,8 +9,8 @@ type GetOnlineResponse struct {
 }
 
 type SetOnlineRequest struct {
-	UserId int64 `json:u`
-	Online bool  `json:o`
+	UserId uint64 `json:u`
+	Online bool   `json:o`
 }
 
 type SetOnlineResponse int

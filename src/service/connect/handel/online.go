@@ -6,28 +6,28 @@ import (
 
 type Onlines struct {
 	sync.Mutex
-	Map map[int64]bool
+	Map map[uint64]bool
 }
 
-func NewOnlines(size int) *Onlines {
+func NewOnlines(size uint64) *Onlines {
 	return &Onlines{
-		Map: make(map[int64]bool, size),
+		Map: make(map[uint64]bool, size),
 	}
 }
 
-func (h *Onlines) Get(u int64) bool {
+func (h *Onlines) Get(u uint64) bool {
 	h.Lock()
 	defer h.Unlock()
 	return h.Map[u]
 }
 
-func (h *Onlines) Set(u int64, v bool) {
+func (h *Onlines) Set(u uint64, v bool) {
 	h.Lock()
 	defer h.Unlock()
 	h.Map[u] = v
 }
 
-func (h *Onlines) Del(u int64) {
+func (h *Onlines) Del(u uint64) {
 	h.Lock()
 	defer h.Unlock()
 	delete(h.Map, u)

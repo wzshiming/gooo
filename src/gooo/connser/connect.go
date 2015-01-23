@@ -30,6 +30,10 @@ func (self *Connect) ToUint() uint {
 	return (uint)((uintptr)(unsafe.Pointer(self)))
 }
 
+func (self *Connect) ToUint64() uint64 {
+	return (uint64)((uintptr)(unsafe.Pointer(self)))
+}
+
 func (self *Connect) Write(message []byte) {
 	err := self.ior.Writer(self.Conn, message)
 	if err != nil {
@@ -37,7 +41,6 @@ func (self *Connect) Write(message []byte) {
 	}
 	return
 }
-
 
 func (self *Connect) listen() {
 	defer func() {

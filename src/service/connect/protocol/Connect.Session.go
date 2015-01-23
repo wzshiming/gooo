@@ -1,7 +1,7 @@
 package protocol
 
 type GetSessionRequest struct {
-	Id uint `json:i`
+	Id uint64 `json:i`
 }
 
 type GetSessionResponse struct {
@@ -9,7 +9,7 @@ type GetSessionResponse struct {
 }
 
 type SetSessionRequest struct {
-	Id   uint   `json:u`
+	Id   uint64 `json:u`
 	Data []byte `json:d`
 }
 

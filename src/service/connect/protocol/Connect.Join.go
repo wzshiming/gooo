@@ -1,7 +1,7 @@
 package protocol
 
 type JoinRequest struct {
-	Id uint `json:"id"`
+	Id uint64 `json:"id"`
 }
 
 type JoinResponse struct {

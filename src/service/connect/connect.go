@@ -88,7 +88,7 @@ func (s *Connect) Start(args protocol.InitRequest, reply *int) error {
 func (s *Connect) Init(args protocol.InitRequest, reply *int) error {
 	if args.State == 1 {
 		s.conf = &args.Conf
-		s.hand = handel.NewHandel(s.conf)
+		s.hand = handel.NewHandel(s.conf, 1024)
 	}
 	return nil
 }

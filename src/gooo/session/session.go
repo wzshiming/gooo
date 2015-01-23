@@ -27,7 +27,7 @@ func NewSession(conn *connser.Connect) *Session {
 		LastPacketTime: time.Now(),
 		Dirtycount:     0,
 		conn:           conn,
-		Uniq:           NewUnique(uint(configs.Id), conn.ToUint()),
+		Uniq:           NewUnique(configs.Id, conn.ToUint64()),
 	}
 }
 

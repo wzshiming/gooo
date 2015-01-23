@@ -151,7 +151,7 @@ func (r *Auth) LogIn(args protocol.RpcRequest, reply *protocol.RpcResponse) erro
 
 func (r *Auth) LogOut(args protocol.RpcRequest, reply *protocol.RpcResponse) error {
 	var d struct {
-		UserId   int64
+		UserId   uint64
 		Language string
 	}
 	encoder.Decode(args.Session.Data, &d)

@@ -19,17 +19,17 @@ type Handel struct {
 	Online  *Onlines
 }
 
-func NewHandel(conf *configs.Configs) *Handel {
+func NewHandel(conf *configs.Configs, size uint64) *Handel {
 	return &Handel{
 		Server:  route.NewMethodServers(conf),
-		Session: NewSessions(1024),
-		Online:  NewOnlines(1024),
+		Session: NewSessions(size),
+		Online:  NewOnlines(size),
 	}
 }
 
 func (h *Handel) Join(c *connser.Connect) {
 	log.Printf("%v %v join\n", c.ToUint(), c.RemoteAddr())
-	h.Session.Set(c.ToUint(), session.NewSession(c))
+	h.Session.Set(c.ToUint64(), session.NewSession(c))
 }
 
 func (h *Handel) Mess(c *connser.Connect, msg []byte) {
@@ -39,7 +39,7 @@ func (h *Handel) Mess(c *connser.Connect, msg []byte) {
 			helper.RecoverInfo()
 		}
 	}()
-	id := c.ToUint()
+	id := c.ToUint64()
 	s := h.Session.Get(id)
 	s.Lock()
 	defer s.Unlock()
@@ -75,6 +75,6 @@ func (h *Handel) Mess(c *connser.Connect, msg []byte) {
 	return
 }
 func (h *Handel) Exit(c *connser.Connect) {
-	h.Session.Del(c.ToUint())
+	h.Session.Del(c.ToUint64())
 	log.Printf("%d  %v is quiting\n", h.Session.Len(), c.RemoteAddr())
 }
