@@ -2,4 +2,4 @@
 
 set GOOS=linux
 set GOARCH=amd64
-make install
+make build

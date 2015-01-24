@@ -1,4 +1,4 @@
-##A game distributed server skeleton implemented with golang
+## A game distributed server skeleton implemented with golang
 
 ## 1.需求
 1. 确保安装好 golang, make
@@ -7,8 +7,10 @@
     #for linux
     export GOPATH = `pwd`
 ```
+
+3. windows 额外需要 mingw 或 cygwin
 ```cmd 
-    #for win
+    #for win 
     set GOPATH = %CD%
 ```
 ## 2.安装 & 运行
