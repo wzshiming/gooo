@@ -9,8 +9,10 @@ import (
 
 type RouteConfig []struct {
 	Name string `json:"name"`
+	Auth uint32 `json:"auth"`
 	Map  []struct {
 		Name string   `json:"name"`
+		Auth uint32   `json:"auth"`
 		Map  []string `json:"map"`
 	} `json:"map"`
 }

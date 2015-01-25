@@ -1,11 +1,17 @@
+/*
+    auth type is uint32 
+*/
+
 [
     {}
     ,{
         "name": "Random"
+        ,"auth": 0  // 0x00000000
         ,"map": [
             {}
             ,{
                 "name": "Random"
+                ,"auth": 0  // 0x00000000
                 ,"map": [
                     ""
                     ,"Range100"
@@ -16,10 +22,12 @@
     }
     ,{
         "name": "Auth"
+        ,"auth": 0  // 0x00000000
         ,"map": [
             {}
             ,{
-                "name": "Auth"
+                "name": "Auth" 
+                ,"auth": 16  // 0x00000010
                 ,"map": [
                     ""
                     ,"Unregister"
