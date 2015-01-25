@@ -30,9 +30,16 @@
                 ,"auth": 0  // 0x00000000
                 ,"map": [
                     ""
-                    ,"Unregister"
                     ,"Register"
                     ,"LogIn"
+                ]
+            }
+            ,{
+                "name": "PassAuth" 
+                ,"auth": 16  // 0x00000010
+                ,"map": [
+                    ""
+                    ,"Unregister"
                     ,"LogOut"
                     ,"ChangePwd"
                 ]

@@ -26,7 +26,12 @@ func (h *test) Mess(c *connser.Connect, msg []byte) {
 func (h *test) Join(c *connser.Connect) {
 	log.Printf("%v %v Join\n", c.ToUint(), c.Conn.RemoteAddr())
 
-	b := route.ClientRequestForm(conf, "Auth", "Auth", "Register", authprtc.RegisterRequest{
+	b := route.ClientRequestForm(conf, "Auth", "PassAuth", "LogOut", authprtc.LogOutRequest{
+		LogOut: true,
+	})
+	c.Write(b)
+
+	b = route.ClientRequestForm(conf, "Auth", "Auth", "Register", authprtc.RegisterRequest{
 		Username: "hallo1",
 		Password: "aaasssss",
 	})
@@ -39,6 +44,12 @@ func (h *test) Join(c *connser.Connect) {
 	})
 
 	c.Write(b)
+	c.Write(b)
+
+	b2 := route.ClientRequestForm(conf, "Auth", "PassAuth", "LogOut", authprtc.LogOutRequest{
+		LogOut: true,
+	})
+	c.Write(b2)
 	c.Write(b)
 }
 

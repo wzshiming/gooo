@@ -10,10 +10,9 @@ import (
 	"gooo/router"
 	authprtc "service/auth/protocol"
 	connprtc "service/connect/protocol"
-	offlprot "service/offline/protocol"
 )
 
-type Auth struct {
+type PassAuth struct {
 	status   *Status
 	db       gorm.DB
 	i18n     *i18n.L
@@ -21,8 +20,8 @@ type Auth struct {
 	calloffl *router.CallServer
 }
 
-func NewAuth(m *Status) *Auth {
-	r := Auth{
+func NewPassAuth(m *Status) *PassAuth {
+	r := PassAuth{
 		i18n:   m.I18n,
 		status: m,
 	}
@@ -33,27 +32,34 @@ func NewAuth(m *Status) *Auth {
 	return &r
 }
 
-func (r *Auth) Register(args protocol.RpcRequest, reply *protocol.RpcResponse) error {
-	var p authprtc.RegisterRequest
+func (r *PassAuth) ChangePwd(args protocol.RpcRequest, reply *protocol.RpcResponse) error {
+	var p authprtc.ChangePwdRequest
 	encoder.Decode(args.Request, &p)
 	var d struct {
+		UserId   int64
 		Language string
 	}
+
 	encoder.Decode(args.Session.Data, &d)
 	Trans := r.i18n.TranslationsForLocale(d.Language)
-	if len(p.Password) <= 6 {
-		return errors.New(Trans.Value("auth.pwdshort"))
+
+	if len(p.NewPassword) <= 6 {
+		return errors.New(Trans.Value("auth.newpwdshort"))
 	}
-	if err := r.db.Create(authprtc.User{
+	var ouser authprtc.User
+	if err := r.db.Where(&authprtc.User{
 		Username: p.Username,
-		Password: p.Password,
-	}).Error; err != nil {
-		return errors.New(Trans.Value("auth.userexists"))
+	}).First(&ouser).Error; err != nil {
+		return errors.New(Trans.Value("auth.usernotexists"))
 	}
+	if ouser.Password != p.Password {
+		return errors.New(Trans.Value("auth.pwderr"))
+	}
+	r.db.Model(&ouser).Update(&authprtc.User{Password: p.NewPassword})
 	return nil
 }
 
-func (r *Auth) LogIn(args protocol.RpcRequest, reply *protocol.RpcResponse) error {
+func (r *PassAuth) Unregister(args protocol.RpcRequest, reply *protocol.RpcResponse) error {
 	var p authprtc.LogInRequest
 	encoder.Decode(args.Request, &p)
 	var d struct {
@@ -79,27 +85,29 @@ func (r *Auth) LogIn(args protocol.RpcRequest, reply *protocol.RpcResponse) erro
 	if gonli.Online {
 		return errors.New(Trans.Value("auth.inlogin"))
 	}
+	r.db.Delete(ouser)
+	return nil
+}
+
+func (r *PassAuth) LogOut(args protocol.RpcRequest, reply *protocol.RpcResponse) error {
+	var d struct {
+		UserId   uint64
+		Language string
+	}
+	encoder.Decode(args.Session.Data, &d)
+	Trans := r.i18n.TranslationsForLocale(d.Language)
+	if d.UserId == 0 {
+		return errors.New(Trans.Value("auth.nologin"))
+	}
 	var sonli connprtc.SetOnlineResponse
 	r.callconn.CallBySession(args.Session, "Connect.SetOnline", connprtc.SetOnlineRequest{
-		UserId: ouser.Id,
-		Online: true,
+		UserId: d.UserId,
+		Online: false,
 	}, &sonli)
-	var rr offlprot.ReconnectionResponse
-	err := r.calloffl.Call("Offline.Reconnection", offlprot.ReconnectionRequest{
-		UserId: ouser.Id,
-	}, &rr)
-	if err == nil {
-		*reply = protocol.RpcResponse{
-			Coverage: rr.Data,
-			Response: []byte("{\"s\":\"Reconnection\"}"),
-		}
-	} else {
-		*reply = protocol.RpcResponse{
-			Data: &map[string]interface{}{
-				"UserId": ouser.Id,
-				"Auth":   0x00000010,
-			},
-		}
+	*reply = protocol.RpcResponse{
+		Data: &map[string]interface{}{
+			"UserId": 0,
+		},
 	}
 	return nil
 }

@@ -11,10 +11,11 @@ import (
 
 type Status struct {
 	handeln.Status
-	Hand        *handeln.Handeln
-	Conf        *configs.Configs
-	I18n        *i18n.L
-	ServiceAuth *Auth
+	Hand            *handeln.Handeln
+	Conf            *configs.Configs
+	I18n            *i18n.L
+	ServiceAuth     *Auth
+	ServicePassAuth *PassAuth
 }
 
 func (r *Status) Init(args protocol.InitRequest, reply *int) (err error) {
@@ -23,6 +24,10 @@ func (r *Status) Init(args protocol.InitRequest, reply *int) (err error) {
 		if r.ServiceAuth == nil {
 			r.ServiceAuth = NewAuth(r)
 			r.Hand.Register(r.ServiceAuth)
+		}
+		if r.ServicePassAuth == nil {
+			r.ServicePassAuth = NewPassAuth(r)
+			r.Hand.Register(r.ServicePassAuth)
 		}
 	}
 	return nil
