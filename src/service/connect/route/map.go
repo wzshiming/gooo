@@ -15,9 +15,14 @@ import (
 	//"sync"
 )
 
+type CallName struct {
+	Name string
+	Auth uint32
+}
+
 type MethodServer struct {
 	caller  router.CallServer
-	methods [][]string
+	methods [][]CallName
 	name    string
 }
 
@@ -26,20 +31,23 @@ func NewMethodServer(index int, conf *configs.Configs) *MethodServer {
 	fri := fr[index]
 	s := MethodServer{
 		caller:  *router.NewCallServer(fri.Name, conf),
-		methods: make([][]string, len(fr)),
+		methods: make([][]CallName, len(fr)),
 		name:    fri.Name,
 	}
 
 	for k1, v1 := range fri.Map {
-		s.methods[k1] = make([]string, len(v1.Map))
+		s.methods[k1] = make([]CallName, len(v1.Map))
 		for k2, v2 := range v1.Map {
-			s.methods[k1][k2] = fmt.Sprintf("%v.%v", v1.Name, v2)
+			s.methods[k1][k2] = CallName{
+				Name: fmt.Sprintf("%v.%v", v1.Name, v2),
+				Auth: fri.Auth | v1.Auth,
+			}
 		}
 	}
 	return &s
 }
 
-func (s *MethodServer) Call(c2 uint8, c3 uint8, args, reply interface{}) error {
+func (s *MethodServer) Call(auth uint32, c2 uint8, c3 uint8, args, reply interface{}) error {
 	if c2 >= uint8(len(s.methods)) {
 		return errors.New("MethodServer Call index c2 error")
 	}
@@ -47,14 +55,19 @@ func (s *MethodServer) Call(c2 uint8, c3 uint8, args, reply interface{}) error {
 	if c3 >= uint8(len(m)) {
 		return errors.New("MethodServer Call index c3 error")
 	}
-	return s.caller.Call(m[c3], args, reply)
+
+	if a := m[c3].Auth; a != (a & auth) {
+		return errors.New("Permission denied")
+	}
+
+	return s.caller.Call(m[c3].Name, args, reply)
 }
 
 func (s *MethodServer) Type() string {
 	return s.name
 }
 
-func (s *MethodServer) Methods() [][]string {
+func (s *MethodServer) Methods() [][]CallName {
 	return s.methods
 }
 
@@ -95,7 +108,7 @@ func NewMethodServers(conf *configs.Configs) *MethodServers {
 	return &s
 }
 
-func (s *MethodServers) Call(msg []byte, args, reply interface{}) error {
+func (s *MethodServers) Call(auth uint32, msg []byte, args, reply interface{}) error {
 	c1 := msg[1]
 	c2 := msg[2]
 	c3 := msg[3]
@@ -105,5 +118,5 @@ func (s *MethodServers) Call(msg []byte, args, reply interface{}) error {
 		return errors.New("MethodServers Call index c1 error")
 	}
 	ss := (*s)[c1]
-	return ss.Call(c2, c3, args, reply)
+	return ss.Call(auth, c2, c3, args, reply)
 }

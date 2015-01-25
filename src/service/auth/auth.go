@@ -6,7 +6,6 @@ import (
 	"github.com/jinzhu/gorm"
 	i18n "github.com/kortem/lingo"
 	"gooo/handeln"
-	"log"
 	//_ "github.com/lib/pq"
 	"gooo/configs"
 	"gooo/encoder"
@@ -30,11 +29,6 @@ func NewAuth() *Auth {
 	return &Auth{i18n: i18n.New("zh_CN", "i18n")}
 }
 
-func (r *Auth) all() {
-	var users []authprtc.User
-	r.db.Find(&users)
-	log.Println(users)
-}
 func (r *Auth) Register(args protocol.RpcRequest, reply *protocol.RpcResponse) error {
 	var p authprtc.RegisterRequest
 	encoder.Decode(args.Request, &p)

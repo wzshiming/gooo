@@ -52,7 +52,11 @@ func (h *Handel) Mess(c *connser.Connect, msg []byte) {
 	//log.Printf("%v msg  %v\n", c.RemoteAddr(),msg)
 	var reply protocol.RpcResponse
 
-	err := h.Server.Call(msg[:4], protocol.RpcRequest{
+	var t struct {
+		Auth uint32
+	}
+	encoder.Decode(s.Data, &t)
+	err := h.Server.Call(t.Auth, msg[:4], protocol.RpcRequest{
 		Request: msg[4:],
 		Session: s,
 	}, &reply)
