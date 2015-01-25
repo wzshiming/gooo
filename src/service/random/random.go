@@ -3,8 +3,6 @@ package main
 import (
 	"gooo/configs"
 	"gooo/encoder"
-	"gooo/handeln"
-	"gooo/helper"
 	"gooo/protocol"
 	"gooo/router"
 	//"log"
@@ -23,10 +21,11 @@ type Random struct {
 	ch chan int
 }
 
-func NewRandom() (random *Random) {
+func NewRandom(m *Status) (random *Random) {
 	random = &Random{
-		r:  rand.New(rand.NewSource(time.Now().UnixNano())),
-		ch: make(chan int, 1024),
+		r:    rand.New(rand.NewSource(time.Now().UnixNano())),
+		ch:   make(chan int, 1024),
+		call: router.NewCallServer("Connect", m.Conf),
 	}
 	go func() {
 		for {
@@ -92,23 +91,4 @@ func (r *Random) Range100Spacing(args protocol.RpcRequest, reply *protocol.RpcRe
 	}
 	//log.Println(t)
 	return nil
-}
-
-func (r *Random) Init(args protocol.InitRequest, reply *int) error {
-	if args.State == 1 {
-		r.conf = &args.Conf
-		//r.conf.StartConnect()
-		r.call = router.NewCallServer("Connect", r.conf)
-	}
-	return nil
-}
-
-func main() {
-	defer helper.Recover()
-	h := handeln.NewHandeln()
-	c := NewRandom()
-	h.Register(c)
-	h.Register(handeln.NewStatus(h))
-	helper.EchoPortInfo(configs.Name, configs.Port)
-	h.Start(configs.Port)
 }

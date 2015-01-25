@@ -2,10 +2,7 @@ package main
 
 import (
 	"errors"
-	"gooo/configs"
 	"gooo/encoder"
-	"gooo/handeln"
-	"gooo/helper"
 	offlprot "service/offline/protocol"
 	"sync"
 )
@@ -61,14 +58,4 @@ func (s *Offline) OutTime(args offlprot.OutTimeRequest, reply *int) error {
 	defer s.lock.Unlock()
 	delete(s.freeze, args.UserId)
 	return nil
-}
-
-func main() {
-	defer helper.Recover()
-	h := handeln.NewHandeln()
-	c := NewOffline(5000)
-	h.Register(c)
-	h.Register(handeln.NewStatus(h))
-	helper.EchoPortInfo(configs.Name, configs.Port)
-	h.Start(configs.Port)
 }

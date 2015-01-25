@@ -8,6 +8,7 @@ import (
 	"gooo/handeln"
 	"gooo/helper"
 	"gooo/protocol"
+	//"time"
 )
 
 type Master struct {
@@ -56,6 +57,8 @@ func main() {
 		Conf:  *conf,
 		State: 1,
 	}
+	conf.Foreach("Status", "Init", m, &b)
+	//time.Sleep(time.Second)
 	conf.Foreach("", "Init", m, &b)
 	conf.Foreach("", "Start", m, &b)
 

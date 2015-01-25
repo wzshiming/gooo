@@ -27,7 +27,7 @@
             {}
             ,{
                 "name": "Auth" 
-                ,"auth": 16  // 0x00000010
+                ,"auth": 0  // 0x00000000
                 ,"map": [
                     ""
                     ,"Unregister"

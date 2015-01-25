@@ -9,8 +9,8 @@ CD            := cd
 MAKE          := make
 MKDIR         := mkdir -p
 GO            := go
-FILES_SERVICE := $(notdir $(wildcard ./src/service/*/*.go))
-FILES_TOOLS   := $(notdir $(wildcard ./src/tools/*/*.go))
+FILES_SERVICE := $(notdir $(wildcard ./src/service/*))
+FILES_TOOLS   := $(notdir $(wildcard ./src/tools/*))
 PRE_FILES     := $(FILES:%.go=%)
 ECHO          := echo
 

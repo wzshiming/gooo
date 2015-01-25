@@ -5,11 +5,7 @@ import (
 	_ "github.com/go-sql-driver/mysql"
 	"github.com/jinzhu/gorm"
 	i18n "github.com/kortem/lingo"
-	"gooo/handeln"
-	//_ "github.com/lib/pq"
-	"gooo/configs"
 	"gooo/encoder"
-	"gooo/helper"
 	"gooo/protocol"
 	"gooo/router"
 	authprtc "service/auth/protocol"
@@ -18,15 +14,23 @@ import (
 )
 
 type Auth struct {
-	conf     *configs.Configs
+	status   *Status
 	db       gorm.DB
 	i18n     *i18n.L
 	callconn *router.CallServer
 	calloffl *router.CallServer
 }
 
-func NewAuth() *Auth {
-	return &Auth{i18n: i18n.New("zh_CN", "i18n")}
+func NewAuth(m *Status) *Auth {
+	r := Auth{
+		i18n:   m.I18n,
+		status: m,
+	}
+	us := m.Conf.Dc["Users"]
+	r.db, _ = gorm.Open(us.Dialect, us.Source)
+	r.callconn = router.NewCallServer("Connect", m.Conf)
+	r.calloffl = router.NewCallServer("Offline", m.Conf)
+	return &r
 }
 
 func (r *Auth) Register(args protocol.RpcRequest, reply *protocol.RpcResponse) error {
@@ -177,24 +181,4 @@ func (r *Auth) LogOut(args protocol.RpcRequest, reply *protocol.RpcResponse) err
 		},
 	}
 	return nil
-}
-
-func (r *Auth) Init(args protocol.InitRequest, reply *int) (err error) {
-	if args.State == 1 {
-		r.conf = &args.Conf
-		us := r.conf.Dc["Users"]
-		r.db, err = gorm.Open(us.Dialect, us.Source)
-		r.callconn = router.NewCallServer("Connect", r.conf)
-		r.calloffl = router.NewCallServer("Offline", r.conf)
-	}
-	return nil
-}
-func main() {
-	defer helper.Recover()
-	h := handeln.NewHandeln()
-	c := NewAuth()
-	h.Register(c)
-	h.Register(handeln.NewStatus(h))
-	helper.EchoPortInfo(configs.Name, configs.Port)
-	h.Start(configs.Port)
 }
