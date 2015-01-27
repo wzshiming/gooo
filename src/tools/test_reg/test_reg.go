@@ -10,6 +10,7 @@ import (
 	authprtc "service/Auth/protocol"
 	"service/connect/iorange"
 	"service/connect/route"
+	infoprtc "service/info/protocol"
 	"time"
 )
 
@@ -25,8 +26,11 @@ func (h *test) Mess(c *connser.Connect, msg []byte) {
 
 func (h *test) Join(c *connser.Connect) {
 	log.Printf("%v %v Join\n", c.ToUint(), c.Conn.RemoteAddr())
+	var b []byte
+	b = route.ClientRequestForm(conf, "Info", "Info", "Info", infoprtc.InfoRequest{})
+	c.Write(b)
 
-	b := route.ClientRequestForm(conf, "Auth", "PassAuth", "LogOut", authprtc.LogOutRequest{
+	b = route.ClientRequestForm(conf, "Auth", "PassAuth", "LogOut", authprtc.LogOutRequest{
 		LogOut: true,
 	})
 	c.Write(b)

@@ -22,17 +22,9 @@ type Handel struct {
 	Online   *Onlines
 	Conf     *configs.Configs
 	calloffl *router.CallServer
-	dataInit []byte
 }
 
 func NewHandel(conf *configs.Configs, size uint64) *Handel {
-	var t struct {
-		Auth   uint32
-		UserId uint64
-	}
-	t.Auth = conf.St.NoLogin
-	t.UserId = 0
-	b, _ := encoder.Encode(t)
 
 	port := helper.GetPort(conf.Sc[configs.Type][configs.Id].ClientPort)
 	helper.EchoPublicPortInfo(configs.Name, port)
@@ -42,7 +34,6 @@ func NewHandel(conf *configs.Configs, size uint64) *Handel {
 		Online:   NewOnlines(size),
 		Conf:     conf,
 		calloffl: router.NewCallServer("Offline", conf),
-		dataInit: b,
 	}
 	ser := connser.NewServer(&h, iorange.NewIORange(1024))
 	go ser.StartTCP(port)
@@ -52,7 +43,6 @@ func NewHandel(conf *configs.Configs, size uint64) *Handel {
 func (h *Handel) Join(c *connser.Connect) {
 	//log.Printf("%v %v join\n", c.ToUint(), c.RemoteAddr())
 	s := session.NewSession(c)
-	s.Data = h.dataInit
 	h.Session.Set(c.ToUint64(), s)
 }
 
@@ -70,11 +60,7 @@ func (h *Handel) Mess(c *connser.Connect, msg []byte) {
 	//log.Printf("%v msg  %v\n", c.RemoteAddr(),msg)
 	var reply protocol.RpcResponse
 
-	var t struct {
-		Auth uint32
-	}
-	encoder.Decode(s.Data, &t)
-	err := h.Server.Call(t.Auth, msg[:4], protocol.RpcRequest{
+	err := h.Server.Call(msg[:4], protocol.RpcRequest{
 		Request: msg[4:],
 		Session: s,
 	}, &reply)
@@ -95,7 +81,11 @@ func (h *Handel) Mess(c *connser.Connect, msg []byte) {
 			var t map[string]interface{}
 			encoder.Decode(s.Data, &t)
 			for k, v := range *reply.Data {
-				t[k] = v
+				if v == nil {
+					delete(t, k)
+				} else {
+					t[k] = v
+				}
 			}
 			if b, err := encoder.Encode(t); err == nil {
 				s.Data = b

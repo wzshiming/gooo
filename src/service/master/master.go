@@ -59,8 +59,8 @@ func main() {
 	}
 	conf.Foreach("Status", "Init", m, &b)
 	//time.Sleep(time.Second)
-	conf.Foreach("", "Init", m, &b)
-	conf.Foreach("", "Start", m, &b)
+	//conf.Foreach("", "Init", m, &b)
+	//conf.Foreach("", "Start", m, &b)
 
 	h := handeln.NewHandeln()
 	master := NewMaster(conf, h)

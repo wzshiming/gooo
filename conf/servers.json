@@ -8,11 +8,15 @@
     ]
     ,"Auth":[
          {"host":"127.0.0.1", "port":5000}
-    ],
-    "Offline":[
+    ]
+    ,"Info":[
+         {"host":"127.0.0.1", "port":5001}
+    ]
+    ,"Offline":[
          {"host":"127.0.0.1", "port":5010}
-    ],
-    "Chan":[
-         {"host":"127.0.0.1", "port":5020, "name":"beta"}
+    ]
+    ,"Chan":[
+         {"host":"127.0.0.1", "port":5020, "name":"beta 1"}
+        ,{"host":"127.0.0.1", "port":5021, "name":"beta 2"}
     ]
 }

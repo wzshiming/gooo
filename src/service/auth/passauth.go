@@ -34,7 +34,7 @@ func (r *PassAuth) ChangePwd(args protocol.RpcRequest, reply *protocol.RpcRespon
 	var p authprtc.ChangePwdRequest
 	encoder.Decode(args.Request, &p)
 	var d struct {
-		UserId   int64
+		UserId   int64 `json:"userId"`
 		Language string
 	}
 
@@ -62,7 +62,7 @@ func (r *PassAuth) Unregister(args protocol.RpcRequest, reply *protocol.RpcRespo
 	encoder.Decode(args.Request, &p)
 	var d struct {
 		Language string
-		UserId   int64
+		UserId   int64 `json:"userId"`
 	}
 	encoder.Decode(args.Session.Data, &d)
 	Trans := configs.I18n.TranslationsForLocale(d.Language)
@@ -89,7 +89,7 @@ func (r *PassAuth) Unregister(args protocol.RpcRequest, reply *protocol.RpcRespo
 
 func (r *PassAuth) LogOut(args protocol.RpcRequest, reply *protocol.RpcResponse) error {
 	var d struct {
-		UserId   uint64
+		UserId   uint64 `json:"userId"`
 		Language string
 	}
 	encoder.Decode(args.Session.Data, &d)
@@ -104,7 +104,7 @@ func (r *PassAuth) LogOut(args protocol.RpcRequest, reply *protocol.RpcResponse)
 	}, &sonli)
 	*reply = protocol.RpcResponse{
 		Data: &map[string]interface{}{
-			"UserId": 0,
+			"userId": 0,
 		},
 	}
 	return nil

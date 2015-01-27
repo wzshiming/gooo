@@ -2,18 +2,15 @@
     auth type is uint32 
 */
 
-[
-    {}
+[{}
     ,{
         "name": "Random"
-        ,"auth": 0  // 0x00000000
-        ,"map": [
-            {}
+        ,"auth": 0  // 0x00000000 none
+        ,"map": [{}
             ,{
                 "name": "Random"
-                ,"auth": 0  // 0x00000000
-                ,"map": [
-                    ""
+                ,"auth": 0  // 0x00000000 none
+                ,"map": [""
                     ,"Range100"
                     ,"Range100Spacing"
                 ]
@@ -22,23 +19,20 @@
     }
     ,{
         "name": "Auth"
-        ,"auth": 0  // 0x00000000
-        ,"map": [
-            {}
+        ,"auth": 0  // 0x00000000 none
+        ,"map": [{}
             ,{
                 "name": "Auth" 
-                ,"auth": 1  // 0x00000001
-                ,"map": [
-                    ""
+                ,"auth": 1  // 0x00000001 nologin
+                ,"map": [""
                     ,"Register"
                     ,"LogIn"
                 ]
             }
             ,{
                 "name": "PassAuth" 
-                ,"auth": 2  // 0x00000002
-                ,"map": [
-                    ""
+                ,"auth": 2  // 0x00000002 login
+                ,"map": [""
                     ,"Unregister"
                     ,"LogOut"
                     ,"ChangePwd"
@@ -47,15 +41,33 @@
         ]
     }
     ,{
+        "name": "Info"
+        ,"auth": 0  // 0x00000000 none
+        ,"map": [{}
+            ,{
+                "name": "Info"
+                ,"auth": 0  // 0x00000000 none
+                ,"map": [""
+                    ,"Info"
+                ]
+            }
+            ,{
+                "name": "Use"
+                ,"auth": 6  // 0x00000006 login | noroom
+                ,"map": [""
+                    ,"Chan"
+                ]
+            }
+        ]
+    }
+    ,{
         "name": "Chan"
-        ,"auth": 2  // 0x00000002
-        ,"map": [
-            {}
+        ,"auth": 2  // 0x00000002 login
+        ,"map": [{}
             ,{
                 "name": "Chan"
-                ,"auth": 0  // 0x00000000
-                ,"map": [
-                    ""
+                ,"auth": 8  // 0x00000008 inroom
+                ,"map": [""
                     ,"Name"
                 ]
             }

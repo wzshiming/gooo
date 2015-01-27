@@ -42,6 +42,10 @@ type StatusConfig struct {
 	None    uint32 `json:"none"`
 	NoLogin uint32 `json:"nologin"`
 	Login   uint32 `json:"login"`
+	NoRoom  uint32 `json:"noroom"`
+	InRoom  uint32 `json:"inroom"`
+	NoGame  uint32 `json:"nogame"`
+	InGame  uint32 `json:"ingame"`
 	Vip     uint32 `json:"vip"`
 	Vip1    uint32 `json:"vip1"`
 	Vip2    uint32 `json:"vip2"`

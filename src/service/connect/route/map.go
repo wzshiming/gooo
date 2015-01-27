@@ -1,18 +1,12 @@
 package route
 
 import (
-	//"encoding/binary"
 	"errors"
 	"fmt"
-	//"gooo/balance"
 	"gooo/configs"
-	//"gooo/protocol"
-	//"gooo/helper"
+	"gooo/encoder"
+	"gooo/protocol"
 	"gooo/router"
-	//"gooo/session"
-	//"log"
-	//"net/rpc"
-	//"sync"
 )
 
 type CallName struct {
@@ -24,6 +18,7 @@ type MethodServer struct {
 	caller  router.CallServer
 	methods [][]CallName
 	name    string
+	nameuse string
 }
 
 func NewMethodServer(index int, conf *configs.Configs) *MethodServer {
@@ -33,6 +28,7 @@ func NewMethodServer(index int, conf *configs.Configs) *MethodServer {
 		caller:  *router.NewCallServer(fri.Name, conf),
 		methods: make([][]CallName, len(fr)),
 		name:    fri.Name,
+		nameuse: fmt.Sprintf("use%s", fri.Name),
 	}
 
 	for k1, v1 := range fri.Map {
@@ -47,7 +43,7 @@ func NewMethodServer(index int, conf *configs.Configs) *MethodServer {
 	return &s
 }
 
-func (s *MethodServer) Call(auth uint32, c2 uint8, c3 uint8, args, reply interface{}) error {
+func (s *MethodServer) Call(c2 uint8, c3 uint8, args protocol.RpcRequest, reply *protocol.RpcResponse) error {
 	if c2 >= uint8(len(s.methods)) {
 		return errors.New("MethodServer Call index c2 error")
 	}
@@ -55,11 +51,15 @@ func (s *MethodServer) Call(auth uint32, c2 uint8, c3 uint8, args, reply interfa
 	if c3 >= uint8(len(m)) {
 		return errors.New("MethodServer Call index c3 error")
 	}
-
-	if a := m[c3].Auth; a != (a & auth) {
+	var t map[string]uint32
+	encoder.Decode(args.Session.Data, &t)
+	if a := m[c3].Auth; a != (a & t["auth"]) {
 		return errors.New("Permission denied")
 	}
 
+	if a := t[s.nameuse]; a != 0 {
+		return s.caller.CallBy(int(a-1), m[c3].Name, args, reply)
+	}
 	return s.caller.Call(m[c3].Name, args, reply)
 }
 
@@ -108,7 +108,7 @@ func NewMethodServers(conf *configs.Configs) *MethodServers {
 	return &s
 }
 
-func (s *MethodServers) Call(auth uint32, msg []byte, args, reply interface{}) error {
+func (s *MethodServers) Call(msg []byte, args protocol.RpcRequest, reply *protocol.RpcResponse) error {
 	c1 := msg[1]
 	c2 := msg[2]
 	c3 := msg[3]
@@ -118,5 +118,5 @@ func (s *MethodServers) Call(auth uint32, msg []byte, args, reply interface{}) e
 		return errors.New("MethodServers Call index c1 error")
 	}
 	ss := (*s)[c1]
-	return ss.Call(auth, c2, c3, args, reply)
+	return ss.Call(c2, c3, args, reply)
 }

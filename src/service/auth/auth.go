@@ -55,9 +55,9 @@ func (r *Auth) LogIn(args protocol.RpcRequest, reply *protocol.RpcResponse) erro
 	var p authprtc.LogInRequest
 	encoder.Decode(args.Request, &p)
 	var d struct {
-		Auth     uint32
+		Auth     uint32 `json:"auth"`
 		Language string
-		UserId   uint64
+		UserId   uint64 `json:"userId"`
 	}
 	encoder.Decode(args.Session.Data, &d)
 	Trans := configs.I18n.TranslationsForLocale(d.Language)
@@ -95,8 +95,8 @@ func (r *Auth) LogIn(args protocol.RpcRequest, reply *protocol.RpcResponse) erro
 	} else {
 		*reply = protocol.RpcResponse{
 			Data: &map[string]interface{}{
-				"UserId": ouser.Id,
-				"Auth":   ((d.Auth & ^r.status.Conf.St.NoLogin) | r.status.Conf.St.Login),
+				"userId": ouser.Id,
+				"auth":   ((d.Auth & ^r.status.Conf.St.NoLogin) | r.status.Conf.St.Login),
 			},
 		}
 	}
