@@ -96,7 +96,7 @@ func (r *Auth) LogIn(args protocol.RpcRequest, reply *protocol.RpcResponse) erro
 		*reply = protocol.RpcResponse{
 			Data: &map[string]interface{}{
 				"UserId": ouser.Id,
-				"Auth":   ((d.Auth & ^uint32(0x00000001)) | 0x00000002),
+				"Auth":   ((d.Auth & ^r.status.Conf.St.NoLogin) | r.status.Conf.St.Login),
 			},
 		}
 	}

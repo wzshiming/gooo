@@ -16,11 +16,12 @@ type Configs struct {
 	Rc RouteConfig
 	Mc MasterConfig
 	Dc DataBaseConfig
+	St StatusConfig
 }
 
 func NewConfigsFrom(dir string) *Configs {
 	mm := map[string][]byte{}
-	ss := []string{"master", "servers", "route", "database"}
+	ss := []string{"master", "servers", "route", "database", "status"}
 	reg1 := regexp.MustCompile(`//.*\r`)
 	reg2 := regexp.MustCompile(`#.*\r`)
 	reg3 := regexp.MustCompile(`\s`)
@@ -51,11 +52,15 @@ func NewConfigs(m *map[string][]byte) *Configs {
 	var dc DataBaseConfig
 	helper.GetConfig((*m)["database"], &dc)
 
+	var st StatusConfig
+	helper.GetConfig((*m)["status"], &st)
+
 	return &Configs{
 		Sc: sc,
 		Rc: rc,
 		Mc: mc,
 		Dc: dc,
+		St: st,
 	}
 }
 

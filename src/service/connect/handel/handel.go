@@ -30,7 +30,7 @@ func NewHandel(conf *configs.Configs, size uint64) *Handel {
 		Auth   uint32
 		UserId uint64
 	}
-	t.Auth = 0x00000001
+	t.Auth = conf.St.NoLogin
 	t.UserId = 0
 	b, _ := encoder.Encode(t)
 
@@ -50,7 +50,7 @@ func NewHandel(conf *configs.Configs, size uint64) *Handel {
 }
 
 func (h *Handel) Join(c *connser.Connect) {
-	log.Printf("%v %v join\n", c.ToUint(), c.RemoteAddr())
+	//log.Printf("%v %v join\n", c.ToUint(), c.RemoteAddr())
 	s := session.NewSession(c)
 	s.Data = h.dataInit
 	h.Session.Set(c.ToUint64(), s)
@@ -108,10 +108,12 @@ func (h *Handel) Exit(c *connser.Connect) {
 	id := c.ToUint64()
 	s := h.Session.Get(id)
 	var r offlprot.InterruptResponse
-	h.calloffl.Call("Offline.Interrupt", offlprot.InterruptRequest{
+	if err := h.calloffl.Call("Offline.Interrupt", offlprot.InterruptRequest{
 		Data: s.Data,
-	}, &r)
+	}, &r); err != nil {
+		return
+	}
 	h.Session.Del(c.ToUint64())
 	h.Online.Del(r.UserId)
-	log.Printf("%d  %v is quiting\n", h.Session.Len(), c.RemoteAddr())
+	return
 }

@@ -36,3 +36,17 @@ type DataBaseConfig map[string]struct {
 	Dialect string `json:"dialect"`
 	Source  string `json:"source"`
 }
+
+type StatusConfig struct {
+	None    uint32 `json:"none"`
+	NoLogin uint32 `json:"nologin"`
+	Login   uint32 `json:"login"`
+	Vip     uint32 `json:"vip"`
+	Vip1    uint32 `json:"vip1"`
+	Vip2    uint32 `json:"vip2"`
+	Vip3    uint32 `json:"vip3"`
+	Admin   uint32 `json:"admin"`
+	Admin1  uint32 `json:"admin1"`
+	Admin2  uint32 `json:"admin2"`
+	Admin3  uint32 `json:"admin3"`
+}
