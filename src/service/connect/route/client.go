@@ -5,8 +5,11 @@ import (
 	"gooo/encoder"
 )
 
+var lo byte = 0
+
 func ClientRequest(i1, i2, i3 uint8, arge interface{}) []byte {
-	sms := []byte{0, i1, i2, i3}
+	lo++
+	sms := []byte{lo, i1, i2, i3}
 	b, err := encoder.Encode(arge)
 	if err != nil {
 		return []byte{}

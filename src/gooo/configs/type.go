@@ -20,6 +20,7 @@ type RouteConfig []struct {
 type ServerConfig struct {
 	Host       string `json:"host"`
 	Port       int    `json:"port"`
+	Name       string `json:"name"`
 	ClientPort int    `json:"clientport"`
 	conn       *rpc.Client
 }
