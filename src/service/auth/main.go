@@ -1,7 +1,6 @@
 package main
 
 import (
-	i18n "github.com/kortem/lingo"
 	"gooo/handeln"
 	//_ "github.com/lib/pq"
 	"gooo/configs"
@@ -13,7 +12,6 @@ type Status struct {
 	handeln.Status
 	Hand            *handeln.Handeln
 	Conf            *configs.Configs
-	I18n            *i18n.L
 	ServiceAuth     *Auth
 	ServicePassAuth *PassAuth
 }
@@ -39,7 +37,6 @@ func main() {
 	h.Register(&Status{
 		Hand:   h,
 		Status: *handeln.NewStatus(h),
-		I18n:   i18n.New("zh_CN", "i18n"),
 	})
 	helper.EchoPortInfo(configs.Name, configs.Port)
 	h.Start(configs.Port)

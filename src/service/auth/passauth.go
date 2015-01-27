@@ -4,7 +4,7 @@ import (
 	"errors"
 	_ "github.com/go-sql-driver/mysql"
 	"github.com/jinzhu/gorm"
-	i18n "github.com/kortem/lingo"
+	"gooo/configs"
 	"gooo/encoder"
 	"gooo/protocol"
 	"gooo/router"
@@ -15,14 +15,12 @@ import (
 type PassAuth struct {
 	status   *Status
 	db       gorm.DB
-	i18n     *i18n.L
 	callconn *router.CallServer
 	calloffl *router.CallServer
 }
 
 func NewPassAuth(m *Status) *PassAuth {
 	r := PassAuth{
-		i18n:   m.I18n,
 		status: m,
 	}
 	us := m.Conf.Dc["Users"]
@@ -41,7 +39,7 @@ func (r *PassAuth) ChangePwd(args protocol.RpcRequest, reply *protocol.RpcRespon
 	}
 
 	encoder.Decode(args.Session.Data, &d)
-	Trans := r.i18n.TranslationsForLocale(d.Language)
+	Trans := configs.I18n.TranslationsForLocale(d.Language)
 
 	if len(p.NewPassword) <= 6 {
 		return errors.New(Trans.Value("auth.newpwdshort"))
@@ -67,7 +65,7 @@ func (r *PassAuth) Unregister(args protocol.RpcRequest, reply *protocol.RpcRespo
 		UserId   int64
 	}
 	encoder.Decode(args.Session.Data, &d)
-	Trans := r.i18n.TranslationsForLocale(d.Language)
+	Trans := configs.I18n.TranslationsForLocale(d.Language)
 	if d.UserId != 0 {
 		return errors.New(Trans.Value("auth.islogin"))
 	}
@@ -95,7 +93,7 @@ func (r *PassAuth) LogOut(args protocol.RpcRequest, reply *protocol.RpcResponse)
 		Language string
 	}
 	encoder.Decode(args.Session.Data, &d)
-	Trans := r.i18n.TranslationsForLocale(d.Language)
+	Trans := configs.I18n.TranslationsForLocale(d.Language)
 	if d.UserId == 0 {
 		return errors.New(Trans.Value("auth.nologin"))
 	}

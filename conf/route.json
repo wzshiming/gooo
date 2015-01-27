@@ -27,7 +27,7 @@
             {}
             ,{
                 "name": "Auth" 
-                ,"auth": 0  // 0x00000000
+                ,"auth": 1  // 0x00000001
                 ,"map": [
                     ""
                     ,"Register"
@@ -36,7 +36,7 @@
             }
             ,{
                 "name": "PassAuth" 
-                ,"auth": 16  // 0x00000010
+                ,"auth": 2  // 0x00000002
                 ,"map": [
                     ""
                     ,"Unregister"

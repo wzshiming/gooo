@@ -4,7 +4,7 @@ import (
 	"errors"
 	_ "github.com/go-sql-driver/mysql"
 	"github.com/jinzhu/gorm"
-	i18n "github.com/kortem/lingo"
+	"gooo/configs"
 	"gooo/encoder"
 	"gooo/protocol"
 	"gooo/router"
@@ -16,14 +16,12 @@ import (
 type Auth struct {
 	status   *Status
 	db       gorm.DB
-	i18n     *i18n.L
 	callconn *router.CallServer
 	calloffl *router.CallServer
 }
 
 func NewAuth(m *Status) *Auth {
 	r := Auth{
-		i18n:   m.I18n,
 		status: m,
 	}
 	us := m.Conf.Dc["Users"]
@@ -40,7 +38,7 @@ func (r *Auth) Register(args protocol.RpcRequest, reply *protocol.RpcResponse) e
 		Language string
 	}
 	encoder.Decode(args.Session.Data, &d)
-	Trans := r.i18n.TranslationsForLocale(d.Language)
+	Trans := configs.I18n.TranslationsForLocale(d.Language)
 	if len(p.Password) <= 6 {
 		return errors.New(Trans.Value("auth.pwdshort"))
 	}
@@ -57,11 +55,12 @@ func (r *Auth) LogIn(args protocol.RpcRequest, reply *protocol.RpcResponse) erro
 	var p authprtc.LogInRequest
 	encoder.Decode(args.Request, &p)
 	var d struct {
+		Auth     uint32
 		Language string
-		UserId   int64
+		UserId   uint64
 	}
 	encoder.Decode(args.Session.Data, &d)
-	Trans := r.i18n.TranslationsForLocale(d.Language)
+	Trans := configs.I18n.TranslationsForLocale(d.Language)
 	if d.UserId != 0 {
 		return errors.New(Trans.Value("auth.islogin"))
 	}
@@ -97,7 +96,7 @@ func (r *Auth) LogIn(args protocol.RpcRequest, reply *protocol.RpcResponse) erro
 		*reply = protocol.RpcResponse{
 			Data: &map[string]interface{}{
 				"UserId": ouser.Id,
-				"Auth":   0x00000010,
+				"Auth":   ((d.Auth & ^uint32(0x00000001)) | 0x00000002),
 			},
 		}
 	}

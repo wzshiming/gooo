@@ -10,6 +10,7 @@ import (
 	"gooo/router"
 	"gooo/session"
 	"log"
+	"service/connect/iorange"
 	"service/connect/route"
 	offlprot "service/offline/protocol"
 )
@@ -21,21 +22,38 @@ type Handel struct {
 	Online   *Onlines
 	Conf     *configs.Configs
 	calloffl *router.CallServer
+	dataInit []byte
 }
 
 func NewHandel(conf *configs.Configs, size uint64) *Handel {
-	return &Handel{
+	var t struct {
+		Auth   uint32
+		UserId uint64
+	}
+	t.Auth = 0x00000001
+	t.UserId = 0
+	b, _ := encoder.Encode(t)
+
+	port := helper.GetPort(conf.Sc[configs.Type][configs.Id].ClientPort)
+	helper.EchoPublicPortInfo(configs.Name, port)
+	h := Handel{
 		Server:   route.NewMethodServers(conf),
 		Session:  NewSessions(size),
 		Online:   NewOnlines(size),
 		Conf:     conf,
 		calloffl: router.NewCallServer("Offline", conf),
+		dataInit: b,
 	}
+	ser := connser.NewServer(&h, iorange.NewIORange(1024))
+	go ser.StartTCP(port)
+	return &h
 }
 
 func (h *Handel) Join(c *connser.Connect) {
 	log.Printf("%v %v join\n", c.ToUint(), c.RemoteAddr())
-	h.Session.Set(c.ToUint64(), session.NewSession(c))
+	s := session.NewSession(c)
+	s.Data = h.dataInit
+	h.Session.Set(c.ToUint64(), s)
 }
 
 func (h *Handel) Mess(c *connser.Connect, msg []byte) {

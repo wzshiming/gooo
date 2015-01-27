@@ -20,7 +20,7 @@ ECHO          := echo
 all: clean_pkg build run
 
 build: build_num_print service_build deploy
-	@$(MAKE) build_num_record tools_build > /dev/null & 
+	@$(MAKE) tools_build build_num_record > /dev/null & 
 
 deploy:
 	@$(MKDIR) $(BUILD_DIR) && $(CD) $(BUILD_DIR) && $(MKDIR) conf static log i18n
