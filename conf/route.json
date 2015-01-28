@@ -65,10 +65,19 @@
         ,"auth": 2  // 0x00000002 login
         ,"map": [{}
             ,{
-                "name": "Chan"
-                ,"auth": 8  // 0x00000008 inroom
+                "name": "Info"
+                ,"auth": 0  // 0x00000000 none
                 ,"map": [""
                     ,"Name"
+                    ,"Rooms"
+                ]
+            }
+            ,{
+                "name": "Chan"
+                ,"auth": 24  // 0x00000018 inroom | nogame
+                ,"map": [""
+                    ,"Create"
+                    ,"Join"
                 ]
             }
         ]

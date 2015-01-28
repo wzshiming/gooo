@@ -13,6 +13,7 @@ type Status struct {
 	Hand        *handeln.Handeln
 	Conf        *configs.Configs
 	ServiceChan *Chan
+	ServiceInfo *Info
 }
 
 func (r *Status) Init(args protocol.InitRequest, reply *int) (err error) {
@@ -21,6 +22,10 @@ func (r *Status) Init(args protocol.InitRequest, reply *int) (err error) {
 		if r.ServiceChan == nil {
 			r.ServiceChan = NewChan(r)
 			r.Hand.Register(r.ServiceChan)
+		}
+		if r.ServiceInfo == nil {
+			r.ServiceInfo = NewInfo(r)
+			r.Hand.Register(r.ServiceInfo)
 		}
 	}
 	return nil

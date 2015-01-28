@@ -1,8 +1,8 @@
 package configs
 
 import (
+	"fmt"
 	"net/rpc"
-	//"log"
 )
 
 //type RouteConfig map[string]map[string][]string
@@ -15,6 +15,17 @@ type RouteConfig []struct {
 		Auth uint32   `json:"auth"`
 		Map  []string `json:"map"`
 	} `json:"map"`
+}
+
+func (s *RouteConfig) Info(c1, c2, c3 uint8) string {
+	b1 := (*s)[c1]
+	b2 := b1.Map[c2]
+	b3 := b2.Map[c3]
+	return fmt.Sprintf("%s(%d).%s(%d).%s(%d) <0x%08X>",
+		b1.Name, c1,
+		b2.Name, c2,
+		b3, c3,
+		b1.Auth|b2.Auth)
 }
 
 type ServerConfig struct {

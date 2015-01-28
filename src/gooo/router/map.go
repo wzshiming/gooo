@@ -4,6 +4,7 @@ import (
 	"gooo/balance"
 	"gooo/configs"
 	"gooo/helper"
+	"gooo/session"
 	"net/rpc"
 )
 
@@ -31,6 +32,10 @@ func NewCallServer(tye string, conf *configs.Configs) *CallServer {
 	return &s
 }
 
+func (s *CallServer) Size() int {
+	return len(s.Client)
+}
+
 func (s *CallServer) Call(method string, args, reply interface{}) (err error) {
 	defer helper.Recover()
 	return s.Client[s.bal.Allot()].Call(method, args, reply)
@@ -39,6 +44,18 @@ func (s *CallServer) Call(method string, args, reply interface{}) (err error) {
 func (s *CallServer) CallBy(index int, method string, args, reply interface{}) (err error) {
 	defer helper.Recover()
 	return s.Client[index].Call(method, args, reply)
+}
+
+func (s *CallServer) CallBySession(sess *session.Session, method string, args, reply interface{}) (err error) {
+	defer helper.Recover()
+	return s.Client[sess.Uniq.Server].Call(method, args, reply)
+}
+
+func (s *CallServer) CallBySessions(sesss []*session.Session, method string, args, reply interface{}) (err error) {
+	for _, sess := range sesss {
+		s.CallBySession(sess, method, args, reply)
+	}
+	return
 }
 
 type CallServers map[string]*CallServer

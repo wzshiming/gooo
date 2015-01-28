@@ -71,18 +71,23 @@ func (r *Auth) LogIn(args protocol.RpcRequest, reply *protocol.RpcResponse) erro
 	if ouser.Password != p.Password {
 		return errors.New(Trans.Value("auth.pwderr"))
 	}
+
 	var gonli connprtc.GetOnlineResponse
-	r.callconn.CallBySession(args.Session, "Connect.GetOnline", connprtc.GetOnlineRequest{
-		UserId: ouser.Id,
-	}, &gonli)
-	if gonli.Online {
-		return errors.New(Trans.Value("auth.inlogin"))
+	for i := 0; i != r.callconn.Size(); i++ {
+		r.callconn.CallBy(i, "Connect.GetOnline", connprtc.GetOnlineRequest{
+			UserId: ouser.Id,
+		}, &gonli)
+		if gonli.Online {
+			return errors.New(Trans.Value("auth.inlogin"))
+		}
 	}
+
 	var sonli connprtc.SetOnlineResponse
 	r.callconn.CallBySession(args.Session, "Connect.SetOnline", connprtc.SetOnlineRequest{
 		UserId: ouser.Id,
 		Online: true,
 	}, &sonli)
+
 	var rr offlprot.ReconnectionResponse
 	err := r.calloffl.Call("Offline.Reconnection", offlprot.ReconnectionRequest{
 		UserId: ouser.Id,

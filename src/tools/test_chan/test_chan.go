@@ -4,7 +4,7 @@ import (
 	"gooo/configs"
 	"gooo/connser"
 	"gooo/handeln"
-	"gooo/helper"
+	//"gooo/helper"
 	"log"
 	"runtime"
 	authprtc "service/Auth/protocol"
@@ -22,7 +22,7 @@ type test struct {
 }
 
 func (h *test) Mess(c *connser.Connect, msg []byte) {
-	helper.MsgInfo(msg)
+	log.Printf("\n%s\n%s\n\n", conf.Rc.Info(msg[1], msg[2], msg[3]), msg[4:])
 }
 
 func (h *test) Join(c *connser.Connect) {
@@ -43,7 +43,17 @@ func (h *test) Join(c *connser.Connect) {
 	})
 	c.Write(b)
 
-	b = route.ClientRequestForm(conf, "Chan", "Chan", "Name", chanprtc.NameRequest{
+	b = route.ClientRequestForm(conf, "Chan", "Info", "Name", chanprtc.NameRequest{
+		Get: true,
+	})
+	c.Write(b)
+
+	b = route.ClientRequestForm(conf, "Chan", "Chan", "Create", chanprtc.CreateRequest{
+		Size: 4,
+	})
+	c.Write(b)
+
+	b = route.ClientRequestForm(conf, "Chan", "Info", "Rooms", chanprtc.RoomsRequest{
 		Get: true,
 	})
 	c.Write(b)

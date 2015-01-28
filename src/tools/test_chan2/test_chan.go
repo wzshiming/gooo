@@ -4,10 +4,10 @@ import (
 	"gooo/configs"
 	"gooo/connser"
 	"gooo/handeln"
-	//"gooo/helper"
 	"log"
 	"runtime"
 	authprtc "service/Auth/protocol"
+	chanprtc "service/chan/protocol"
 	"service/connect/iorange"
 	"service/connect/route"
 	infoprtc "service/info/protocol"
@@ -27,34 +27,42 @@ func (h *test) Mess(c *connser.Connect, msg []byte) {
 func (h *test) Join(c *connser.Connect) {
 	log.Printf("%v %v Join\n", c.ToUint(), c.Conn.RemoteAddr())
 	var b []byte
+
 	b = route.ClientRequestForm(conf, "Info", "Info", "Info", infoprtc.InfoRequest{})
 	c.Write(b)
 
-	b = route.ClientRequestForm(conf, "Auth", "PassAuth", "LogOut", authprtc.LogOutRequest{
-		LogOut: true,
-	})
-	c.Write(b)
-
 	b = route.ClientRequestForm(conf, "Auth", "Auth", "Register", authprtc.RegisterRequest{
-		Username: "hallo1",
+		Username: "hallo2",
 		Password: "aaasssss",
 	})
-
 	c.Write(b)
 
 	b = route.ClientRequestForm(conf, "Auth", "Auth", "LogIn", authprtc.LogInRequest{
-		Username: "hallo1",
+		Username: "hallo2",
 		Password: "aaasssss",
 	})
-
-	c.Write(b)
 	c.Write(b)
 
-	b2 := route.ClientRequestForm(conf, "Auth", "PassAuth", "LogOut", authprtc.LogOutRequest{
-		LogOut: true,
+	b = route.ClientRequestForm(conf, "Info", "Use", "Chan", infoprtc.UseChanRequest{
+		Use: 1,
 	})
-	c.Write(b2)
 	c.Write(b)
+
+	b = route.ClientRequestForm(conf, "Chan", "Info", "Name", chanprtc.NameRequest{
+		Get: true,
+	})
+	c.Write(b)
+
+	b = route.ClientRequestForm(conf, "Chan", "Chan", "Join", chanprtc.JoinRequest{
+		RoomId: 0,
+	})
+	c.Write(b)
+
+	b = route.ClientRequestForm(conf, "Chan", "Info", "Rooms", chanprtc.RoomsRequest{
+		Get: true,
+	})
+	c.Write(b)
+
 }
 
 func main() {
