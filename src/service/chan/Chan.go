@@ -5,17 +5,15 @@ import (
 	"gooo/configs"
 	"gooo/encoder"
 	"gooo/protocol"
-	"gooo/router"
 	chanprtc "service/chan/protocol"
 
 	//connprtc "service/connect/protocol"
 )
 
 type Chan struct {
-	conf     *configs.Configs
-	status   *Status
-	callconn *router.CallServer
-	rooms    *chanprtc.GameRooms
+	conf   *configs.Configs
+	status *Status
+	rooms  *chanprtc.GameRooms
 }
 
 func NewChan(m *Status) *Chan {
@@ -24,7 +22,6 @@ func NewChan(m *Status) *Chan {
 		conf:   m.Conf,
 		rooms:  chanprtc.NewGameRooms(100),
 	}
-	r.callconn = router.NewCallServer("Connect", m.Conf)
 	return &r
 }
 

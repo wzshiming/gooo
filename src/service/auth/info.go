@@ -25,7 +25,6 @@ func NewInfo(m *Status) *Info {
 		sizechan: len(m.Conf.Sc["Chan"]),
 		//name:   m.Conf.Sc[configs.Type][configs.Id].Name,
 	}
-	//r.callconn = router.NewCallServer("Connect", m.Conf)
 	return &r
 }
 

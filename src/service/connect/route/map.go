@@ -26,7 +26,7 @@ func NewMethodServer(index int, conf *configs.Configs) *MethodServer {
 	fri := fr[index]
 	s := MethodServer{
 		caller:  *router.NewCallServer(fri.Name, conf),
-		methods: make([][]CallName, len(fr)),
+		methods: make([][]CallName, len(fri.Map)),
 		name:    fri.Name,
 		nameuse: fmt.Sprintf("use%s", fri.Name),
 	}

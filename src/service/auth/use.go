@@ -6,8 +6,7 @@ import (
 	"gooo/encoder"
 	"gooo/protocol"
 	//"gooo/router"
-	infoprtc "service/info/protocol"
-	//connprtc "service/connect/protocol"
+	authprot "service/auth/protocol"
 )
 
 type Use struct {
@@ -23,14 +22,12 @@ func NewUse(m *Status) *Use {
 		status:   m,
 		conf:     m.Conf,
 		sizechan: len(m.Conf.Sc["Chan"]),
-		//name:   m.Conf.Sc[configs.Type][configs.Id].Name,
 	}
-	//r.callconn = router.NewCallServer("Connect", m.Conf)
 	return &r
 }
 
 func (r *Use) Chan(args protocol.RpcRequest, reply *protocol.RpcResponse) error {
-	var p infoprtc.UseChanRequest
+	var p authprot.UseChanRequest
 	encoder.Decode(args.Request, &p)
 
 	if r.sizechan < p.Use {

@@ -10,9 +10,9 @@ import (
 	"gooo/router"
 	"gooo/session"
 	"log"
+	authprot "service/auth/protocol"
 	"service/connect/iorange"
 	"service/connect/route"
-	offlprot "service/offline/protocol"
 )
 
 type Handel struct {
@@ -21,7 +21,7 @@ type Handel struct {
 	Session  *Sessions
 	Online   *Onlines
 	Conf     *configs.Configs
-	calloffl *router.CallServer
+	callauth *router.CallServer
 }
 
 func NewHandel(conf *configs.Configs, size uint64) *Handel {
@@ -33,7 +33,7 @@ func NewHandel(conf *configs.Configs, size uint64) *Handel {
 		Session:  NewSessions(size),
 		Online:   NewOnlines(size),
 		Conf:     conf,
-		calloffl: router.NewCallServer("Offline", conf),
+		callauth: router.NewCallServer("Auth", conf),
 	}
 	ser := connser.NewServer(&h, iorange.NewIORange(1024))
 	go ser.StartTCP(port)
@@ -97,13 +97,13 @@ func (h *Handel) Mess(c *connser.Connect, msg []byte) {
 func (h *Handel) Exit(c *connser.Connect) {
 	id := c.ToUint64()
 	s := h.Session.Get(id)
-	var r offlprot.InterruptResponse
-	if err := h.calloffl.Call("Offline.Interrupt", offlprot.InterruptRequest{
+	h.Session.Del(c.ToUint64())
+	var r authprot.InterruptResponse
+	if err := h.callauth.Call("Offline.Interrupt", authprot.InterruptRequest{
 		Data: s.Data,
 	}, &r); err != nil {
 		return
 	}
-	h.Session.Del(c.ToUint64())
 	h.Online.Del(r.UserId)
 	return
 }

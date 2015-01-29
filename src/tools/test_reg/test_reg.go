@@ -10,7 +10,6 @@ import (
 	authprtc "service/Auth/protocol"
 	"service/connect/iorange"
 	"service/connect/route"
-	infoprtc "service/info/protocol"
 	"time"
 )
 
@@ -27,7 +26,7 @@ func (h *test) Mess(c *connser.Connect, msg []byte) {
 func (h *test) Join(c *connser.Connect) {
 	log.Printf("%v %v Join\n", c.ToUint(), c.Conn.RemoteAddr())
 	var b []byte
-	b = route.ClientRequestForm(conf, "Info", "Info", "Info", infoprtc.InfoRequest{})
+	b = route.ClientRequestForm(conf, "Auth", "Info", "Info", authprtc.InfoRequest{})
 	c.Write(b)
 
 	b = route.ClientRequestForm(conf, "Auth", "PassAuth", "LogOut", authprtc.LogOutRequest{
@@ -35,12 +34,12 @@ func (h *test) Join(c *connser.Connect) {
 	})
 	c.Write(b)
 
-	b = route.ClientRequestForm(conf, "Auth", "Auth", "Register", authprtc.RegisterRequest{
-		Username: "hallo1",
-		Password: "aaasssss",
-	})
+	//b = route.ClientRequestForm(conf, "Auth", "Auth", "Register", authprtc.RegisterRequest{
+	//	Username: "hallo1",
+	//	Password: "aaasssss",
+	//})
 
-	c.Write(b)
+	//c.Write(b)
 
 	b = route.ClientRequestForm(conf, "Auth", "Auth", "LogIn", authprtc.LogInRequest{
 		Username: "hallo1",
@@ -48,13 +47,13 @@ func (h *test) Join(c *connser.Connect) {
 	})
 
 	c.Write(b)
-	c.Write(b)
+	//c.Write(b)
 
-	b2 := route.ClientRequestForm(conf, "Auth", "PassAuth", "LogOut", authprtc.LogOutRequest{
-		LogOut: true,
-	})
-	c.Write(b2)
-	c.Write(b)
+	//b2 := route.ClientRequestForm(conf, "Auth", "PassAuth", "LogOut", authprtc.LogOutRequest{
+	//	LogOut: true,
+	//})
+	//c.Write(b2)
+	//c.Write(b)
 }
 
 func main() {

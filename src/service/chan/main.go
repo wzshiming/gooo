@@ -10,10 +10,11 @@ import (
 
 type Status struct {
 	handeln.Status
-	Hand        *handeln.Handeln
-	Conf        *configs.Configs
-	ServiceChan *Chan
-	ServiceInfo *Info
+	Hand          *handeln.Handeln
+	Conf          *configs.Configs
+	ServiceChan   *Chan
+	ServiceInChan *InChan
+	ServiceInfo   *Info
 }
 
 func (r *Status) Init(args protocol.InitRequest, reply *int) (err error) {
@@ -22,6 +23,10 @@ func (r *Status) Init(args protocol.InitRequest, reply *int) (err error) {
 		if r.ServiceChan == nil {
 			r.ServiceChan = NewChan(r)
 			r.Hand.Register(r.ServiceChan)
+		}
+		if r.ServiceInChan == nil {
+			r.ServiceInChan = NewInChan(r)
+			r.Hand.Register(r.ServiceInChan)
 		}
 		if r.ServiceInfo == nil {
 			r.ServiceInfo = NewInfo(r)

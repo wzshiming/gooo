@@ -38,24 +38,18 @@
                     ,"ChangePwd"
                 ]
             }
-        ]
-    }
-    ,{
-        "name": "Info"
-        ,"auth": 0x00000000  // none
-        ,"map": [{}
-            ,{
-                "name": "Info"
-                ,"auth": 0x00000000  // none
-                ,"map": [""
-                    ,"Info"
-                ]
-            }
             ,{
                 "name": "Use"
                 ,"auth": 0x00000006  // login | noroom
                 ,"map": [""
                     ,"Chan"
+                ]
+            }
+            ,{
+                "name": "Info"
+                ,"auth": 0x00000000  // none
+                ,"map": [""
+                    ,"Info"
                 ]
             }
         ]

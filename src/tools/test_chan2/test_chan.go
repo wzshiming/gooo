@@ -10,7 +10,6 @@ import (
 	chanprtc "service/chan/protocol"
 	"service/connect/iorange"
 	"service/connect/route"
-	infoprtc "service/info/protocol"
 	"time"
 )
 
@@ -28,7 +27,7 @@ func (h *test) Join(c *connser.Connect) {
 	log.Printf("%v %v Join\n", c.ToUint(), c.Conn.RemoteAddr())
 	var b []byte
 
-	b = route.ClientRequestForm(conf, "Info", "Info", "Info", infoprtc.InfoRequest{})
+	b = route.ClientRequestForm(conf, "Auth", "Info", "Info", authprtc.InfoRequest{})
 	c.Write(b)
 
 	b = route.ClientRequestForm(conf, "Auth", "Auth", "Register", authprtc.RegisterRequest{
@@ -43,7 +42,7 @@ func (h *test) Join(c *connser.Connect) {
 	})
 	c.Write(b)
 
-	b = route.ClientRequestForm(conf, "Info", "Use", "Chan", infoprtc.UseChanRequest{
+	b = route.ClientRequestForm(conf, "Auth", "Use", "Chan", authprtc.UseChanRequest{
 		Use: 1,
 	})
 	c.Write(b)
