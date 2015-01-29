@@ -10,6 +10,7 @@ import (
 	"net/rpc/jsonrpc"
 	"os"
 	"path"
+	"regexp"
 	"strings"
 )
 
@@ -27,6 +28,27 @@ func OpenFile(path string) []byte {
 		log.Fatal(err)
 	}
 	return f
+}
+
+var (
+	reg1 = regexp.MustCompile(`//.*\r`)
+	reg2 = regexp.MustCompile(`#.*\r`)
+	reg3 = regexp.MustCompile(`\s`)
+	reg4 = regexp.MustCompile(`/\*.*\*/`)
+	reg5 = regexp.MustCompile(`\b0[xX][0-9a-fA-F]+\b`)
+)
+
+func ReplaceJson(str []byte) []byte {
+	str = reg1.ReplaceAll(str, []byte{})
+	str = reg2.ReplaceAll(str, []byte{})
+	str = reg3.ReplaceAll(str, []byte{})
+	str = reg4.ReplaceAll(str, []byte{})
+	str = reg5.ReplaceAllFunc(str, func(b []byte) []byte {
+		var p uint32
+		fmt.Sscanf(string(b[2:]), "%x", &p)
+		return []byte(fmt.Sprintln(p))
+	})
+	return str
 }
 
 func GetConfig(conf []byte, s interface{}) {

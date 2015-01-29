@@ -7,7 +7,6 @@ import (
 	"net/rpc"
 	"os"
 	"os/exec"
-	"regexp"
 	"time"
 )
 
@@ -22,18 +21,9 @@ type Configs struct {
 func NewConfigsFrom(dir string) *Configs {
 	mm := map[string][]byte{}
 	ss := []string{"master", "servers", "route", "database", "status"}
-	reg1 := regexp.MustCompile(`//.*\r`)
-	reg2 := regexp.MustCompile(`#.*\r`)
-	reg3 := regexp.MustCompile(`\s`)
-	reg4 := regexp.MustCompile(`/\*.*\*/`)
-	var str string
 	for _, v := range ss {
-		str = string(helper.OpenFile(fmt.Sprintf("%s/%s.json", dir, v)))
-		str = reg1.ReplaceAllString(str, "")
-		str = reg2.ReplaceAllString(str, "")
-		str = reg3.ReplaceAllString(str, "")
-		str = reg4.ReplaceAllString(str, "")
-		mm[v] = []byte(str)
+		file := helper.OpenFile(fmt.Sprintf("%s/%s.json", dir, v))
+		mm[v] = helper.ReplaceJson(file)
 	}
 
 	return NewConfigs(&mm)

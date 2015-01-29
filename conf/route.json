@@ -5,11 +5,11 @@
 [{}
     ,{
         "name": "Random"
-        ,"auth": 0  // 0x00000000 none
+        ,"auth": 0x00000000  // none
         ,"map": [{}
             ,{
                 "name": "Random"
-                ,"auth": 0  // 0x00000000 none
+                ,"auth": 0x00000000  // none
                 ,"map": [""
                     ,"Range100"
                     ,"Range100Spacing"
@@ -19,11 +19,11 @@
     }
     ,{
         "name": "Auth"
-        ,"auth": 0  // 0x00000000 none
+        ,"auth": 0x00000000  // none
         ,"map": [{}
             ,{
                 "name": "Auth" 
-                ,"auth": 1  // 0x00000001 nologin
+                ,"auth": 0x00000001  // nologin
                 ,"map": [""
                     ,"Register"
                     ,"LogIn"
@@ -31,7 +31,7 @@
             }
             ,{
                 "name": "PassAuth" 
-                ,"auth": 2  // 0x00000002 login
+                ,"auth": 0x00000002  // login
                 ,"map": [""
                     ,"Unregister"
                     ,"LogOut"
@@ -42,18 +42,18 @@
     }
     ,{
         "name": "Info"
-        ,"auth": 0  // 0x00000000 none
+        ,"auth": 0x00000000  // none
         ,"map": [{}
             ,{
                 "name": "Info"
-                ,"auth": 0  // 0x00000000 none
+                ,"auth": 0x00000000  // none
                 ,"map": [""
                     ,"Info"
                 ]
             }
             ,{
                 "name": "Use"
-                ,"auth": 6  // 0x00000006 login | noroom
+                ,"auth": 0x00000006  // login | noroom
                 ,"map": [""
                     ,"Chan"
                 ]
@@ -62,11 +62,11 @@
     }
     ,{
         "name": "Chan"
-        ,"auth": 2  // 0x00000002 login
+        ,"auth": 0x00000002  // login
         ,"map": [{}
             ,{
                 "name": "Info"
-                ,"auth": 0  // 0x00000000 none
+                ,"auth": 0x00000000  // none
                 ,"map": [""
                     ,"Name"
                     ,"Rooms"
@@ -74,7 +74,7 @@
             }
             ,{
                 "name": "Chan"
-                ,"auth": 24  // 0x00000018 inroom | nogame
+                ,"auth": 0x00000018  // inroom | nogame
                 ,"map": [""
                     ,"Create"
                     ,"Join"
