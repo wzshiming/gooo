@@ -92,10 +92,13 @@ func FlagVar() (name, port, typ string, id uint64) {
 	inputPort := flag.Int("p", 0, "Port")
 	inputId := flag.Uint64("i", 0, "Id")
 	flag.Parse()
-	name = fmt.Sprintf("%s", *inputType)
+	typ = fmt.Sprintf("%s", *inputType)
 	port = fmt.Sprintf(":%d", *inputPort)
-	typ = fmt.Sprintf("%s_%d", *inputType, *inputId)
+	name = fmt.Sprintf("%s_%d", *inputType, *inputId)
 	id = *inputId
+	if typ == "" {
+		name = ""
+	}
 	return
 }
 
