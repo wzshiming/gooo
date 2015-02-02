@@ -10,7 +10,7 @@ import (
 func main() {
 
 	conf := configs.NewConfigsFrom("./conf")
-	conn := helper.NewConn(fmt.Sprintf("%s:%d", conf.Mc.Host, conf.Mc.Port))
+	conn := helper.NewConnTcp(fmt.Sprintf("%s:%d", conf.Mc.Host, conf.Mc.Port))
 	var b int
 	conn.Call("Master.Stop", 222, &b)
 	//time.Sleep(time.Second * 5)

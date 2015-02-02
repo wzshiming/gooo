@@ -31,18 +31,22 @@ func (r *Use) Chan(args protocol.RpcRequest, reply *protocol.RpcResponse) error 
 	encoder.Decode(args.Request, &p)
 
 	if r.sizechan < p.Use {
-		return errors.New("out of range")
+		return errors.New("Out of range")
 	}
 
 	var d struct {
-		Auth uint32 `json:"auth"`
+		UseChan uint32 `json:"useChan"`
 	}
+
+	if d.UseChan != 0 {
+		return errors.New("Have chosen")
+	}
+
 	encoder.Decode(args.Session.Data, &d)
 
 	*reply = protocol.RpcResponse{
 		Data: &map[string]interface{}{
 			"useChan": p.Use,
-			"auth":    (d.Auth | r.status.Conf.St.InRoom),
 		},
 	}
 	return nil

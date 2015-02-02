@@ -27,7 +27,7 @@ func NewInChan(m *Status) *InChan {
 
 func (r *InChan) Leave(args protocol.RpcRequest, reply *protocol.RpcResponse) error {
 	var d struct {
-		Auth     uint32 `json:"auth"`
+		Flag     uint32 `json:"flag"`
 		Language string
 		UserId   uint64 `json:"userId"`
 		RoomId   int
@@ -35,7 +35,7 @@ func (r *InChan) Leave(args protocol.RpcRequest, reply *protocol.RpcResponse) er
 	}
 	encoder.Decode(args.Session.Data, &d)
 
-	if (d.Auth & r.status.Conf.St.InGame) != 0 {
+	if (d.Flag & configs.FlagGame) != 0 {
 		return errors.New("In the game")
 	}
 
@@ -45,7 +45,7 @@ func (r *InChan) Leave(args protocol.RpcRequest, reply *protocol.RpcResponse) er
 		Data: &map[string]interface{}{
 			"RoomId": nil,
 			"SeatId": nil,
-			"auth":   ((d.Auth & ^r.status.Conf.St.InRoom) | r.status.Conf.St.NoRoom),
+			"flag":   d.Flag & ^configs.FlagRoom,
 		},
 	}
 	return nil

@@ -14,10 +14,18 @@ import (
 	"strings"
 )
 
-func NewConn(addr string) (c *rpc.Client) {
+func NewConnTcp(addr string) (c *rpc.Client) {
 	c, err := jsonrpc.Dial("tcp", addr)
 	if err != nil {
-		log.Fatal("Server Connect error:", err)
+		log.Fatal("Server tcp Connect error:", err)
+	}
+	return
+}
+
+func NewConnUdp(addr string) (c *rpc.Client) {
+	c, err := jsonrpc.Dial("udp", addr)
+	if err != nil {
+		log.Fatal("Server udp Connect error:", err)
 	}
 	return
 }

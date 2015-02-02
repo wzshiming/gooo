@@ -27,9 +27,6 @@ func (h *test) Join(c *connser.Connect) {
 	log.Printf("%v %v Join\n", c.ToUint(), c.Conn.RemoteAddr())
 	var b []byte
 
-	b = route.ClientRequestForm(conf, "Auth", "Info", "Info", authprtc.InfoRequest{})
-	c.Write(b)
-
 	b = route.ClientRequestForm(conf, "Auth", "Auth", "Register", authprtc.RegisterRequest{
 		Username: "hallo2",
 		Password: "aaasssss",

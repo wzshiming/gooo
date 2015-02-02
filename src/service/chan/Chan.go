@@ -29,7 +29,7 @@ func (r *Chan) Create(args protocol.RpcRequest, reply *protocol.RpcResponse) err
 	var p chanprtc.CreateRequest
 	encoder.Decode(args.Request, &p)
 	var d struct {
-		Auth     uint32 `json:"auth"`
+		Flag     uint32 `json:"flag"`
 		Language string
 		UserId   uint64 `json:"userId"`
 	}
@@ -49,7 +49,7 @@ func (r *Chan) Create(args protocol.RpcRequest, reply *protocol.RpcResponse) err
 		Response: s,
 		Data: &map[string]interface{}{
 			"roomId": s,
-			"auth":   ((d.Auth & ^r.status.Conf.St.NoRoom) | r.status.Conf.St.InRoom),
+			"flag":   d.Flag | configs.FlagRoom,
 		},
 	}
 	return nil
@@ -59,7 +59,7 @@ func (r *Chan) Join(args protocol.RpcRequest, reply *protocol.RpcResponse) error
 	var p chanprtc.JoinRequest
 	encoder.Decode(args.Request, &p)
 	var d struct {
-		Auth     uint32 `json:"auth"`
+		Flag     uint32 `json:"flag"`
 		Language string
 		UserId   uint64 `json:"userId"`
 	}
@@ -79,7 +79,7 @@ func (r *Chan) Join(args protocol.RpcRequest, reply *protocol.RpcResponse) error
 		Response: s,
 		Data: &map[string]interface{}{
 			"roomId": s,
-			"auth":   ((d.Auth & ^r.status.Conf.St.NoRoom) | r.status.Conf.St.InRoom),
+			"flag":   d.Flag | configs.FlagRoom,
 		},
 	}
 	return nil

@@ -19,7 +19,6 @@ type Handel struct {
 	handeln.HandelInterface
 	Server   *route.MethodServers
 	Session  *Sessions
-	Online   *Onlines
 	Conf     *configs.Configs
 	callauth *router.CallServer
 }
@@ -31,7 +30,6 @@ func NewHandel(conf *configs.Configs, size uint64) *Handel {
 	h := Handel{
 		Server:   route.NewMethodServers(conf),
 		Session:  NewSessions(size),
-		Online:   NewOnlines(size),
 		Conf:     conf,
 		callauth: router.NewCallServer("Auth", conf),
 	}
@@ -104,6 +102,5 @@ func (h *Handel) Exit(c *connser.Connect) {
 	}, &r); err != nil {
 		return
 	}
-	h.Online.Del(r.UserId)
 	return
 }

@@ -15,7 +15,6 @@ type Status struct {
 	ServiceAuth     *Auth
 	ServicePassAuth *PassAuth
 	ServiceOffline  *Offline
-	ServiceInfo     *Info
 	ServiceUse      *Use
 }
 
@@ -29,10 +28,6 @@ func (r *Status) Init(args protocol.InitRequest, reply *int) (err error) {
 		if r.ServicePassAuth == nil {
 			r.ServicePassAuth = NewPassAuth(r)
 			r.Hand.Register(r.ServicePassAuth)
-		}
-		if r.ServiceInfo == nil {
-			r.ServiceInfo = NewInfo(r)
-			r.Hand.Register(r.ServiceInfo)
 		}
 		if r.ServiceUse == nil {
 			r.ServiceUse = NewUse(r)

@@ -48,7 +48,7 @@ func (r *Auth) LogIn(args protocol.RpcRequest, reply *protocol.RpcResponse) erro
 	var p authprot.LogInRequest
 	encoder.Decode(args.Request, &p)
 	var d struct {
-		Auth     uint32 `json:"auth"`
+		Flag     uint32 `json:"flag"`
 		Language string
 		UserId   uint64 `json:"userId"`
 	}
@@ -77,7 +77,7 @@ func (r *Auth) LogIn(args protocol.RpcRequest, reply *protocol.RpcResponse) erro
 		Coverage: rr.Data,
 		Data: &map[string]interface{}{
 			"userId": ouser.Id,
-			"auth":   ((d.Auth & ^r.status.Conf.St.NoLogin) | r.status.Conf.St.Login),
+			"flag":   d.Flag | configs.FlagLogin,
 		},
 	}
 	return nil

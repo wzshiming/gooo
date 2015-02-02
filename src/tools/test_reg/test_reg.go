@@ -26,8 +26,6 @@ func (h *test) Mess(c *connser.Connect, msg []byte) {
 func (h *test) Join(c *connser.Connect) {
 	log.Printf("%v %v Join\n", c.ToUint(), c.Conn.RemoteAddr())
 	var b []byte
-	b = route.ClientRequestForm(conf, "Auth", "Info", "Info", authprtc.InfoRequest{})
-	c.Write(b)
 
 	b = route.ClientRequestForm(conf, "Auth", "PassAuth", "LogOut", authprtc.LogOutRequest{
 		LogOut: true,

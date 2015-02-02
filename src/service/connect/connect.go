@@ -29,22 +29,6 @@ func (s *Connect) Send(args connprot.SendRequest, reply *connprot.SendResponse) 
 	return nil
 }
 
-func (s *Connect) SetOnline(args connprot.SetOnlineRequest, reply *connprot.SetOnlineResponse) error {
-	if args.Online {
-		s.status.CilentHandeln.Online.Set(args.UserId, true)
-	} else {
-		s.status.CilentHandeln.Online.Del(args.UserId)
-	}
-	return nil
-}
-
-func (s *Connect) GetOnline(args connprot.GetOnlineRequest, reply *connprot.GetOnlineResponse) error {
-	*reply = connprot.GetOnlineResponse{
-		Online: s.status.CilentHandeln.Online.Get(args.UserId),
-	}
-	return nil
-}
-
 func (s *Connect) SetSession(args connprot.SetSessionRequest, reply *connprot.SetSessionResponse) error {
 	obj := s.status.CilentHandeln.Session.Get(args.Id)
 	obj.Data = args.Data
@@ -60,15 +44,3 @@ func (s *Connect) GetSession(args connprot.GetSessionRequest, reply *connprot.Ge
 	}
 	return nil
 }
-
-//func (s *Connect) Join(args connprot.JoinRequest, reply *connprot.JoinResponse) error {
-//	defer helper.Recover()
-//	id := fmt.Sprintln(s.uniq())
-//	reg := []byte(fmt.Sprintf("%s %s", s.caddr, id))
-//	s.auth.Register(id)
-//	*reply = connprot.JoinResponse{
-//		Sum:      s.status.CilentHandeln.Session.Len(),
-//		Response: reg,
-//	}
-//	return nil
-//}

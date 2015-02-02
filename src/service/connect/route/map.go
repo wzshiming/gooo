@@ -10,8 +10,9 @@ import (
 )
 
 type CallName struct {
-	Name string
-	Auth uint32
+	Name    string
+	Allow   uint32
+	Unallow uint32
 }
 
 type MethodServer struct {
@@ -35,8 +36,9 @@ func NewMethodServer(index int, conf *configs.Configs) *MethodServer {
 		s.methods[k1] = make([]CallName, len(v1.Map))
 		for k2, v2 := range v1.Map {
 			s.methods[k1][k2] = CallName{
-				Name: fmt.Sprintf("%v.%v", v1.Name, v2),
-				Auth: fri.Auth | v1.Auth,
+				Name:    fmt.Sprintf("%v.%v", v1.Name, v2),
+				Allow:   fri.Allow | v1.Allow,
+				Unallow: fri.Unallow | v1.Unallow,
 			}
 		}
 	}
@@ -53,7 +55,11 @@ func (s *MethodServer) Call(c2 uint8, c3 uint8, args protocol.RpcRequest, reply 
 	}
 	var t map[string]uint32
 	encoder.Decode(args.Session.Data, &t)
-	if a := m[c3].Auth; a != (a & t["auth"]) {
+	if a := m[c3].Allow; a != (a & t["flag"]) {
+		return errors.New("Permission denied")
+	}
+
+	if a := m[c3].Unallow; 0 != (a & t["flag"]) {
 		return errors.New("Permission denied")
 	}
 
@@ -71,32 +77,6 @@ func (s *MethodServer) Methods() [][]CallName {
 	return s.methods
 }
 
-/*
-func (self *MethodServer) CallsBy(clients []session.Unique, name string, args []byte, reply interface{}) (err error) {
-	defer func() {
-		if err := recover(); err != nil {
-			log.Println("CallsBy error: ", err)
-		}
-	}()
-	size := len(self.Client)
-	cs := make([][]uint, size)
-	var sr protocol.SendRequest
-	sr.Data = args
-	for _, v := range clients {
-		if v.Server < uint(size) {
-			cs[v.Server] = append(cs[v.Server], v.Id)
-		}
-	}
-
-	for i := 0; i != size; i++ {
-		go self.Client[i].Call(name, protocol.SendRequest{
-			Clients: cs[i],
-			Data:    args,
-		}, reply)
-	}
-	return
-}
-*/
 type MethodServers []MethodServer
 
 func NewMethodServers(conf *configs.Configs) *MethodServers {

@@ -1,16 +1,14 @@
 /*
-    auth type is uint32 
+    allow type is uint32 
 */
 
 [{}
     ,{
-        "name": "Random"
-        ,"auth": 0x00000000  // none
+        "name":   "Random"
         ,"map": [{}
             ,{
-                "name": "Random"
-                ,"auth": 0x00000000  // none
-                ,"map": [""
+                "name":   "Random"
+                ,"map":   [""
                     ,"Range100"
                     ,"Range100Spacing"
                 ]
@@ -19,19 +17,18 @@
     }
     ,{
         "name": "Auth"
-        ,"auth": 0x00000000  // none
         ,"map": [{}
             ,{
-                "name": "Auth" 
-                ,"auth": 0x00000001  // nologin
-                ,"map": [""
+                "name":    "Auth" 
+                ,"nuallow": 0x00000001  // login
+                ,"map":     [""
                     ,"Register"
                     ,"LogIn"
                 ]
             }
             ,{
-                "name": "PassAuth" 
-                ,"auth": 0x00000002  // login
+                "name":     "PassAuth" 
+                ,"allow":   0x00000001  // login
                 ,"map": [""
                     ,"Unregister"
                     ,"LogOut"
@@ -39,15 +36,15 @@
                 ]
             }
             ,{
-                "name": "Use"
-                ,"auth": 0x00000006  // login | noroom
-                ,"map": [""
+                "name":     "Use"
+                ,"allow":   0x00000001  // login
+                ,"nuallow": 0x00000002  // room
+                ,"map":     [""
                     ,"Chan"
                 ]
             }
             ,{
                 "name": "Info"
-                ,"auth": 0x00000000  // none
                 ,"map": [""
                     ,"Info"
                 ]
@@ -55,21 +52,20 @@
         ]
     }
     ,{
-        "name": "Chan"
-        ,"auth": 0x00000002  // login
-        ,"map": [{}
+        "name":   "Chan"
+        ,"allow": 0x00000001  // login
+        ,"map":   [{}
             ,{
-                "name": "Info"
-                ,"auth": 0x00000000  // none
-                ,"map": [""
+                "name":    "Info"
+                ,"map":     [""
                     ,"Name"
                     ,"Rooms"
                 ]
             }
             ,{
-                "name": "Chan"
-                ,"auth": 0x00000018  // inroom | nogame
-                ,"map": [""
+                "name":     "Chan"
+                ,"unallow": 0x00000006  // game | room
+                ,"map":     [""
                     ,"Create"
                     ,"Join"
                 ]

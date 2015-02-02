@@ -97,11 +97,8 @@ func (r *PassAuth) LogOut(args protocol.RpcRequest, reply *protocol.RpcResponse)
 	r.status.ServiceOffline.Interrupt(authprot.InterruptRequest{
 		Data: args.Session.Data,
 	}, &sonli)
-
 	*reply = protocol.RpcResponse{
-		Data: &map[string]interface{}{
-			"userId": 0,
-		},
+		Coverage: []byte("{}"),
 	}
 	return nil
 }

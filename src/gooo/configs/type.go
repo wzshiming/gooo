@@ -2,30 +2,49 @@ package configs
 
 import (
 	"fmt"
+	"gooo/helper"
 	"net/rpc"
 )
 
-//type RouteConfig map[string]map[string][]string
-
 type RouteConfig []struct {
-	Name string `json:"name"`
-	Auth uint32 `json:"auth"`
-	Map  []struct {
-		Name string   `json:"name"`
-		Auth uint32   `json:"auth"`
-		Map  []string `json:"map"`
+	Name    string `json:"name"`
+	Allow   uint32 `json:"allow"`
+	Unallow uint32 `json:"unallow"`
+	Map     []struct {
+		Name    string   `json:"name"`
+		Allow   uint32   `json:"allow"`
+		Unallow uint32   `json:"unallow"`
+		Map     []string `json:"map"`
 	} `json:"map"`
+}
+
+func (s *RouteConfig) FindIndex(c1, c2, c3 string) (i1, i2, i3 uint8) {
+	for k1, v1 := range *s {
+		if v1.Name == c1 {
+			for k2, v2 := range v1.Map {
+				if v2.Name == c2 {
+					for k3, v3 := range v2.Map {
+						if v3 == c3 {
+							return uint8(k1), uint8(k2), uint8(k3)
+						}
+					}
+				}
+			}
+		}
+	}
+	return 255, 255, 255
 }
 
 func (s *RouteConfig) Info(c1, c2, c3 uint8) string {
 	b1 := (*s)[c1]
 	b2 := b1.Map[c2]
 	b3 := b2.Map[c3]
-	return fmt.Sprintf("%s(%d).%s(%d).%s(%d) <0x%08X>",
+	return fmt.Sprintf("%s(%d).%s(%d).%s(%d) <0x%08X^0x%08X>",
 		b1.Name, c1,
 		b2.Name, c2,
 		b3, c3,
-		b1.Auth|b2.Auth)
+		b1.Allow|b2.Allow,
+		b1.Unallow|b2.Unallow)
 }
 
 type ServerConfig struct {
@@ -33,7 +52,17 @@ type ServerConfig struct {
 	Port       int    `json:"port"`
 	Name       string `json:"name"`
 	ClientPort int    `json:"clientport"`
+	Bin        string `json:"bin"`
 	conn       *rpc.Client
+}
+
+func (s *ServerConfig) Conn() *rpc.Client {
+	if s.conn == nil {
+		addr := fmt.Sprintf("%v:%v", s.Host, s.Port)
+		//log.Println(Name, "connect to", addr)
+		s.conn = helper.NewConnTcp(addr)
+	}
+	return s.conn
 }
 
 type ServersConfig map[string][]ServerConfig
@@ -49,20 +78,13 @@ type DataBaseConfig map[string]struct {
 	Source  string `json:"source"`
 }
 
-type StatusConfig struct {
-	None    uint32 `json:"none"`
-	NoLogin uint32 `json:"nologin"`
-	Login   uint32 `json:"login"`
-	NoRoom  uint32 `json:"noroom"`
-	InRoom  uint32 `json:"inroom"`
-	NoGame  uint32 `json:"nogame"`
-	InGame  uint32 `json:"ingame"`
-	Vip     uint32 `json:"vip"`
-	Vip1    uint32 `json:"vip1"`
-	Vip2    uint32 `json:"vip2"`
-	Vip3    uint32 `json:"vip3"`
-	Admin   uint32 `json:"admin"`
-	Admin1  uint32 `json:"admin1"`
-	Admin2  uint32 `json:"admin2"`
-	Admin3  uint32 `json:"admin3"`
-}
+const (
+	FlagLogin   uint32 = (1 << iota)
+	FlagRoom    uint32 = (1 << iota)
+	FlagGame    uint32 = (1 << iota)
+	FlagUnallow uint32 = (1 << iota)
+	FlagWarning uint32 = (1 << iota)
+	FlagVip     uint32 = (1 << iota)
+	FlagAdmin   uint32 = (1 << 31)
+	FlagNone    uint32 = 0
+)
