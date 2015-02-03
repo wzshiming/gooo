@@ -17,6 +17,10 @@ func NewUsed(size int) *Used {
 	}
 }
 
+func (s *Used) Size() int {
+	return s.size
+}
+
 func (s *Used) Cap() int {
 	return cap(s.use)
 }

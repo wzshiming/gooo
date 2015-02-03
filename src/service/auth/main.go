@@ -34,7 +34,7 @@ func (r *Status) Init(args protocol.InitRequest, reply *int) (err error) {
 			r.Hand.Register(r.ServiceUse)
 		}
 		if r.ServiceOffline == nil {
-			r.ServiceOffline = NewOffline(5000)
+			r.ServiceOffline = NewOffline(r, 5000)
 			r.Hand.Register(r.ServiceOffline)
 		}
 	}

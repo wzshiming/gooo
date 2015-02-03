@@ -70,6 +70,14 @@
                     ,"Join"
                 ]
             }
+            ,{
+                "name":     "InChan"
+                ,"unallow": 0x00000004  // game
+                ,"allow":   0x00000002  // room
+                ,"map":     [""
+                    ,"Leave"
+                ]
+            }
         ]
     }
 ]

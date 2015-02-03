@@ -13,8 +13,8 @@ func NewUniqUint() func() uint64 {
 }
 
 type Unique struct {
-	Server uint64
-	Id     uint64
+	Server uint64 `json:"s"`
+	Id     uint64 `json:"i"`
 }
 
 func NewUnique(server, id uint64) Unique {

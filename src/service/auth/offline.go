@@ -2,39 +2,57 @@ package main
 
 import (
 	"errors"
+	"gooo/configs"
 	"gooo/encoder"
+	"gooo/router"
+	"service/auth/online"
 	authprot "service/auth/protocol"
+	chanprot "service/chan/protocol"
 	"sync"
 )
 
 type Offline struct {
-	lock   sync.Mutex
-	freeze map[uint64][]byte
-	online *Onlines
+	status   *Status
+	lock     sync.Mutex
+	freeze   map[uint64][]byte
+	online   *online.Onlines
+	callchan *router.CallServer
 }
 
-func NewOffline(size uint64) *Offline {
+func NewOffline(m *Status, size uint64) *Offline {
 	return &Offline{
-		freeze: make(map[uint64][]byte, size),
-		online: NewOnlines(size),
+		status:   m,
+		freeze:   make(map[uint64][]byte, size),
+		online:   online.NewOnlines(size),
+		callchan: router.NewCallServer("Chan", m.Conf),
 	}
 }
 
 func (s *Offline) Interrupt(args authprot.InterruptRequest, reply *authprot.InterruptResponse) error {
 	var d struct {
-		UserId uint64
+		UserId  uint64 `json:"userId"`
+		RoomId  int
+		SeatId  int
+		UseChan int    `json:"useChan"`
+		Flag    uint32 `json:"flag"`
 	}
 	encoder.Decode(args.Data, &d)
 	if d.UserId == 0 {
 		return errors.New("Interrupt index is 0")
 	}
-	*reply = authprot.InterruptResponse{
-		UserId: d.UserId,
-	}
+
 	s.online.Del(d.UserId)
-	s.lock.Lock()
-	defer s.lock.Unlock()
-	s.freeze[d.UserId] = args.Data
+	if 0 != (d.Flag & configs.FlagGame) {
+		s.lock.Lock()
+		defer s.lock.Unlock()
+		s.freeze[d.UserId] = args.Data
+	} else if 0 != (d.Flag & configs.FlagRoom) {
+		var p chanprot.InterruptResponse
+		s.callchan.CallBy(d.UseChan-1, "InChan.Interrupt", chanprot.InterruptRequest{
+			RoomId: d.RoomId,
+			SeatId: d.SeatId,
+		}, &p)
+	}
 	return nil
 }
 

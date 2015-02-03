@@ -1,6 +1,7 @@
 package main
 
 import (
+	//"fmt"
 	"gooo/configs"
 	"gooo/encoder"
 	"gooo/protocol"
@@ -29,6 +30,7 @@ func NewInfo(m *Status) *Info {
 	go func() {
 		for {
 			r.roomsResponse, _ = encoder.Encode(r.status.ServiceChan.rooms.List())
+			//fmt.Println(string(r.roomsResponse))
 			time.Sleep(time.Second)
 		}
 	}()

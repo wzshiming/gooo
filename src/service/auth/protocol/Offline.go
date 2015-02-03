@@ -8,9 +8,7 @@ type InterruptRequest struct {
 	Data []byte `json:"d"`
 }
 
-type InterruptResponse struct {
-	UserId uint64 `json:"u"`
-}
+type InterruptResponse int
 
 type ReconnectionRequest struct {
 	UserId uint64         `json:"u"`

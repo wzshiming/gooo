@@ -37,12 +37,11 @@ func (r *Use) Chan(args protocol.RpcRequest, reply *protocol.RpcResponse) error 
 	var d struct {
 		UseChan uint32 `json:"useChan"`
 	}
+	encoder.Decode(args.Session.Data, &d)
 
 	if d.UseChan != 0 {
 		return errors.New("Have chosen")
 	}
-
-	encoder.Decode(args.Session.Data, &d)
 
 	*reply = protocol.RpcResponse{
 		Data: &map[string]interface{}{

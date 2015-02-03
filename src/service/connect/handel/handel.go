@@ -97,10 +97,8 @@ func (h *Handel) Exit(c *connser.Connect) {
 	s := h.Session.Get(id)
 	h.Session.Del(c.ToUint64())
 	var r authprot.InterruptResponse
-	if err := h.callauth.Call("Offline.Interrupt", authprot.InterruptRequest{
+	h.callauth.Call("Offline.Interrupt", authprot.InterruptRequest{
 		Data: s.Data,
-	}, &r); err != nil {
-		return
-	}
+	}, &r)
 	return
 }

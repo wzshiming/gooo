@@ -5,24 +5,28 @@ import (
 	"gooo/configs"
 	"gooo/encoder"
 	"gooo/protocol"
-	chanprtc "service/chan/protocol"
-
-	//connprtc "service/connect/protocol"
+	chanprot "service/chan/protocol"
+	"service/chan/room"
 )
 
 type InChan struct {
 	conf   *configs.Configs
 	status *Status
-	rooms  *chanprtc.GameRooms
+	rooms  *room.GameRooms
 }
 
 func NewInChan(m *Status) *InChan {
 	r := InChan{
 		status: m,
 		conf:   m.Conf,
-		rooms:  chanprtc.NewGameRooms(100),
+		rooms:  m.ServiceChan.rooms,
 	}
 	return &r
+}
+
+func (r *InChan) Interrupt(args chanprot.InterruptRequest, reply *chanprot.InterruptResponse) error {
+	r.rooms.Leave(args.RoomId, args.SeatId)
+	return nil
 }
 
 func (r *InChan) Leave(args protocol.RpcRequest, reply *protocol.RpcResponse) error {

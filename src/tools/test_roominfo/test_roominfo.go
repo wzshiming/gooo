@@ -28,13 +28,13 @@ func (h *test) Join(c *connser.Connect) {
 	var b []byte
 
 	//b = route.ClientRequestForm(conf, "Auth", "Auth", "Register", authprtc.RegisterRequest{
-	//	Username: "hallo2",
+	//	Username: "hallo111",
 	//	Password: "aaasssss",
 	//})
 	//c.Write(b)
 
 	b = route.ClientRequestForm(conf, "Auth", "Auth", "LogIn", authprtc.LogInRequest{
-		Username: "hallo2",
+		Username: "hallo111",
 		Password: "aaasssss",
 	})
 	c.Write(b)
@@ -49,10 +49,10 @@ func (h *test) Join(c *connser.Connect) {
 	})
 	c.Write(b)
 
-	b = route.ClientRequestForm(conf, "Chan", "Chan", "Join", chanprtc.JoinRequest{
-		RoomId: 0,
-	})
-	c.Write(b)
+	//b = route.ClientRequestForm(conf, "Chan", "Chan", "Join", chanprtc.JoinRequest{
+	//	RoomId: 0,
+	//})
+	//c.Write(b)
 
 	b = route.ClientRequestForm(conf, "Chan", "Info", "Rooms", chanprtc.RoomsRequest{
 		Get: true,

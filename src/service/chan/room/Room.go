@@ -1,4 +1,4 @@
-package protocol
+package room
 
 import (
 	"gooo/used"
@@ -19,6 +19,10 @@ func NewGameRoom(roomid int, size int, userid uint64) *GameRoom {
 		roomId: roomid,
 	}
 	return &s
+}
+
+func (s *GameRoom) Size() int {
+	return s.use.Size()
 }
 
 func (s *GameRoom) List() []uint64 {

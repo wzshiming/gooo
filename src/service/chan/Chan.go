@@ -6,6 +6,7 @@ import (
 	"gooo/encoder"
 	"gooo/protocol"
 	chanprtc "service/chan/protocol"
+	"service/chan/room"
 
 	//connprtc "service/connect/protocol"
 )
@@ -13,15 +14,16 @@ import (
 type Chan struct {
 	conf   *configs.Configs
 	status *Status
-	rooms  *chanprtc.GameRooms
+	rooms  *room.GameRooms
 }
 
 func NewChan(m *Status) *Chan {
 	r := Chan{
 		status: m,
 		conf:   m.Conf,
-		rooms:  chanprtc.NewGameRooms(100),
+		rooms:  room.NewGameRooms(100),
 	}
+
 	return &r
 }
 
@@ -48,7 +50,8 @@ func (r *Chan) Create(args protocol.RpcRequest, reply *protocol.RpcResponse) err
 	*reply = protocol.RpcResponse{
 		Response: s,
 		Data: &map[string]interface{}{
-			"roomId": s,
+			"RoomId": b.RoomId,
+			"SeatId": b.SeatId,
 			"flag":   d.Flag | configs.FlagRoom,
 		},
 	}
@@ -78,7 +81,8 @@ func (r *Chan) Join(args protocol.RpcRequest, reply *protocol.RpcResponse) error
 	*reply = protocol.RpcResponse{
 		Response: s,
 		Data: &map[string]interface{}{
-			"roomId": s,
+			"RoomId": b.RoomId,
+			"SeatId": b.SeatId,
 			"flag":   d.Flag | configs.FlagRoom,
 		},
 	}
