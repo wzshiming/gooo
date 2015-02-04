@@ -35,6 +35,12 @@ func (r *Auth) Register(args protocol.RpcRequest, reply *protocol.RpcResponse) e
 	if len(p.Password) <= 6 {
 		return errors.New(Trans.Value("auth.pwdshort"))
 	}
+
+	var ouser authprot.User
+	if err := r.db.Where(&authprot.User{Username: p.Username}).First(&ouser).Error; err == nil {
+		return errors.New(Trans.Value("auth.userexists"))
+	}
+
 	if err := r.db.Create(authprot.User{
 		Username: p.Username,
 		Password: p.Password,

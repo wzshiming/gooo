@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"gooo/configs"
 	"gooo/connser"
 	"gooo/handeln"
@@ -17,6 +18,7 @@ var conf = configs.NewConfigsFrom("./conf")
 
 type test struct {
 	handeln.HandelInterface
+	index int
 }
 
 func (h *test) Mess(c *connser.Connect, msg []byte) {
@@ -27,14 +29,16 @@ func (h *test) Join(c *connser.Connect) {
 	log.Printf("%v %v Join\n", c.ToUint(), c.Conn.RemoteAddr())
 	var b []byte
 
-	//b = route.ClientRequestForm(conf, "Auth", "Auth", "Register", authprtc.RegisterRequest{
-	//	Username: "hallo2",
-	//	Password: "aaasssss",
-	//})
-	//c.Write(b)
+	cc := fmt.Sprintf("hallo%d", h.index)
+
+	b = route.ClientRequestForm(conf, "Auth", "Auth", "Register", authprtc.RegisterRequest{
+		Username: cc,
+		Password: "aaasssss",
+	})
+	c.Write(b)
 
 	b = route.ClientRequestForm(conf, "Auth", "Auth", "LogIn", authprtc.LogInRequest{
-		Username: "hallo2",
+		Username: cc,
 		Password: "aaasssss",
 	})
 	c.Write(b)
@@ -69,7 +73,9 @@ func (h *test) Join(c *connser.Connect) {
 func main() {
 	runtime.GOMAXPROCS(runtime.NumCPU())
 	ior := iorange.NewIORange(1024)
-	ttt := &test{}
-	connser.NewClientTCP("127.0.0.1:3005", ior, ttt)
+	for i := 10; i != 20; i++ {
+		ttt := &test{index: i}
+		connser.NewClientTCP("127.0.0.1:3005", ior, ttt)
+	}
 	time.Sleep(time.Second * 120)
 }
