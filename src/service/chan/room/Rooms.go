@@ -2,13 +2,11 @@ package room
 
 import (
 	"gooo/used"
-
-	chanprtc "service/chan/protocol"
 )
 
 type GameRooms struct {
 	use  *used.Used
-	list []*GameRoom
+	list []*GameRoom `json:"l"`
 }
 
 func NewGameRooms(size int) *GameRooms {
@@ -19,22 +17,26 @@ func NewGameRooms(size int) *GameRooms {
 	return &s
 }
 
-func (s *GameRooms) List() chanprtc.RoomsResponse {
+func (s *GameRooms) List() []GameRoom {
 	l := s.use.List()
-	r := make(chanprtc.RoomsResponse, len(l))
+	r := make([]GameRoom, len(l))
 	for k, v := range l {
 		if d := s.list[v]; d != nil {
-			r[k].Users = d.List()
-			r[k].RoomId = d.roomId
-			r[k].Name = d.name
-			r[k].Started = d.started
+			r[k] = *d
 		}
 	}
 	return r
 }
 
-func (s *GameRooms) Join(roomid int, userid uint64) int {
+func (s *GameRooms) Room(roomid int) *GameRoom {
 	if s.use.IsUse(roomid) {
+		return s.list[roomid]
+	}
+	return nil
+}
+
+func (s *GameRooms) Join(roomid int, userid uint64) int {
+	if s.use.IsUse(roomid) && !s.list[roomid].IsStarted() {
 		return s.list[roomid].Join(userid)
 	}
 	return -1
@@ -57,5 +59,17 @@ func (s *GameRooms) Create(size int, userid uint64) (int, int) {
 		seat := s.list[i].Join(userid)
 		return i, seat
 	}
-	return -1, 0
+	return -1, -1
+}
+
+func (s *GameRooms) Play(roomid int) {
+	if s.use.IsUse(roomid) {
+		s.list[roomid].Play()
+	}
+}
+
+func (s *GameRooms) End(roomid int) {
+	if s.use.IsUse(roomid) {
+		s.list[roomid].End()
+	}
 }

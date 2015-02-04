@@ -53,6 +53,9 @@ func (h *test) Join(c *connser.Connect) {
 		Get: true,
 	})
 	c.Write(b)
+
+	b = route.ClientRequestForm(conf, "Chan", "InChan", "Play", 1)
+	c.Write(b)
 }
 
 func main() {

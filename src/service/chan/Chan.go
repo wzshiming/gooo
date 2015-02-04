@@ -38,12 +38,14 @@ func (r *Chan) Create(args protocol.RpcRequest, reply *protocol.RpcResponse) err
 	encoder.Decode(args.Session.Data, &d)
 
 	room, seat := r.rooms.Create(p.Size, d.UserId)
+
+	if seat < 0 {
+		return errors.New("Unable to create the room")
+	}
+
 	b := chanprtc.CreateResponse{
 		RoomId: room,
 		SeatId: seat,
-	}
-	if b.RoomId < 0 {
-		return errors.New("Unable to create the room")
 	}
 
 	s, _ := encoder.Encode(b)
@@ -69,12 +71,14 @@ func (r *Chan) Join(args protocol.RpcRequest, reply *protocol.RpcResponse) error
 	encoder.Decode(args.Session.Data, &d)
 
 	seat := r.rooms.Join(p.RoomId, d.UserId)
+
+	if seat < 0 {
+		return errors.New("Unable to join the room")
+	}
+
 	b := chanprtc.JoinResponse{
 		RoomId: p.RoomId,
 		SeatId: seat,
-	}
-	if b.RoomId < 0 {
-		return errors.New("Unable to join the room")
 	}
 
 	s, _ := encoder.Encode(b)

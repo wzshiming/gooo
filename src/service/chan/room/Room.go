@@ -6,19 +6,33 @@ import (
 
 type GameRoom struct {
 	use     *used.Used
-	users   []uint64
-	roomId  int
-	name    string
-	started bool
+	Users   []uint64 `json:"u"`
+	RoomId  int      `json:"r"`
+	Master  int      `json:"m"`
+	Name    string   `json:"n"`
+	Started bool     `json:"s"`
 }
 
 func NewGameRoom(roomid int, size int, userid uint64) *GameRoom {
 	s := GameRoom{
-		users:  make([]uint64, size),
+		Users:  make([]uint64, size),
 		use:    used.NewUsed(size),
-		roomId: roomid,
+		RoomId: roomid,
+		Master: 0,
 	}
 	return &s
+}
+
+func (s *GameRoom) IsStarted() bool {
+	return s.Started
+}
+
+func (s *GameRoom) Play() {
+	s.Started = true
+}
+
+func (s *GameRoom) End() {
+	s.Started = false
 }
 
 func (s *GameRoom) Size() int {
@@ -26,12 +40,12 @@ func (s *GameRoom) Size() int {
 }
 
 func (s *GameRoom) List() []uint64 {
-	return s.users
+	return s.Users
 }
 
 func (s *GameRoom) Join(userid uint64) int {
 	if i := s.use.Join(); i >= 0 {
-		s.users[i] = userid
+		s.Users[i] = userid
 		return i
 	}
 	return -1
@@ -39,7 +53,10 @@ func (s *GameRoom) Join(userid uint64) int {
 
 func (s *GameRoom) Leave(seat int) int {
 	if i := s.use.Leave(seat); i == 0 {
-		s.users[seat] = 0
+		s.Users[seat] = 0
+		if seat == s.Master && s.Size() != 0 {
+			s.Master = s.use.Unusable()
+		}
 		return 0
 	}
 	return -1

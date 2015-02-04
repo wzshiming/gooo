@@ -76,6 +76,7 @@
                 ,"allow":   0x00000002  // room
                 ,"map":     [""
                     ,"Leave"
+                    ,"Play"
                 ]
             }
         ]

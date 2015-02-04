@@ -46,6 +46,17 @@ func (s *Used) List() []int {
 	return r
 }
 
+func (s *Used) Unusable() int {
+	s.Lock()
+	defer s.Unlock()
+	for k, v := range s.use {
+		if v {
+			return k
+		}
+	}
+	return -1
+}
+
 func (s *Used) Usable() int {
 	s.Lock()
 	defer s.Unlock()

@@ -54,3 +54,26 @@ func (r *InChan) Leave(args protocol.RpcRequest, reply *protocol.RpcResponse) er
 	}
 	return nil
 }
+
+func (r *InChan) Play(args protocol.RpcRequest, reply *protocol.RpcResponse) error {
+	var d struct {
+		Flag     uint32 `json:"flag"`
+		Language string
+		UserId   uint64 `json:"userId"`
+		RoomId   int
+		SeatId   int
+	}
+	encoder.Decode(args.Session.Data, &d)
+
+	if r.rooms.Room(d.RoomId).Master != d.SeatId {
+		return errors.New("You are not master")
+	}
+
+	r.rooms.Play(d.RoomId)
+	*reply = protocol.RpcResponse{
+		Data: &map[string]interface{}{
+			"flag": d.Flag | configs.FlagGame,
+		},
+	}
+	return nil
+}
