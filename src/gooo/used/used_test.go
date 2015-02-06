@@ -4,7 +4,7 @@ import (
 	"testing"
 )
 
-func Test_1(t *testing.T) {
+func Test_Used(t *testing.T) {
 	u := NewUsed(10)
 	u.Join()
 	u.Join()
