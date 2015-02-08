@@ -1,21 +1,17 @@
 package main
 
 import (
-	"gooo/handeln"
-	//_ "github.com/lib/pq"
-	"gooo/configs"
-	"gooo/helper"
-	"gooo/protocol"
+	"gooo"
 )
 
 type Status struct {
-	handeln.Status
-	Hand          *handeln.Handeln
-	Conf          *configs.Configs
+	gooo.Status
+	Hand          *gooo.Handeln
+	Conf          *gooo.Configs
 	ServiceRandom *Random
 }
 
-func (r *Status) Init(args protocol.InitRequest, reply *int) (err error) {
+func (r *Status) Init(args gooo.InitRequest, reply *int) (err error) {
 	if args.State == 1 {
 		r.Conf = &args.Conf
 		if r.ServiceRandom == nil {
@@ -27,13 +23,13 @@ func (r *Status) Init(args protocol.InitRequest, reply *int) (err error) {
 }
 
 func main() {
-	defer helper.Recover()
-	h := handeln.NewHandeln()
+	defer gooo.Recover()
+	h := gooo.NewHandeln()
 	h.Register(&Status{
 		Hand:   h,
-		Status: *handeln.NewStatus(h),
+		Status: *gooo.NewStatus(h),
 	})
-	helper.EchoPortInfo(configs.Name, configs.Port)
-	h.Start(configs.Port)
+	gooo.EchoPortInfo(gooo.Name, gooo.Port)
+	h.Start(gooo.Port)
 
 }

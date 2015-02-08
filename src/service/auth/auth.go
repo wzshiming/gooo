@@ -4,10 +4,8 @@ import (
 	"errors"
 	_ "github.com/go-sql-driver/mysql"
 	"github.com/jinzhu/gorm"
-	"gooo/configs"
-	"gooo/encoder"
+	"gooo"
 	"gooo/protocol"
-	authprot "service/auth/protocol"
 )
 
 type Auth struct {
@@ -24,24 +22,24 @@ func NewAuth(m *Status) *Auth {
 	return &r
 }
 
-func (r *Auth) Register(args protocol.RpcRequest, reply *protocol.RpcResponse) error {
-	var p authprot.RegisterRequest
-	encoder.Decode(args.Request, &p)
+func (r *Auth) Register(args gooo.RpcRequest, reply *gooo.RpcResponse) error {
+	var p protocol.RegisterRequest
+	gooo.Decode(args.Request, &p)
 	var d struct {
 		Language string
 	}
-	encoder.Decode(args.Session.Data, &d)
-	Trans := configs.I18n.TranslationsForLocale(d.Language)
+	gooo.Decode(args.Session.Data, &d)
+	Trans := I18n.TranslationsForLocale(d.Language)
 	if len(p.Password) <= 6 {
 		return errors.New(Trans.Value("auth.pwdshort"))
 	}
 
-	var ouser authprot.User
-	if err := r.db.Where(&authprot.User{Username: p.Username}).First(&ouser).Error; err == nil {
+	var ouser protocol.User
+	if err := r.db.Where(&protocol.User{Username: p.Username}).First(&ouser).Error; err == nil {
 		return errors.New(Trans.Value("auth.userexists"))
 	}
 
-	if err := r.db.Create(authprot.User{
+	if err := r.db.Create(protocol.User{
 		Username: p.Username,
 		Password: p.Password,
 	}).Error; err != nil {
@@ -50,40 +48,40 @@ func (r *Auth) Register(args protocol.RpcRequest, reply *protocol.RpcResponse) e
 	return nil
 }
 
-func (r *Auth) LogIn(args protocol.RpcRequest, reply *protocol.RpcResponse) error {
-	var p authprot.LogInRequest
-	encoder.Decode(args.Request, &p)
+func (r *Auth) LogIn(args gooo.RpcRequest, reply *gooo.RpcResponse) error {
+	var p protocol.LogInRequest
+	gooo.Decode(args.Request, &p)
 	var d struct {
 		Flag     uint32 `json:"flag"`
 		Language string
 		UserId   uint64 `json:"userId"`
 	}
-	encoder.Decode(args.Session.Data, &d)
-	Trans := configs.I18n.TranslationsForLocale(d.Language)
+	gooo.Decode(args.Session.Data, &d)
+	Trans := I18n.TranslationsForLocale(d.Language)
 	if d.UserId != 0 {
 		return errors.New(Trans.Value("auth.islogin"))
 	}
-	var ouser authprot.User
-	if err := r.db.Where(&authprot.User{Username: p.Username}).First(&ouser).Error; err != nil {
+	var ouser protocol.User
+	if err := r.db.Where(&protocol.User{Username: p.Username}).First(&ouser).Error; err != nil {
 		return errors.New(Trans.Value("auth.usernotexists"))
 	}
 	if ouser.Password != p.Password {
 		return errors.New(Trans.Value("auth.pwderr"))
 	}
 
-	var rr authprot.ReconnectionResponse
-	if err := r.status.ServiceOffline.Reconnection(authprot.ReconnectionRequest{
+	var rr protocol.ReconnectionResponse
+	if err := r.status.ServiceOffline.Reconnection(protocol.ReconnectionRequest{
 		UserId: ouser.Id,
 		Unique: args.Session.Uniq,
 	}, &rr); err != nil {
 		return err
 	}
 
-	*reply = protocol.RpcResponse{
+	*reply = gooo.RpcResponse{
 		Coverage: rr.Data,
 		Data: &map[string]interface{}{
 			"userId": ouser.Id,
-			"flag":   d.Flag | configs.FlagLogin,
+			"flag":   d.Flag | gooo.FlagLogin,
 		},
 	}
 	return nil

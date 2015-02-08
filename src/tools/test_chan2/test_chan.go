@@ -2,68 +2,64 @@ package main
 
 import (
 	"fmt"
-	"gooo/configs"
-	"gooo/connser"
-	"gooo/handeln"
+	"gooo"
+	"gooo/protocol"
 	"log"
 	"runtime"
-	authprtc "service/Auth/protocol"
-	chanprtc "service/chan/protocol"
-	"service/connect/iorange"
 	"service/connect/route"
 	"time"
 )
 
-var conf = configs.NewConfigsFrom("./conf")
+var conf = gooo.NewConfigsFrom("./conf")
 
 type test struct {
-	handeln.HandelInterface
+	gooo.HandelInterface
 	index int
 }
 
-func (h *test) Mess(c *connser.Connect, msg []byte) {
+func (h *test) Mess(c *gooo.Connect, msg []byte) {
 	log.Printf("\n%s\n%s\n\n", conf.Rc.Info(msg[1], msg[2], msg[3]), msg[4:])
 }
 
-func (h *test) Join(c *connser.Connect) {
+func (h *test) Join(c *gooo.Connect) {
 	log.Printf("%v %v Join\n", c.ToUint(), c.Conn.RemoteAddr())
 	var b []byte
 
 	cc := fmt.Sprintf("hallo%d", h.index)
 
-	b = route.ClientRequestForm(conf, "Auth", "Auth", "Register", authprtc.RegisterRequest{
+	b = route.ClientRequestForm(conf, "Auth", "Auth", "Register", protocol.RegisterRequest{
 		Username: cc,
 		Password: "aaasssss",
 	})
 	c.Write(b)
 
-	b = route.ClientRequestForm(conf, "Auth", "Auth", "LogIn", authprtc.LogInRequest{
+	b = route.ClientRequestForm(conf, "Auth", "Auth", "LogIn", protocol.LogInRequest{
 		Username: cc,
 		Password: "aaasssss",
 	})
 	c.Write(b)
 
-	b = route.ClientRequestForm(conf, "Auth", "Use", "Chan", authprtc.UseChanRequest{
+	b = route.ClientRequestForm(conf, "Auth", "Use", "Chan", protocol.UseChanRequest{
 		Use: 1,
 	})
 	c.Write(b)
 
-	b = route.ClientRequestForm(conf, "Chan", "Info", "Name", chanprtc.NameRequest{
+	b = route.ClientRequestForm(conf, "Chan", "Info", "Name", protocol.NameRequest{
 		Get: true,
 	})
 	c.Write(b)
 
-	b = route.ClientRequestForm(conf, "Chan", "Chan", "Join", chanprtc.JoinRequest{
+	b = route.ClientRequestForm(conf, "Chan", "Chan", "Join", protocol.JoinRequest{
 		RoomId: 0,
 	})
 	c.Write(b)
 
-	b = route.ClientRequestForm(conf, "Chan", "Info", "Rooms", chanprtc.RoomsRequest{
+	b = route.ClientRequestForm(conf, "Chan", "Info", "Rooms", protocol.RoomsRequest{
 		Get: true,
 	})
 	c.Write(b)
 
-	//b = route.ClientRequestForm(conf, "Chan", "InChan", "Leave", chanprtc.RoomsRequest{
+	//b = route.ClientRequestForm(conf, "Chan", "InChan", "Leave", protocol.RoomsRequest{
 	//	Get: true,
 	//})
 	//c.Write(b)
@@ -72,10 +68,10 @@ func (h *test) Join(c *connser.Connect) {
 
 func main() {
 	runtime.GOMAXPROCS(runtime.NumCPU())
-	ior := iorange.NewIORange(1024)
+	ior := route.NewIORange(1024)
 	for i := 10; i != 20; i++ {
 		ttt := &test{index: i}
-		connser.NewClientTCP("127.0.0.1:3005", ior, ttt)
+		gooo.NewClientTCP("127.0.0.1:3005", ior, ttt)
 	}
 	time.Sleep(time.Second * 120)
 }

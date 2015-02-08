@@ -1,45 +1,41 @@
 package main
 
 import (
-	"gooo/configs"
-	"gooo/connser"
-	"gooo/handeln"
-	//"gooo/helper"
+	"gooo"
+	"gooo/protocol"
 	"log"
 	"runtime"
-	authprtc "service/Auth/protocol"
-	"service/connect/iorange"
 	"service/connect/route"
 	"time"
 )
 
-var conf = configs.NewConfigsFrom("./conf")
+var conf = gooo.NewConfigsFrom("./conf")
 
 type test struct {
-	handeln.HandelInterface
+	gooo.HandelInterface
 }
 
-func (h *test) Mess(c *connser.Connect, msg []byte) {
+func (h *test) Mess(c *gooo.Connect, msg []byte) {
 	log.Printf("\n%s\n%s\n\n", conf.Rc.Info(msg[1], msg[2], msg[3]), msg[4:])
 }
 
-func (h *test) Join(c *connser.Connect) {
+func (h *test) Join(c *gooo.Connect) {
 	log.Printf("%v %v Join\n", c.ToUint(), c.Conn.RemoteAddr())
 	var b []byte
 
-	b = route.ClientRequestForm(conf, "Auth", "PassAuth", "LogOut", authprtc.LogOutRequest{
+	b = route.ClientRequestForm(conf, "Auth", "PassAuth", "LogOut", protocol.LogOutRequest{
 		LogOut: true,
 	})
 	c.Write(b)
 
-	//b = route.ClientRequestForm(conf, "Auth", "Auth", "Register", authprtc.RegisterRequest{
+	//b = route.ClientRequestForm(conf, "Auth", "Auth", "Register", protocol.RegisterRequest{
 	//	Username: "hallo1",
 	//	Password: "aaasssss",
 	//})
 
 	//c.Write(b)
 
-	b = route.ClientRequestForm(conf, "Auth", "Auth", "LogIn", authprtc.LogInRequest{
+	b = route.ClientRequestForm(conf, "Auth", "Auth", "LogIn", protocol.LogInRequest{
 		Username: "hallo1",
 		Password: "aaasssss",
 	})
@@ -47,7 +43,7 @@ func (h *test) Join(c *connser.Connect) {
 	c.Write(b)
 	//c.Write(b)
 
-	//b2 := route.ClientRequestForm(conf, "Auth", "PassAuth", "LogOut", authprtc.LogOutRequest{
+	//b2 := route.ClientRequestForm(conf, "Auth", "PassAuth", "LogOut", protocol.LogOutRequest{
 	//	LogOut: true,
 	//})
 	//c.Write(b2)
@@ -56,8 +52,8 @@ func (h *test) Join(c *connser.Connect) {
 
 func main() {
 	runtime.GOMAXPROCS(runtime.NumCPU())
-	ior := iorange.NewIORange(1024)
+	ior := route.NewIORange(1024)
 	ttt := &test{}
-	connser.NewClientTCP("127.0.0.1:3005", ior, ttt)
+	gooo.NewClientTCP("127.0.0.1:3005", ior, ttt)
 	time.Sleep(time.Second * 120)
 }

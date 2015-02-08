@@ -1,14 +1,13 @@
 package main
 
 import (
-	"gooo/configs"
-	connprot "service/connect/protocol"
+	"gooo"
+	"gooo/protocol"
 )
 
 type Connect struct {
-	conf   *configs.Configs
+	conf   *gooo.Configs
 	status *Status
-	//auth  *handel.Auth
 }
 
 func NewConnect(m *Status) *Connect {
@@ -19,7 +18,7 @@ func NewConnect(m *Status) *Connect {
 	return &s
 }
 
-func (s *Connect) Send(args connprot.SendRequest, reply *connprot.SendResponse) error {
+func (s *Connect) Send(args protocol.SendRequest, reply *protocol.SendResponse) error {
 	for _, v := range args.Clients {
 		c := s.status.CilentHandeln.Session.Get(v)
 		if c != nil {
@@ -29,17 +28,17 @@ func (s *Connect) Send(args connprot.SendRequest, reply *connprot.SendResponse) 
 	return nil
 }
 
-func (s *Connect) SetSession(args connprot.SetSessionRequest, reply *connprot.SetSessionResponse) error {
+func (s *Connect) SetSession(args protocol.SetSessionRequest, reply *protocol.SetSessionResponse) error {
 	obj := s.status.CilentHandeln.Session.Get(args.Id)
 	obj.Data = args.Data
 	obj.Unlock()
 	return nil
 }
 
-func (s *Connect) GetSession(args connprot.GetSessionRequest, reply *connprot.GetSessionResponse) error {
+func (s *Connect) GetSession(args protocol.GetSessionRequest, reply *protocol.GetSessionResponse) error {
 	obj := s.status.CilentHandeln.Session.Get(args.Id)
 	obj.Lock()
-	*reply = connprot.GetSessionResponse{
+	*reply = protocol.GetSessionResponse{
 		Data: obj.Data,
 	}
 	return nil

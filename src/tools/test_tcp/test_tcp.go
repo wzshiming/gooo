@@ -3,22 +3,20 @@ package main
 import (
 	//"encoding/binary"
 	"fmt"
-	"gooo/connser"
-	"gooo/handeln"
-	"gooo/helper"
+	"gooo"
 	"log"
-	"service/connect/iorange"
+	"service/connect/route"
 )
 
 type Handel struct {
-	handeln.HandelInterface
+	gooo.HandelInterface
 }
 
 func NewHandel() *Handel {
 	return &Handel{}
 }
 
-func (h *Handel) Join(c *connser.Connect) {
+func (h *Handel) Join(c *gooo.Connect) {
 	h.HandelInterface.Join(c)
 	sms := make([]byte, 1024)
 	go func() {
@@ -29,11 +27,11 @@ func (h *Handel) Join(c *connser.Connect) {
 	}()
 }
 
-func (h *Handel) Mess(c *connser.Connect, msg []byte) {
+func (h *Handel) Mess(c *gooo.Connect, msg []byte) {
 	defer func() {
 		if err := recover(); err != nil {
 			log.Printf("Client %v Mess error: %v", c.RemoteAddr(), err)
-			helper.RecoverInfo()
+			gooo.RecoverInfo()
 		}
 	}()
 	c0 := msg[0]
@@ -53,5 +51,5 @@ func (h *Handel) Mess(c *connser.Connect, msg []byte) {
 func main() {
 	port := ":3005"
 	log.Println("port", port)
-	connser.NewServer(NewHandel(), iorange.NewIORange(1024)).StartTCP(port)
+	gooo.NewServer(NewHandel(), route.NewIORange(1024)).StartTCP(port)
 }

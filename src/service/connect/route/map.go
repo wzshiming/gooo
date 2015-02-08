@@ -3,10 +3,7 @@ package route
 import (
 	"errors"
 	"fmt"
-	"gooo/configs"
-	"gooo/encoder"
-	"gooo/protocol"
-	"gooo/router"
+	"gooo"
 )
 
 type CallName struct {
@@ -16,17 +13,17 @@ type CallName struct {
 }
 
 type MethodServer struct {
-	caller  router.CallServer
+	caller  gooo.CallServer
 	methods [][]CallName
 	name    string
 	nameuse string
 }
 
-func NewMethodServer(index int, conf *configs.Configs) *MethodServer {
+func NewMethodServer(index int, conf *gooo.Configs) *MethodServer {
 	fr := conf.Rc
 	fri := fr[index]
 	s := MethodServer{
-		caller:  *router.NewCallServer(fri.Name, conf),
+		caller:  *gooo.NewCallServer(fri.Name, conf),
 		methods: make([][]CallName, len(fri.Map)),
 		name:    fri.Name,
 		nameuse: fmt.Sprintf("use%s", fri.Name),
@@ -45,7 +42,7 @@ func NewMethodServer(index int, conf *configs.Configs) *MethodServer {
 	return &s
 }
 
-func (s *MethodServer) Call(c2 uint8, c3 uint8, args protocol.RpcRequest, reply *protocol.RpcResponse) error {
+func (s *MethodServer) Call(c2 uint8, c3 uint8, args gooo.RpcRequest, reply *gooo.RpcResponse) error {
 	if c2 >= uint8(len(s.methods)) {
 		return errors.New("MethodServer Call index c2 error")
 	}
@@ -54,7 +51,7 @@ func (s *MethodServer) Call(c2 uint8, c3 uint8, args protocol.RpcRequest, reply 
 		return errors.New("MethodServer Call index c3 error")
 	}
 	var t map[string]uint32
-	encoder.Decode(args.Session.Data, &t)
+	gooo.Decode(args.Session.Data, &t)
 	if a := m[c3].Allow; a != (a & t["flag"]) {
 		return errors.New("Permission denied")
 	}
@@ -79,7 +76,7 @@ func (s *MethodServer) Methods() [][]CallName {
 
 type MethodServers []MethodServer
 
-func NewMethodServers(conf *configs.Configs) *MethodServers {
+func NewMethodServers(conf *gooo.Configs) *MethodServers {
 	fr := conf.Rc
 	s := make(MethodServers, len(fr))
 	for k, _ := range fr {
@@ -88,7 +85,7 @@ func NewMethodServers(conf *configs.Configs) *MethodServers {
 	return &s
 }
 
-func (s *MethodServers) Call(msg []byte, args protocol.RpcRequest, reply *protocol.RpcResponse) error {
+func (s *MethodServers) Call(msg []byte, args gooo.RpcRequest, reply *gooo.RpcResponse) error {
 	c1 := msg[1]
 	c2 := msg[2]
 	c3 := msg[3]

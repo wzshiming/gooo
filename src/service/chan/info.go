@@ -1,17 +1,13 @@
 package main
 
 import (
-	//"fmt"
-	"gooo/configs"
-	"gooo/encoder"
+	"gooo"
 	"gooo/protocol"
-	chanprtc "service/chan/protocol"
 	"time"
-	//connprtc "service/connect/protocol"
 )
 
 type Info struct {
-	conf          *configs.Configs
+	conf          *gooo.Configs
 	status        *Status
 	name          string
 	nameResponse  []byte
@@ -22,14 +18,14 @@ func NewInfo(m *Status) *Info {
 	r := Info{
 		status: m,
 		conf:   m.Conf,
-		name:   m.Conf.Sc[configs.Type][configs.Id].Name,
+		name:   m.Conf.Sc[gooo.Type][gooo.Id].Name,
 	}
-	r.nameResponse, _ = encoder.Encode(chanprtc.NameResponse{
+	r.nameResponse, _ = gooo.Encode(protocol.NameResponse{
 		Name: r.name,
 	})
 	go func() {
 		for {
-			r.roomsResponse, _ = encoder.Encode(r.status.ServiceChan.rooms.List())
+			r.roomsResponse, _ = gooo.Encode(r.status.ServiceChan.rooms.List())
 			//fmt.Println(string(r.roomsResponse))
 			time.Sleep(time.Second)
 		}
@@ -37,15 +33,15 @@ func NewInfo(m *Status) *Info {
 	return &r
 }
 
-func (r *Info) Name(args protocol.RpcRequest, reply *protocol.RpcResponse) error {
-	*reply = protocol.RpcResponse{
+func (r *Info) Name(args gooo.RpcRequest, reply *gooo.RpcResponse) error {
+	*reply = gooo.RpcResponse{
 		Response: r.nameResponse,
 	}
 	return nil
 }
 
-func (r *Info) Rooms(args protocol.RpcRequest, reply *protocol.RpcResponse) error {
-	*reply = protocol.RpcResponse{
+func (r *Info) Rooms(args gooo.RpcRequest, reply *gooo.RpcResponse) error {
+	*reply = gooo.RpcResponse{
 		Response: r.roomsResponse,
 	}
 	return nil

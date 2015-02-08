@@ -1,22 +1,15 @@
 package main
 
 import (
-	"gooo/configs"
-	//"log"
-	//"reflect"
-	//"fmt"
-	"gooo/handeln"
-	"gooo/helper"
-	"gooo/protocol"
-	//"time"
+	"gooo"
 )
 
 type Master struct {
-	conf *configs.Configs
-	hand *handeln.Handeln
+	conf *gooo.Configs
+	hand *gooo.Handeln
 }
 
-func NewMaster(conf *configs.Configs, hand *handeln.Handeln) *Master {
+func NewMaster(conf *gooo.Configs, hand *gooo.Handeln) *Master {
 	return &Master{
 		conf: conf,
 		hand: hand,
@@ -33,7 +26,7 @@ func (s *Master) Stop(args int, reply *int) error {
 }
 
 //func Build(path string){
-//    conf := configs.GetServersConfig(path)
+//    conf := gooo.GetServersConfig(path)
 //    for k1,_ := range conf {
 //        b := fmt.Sprintf("%s.go",k1)
 //        args := []string{"build", b}
@@ -45,15 +38,15 @@ func (s *Master) Stop(args int, reply *int) error {
 //}
 
 func main() {
-	defer helper.Recover()
-	conf := configs.NewConfigsFrom("./conf")
-	configs.Name = conf.Mc.Name
-	configs.Port = helper.GetPort(conf.Mc.Port)
+	defer gooo.Recover()
+	conf := gooo.NewConfigsFrom("./conf")
+	gooo.Name = conf.Mc.Name
+	gooo.Port = gooo.GetPort(conf.Mc.Port)
 
 	conf.StartServers()
 	//conf.StartConnect()
 	var b int
-	m := protocol.InitRequest{
+	m := gooo.InitRequest{
 		Conf:  *conf,
 		State: 1,
 	}
@@ -62,9 +55,9 @@ func main() {
 	//conf.Foreach("", "Init", m, &b)
 	//conf.Foreach("", "Start", m, &b)
 
-	h := handeln.NewHandeln()
+	h := gooo.NewHandeln()
 	master := NewMaster(conf, h)
 	h.Register(master)
-	helper.EchoPortInfo(configs.Name, configs.Port)
-	h.Start(configs.Port)
+	gooo.EchoPortInfo(gooo.Name, gooo.Port)
+	h.Start(gooo.Port)
 }

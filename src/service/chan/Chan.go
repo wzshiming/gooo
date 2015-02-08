@@ -2,40 +2,35 @@ package main
 
 import (
 	"errors"
-	"gooo/configs"
-	"gooo/encoder"
+	"gooo"
 	"gooo/protocol"
-	chanprtc "service/chan/protocol"
-	"service/chan/room"
-
-	//connprtc "service/connect/protocol"
 )
 
 type Chan struct {
-	conf   *configs.Configs
+	conf   *gooo.Configs
 	status *Status
-	rooms  *room.GameRooms
+	rooms  *gooo.GameRooms
 }
 
 func NewChan(m *Status) *Chan {
 	r := Chan{
 		status: m,
 		conf:   m.Conf,
-		rooms:  room.NewGameRooms(100),
+		rooms:  gooo.NewGameRooms(100),
 	}
 
 	return &r
 }
 
-func (r *Chan) Create(args protocol.RpcRequest, reply *protocol.RpcResponse) error {
-	var p chanprtc.CreateRequest
-	encoder.Decode(args.Request, &p)
+func (r *Chan) Create(args gooo.RpcRequest, reply *gooo.RpcResponse) error {
+	var p protocol.CreateRequest
+	gooo.Decode(args.Request, &p)
 	var d struct {
 		Flag     uint32 `json:"flag"`
 		Language string
 		UserId   uint64 `json:"userId"`
 	}
-	encoder.Decode(args.Session.Data, &d)
+	gooo.Decode(args.Session.Data, &d)
 
 	room, seat := r.rooms.Create(p.Size, d.UserId)
 
@@ -43,32 +38,32 @@ func (r *Chan) Create(args protocol.RpcRequest, reply *protocol.RpcResponse) err
 		return errors.New("Unable to create the room")
 	}
 
-	b := chanprtc.CreateResponse{
+	b := protocol.CreateResponse{
 		RoomId: room,
 		SeatId: seat,
 	}
 
-	s, _ := encoder.Encode(b)
-	*reply = protocol.RpcResponse{
+	s, _ := gooo.Encode(b)
+	*reply = gooo.RpcResponse{
 		Response: s,
 		Data: &map[string]interface{}{
 			"RoomId": b.RoomId,
 			"SeatId": b.SeatId,
-			"flag":   d.Flag | configs.FlagRoom,
+			"flag":   d.Flag | gooo.FlagRoom,
 		},
 	}
 	return nil
 }
 
-func (r *Chan) Join(args protocol.RpcRequest, reply *protocol.RpcResponse) error {
-	var p chanprtc.JoinRequest
-	encoder.Decode(args.Request, &p)
+func (r *Chan) Join(args gooo.RpcRequest, reply *gooo.RpcResponse) error {
+	var p protocol.JoinRequest
+	gooo.Decode(args.Request, &p)
 	var d struct {
 		Flag     uint32 `json:"flag"`
 		Language string
 		UserId   uint64 `json:"userId"`
 	}
-	encoder.Decode(args.Session.Data, &d)
+	gooo.Decode(args.Session.Data, &d)
 
 	seat := r.rooms.Join(p.RoomId, d.UserId)
 
@@ -76,18 +71,18 @@ func (r *Chan) Join(args protocol.RpcRequest, reply *protocol.RpcResponse) error
 		return errors.New("Unable to join the room")
 	}
 
-	b := chanprtc.JoinResponse{
+	b := protocol.JoinResponse{
 		RoomId: p.RoomId,
 		SeatId: seat,
 	}
 
-	s, _ := encoder.Encode(b)
-	*reply = protocol.RpcResponse{
+	s, _ := gooo.Encode(b)
+	*reply = gooo.RpcResponse{
 		Response: s,
 		Data: &map[string]interface{}{
 			"RoomId": b.RoomId,
 			"SeatId": b.SeatId,
-			"flag":   d.Flag | configs.FlagRoom,
+			"flag":   d.Flag | gooo.FlagRoom,
 		},
 	}
 	return nil

@@ -2,17 +2,14 @@ package main
 
 import (
 	"errors"
-	"gooo/configs"
-	"gooo/encoder"
+	"gooo"
 	"gooo/protocol"
-	chanprot "service/chan/protocol"
-	"service/chan/room"
 )
 
 type InChan struct {
-	conf   *configs.Configs
+	conf   *gooo.Configs
 	status *Status
-	rooms  *room.GameRooms
+	rooms  *gooo.GameRooms
 }
 
 func NewInChan(m *Status) *InChan {
@@ -24,12 +21,12 @@ func NewInChan(m *Status) *InChan {
 	return &r
 }
 
-func (r *InChan) Interrupt(args chanprot.InterruptRequest, reply *chanprot.InterruptResponse) error {
+func (r *InChan) InterruptLeave(args protocol.InterruptLeaveRequest, reply *protocol.InterruptLeaveResponse) error {
 	r.rooms.Leave(args.RoomId, args.SeatId)
 	return nil
 }
 
-func (r *InChan) Leave(args protocol.RpcRequest, reply *protocol.RpcResponse) error {
+func (r *InChan) Leave(args gooo.RpcRequest, reply *gooo.RpcResponse) error {
 	var d struct {
 		Flag     uint32 `json:"flag"`
 		Language string
@@ -37,25 +34,25 @@ func (r *InChan) Leave(args protocol.RpcRequest, reply *protocol.RpcResponse) er
 		RoomId   int
 		SeatId   int
 	}
-	encoder.Decode(args.Session.Data, &d)
+	gooo.Decode(args.Session.Data, &d)
 
-	if (d.Flag & configs.FlagGame) != 0 {
+	if (d.Flag & gooo.FlagGame) != 0 {
 		return errors.New("In the game")
 	}
 
 	r.rooms.Leave(d.RoomId, d.SeatId)
 
-	*reply = protocol.RpcResponse{
+	*reply = gooo.RpcResponse{
 		Data: &map[string]interface{}{
 			"RoomId": nil,
 			"SeatId": nil,
-			"flag":   d.Flag & ^configs.FlagRoom,
+			"flag":   d.Flag & ^gooo.FlagRoom,
 		},
 	}
 	return nil
 }
 
-func (r *InChan) Play(args protocol.RpcRequest, reply *protocol.RpcResponse) error {
+func (r *InChan) Play(args gooo.RpcRequest, reply *gooo.RpcResponse) error {
 	var d struct {
 		Flag     uint32 `json:"flag"`
 		Language string
@@ -63,16 +60,16 @@ func (r *InChan) Play(args protocol.RpcRequest, reply *protocol.RpcResponse) err
 		RoomId   int
 		SeatId   int
 	}
-	encoder.Decode(args.Session.Data, &d)
+	gooo.Decode(args.Session.Data, &d)
 
 	if r.rooms.Room(d.RoomId).Master != d.SeatId {
 		return errors.New("You are not master")
 	}
 
 	r.rooms.Play(d.RoomId)
-	*reply = protocol.RpcResponse{
+	*reply = gooo.RpcResponse{
 		Data: &map[string]interface{}{
-			"flag": d.Flag | configs.FlagGame,
+			"flag": d.Flag | gooo.FlagGame,
 		},
 	}
 	return nil

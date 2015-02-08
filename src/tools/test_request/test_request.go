@@ -1,31 +1,27 @@
 package main
 
 import (
-	"gooo/configs"
-	"gooo/connser"
-	"gooo/handeln"
-	"gooo/helper"
+	"gooo"
+	"gooo/protocol"
 	"log"
 	"runtime"
-	"service/connect/iorange"
 	"service/connect/route"
-	randprtc "service/random/protocol"
 	"time"
 )
 
-var conf = configs.NewConfigsFrom("./conf")
+var conf = gooo.NewConfigsFrom("./conf")
 
 type test struct {
-	handeln.HandelInterface
+	gooo.HandelInterface
 }
 
-func (h *test) Mess(c *connser.Connect, msg []byte) {
-	helper.MsgInfo(msg)
+func (h *test) Mess(c *gooo.Connect, msg []byte) {
+	gooo.MsgInfo(msg)
 }
 
-func (h *test) Join(c *connser.Connect) {
+func (h *test) Join(c *gooo.Connect) {
 	log.Printf("%v %v Join\n", c.ToUint(), c.Conn.RemoteAddr())
-	b := route.ClientRequestForm(conf, "Random", "Random", "Range100", randprtc.RandRequest{
+	b := route.ClientRequestForm(conf, "Random", "Random", "Range100", protocol.RandRequest{
 		Size: 10,
 	})
 
@@ -38,10 +34,10 @@ func (h *test) Join(c *connser.Connect) {
 
 func main() {
 	runtime.GOMAXPROCS(runtime.NumCPU())
-	ior := iorange.NewIORange(1024)
+	ior := route.NewIORange(1024)
 	ttt := &test{}
 	for i := 0; i != 100; i++ {
-		connser.NewClientTCP("127.0.0.1:3005", ior, ttt)
+		gooo.NewClientTCP("127.0.0.1:3005", ior, ttt)
 	}
 	log.Printf("end\n")
 	time.Sleep(time.Second * 120)

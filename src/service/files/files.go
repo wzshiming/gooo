@@ -3,7 +3,7 @@ package main
 import (
 	"flag"
 	"fmt"
-	"gooo/helper"
+	"gooo"
 	"log"
 	"net/http"
 )
@@ -27,7 +27,7 @@ func filesServer(dir, port string) (err error) {
 
 func run() (err error) {
 	_, dir, port := initVar()
-	log.Printf("%s Server starts from port %s\n", helper.GetBaseName(), port)
+	log.Printf("%s Server starts from port %s\n", gooo.GetBaseName(), port)
 	//fmt.Printf("Start the http files server\n\tfor dir:%s port%s\n", dir, port)
 	defer func() {
 		log.Printf("Stop the http files server\n")

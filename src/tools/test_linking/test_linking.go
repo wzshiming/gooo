@@ -1,14 +1,10 @@
 package main
 
 import (
-	//"bufio"
-	//. "./gogogo/connect"
-	//."./gogogo/coding"
 	"fmt"
 	"log"
 	"net"
 	"time"
-	//"encoding/json"
 )
 
 var ls = AllLocalAddr()

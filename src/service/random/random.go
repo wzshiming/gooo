@@ -1,21 +1,15 @@
 package main
 
 import (
-	"gooo/configs"
-	"gooo/encoder"
+	"gooo"
 	"gooo/protocol"
-	"gooo/router"
-	//"log"
 	"math/rand"
-	//"reflect"
-	connprtc "service/connect/protocol"
-	randprtc "service/random/protocol"
 	"time"
 )
 
 type Random struct {
-	conf *configs.Configs
-	call *router.CallServer
+	conf *gooo.Configs
+	call *gooo.CallServer
 	//helper.Control
 	r  *rand.Rand
 	ch chan int
@@ -25,7 +19,7 @@ func NewRandom(m *Status) (random *Random) {
 	random = &Random{
 		r:    rand.New(rand.NewSource(time.Now().UnixNano())),
 		ch:   make(chan int, 1024),
-		call: router.NewCallServer("Connect", m.Conf),
+		call: gooo.NewCallServer("Connect", m.Conf),
 	}
 	go func() {
 		for {
@@ -36,9 +30,9 @@ func NewRandom(m *Status) (random *Random) {
 	return
 }
 
-func (r *Random) Range100(args protocol.RpcRequest, reply *protocol.RpcResponse) error {
-	var p randprtc.RandRequest
-	encoder.Decode(args.Request, &p)
+func (r *Random) Range100(args gooo.RpcRequest, reply *gooo.RpcResponse) error {
+	var p protocol.RandRequest
+	gooo.Decode(args.Request, &p)
 	if p.Size == 0 {
 		p.Size = 1
 	}
@@ -46,11 +40,11 @@ func (r *Random) Range100(args protocol.RpcRequest, reply *protocol.RpcResponse)
 	for i := 0; i != p.Size; i++ {
 		t[i] = <-r.ch
 	}
-	ret := randprtc.RandResponse{
+	ret := protocol.RandResponse{
 		Rands: t,
 	}
-	res, _ := encoder.Encode(ret)
-	*reply = protocol.RpcResponse{
+	res, _ := gooo.Encode(ret)
+	*reply = gooo.RpcResponse{
 		Error:    "",
 		Response: res,
 	}
@@ -58,33 +52,33 @@ func (r *Random) Range100(args protocol.RpcRequest, reply *protocol.RpcResponse)
 	return nil
 }
 
-func (r *Random) Range100Spacing(args protocol.RpcRequest, reply *protocol.RpcResponse) error {
-	var p randprtc.SpacingRequest
-	encoder.Decode(args.Request, &p)
+func (r *Random) Range100Spacing(args gooo.RpcRequest, reply *gooo.RpcResponse) error {
+	var p protocol.SpacingRequest
+	gooo.Decode(args.Request, &p)
 	if p.Size == 0 {
 		p.Size = 1
 	}
-	b := connprtc.SendRequest{
+	b := protocol.SendRequest{
 		Clients: []uint64{args.Session.Uniq.Id},
 	}
 	var t struct {
 		Size int
 	}
-	encoder.Decode(args.Session.Data, &t)
+	gooo.Decode(args.Session.Data, &t)
 
-	var re connprtc.SendResponse
+	var re protocol.SendResponse
 
 	for i := 0; i != p.Size; i++ {
 		time.Sleep(time.Duration(p.Space))
-		ret := randprtc.RandResponse{
+		ret := protocol.RandResponse{
 			Rands: []int{<-r.ch, t.Size},
 		}
-		res, _ := encoder.Encode(ret)
+		res, _ := gooo.Encode(ret)
 		b.Data = res
 		r.call.CallBySession(args.Session, "Connect.Send", b, &re)
 	}
 
-	*reply = protocol.RpcResponse{
+	*reply = gooo.RpcResponse{
 		Data: &map[string]interface{}{
 			"Size": t.Size + 1,
 		},

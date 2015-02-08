@@ -2,15 +2,14 @@ package main
 
 import (
 	"fmt"
-	"gooo/configs"
-	"gooo/helper"
+	"gooo"
 	//"time"
 )
 
 func main() {
 
-	conf := configs.NewConfigsFrom("./conf")
-	conn := helper.NewConnTcp(fmt.Sprintf("%s:%d", conf.Mc.Host, conf.Mc.Port))
+	conf := gooo.NewConfigsFrom("./conf")
+	conn := gooo.NewConnTcp(fmt.Sprintf("%s:%d", conf.Mc.Host, conf.Mc.Port))
 	var b int
 	conn.Call("Master.Stop", 222, &b)
 	//time.Sleep(time.Second * 5)
