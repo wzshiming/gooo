@@ -59,5 +59,6 @@ func main() {
 	master := NewMaster(conf, h)
 	h.Register(master)
 	gooo.EchoPortInfo(gooo.Name, gooo.Port)
-	h.Start(gooo.Port)
+	go h.Start(gooo.Port)
+	gooo.Prevent()
 }
