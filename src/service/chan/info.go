@@ -9,23 +9,25 @@ import (
 type Info struct {
 	conf          *gooo.Configs
 	status        *Status
+	rooms         *gooo.GameRooms
 	name          string
 	nameResponse  []byte
 	roomsResponse []byte
 }
 
-func NewInfo(m *Status) *Info {
+func NewInfo(m *Status, rooms *gooo.GameRooms) *Info {
 	r := Info{
 		status: m,
 		conf:   m.Conf,
-		name:   m.Conf.Sc[gooo.Type][gooo.Id].Name,
+		name:   m.Conf.Self().Name,
+		rooms:  rooms,
 	}
 	r.nameResponse, _ = gooo.Encode(protocol.NameResponse{
 		Name: r.name,
 	})
 	go func() {
 		for {
-			r.roomsResponse, _ = gooo.Encode(r.status.ServiceChan.rooms.List())
+			r.roomsResponse, _ = gooo.Encode(r.rooms.List())
 			//fmt.Println(string(r.roomsResponse))
 			time.Sleep(time.Second)
 		}

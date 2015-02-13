@@ -16,7 +16,7 @@ type test struct {
 }
 
 func (h *test) Mess(c *gooo.Connect, msg []byte) {
-	log.Printf("\n%s\n%s\n\n", conf.Rc.Info(msg[1], msg[2], msg[3]), msg[4:])
+	gooo.MsgInfo(conf, msg)
 }
 
 func (h *test) Join(c *gooo.Connect) {
@@ -35,7 +35,7 @@ func (h *test) Join(c *gooo.Connect) {
 	})
 	c.Write(b)
 
-	b = route.ClientRequestForm(conf, "Auth", "Use", "Chan", protocol.UseChanRequest{
+	b = route.ClientRequestForm(conf, "Chan", "Use", "Chan", protocol.UseChanRequest{
 		Use: 1,
 	})
 	c.Write(b)

@@ -20,7 +20,7 @@ type MethodServer struct {
 }
 
 func NewMethodServer(index int, conf *gooo.Configs) *MethodServer {
-	fr := conf.Rc
+	fr := *conf.Routes()
 	fri := fr[index]
 	s := MethodServer{
 		caller:  *gooo.NewCallServer(fri.Name, conf),
@@ -59,9 +59,8 @@ func (s *MethodServer) Call(c2 uint8, c3 uint8, args gooo.RpcRequest, reply *goo
 	if a := m[c3].Unallow; 0 != (a & t["flag"]) {
 		return errors.New("Permission denied")
 	}
-
-	if a := t[s.nameuse]; a != 0 {
-		return s.caller.CallBy(int(a-1), m[c3].Name, args, reply)
+	if 0 != (gooo.FlagChan & t["flag"]) {
+		return s.caller.CallBy(int(t[s.nameuse]), m[c3].Name, args, reply)
 	}
 	return s.caller.Call(m[c3].Name, args, reply)
 }
@@ -77,7 +76,7 @@ func (s *MethodServer) Methods() [][]CallName {
 type MethodServers []MethodServer
 
 func NewMethodServers(conf *gooo.Configs) *MethodServers {
-	fr := conf.Rc
+	fr := *conf.Routes()
 	s := make(MethodServers, len(fr))
 	for k, _ := range fr {
 		s[k] = *NewMethodServer(k, conf)

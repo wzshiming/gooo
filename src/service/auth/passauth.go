@@ -17,7 +17,7 @@ func NewPassAuth(m *Status) *PassAuth {
 	r := PassAuth{
 		status: m,
 	}
-	us := m.Conf.Dc["Users"]
+	us := m.Conf.DataBase("Users")
 	r.db, _ = gorm.Open(us.Dialect, us.Source)
 	return &r
 }

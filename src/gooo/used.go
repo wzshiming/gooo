@@ -5,7 +5,7 @@ import (
 )
 
 type Used struct {
-	sync.Mutex
+	sync.RWMutex
 	use  []bool
 	size int
 }
@@ -18,6 +18,8 @@ func NewUsed(size int) *Used {
 }
 
 func (s *Used) Size() int {
+	s.RLock()
+	defer s.RUnlock()
 	return s.size
 }
 
@@ -26,12 +28,17 @@ func (s *Used) Cap() int {
 }
 
 func (s *Used) IsUse(seat int) bool {
+	s.RLock()
+	defer s.RUnlock()
+	if seat >= s.Cap() {
+		return false
+	}
 	return s.use[seat]
 }
 
 func (s *Used) List() []int {
-	s.Lock()
-	defer s.Unlock()
+	s.RLock()
+	defer s.RUnlock()
 	r := make([]int, s.size)
 	i := 0
 	for k, v := range s.use {
@@ -47,8 +54,8 @@ func (s *Used) List() []int {
 }
 
 func (s *Used) Unusable() int {
-	s.Lock()
-	defer s.Unlock()
+	s.RLock()
+	defer s.RUnlock()
 	for k, v := range s.use {
 		if v {
 			return k
@@ -58,8 +65,8 @@ func (s *Used) Unusable() int {
 }
 
 func (s *Used) Usable() int {
-	s.Lock()
-	defer s.Unlock()
+	s.RLock()
+	defer s.RUnlock()
 	for k, v := range s.use {
 		if !v {
 			return k
@@ -86,6 +93,9 @@ func (s *Used) Join() int {
 func (s *Used) Leave(seat int) int {
 	s.Lock()
 	defer s.Unlock()
+	if seat >= s.Cap() {
+		return -1
+	}
 	if s.use[seat] {
 		s.size--
 		s.use[seat] = false

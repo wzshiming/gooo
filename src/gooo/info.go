@@ -25,14 +25,19 @@ func RecoverInfo() {
 	}
 }
 
-func MsgInfo(msg []byte) {
-	c0 := msg[0]
+func MsgInfo(s *Configs, msg []byte) {
+	//c0 := msg[0]
 	c1 := msg[1]
 	c2 := msg[2]
 	c3 := msg[3]
-	log.Println("flag:", c0)
-	log.Println("type:", c1)
-	log.Println("sub:", c2)
-	log.Println("code:", c3)
-	log.Println("info:", string(msg[4:]))
+	b1 := s.Rc[c1]
+	b2 := b1.Map[c2]
+	b3 := b2.Map[c3]
+	log.Printf("%s(%d).%s(%d).%s(%d) <0x%08X^0x%08X>",
+		b1.Name, c1,
+		b2.Name, c2,
+		b3, c3,
+		b1.Allow|b2.Allow,
+		b1.Unallow|b2.Unallow)
+	log.Printf(string(msg[4:]))
 }

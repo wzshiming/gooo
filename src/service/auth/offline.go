@@ -32,6 +32,7 @@ func (s *Offline) Interrupt(args protocol.InterruptRequest, reply *protocol.Inte
 		UseChan int    `json:"useChan"`
 		Flag    uint32 `json:"flag"`
 	}
+
 	gooo.Decode(args.Data, &d)
 	if d.UserId == 0 {
 		return errors.New("Interrupt index is 0")
@@ -42,9 +43,9 @@ func (s *Offline) Interrupt(args protocol.InterruptRequest, reply *protocol.Inte
 		s.lock.Lock()
 		defer s.lock.Unlock()
 		s.freeze[d.UserId] = args.Data
-	} else if 0 != (d.Flag & gooo.FlagRoom) {
+	} else if 0 != (d.Flag&gooo.FlagChan) && 0 != (d.Flag&gooo.FlagRoom) {
 		var p protocol.InterruptLeaveResponse
-		s.callchan.CallBy(d.UseChan-1, "InChan.Interrupt", protocol.InterruptLeaveRequest{
+		s.callchan.CallBy(d.UseChan, "InChan.InterruptLeave", protocol.InterruptLeaveRequest{
 			RoomId: d.RoomId,
 			SeatId: d.SeatId,
 		}, &p)

@@ -16,7 +16,7 @@ type test struct {
 }
 
 func (h *test) Mess(c *gooo.Connect, msg []byte) {
-	gooo.MsgInfo(msg)
+	gooo.MsgInfo(conf, msg)
 }
 
 func (h *test) Join(c *gooo.Connect) {

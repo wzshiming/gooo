@@ -69,5 +69,6 @@ func NewCallServers(conf *Configs) *CallServers {
 }
 
 func (s *CallServers) Call(typ, method string, args, reply interface{}) (err error) {
+	defer Recover()
 	return (*s)[typ].Call(method, args, reply)
 }

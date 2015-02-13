@@ -57,14 +57,23 @@
         ,"map":   [{}
             ,{
                 "name":    "Info"
+                ,"allow":   0x00000008  // chan
                 ,"map":     [""
                     ,"Name"
                     ,"Rooms"
                 ]
             }
             ,{
+                "name":    "Use"
+                ,"unallow": 0x00000006  // game | room
+                ,"map":     [""
+                    ,"Chan"
+                ]
+            }
+            ,{
                 "name":     "Chan"
                 ,"unallow": 0x00000006  // game | room
+                ,"allow":   0x00000008  // chan
                 ,"map":     [""
                     ,"Create"
                     ,"Join"
@@ -73,7 +82,7 @@
             ,{
                 "name":     "InChan"
                 ,"unallow": 0x00000004  // game
-                ,"allow":   0x00000002  // room
+                ,"allow":   0x0000000a  // room | chan
                 ,"map":     [""
                     ,"Leave"
                     ,"Play"

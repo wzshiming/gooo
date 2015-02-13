@@ -12,11 +12,11 @@ type Chan struct {
 	rooms  *gooo.GameRooms
 }
 
-func NewChan(m *Status) *Chan {
+func NewChan(m *Status, rooms *gooo.GameRooms) *Chan {
 	r := Chan{
 		status: m,
 		conf:   m.Conf,
-		rooms:  gooo.NewGameRooms(100),
+		rooms:  rooms,
 	}
 
 	return &r

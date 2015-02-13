@@ -18,7 +18,7 @@ func NewUse(m *Status) *Use {
 	r := Use{
 		status:   m,
 		conf:     m.Conf,
-		sizechan: len(m.Conf.Sc["Chan"]),
+		sizechan: m.Conf.TypeSize("Chan"),
 	}
 	return &r
 }
@@ -32,7 +32,9 @@ func (r *Use) Chan(args gooo.RpcRequest, reply *gooo.RpcResponse) error {
 	}
 
 	var d struct {
-		UseChan uint32 `json:"useChan"`
+		Flag     uint32 `json:"flag"`
+		Language string
+		UseChan  uint32 `json:"useChan"`
 	}
 	gooo.Decode(args.Session.Data, &d)
 
@@ -43,6 +45,7 @@ func (r *Use) Chan(args gooo.RpcRequest, reply *gooo.RpcResponse) error {
 	*reply = gooo.RpcResponse{
 		Data: &map[string]interface{}{
 			"useChan": p.Use,
+			"flag":    d.Flag | gooo.FlagChan,
 		},
 	}
 	return nil

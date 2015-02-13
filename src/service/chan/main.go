@@ -11,22 +11,28 @@ type Status struct {
 	ServiceChan   *Chan
 	ServiceInChan *InChan
 	ServiceInfo   *Info
+	ServiceUse    *Use
 }
 
 func (r *Status) Init(args gooo.InitRequest, reply *int) (err error) {
 	if args.State == 1 {
 		r.Conf = &args.Conf
+		room := gooo.NewGameRooms(100)
 		if r.ServiceChan == nil {
-			r.ServiceChan = NewChan(r)
+			r.ServiceChan = NewChan(r, room)
 			r.Hand.Register(r.ServiceChan)
 		}
 		if r.ServiceInChan == nil {
-			r.ServiceInChan = NewInChan(r)
+			r.ServiceInChan = NewInChan(r, room)
 			r.Hand.Register(r.ServiceInChan)
 		}
 		if r.ServiceInfo == nil {
-			r.ServiceInfo = NewInfo(r)
+			r.ServiceInfo = NewInfo(r, room)
 			r.Hand.Register(r.ServiceInfo)
+		}
+		if r.ServiceUse == nil {
+			r.ServiceUse = NewUse(r)
+			r.Hand.Register(r.ServiceUse)
 		}
 	}
 	return nil

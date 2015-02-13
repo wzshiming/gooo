@@ -27,21 +27,21 @@ func (s *GameRooms) List() []GameRoom {
 }
 
 func (s *GameRooms) Room(roomid int) *GameRoom {
-	if s.use.IsUse(roomid) {
+	if s.list[roomid] != nil {
 		return s.list[roomid]
 	}
 	return nil
 }
 
 func (s *GameRooms) Join(roomid int, userid uint64) int {
-	if s.use.IsUse(roomid) && !s.list[roomid].IsStarted() {
+	if s.list[roomid] != nil && !s.list[roomid].IsStarted() {
 		return s.list[roomid].Join(userid)
 	}
 	return -1
 }
 
 func (s *GameRooms) Leave(roomid int, seat int) int {
-	if s.use.IsUse(roomid) {
+	if s.list[roomid] != nil && !s.list[roomid].IsStarted() {
 		s.list[roomid].Leave(seat)
 		if s.list[roomid].Size() == 0 {
 			s.use.Leave(roomid)
@@ -61,7 +61,7 @@ func (s *GameRooms) Create(size int, userid uint64) (int, int) {
 }
 
 func (s *GameRooms) Play(roomid int) {
-	if s.use.IsUse(roomid) {
+	if s.list[roomid] != nil {
 		s.list[roomid].Play()
 	}
 }

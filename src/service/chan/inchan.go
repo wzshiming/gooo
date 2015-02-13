@@ -12,11 +12,11 @@ type InChan struct {
 	rooms  *gooo.GameRooms
 }
 
-func NewInChan(m *Status) *InChan {
+func NewInChan(m *Status, rooms *gooo.GameRooms) *InChan {
 	r := InChan{
 		status: m,
 		conf:   m.Conf,
-		rooms:  m.ServiceChan.rooms,
+		rooms:  rooms,
 	}
 	return &r
 }

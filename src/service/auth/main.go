@@ -14,7 +14,6 @@ type Status struct {
 	ServiceAuth     *Auth
 	ServicePassAuth *PassAuth
 	ServiceOffline  *Offline
-	ServiceUse      *Use
 }
 
 func (r *Status) Init(args gooo.InitRequest, reply *int) (err error) {
@@ -28,10 +27,7 @@ func (r *Status) Init(args gooo.InitRequest, reply *int) (err error) {
 			r.ServicePassAuth = NewPassAuth(r)
 			r.Hand.Register(r.ServicePassAuth)
 		}
-		if r.ServiceUse == nil {
-			r.ServiceUse = NewUse(r)
-			r.Hand.Register(r.ServiceUse)
-		}
+
 		if r.ServiceOffline == nil {
 			r.ServiceOffline = NewOffline(r, 5000)
 			r.Hand.Register(r.ServiceOffline)

@@ -40,8 +40,8 @@ func (s *Master) Stop(args int, reply *int) error {
 func main() {
 	defer gooo.Recover()
 	conf := gooo.NewConfigsFrom("./conf")
-	gooo.Name = conf.Mc.Name
-	gooo.Port = gooo.GetPort(conf.Mc.Port)
+	gooo.Name = conf.Master().Name
+	gooo.Port = gooo.GetPort(conf.Master().Port)
 
 	conf.StartServers()
 	//conf.StartConnect()
@@ -59,6 +59,6 @@ func main() {
 	master := NewMaster(conf, h)
 	h.Register(master)
 	gooo.EchoPortInfo(gooo.Name, gooo.Port)
-	go h.Start(gooo.Port)
-	gooo.Prevent()
+	h.Start(gooo.Port)
+	//gooo.Prevent()
 }

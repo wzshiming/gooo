@@ -2,22 +2,28 @@ package gooo
 
 import (
 	"fmt"
+	"log"
 	"net/rpc"
+	"os"
+	"os/exec"
+	"time"
 )
 
-type RouteConfig []struct {
+type names struct {
 	Name    string `json:"name"`
 	Allow   uint32 `json:"allow"`
 	Unallow uint32 `json:"unallow"`
-	Map     []struct {
-		Name    string   `json:"name"`
-		Allow   uint32   `json:"allow"`
-		Unallow uint32   `json:"unallow"`
-		Map     []string `json:"map"`
+}
+
+type RoutesConfig []struct {
+	names
+	Map []struct {
+		names
+		Map []string `json:"map"`
 	} `json:"map"`
 }
 
-func (s *RouteConfig) FindIndex(c1, c2, c3 string) (i1, i2, i3 uint8) {
+func (s *RoutesConfig) FindIndex(c1, c2, c3 string) (i1, i2, i3 uint8) {
 	for k1, v1 := range *s {
 		if v1.Name == c1 {
 			for k2, v2 := range v1.Map {
@@ -32,18 +38,6 @@ func (s *RouteConfig) FindIndex(c1, c2, c3 string) (i1, i2, i3 uint8) {
 		}
 	}
 	return 255, 255, 255
-}
-
-func (s *RouteConfig) Info(c1, c2, c3 uint8) string {
-	b1 := (*s)[c1]
-	b2 := b1.Map[c2]
-	b3 := b2.Map[c3]
-	return fmt.Sprintf("%s(%d).%s(%d).%s(%d) <0x%08X^0x%08X>",
-		b1.Name, c1,
-		b2.Name, c2,
-		b3, c3,
-		b1.Allow|b2.Allow,
-		b1.Unallow|b2.Unallow)
 }
 
 type ServerConfig struct {
@@ -64,7 +58,62 @@ func (s *ServerConfig) Conn() *rpc.Client {
 	return s.conn
 }
 
+func (s *ServerConfig) Start(k1 string, k2 int) {
+	b := fmt.Sprintf("./%s", ToLower(k1))
+	args := []string{}
+	if s.Bin != "" {
+		b = fmt.Sprintf("./%s", s.Bin)
+	}
+	if s.Port != 0 {
+		args = append(args, "-p", fmt.Sprintf("%d", s.Port))
+	}
+	args = append(args, "-t", fmt.Sprintf("%s", k1))
+	args = append(args, "-i", fmt.Sprintf("%d", k2))
+	args = append(args, "&")
+	cmd := exec.Command(b, args...)
+	cmd.Stdout = os.Stdout
+	cmd.Stderr = os.Stderr
+	go cmd.Run()
+}
+
+func (s *ServerConfig) Call(class, method string, m, b interface{}) {
+	t := fmt.Sprintf("%s.%s", class, method)
+	err := s.Conn().Call(fmt.Sprintf("%s.%s", class, method), m, &b)
+	if err != nil {
+		log.Printf("Can't Call %s from %s:%d", t, s.Host, s.Port)
+	}
+}
+
 type ServersConfig map[string][]ServerConfig
+
+func (c *ServersConfig) Size(name string) int {
+	defer Recover()
+	return len((*c)[name])
+}
+
+func (c *ServersConfig) Self() *ServerConfig {
+	defer Recover()
+	return &((*c)[Type][Id])
+}
+
+func (c *ServersConfig) Start() {
+	defer Recover()
+	for k1, v1 := range *c {
+		for k2, v2 := range v1 {
+			v2.Start(k1, k2)
+		}
+	}
+	time.Sleep(time.Second)
+}
+
+func (c *ServersConfig) Foreach(class, method string, m, b interface{}) {
+	defer Recover()
+	for _, v1 := range *c {
+		for _, v2 := range v1 {
+			v2.Call(class, method, m, b)
+		}
+	}
+}
 
 type MasterConfig struct {
 	Name string `json:"name"`
@@ -72,15 +121,18 @@ type MasterConfig struct {
 	Port int    `json:"port"`
 }
 
-type DataBaseConfig map[string]struct {
+type DataBaseConfig struct {
 	Dialect string `json:"dialect"`
 	Source  string `json:"source"`
 }
+
+type DataBasesConfig map[string]DataBaseConfig
 
 const (
 	FlagLogin   uint32 = (1 << iota)
 	FlagRoom    uint32 = (1 << iota)
 	FlagGame    uint32 = (1 << iota)
+	FlagChan    uint32 = (1 << iota)
 	FlagUnallow uint32 = (1 << iota)
 	FlagWarning uint32 = (1 << iota)
 	FlagVip     uint32 = (1 << iota)

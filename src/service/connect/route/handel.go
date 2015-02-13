@@ -15,7 +15,7 @@ type Handel struct {
 }
 
 func NewHandel(conf *gooo.Configs, size uint64) *Handel {
-	port := gooo.GetPort(conf.Sc[gooo.Type][gooo.Id].ClientPort)
+	port := gooo.GetPort(conf.Self().ClientPort)
 	gooo.EchoPublicPortInfo(gooo.Name, port)
 	h := Handel{
 		Server:   NewMethodServers(conf),
@@ -26,6 +26,9 @@ func NewHandel(conf *gooo.Configs, size uint64) *Handel {
 	ser := gooo.NewServer(&h, NewIORange(1024))
 	go ser.StartTCP(port)
 	return &h
+}
+func (h *Handel) Recover(c *gooo.Connect, err error) {
+
 }
 
 func (h *Handel) Join(c *gooo.Connect) {

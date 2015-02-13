@@ -16,7 +16,7 @@ func ClientRequest(i1, i2, i3 uint8, arge interface{}) []byte {
 	return append(sms, b...)
 }
 
-func ClientRequestForm(rc *gooo.Configs, c1, c2, c3 string, arge interface{}) []byte {
-	i1, i2, i3 := rc.Rc.FindIndex(c1, c2, c3)
+func ClientRequestForm(conf *gooo.Configs, c1, c2, c3 string, arge interface{}) []byte {
+	i1, i2, i3 := conf.FindIndex(c1, c2, c3)
 	return ClientRequest(i1, i2, i3, arge)
 }

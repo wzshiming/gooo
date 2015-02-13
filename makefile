@@ -20,7 +20,7 @@ default: build deploy
 
 all: clean info test build clean_pkg deploy run
 
-build: number_build build_service build_tools number_build_record 
+build: number_build build_service build_tools number_build_record deploy
 
 deploy:
 	@$(ECHO_DATE) Deploying...
