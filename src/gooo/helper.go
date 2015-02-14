@@ -30,12 +30,16 @@ func NewConnUdp(addr string) (c *rpc.Client) {
 	return
 }
 
-func OpenFile(path string) []byte {
+func ReadFile(path string) []byte {
 	f, err := ioutil.ReadFile(path)
 	if err != nil {
 		log.Fatal(err)
 	}
 	return f
+}
+
+func WriteFile(path string, b []byte) {
+	ioutil.WriteFile(path, b, os.ModeAppend)
 }
 
 var (

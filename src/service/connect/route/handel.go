@@ -1,6 +1,7 @@
 package route
 
 import (
+	"fmt"
 	"gooo"
 	"gooo/protocol"
 	"log"
@@ -14,15 +15,18 @@ type Handel struct {
 	callauth *gooo.CallServer
 }
 
-func NewHandel(conf *gooo.Configs, size uint64) *Handel {
+func NewHandel(conf *gooo.Configs, size uint64, names ...string) *Handel {
 	port := gooo.GetPort(conf.Self().ClientPort)
 	gooo.EchoPublicPortInfo(gooo.Name, port)
 	h := Handel{
-		Server:   NewMethodServers(conf),
+		Server:   NewMethodServers(conf, names...),
 		Session:  NewSessions(size),
 		Conf:     conf,
 		callauth: gooo.NewCallServer("Auth", conf),
 	}
+
+	h.Server.WriteFile(fmt.Sprintf("./conf/%s_map.json", gooo.Name))
+
 	ser := gooo.NewServer(&h, NewIORange(1024))
 	go ser.StartTCP(port)
 	return &h

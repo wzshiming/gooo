@@ -2,28 +2,21 @@ package gooo
 
 import ()
 
-type Status struct {
-	hand *Handeln
-	conf *Configs
+type Methods struct {
+	MethodsResponse
 }
 
-func NewStatus(hand *Handeln) *Status {
-	s := Status{
-		hand: hand,
+func NewMethods(allow uint32, unallow uint32, method ...string) *Methods {
+	return &Methods{
+		MethodsResponse{
+			Allow:   allow,
+			Unallow: unallow,
+			Method:  method,
+		},
 	}
-	return &s
 }
 
-func (s *Status) Stop(args int, reply *int) error {
-	if args == 222 {
-		s.hand.Stop()
-	}
-	return nil
-}
-
-func (s *Status) Init(args InitRequest, reply *int) error {
-	if args.State == 222 {
-		s.conf = &args.Conf
-	}
+func (s *Methods) Method(args MethodsRequest, reply *MethodsResponse) error {
+	*reply = s.MethodsResponse
 	return nil
 }

@@ -18,3 +18,13 @@ type InitRequest struct {
 	Conf  Configs `json:"conf"`
 	State int     `json:"state"`
 }
+
+type InitResponse int
+
+type MethodsRequest int
+
+type MethodsResponse struct {
+	Allow   uint32   `json:"allow"`
+	Unallow uint32   `json:"unallow"`
+	Method  []string `json:"method"`
+}

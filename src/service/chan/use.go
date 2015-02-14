@@ -7,6 +7,7 @@ import (
 )
 
 type Use struct {
+	gooo.Methods
 	conf     *gooo.Configs
 	status   *Status
 	sizechan int
@@ -20,6 +21,11 @@ func NewUse(m *Status) *Use {
 		conf:     m.Conf,
 		sizechan: m.Conf.TypeSize("Chan"),
 	}
+	r.Methods = *gooo.NewMethods(
+		gooo.FlagNone,
+		gooo.FlagChan|gooo.FlagRoom|gooo.FlagGame,
+		"Chan",
+	)
 	return &r
 }
 

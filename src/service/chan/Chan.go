@@ -7,6 +7,7 @@ import (
 )
 
 type Chan struct {
+	gooo.Methods
 	conf   *gooo.Configs
 	status *Status
 	rooms  *gooo.GameRooms
@@ -18,6 +19,12 @@ func NewChan(m *Status, rooms *gooo.GameRooms) *Chan {
 		conf:   m.Conf,
 		rooms:  rooms,
 	}
+	r.Methods = *gooo.NewMethods(
+		gooo.FlagChan,
+		gooo.FlagRoom|gooo.FlagGame,
+		"Create",
+		"Join",
+	)
 
 	return &r
 }

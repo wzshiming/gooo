@@ -9,6 +9,7 @@ import (
 )
 
 type Auth struct {
+	gooo.Methods
 	status *Status
 	db     gorm.DB
 }
@@ -17,6 +18,12 @@ func NewAuth(m *Status) *Auth {
 	r := Auth{
 		status: m,
 	}
+	r.Methods = *gooo.NewMethods(
+		gooo.FlagNone,
+		gooo.FlagLogin,
+		"Register",
+		"LogIn",
+	)
 	us := m.Conf.DataBase("Users")
 	r.db, _ = gorm.Open(us.Dialect, us.Source)
 	return &r

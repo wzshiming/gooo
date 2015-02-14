@@ -7,6 +7,7 @@ import (
 )
 
 type InChan struct {
+	gooo.Methods
 	conf   *gooo.Configs
 	status *Status
 	rooms  *gooo.GameRooms
@@ -18,6 +19,12 @@ func NewInChan(m *Status, rooms *gooo.GameRooms) *InChan {
 		conf:   m.Conf,
 		rooms:  rooms,
 	}
+	r.Methods = *gooo.NewMethods(
+		gooo.FlagChan|gooo.FlagRoom,
+		gooo.FlagGame,
+		"Leave",
+		"Play",
+	)
 	return &r
 }
 

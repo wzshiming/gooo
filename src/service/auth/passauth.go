@@ -9,6 +9,7 @@ import (
 )
 
 type PassAuth struct {
+	gooo.Methods
 	status *Status
 	db     gorm.DB
 }
@@ -17,6 +18,13 @@ func NewPassAuth(m *Status) *PassAuth {
 	r := PassAuth{
 		status: m,
 	}
+	r.Methods = *gooo.NewMethods(
+		gooo.FlagLogin,
+		gooo.FlagNone,
+		"ChangePwd",
+		"Unregister",
+		"LogOut",
+	)
 	us := m.Conf.DataBase("Users")
 	r.db, _ = gorm.Open(us.Dialect, us.Source)
 	return &r

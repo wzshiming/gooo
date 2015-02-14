@@ -7,6 +7,7 @@ import (
 )
 
 type Info struct {
+	gooo.Methods
 	conf          *gooo.Configs
 	status        *Status
 	rooms         *gooo.GameRooms
@@ -22,6 +23,12 @@ func NewInfo(m *Status, rooms *gooo.GameRooms) *Info {
 		name:   m.Conf.Self().Name,
 		rooms:  rooms,
 	}
+	r.Methods = *gooo.NewMethods(
+		gooo.FlagChan,
+		gooo.FlagNone,
+		"Name",
+		"Rooms",
+	)
 	r.nameResponse, _ = gooo.Encode(protocol.NameResponse{
 		Name: r.name,
 	})

@@ -17,9 +17,10 @@ type test struct {
 	index int
 }
 
+var msf = route.NewMethodServersFile("./conf/Connect_0_map.json")
+
 func (h *test) Mess(c *gooo.Connect, msg []byte) {
-	gooo.MsgInfo(conf, msg)
-	//log.Printf("\n%s\n%s\n\n", conf.Rc.Info(msg[1], msg[2], msg[3]), msg[4:])
+	msf.MsgInfo(msg)
 }
 
 func (h *test) Join(c *gooo.Connect) {
@@ -28,39 +29,39 @@ func (h *test) Join(c *gooo.Connect) {
 
 	cc := fmt.Sprintf("hallo%d", h.index)
 
-	b = route.ClientRequestForm(conf, "Auth", "Auth", "Register", protocol.RegisterRequest{
+	b = msf.ClientRequest("Auth", "Auth", "Register", protocol.RegisterRequest{
 		Username: cc,
 		Password: "aaasssss",
 	})
 	c.Write(b)
 
-	b = route.ClientRequestForm(conf, "Auth", "Auth", "LogIn", protocol.LogInRequest{
+	b = msf.ClientRequest("Auth", "Auth", "LogIn", protocol.LogInRequest{
 		Username: cc,
 		Password: "aaasssss",
 	})
 	c.Write(b)
 
-	b = route.ClientRequestForm(conf, "Chan", "Use", "Chan", protocol.UseChanRequest{
+	b = msf.ClientRequest("Chan", "Use", "Chan", protocol.UseChanRequest{
 		Use: 1,
 	})
 	c.Write(b)
 
-	b = route.ClientRequestForm(conf, "Chan", "Info", "Name", protocol.NameRequest{
+	b = msf.ClientRequest("Chan", "Info", "Name", protocol.NameRequest{
 		Get: true,
 	})
 	c.Write(b)
 
-	b = route.ClientRequestForm(conf, "Chan", "Chan", "Join", protocol.JoinRequest{
+	b = msf.ClientRequest("Chan", "Chan", "Join", protocol.JoinRequest{
 		RoomId: 0,
 	})
 	c.Write(b)
 
-	b = route.ClientRequestForm(conf, "Chan", "Info", "Rooms", protocol.RoomsRequest{
+	b = msf.ClientRequest("Chan", "Info", "Rooms", protocol.RoomsRequest{
 		Get: true,
 	})
 	c.Write(b)
 
-	//b = route.ClientRequestForm(conf, "Chan", "InChan", "Leave", protocol.RoomsRequest{
+	//b = msf.ClientRequest("Chan", "InChan", "Leave", protocol.RoomsRequest{
 	//	Get: true,
 	//})
 	//c.Write(b)

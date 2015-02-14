@@ -15,13 +15,15 @@ type test struct {
 	gooo.HandelInterface
 }
 
+var msf = route.NewMethodServersFile("./conf/Connect_0_map.json")
+
 func (h *test) Mess(c *gooo.Connect, msg []byte) {
-	gooo.MsgInfo(conf, msg)
+	msf.MsgInfo(msg)
 }
 
 func (h *test) Join(c *gooo.Connect) {
 	log.Printf("%v %v Join\n", c.ToUint(), c.Conn.RemoteAddr())
-	b := route.ClientRequestForm(conf, "Random", "Random", "Range100Spacing", protocol.SpacingRequest{
+	b := msf.ClientRequest("Random", "Random", "Range100Spacing", protocol.SpacingRequest{
 		Size:  10,
 		Space: 10000,
 	})

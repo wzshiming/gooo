@@ -5,8 +5,8 @@ import (
 )
 
 type Status struct {
+	gooo.Methods
 	gooo.Status
-	Hand          *gooo.Handeln
 	Conf          *gooo.Configs
 	ServiceChan   *Chan
 	ServiceInChan *InChan
@@ -17,6 +17,7 @@ type Status struct {
 func (r *Status) Init(args gooo.InitRequest, reply *int) (err error) {
 	if args.State == 1 {
 		r.Conf = &args.Conf
+
 		room := gooo.NewGameRooms(100)
 		if r.ServiceChan == nil {
 			r.ServiceChan = NewChan(r, room)
@@ -42,8 +43,15 @@ func main() {
 	defer gooo.Recover()
 	h := gooo.NewHandeln()
 	h.Register(&Status{
-		Hand:   h,
 		Status: *gooo.NewStatus(h),
+		Methods: *gooo.NewMethods(
+			gooo.FlagLogin,
+			gooo.FlagNone,
+			"Chan",
+			"InChan",
+			"Info",
+			"Use",
+		),
 	})
 	gooo.EchoPortInfo(gooo.Name, gooo.Port)
 	h.Start(gooo.Port)

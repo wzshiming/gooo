@@ -3,6 +3,7 @@ package main
 import (
 	"gooo"
 	"service/connect/route"
+	"time"
 )
 
 type Status struct {
@@ -21,7 +22,14 @@ func (r *Status) Init(args gooo.InitRequest, reply *int) (err error) {
 			r.Hand.Register(r.ServiceConnect)
 		}
 		if r.CilentHandeln == nil {
-			r.CilentHandeln = route.NewHandel(r.Conf, 4096)
+			go func() {
+				time.Sleep(time.Second)
+				r.CilentHandeln = route.NewHandel(r.Conf, 4096,
+					"",
+					"Auth",
+					"Chan",
+				)
+			}()
 		}
 	}
 	return nil

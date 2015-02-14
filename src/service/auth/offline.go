@@ -8,7 +8,6 @@ import (
 )
 
 type Offline struct {
-	status   *Status
 	lock     sync.Mutex
 	freeze   map[uint64][]byte
 	online   *gooo.Onlines
@@ -16,12 +15,13 @@ type Offline struct {
 }
 
 func NewOffline(m *Status, size uint64) *Offline {
-	return &Offline{
-		status:   m,
+	r := Offline{
 		freeze:   make(map[uint64][]byte, size),
 		online:   gooo.NewOnlines(size),
 		callchan: gooo.NewCallServer("Chan", m.Conf),
 	}
+
+	return &r
 }
 
 func (s *Offline) Interrupt(args protocol.InterruptRequest, reply *protocol.InterruptResponse) error {
