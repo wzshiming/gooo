@@ -2,8 +2,6 @@ package main
 
 import (
 	"errors"
-	_ "github.com/go-sql-driver/mysql"
-	"github.com/jinzhu/gorm"
 	"gooo"
 	"gooo/protocol"
 )
@@ -11,7 +9,6 @@ import (
 type PassAuth struct {
 	gooo.Methods
 	status *Status
-	db     gorm.DB
 }
 
 func NewPassAuth(m *Status) *PassAuth {
@@ -25,8 +22,6 @@ func NewPassAuth(m *Status) *PassAuth {
 		"Unregister",
 		"LogOut",
 	)
-	us := m.Conf.DataBase("Users")
-	r.db, _ = gorm.Open(us.Dialect, us.Source)
 	return &r
 }
 
@@ -45,7 +40,7 @@ func (r *PassAuth) ChangePwd(args gooo.RpcRequest, reply *gooo.RpcResponse) erro
 		return errors.New(Trans.Value("auth.newpwdshort"))
 	}
 	var ouser protocol.User
-	if err := r.db.Where(&protocol.User{
+	if err := db.Where(&protocol.User{
 		Username: p.Username,
 	}).First(&ouser).Error; err != nil {
 		return errors.New(Trans.Value("auth.usernotexists"))
@@ -53,7 +48,7 @@ func (r *PassAuth) ChangePwd(args gooo.RpcRequest, reply *gooo.RpcResponse) erro
 	if ouser.Password != p.Password {
 		return errors.New(Trans.Value("auth.pwderr"))
 	}
-	r.db.Model(&ouser).Update(&protocol.User{Password: p.NewPassword})
+	db.Model(&ouser).Update(&protocol.User{Password: p.NewPassword})
 	return nil
 }
 
@@ -70,7 +65,7 @@ func (r *PassAuth) Unregister(args gooo.RpcRequest, reply *gooo.RpcResponse) err
 		return errors.New(Trans.Value("auth.islogin"))
 	}
 	var ouser protocol.User
-	if err := r.db.Where(&protocol.User{Username: p.Username}).First(&ouser).Error; err != nil {
+	if err := db.Where(&protocol.User{Username: p.Username}).First(&ouser).Error; err != nil {
 		return errors.New(Trans.Value("auth.usernotexists"))
 	}
 	if ouser.Password != p.Password {
@@ -84,7 +79,7 @@ func (r *PassAuth) Unregister(args gooo.RpcRequest, reply *gooo.RpcResponse) err
 		return errors.New(Trans.Value("auth.inlogin"))
 	}
 
-	r.db.Delete(ouser)
+	db.Delete(ouser)
 	return nil
 }
 

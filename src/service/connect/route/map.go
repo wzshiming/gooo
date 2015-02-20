@@ -5,6 +5,8 @@ import (
 	"fmt"
 	"gooo"
 	"log"
+
+	"github.com/wzshiming/ffmt"
 )
 
 type MethodServer struct {
@@ -112,7 +114,7 @@ func (s *MethodServers) Call(msg []byte, args gooo.RpcRequest, reply *gooo.RpcRe
 
 func (s *MethodServers) WriteFile(path string) {
 	b, _ := gooo.Encode(s)
-	gooo.WriteFile(path, b)
+	gooo.WriteFile(path, []byte(ffmt.Sputs(string(b))))
 }
 
 func (s *MethodServers) RequestCode(c1, c2, c3 string) (i1, i2, i3 uint8) {

@@ -2,8 +2,6 @@ package main
 
 import (
 	"errors"
-	_ "github.com/go-sql-driver/mysql"
-	"github.com/jinzhu/gorm"
 	"gooo"
 	"gooo/protocol"
 )
@@ -11,7 +9,6 @@ import (
 type Auth struct {
 	gooo.Methods
 	status *Status
-	db     gorm.DB
 }
 
 func NewAuth(m *Status) *Auth {
@@ -24,8 +21,6 @@ func NewAuth(m *Status) *Auth {
 		"Register",
 		"LogIn",
 	)
-	us := m.Conf.DataBase("Users")
-	r.db, _ = gorm.Open(us.Dialect, us.Source)
 	return &r
 }
 
@@ -42,11 +37,11 @@ func (r *Auth) Register(args gooo.RpcRequest, reply *gooo.RpcResponse) error {
 	}
 
 	var ouser protocol.User
-	if err := r.db.Where(&protocol.User{Username: p.Username}).First(&ouser).Error; err == nil {
+	if err := db.Where(&protocol.User{Username: p.Username}).First(&ouser).Error; err == nil {
 		return errors.New(Trans.Value("auth.userexists"))
 	}
 
-	if err := r.db.Create(protocol.User{
+	if err := db.Create(protocol.User{
 		Username: p.Username,
 		Password: p.Password,
 	}).Error; err != nil {
@@ -69,7 +64,7 @@ func (r *Auth) LogIn(args gooo.RpcRequest, reply *gooo.RpcResponse) error {
 		return errors.New(Trans.Value("auth.islogin"))
 	}
 	var ouser protocol.User
-	if err := r.db.Where(&protocol.User{Username: p.Username}).First(&ouser).Error; err != nil {
+	if err := db.Where(&protocol.User{Username: p.Username}).First(&ouser).Error; err != nil {
 		return errors.New(Trans.Value("auth.usernotexists"))
 	}
 	if ouser.Password != p.Password {

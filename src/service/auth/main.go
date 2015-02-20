@@ -19,6 +19,10 @@ type Status struct {
 func (r *Status) Init(args gooo.InitRequest, reply *int) (err error) {
 	if args.State == 1 {
 		r.Conf = &args.Conf
+		err = dbconn(r.Conf.DataBase("Users"))
+		if err != nil {
+			return
+		}
 
 		if r.ServiceAuth == nil {
 			r.ServiceAuth = NewAuth(r)
@@ -33,6 +37,7 @@ func (r *Status) Init(args gooo.InitRequest, reply *int) (err error) {
 			r.ServiceOffline = NewOffline(r, 5000)
 			r.Hand.Register(r.ServiceOffline)
 		}
+
 	}
 	return nil
 }

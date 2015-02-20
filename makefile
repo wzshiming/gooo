@@ -9,6 +9,7 @@ CD            := cd
 MAKE          := make
 MKDIR         := mkdir -p
 GO            := go
+GIT           := git
 ECHO          := echo
 ECHO_DATE     := echo `date +%R:%S`
 
@@ -16,7 +17,7 @@ ECHO_DATE     := echo `date +%R:%S`
 
 .PHONY:  all build deploy test run clean_pkg clean number_build number_build_record
 
-default: build deploy
+default: build run
 
 all: clean info test build clean_pkg deploy run
 
@@ -24,7 +25,7 @@ build: number_build build_service build_tools number_build_record deploy
 
 deploy:
 	@$(ECHO_DATE) Deploying...
-	@$(MKDIR) $(BUILD_DIR) && $(CD) $(BUILD_DIR) && $(MKDIR) conf static log i18n
+	@$(MKDIR) $(BUILD_DIR) && $(CD) $(BUILD_DIR) && $(MKDIR) conf log i18n db
 	@$(CP) ./conf ./i18n $(BUILD_DIR)
 
 build_%:
@@ -50,7 +51,7 @@ test_%:
 	 	$(GO) test $(patsubst test_%,%,$@)/$$i;\
 	 done
 
-run: 
+run: deploy
 	@$(ECHO_DATE) Running...
 	@$(CD) $(BUILD_DIR) && ./master
 
@@ -60,7 +61,7 @@ clean_pkg:
 
 clean:
 	@$(ECHO_DATE) Cleaning...
-	@-$(RM) $(BUILD_DIR) pkg
+	@-$(RM) $(BUILD_DIR)/* pkg
 
 
 number_build: number_build.txt
@@ -74,12 +75,25 @@ get:
 	@export GOPATH=`pwd` &&\
 	$(ECHO_DATE) Getting github.com/go-sql-driver/mysql ...;\
 	$(GO) get github.com/go-sql-driver/mysql &&\
+	$(ECHO_DATE) Getting github.com/mattn/go-sqlite3 ...;\
+	$(GO) get github.com/mattn/go-sqlite3 &&\
 	$(ECHO_DATE) Getting github.com/jinzhu/gorm ...;\
 	$(GO) get github.com/jinzhu/gorm &&\
 	$(ECHO_DATE) Getting github.com/kortem/lingo ...;\
 	$(GO) get github.com/kortem/lingo &&\
 	$(ECHO_DATE) Getting github.com/lib/pq ...;\
-	$(GO) get github.com/lib/pq
+	$(GO) get github.com/lib/pq &&\
+	$(ECHO_DATE) Getting github.com/codegangsta/martini ...;\
+	$(GO) get github.com/codegangsta/martini &&\
+	$(ECHO_DATE) Getting github.com/martini-contrib/render ...;\
+	$(GO) get github.com/martini-contrib/render &&\
+	$(ECHO_DATE) Getting github.com/wzshiming/ffmt ...;\
+	$(GO) get github.com/wzshiming/ffmt
+
+
+get_else:
+	@$(MKDIR) temp
+	@$(GIT) clone https://github.com/mrdoob/three.js temp/three.js
 
 info:
 	@$(ECHO_DATE) Gooo source `cat ./src/gooo/*.go | wc -l` line...
