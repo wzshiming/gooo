@@ -71,25 +71,20 @@ number_build_record: number_build.txt
 	@$(ECHO_DATE) Build number record...
 	@$(ECHO) $(shell expr 1 + `sed -n 1p $<`) > $<
 
-get:
+get: get_github.com_go-sql-driver_mysql\
+     get_github.com_mattn_go-sqlite3\
+     get_github.com_jinzhu_gorm\
+     get_github.com_kortem_lingo\
+     get_github.com_lib_pq\
+     get_github.com_codegangsta_martini\
+     get_github.com_martini-contrib_render\
+     get_github.com_wzshiming_ffmt\
+     get_code.google.com_p_go.net_websocket
+	
+get_%:
 	@export GOPATH=`pwd` &&\
-	$(ECHO_DATE) Getting github.com/go-sql-driver/mysql ...;\
-	$(GO) get github.com/go-sql-driver/mysql &&\
-	$(ECHO_DATE) Getting github.com/mattn/go-sqlite3 ...;\
-	$(GO) get github.com/mattn/go-sqlite3 &&\
-	$(ECHO_DATE) Getting github.com/jinzhu/gorm ...;\
-	$(GO) get github.com/jinzhu/gorm &&\
-	$(ECHO_DATE) Getting github.com/kortem/lingo ...;\
-	$(GO) get github.com/kortem/lingo &&\
-	$(ECHO_DATE) Getting github.com/lib/pq ...;\
-	$(GO) get github.com/lib/pq &&\
-	$(ECHO_DATE) Getting github.com/codegangsta/martini ...;\
-	$(GO) get github.com/codegangsta/martini &&\
-	$(ECHO_DATE) Getting github.com/martini-contrib/render ...;\
-	$(GO) get github.com/martini-contrib/render &&\
-	$(ECHO_DATE) Getting github.com/wzshiming/ffmt ...;\
-	$(GO) get github.com/wzshiming/ffmt
-
+	var="$(patsubst get_%,%,$@)" &&\
+	$(GO) get -u -v $${var//_/\/}
 
 get_else:
 	@$(MKDIR) temp

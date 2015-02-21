@@ -1,6 +1,7 @@
 {
     "Connect":[
-         {"host":"127.0.0.1", "port":4000,"clientport":3005}
+         {"host":"127.0.0.1", "port":4000, "clientport":3005, "name":"tcp"}
+        ,{"host":"127.0.0.1", "port":4001, "clientport":3006, "name":"websocket"}
     ]
     ,"Random":[
          {"host":"127.0.0.1", "port":4010}

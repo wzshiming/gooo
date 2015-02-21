@@ -18,7 +18,7 @@ func NewConnect(conn net.Conn, ior IORanges, bc EventHandel) *Connect {
 		ior:  ior,
 		Bc:   bc,
 	}
-	go connect.listen()
+	connect.listen()
 	return connect
 }
 

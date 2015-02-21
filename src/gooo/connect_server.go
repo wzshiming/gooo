@@ -1,8 +1,10 @@
 package gooo
 
 import (
+	"code.google.com/p/go.net/websocket"
 	"log"
 	"net"
+	"net/http"
 )
 
 const (
@@ -26,18 +28,23 @@ func NewServer(bc EventHandel, ior IORanges) *Server {
 }
 
 func (self *Server) StartTCP(port string) (err error) {
-	return self.Start("tcp", port)
+	return self.start("tcp", port)
 }
 
-func (self *Server) Start(name string, port string) (err error) {
+func (self *Server) StartWebsocket(port string) (err error) {
+	return http.ListenAndServe(port, websocket.Handler(func(conn *websocket.Conn) {
+		self.Listen(conn)
+	}))
+}
+
+func (self *Server) start(name string, port string) (err error) {
 	self.listener, err = net.Listen(name, port)
 	if err != nil {
 		log.Println(err)
 	}
-	go self.StartListen()
 	for {
 		if conn, err := self.listener.Accept(); err == nil {
-			self.Listen(conn)
+			go self.Listen(conn)
 		} else {
 			break
 		}
@@ -52,11 +59,5 @@ func (self *Server) Stop() {
 }
 
 func (self *Server) Listen(conn net.Conn) {
-	self.pending <- conn
-}
-
-func (self *Server) StartListen() {
-	for conn := range self.pending {
-		NewConnect(conn, self.ior, self.bc)
-	}
+	NewConnect(conn, self.ior, self.bc)
 }

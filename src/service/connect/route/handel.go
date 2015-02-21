@@ -28,11 +28,16 @@ func NewHandel(conf *gooo.Configs, size uint64, names ...string) *Handel {
 	h.Server.WriteFile(fmt.Sprintf("./conf/%s_map.json", gooo.Name))
 
 	ser := gooo.NewServer(&h, NewIORange(1024))
-	go ser.StartTCP(port)
+	if conf.Self().Name == "websocket" {
+		go ser.StartWebsocket(port)
+	} else {
+		go ser.StartTCP(port)
+	}
 	return &h
 }
-func (h *Handel) Recover(c *gooo.Connect, err error) {
 
+func (h *Handel) Recover(c *gooo.Connect, err error) {
+	//log.Printf("%v %v\n", c.RemoteAddr(), err)
 }
 
 func (h *Handel) Join(c *gooo.Connect) {
@@ -52,7 +57,7 @@ func (h *Handel) Mess(c *gooo.Connect, msg []byte) {
 	s := h.Session.Get(id)
 	s.Lock()
 	defer s.Unlock()
-	//log.Printf("%v msg  %v\n", c.RemoteAddr(),msg)
+	//log.Printf("%v msg  %v\n", c.RemoteAddr(), msg)
 	var reply gooo.RpcResponse
 
 	err := h.Server.Call(msg[:4], gooo.RpcRequest{

@@ -5,10 +5,10 @@ import (
 )
 
 func NewClientTCP(addr string, ior IORanges, bc EventHandel) *Connect {
-	return NewClient("tcp", addr, ior, bc)
+	return newClient("tcp", addr, ior, bc)
 }
 
-func NewClient(name string, addr string, ior IORanges, bc EventHandel) *Connect {
+func newClient(name string, addr string, ior IORanges, bc EventHandel) *Connect {
 	conn, err := net.Dial(name, addr)
 	if err != nil {
 		panic(err)

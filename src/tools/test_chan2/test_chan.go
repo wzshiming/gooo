@@ -73,7 +73,7 @@ func main() {
 	ior := route.NewIORange(1024)
 	for i := 10; i != 20; i++ {
 		ttt := &test{index: i}
-		gooo.NewClientTCP("127.0.0.1:3005", ior, ttt)
+		go gooo.NewClientTCP("127.0.0.1:3005", ior, ttt)
 	}
 	time.Sleep(time.Second * 120)
 }
