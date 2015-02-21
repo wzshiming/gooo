@@ -25,7 +25,7 @@ func NewHandel(conf *gooo.Configs, size uint64, names ...string) *Handel {
 		callauth: gooo.NewCallServer("Auth", conf),
 	}
 
-	h.Server.WriteFile(fmt.Sprintf("./conf/%s_map.json", gooo.Name))
+	h.Server.Map().WriteFile(fmt.Sprintf("./conf/%s_map.json", gooo.Name))
 
 	ser := gooo.NewServer(&h, NewIORange(1024))
 	if conf.Self().Name == "websocket" {

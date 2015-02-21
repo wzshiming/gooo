@@ -4,8 +4,8 @@ import (
 	//"encoding/binary"
 	"fmt"
 	"gooo"
+	"gooo/route"
 	"log"
-	"service/connect/route"
 )
 
 type Handel struct {

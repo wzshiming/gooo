@@ -5,8 +5,6 @@ import (
 	"fmt"
 	"gooo"
 	"log"
-
-	"github.com/wzshiming/ffmt"
 )
 
 type MethodServer struct {
@@ -92,12 +90,6 @@ func NewMethodServers(conf *gooo.Configs, names ...string) *MethodServers {
 	return &s
 }
 
-func NewMethodServersFile(path string) *MethodServers {
-	var s MethodServers
-	gooo.Decode(gooo.ReadFile(path), &s)
-	return &s
-}
-
 func (s *MethodServers) Call(msg []byte, args gooo.RpcRequest, reply *gooo.RpcResponse) error {
 	c1 := msg[1]
 	c2 := msg[2]
@@ -112,37 +104,18 @@ func (s *MethodServers) Call(msg []byte, args gooo.RpcRequest, reply *gooo.RpcRe
 	return ss.Call(c2, c3, args, reply)
 }
 
-func (s *MethodServers) WriteFile(path string) {
-	b, _ := gooo.Encode(s)
-	gooo.WriteFile(path, []byte(ffmt.Sputs(string(b))))
-}
-
-func (s *MethodServers) RequestCode(c1, c2, c3 string) (i1, i2, i3 uint8) {
+func (s *MethodServers) Map() *Remap {
+	b := NewRemap()
 	for k1, v1 := range *s {
-		if v1.Name == c1 {
+		if len(v1.Methods) != 0 {
 			for k2, v2 := range v1.Methods[0] {
 				for k3, v3 := range v2.Method {
-					if v3 == fmt.Sprintf("%s.%s", c2, c3) {
-						return uint8(k1), uint8(k2), uint8(k3)
-					}
+					b.Set(fmt.Sprintf("%s.%s", v1.Name, v3), [3]byte{byte(k1), byte(k2), byte(k3)})
 				}
 			}
 		}
 	}
-	return 255, 255, 255
-}
-
-var lo byte = 0
-
-func (s *MethodServers) ClientRequest(c1, c2, c3 string, arge interface{}) []byte {
-	lo++
-	i1, i2, i3 := s.RequestCode(c1, c2, c3)
-	sms := []byte{lo, i1, i2, i3}
-	b, err := gooo.Encode(arge)
-	if err != nil {
-		return []byte{}
-	}
-	return append(sms, b...)
+	return b
 }
 
 func (s *MethodServers) MsgInfo(msg []byte) {
@@ -156,12 +129,8 @@ func (s *MethodServers) MsgInfo(msg []byte) {
 
 	log.Printf("%s.%s(%d.%d.%d)  <0x%08X^0x%08X>",
 		b1.Name, b3,
-		c1, c2, c2,
+		c1, c2, c3,
 		b2.Allow,
 		b2.Unallow)
 	log.Printf(string(msg[4:]))
 }
-
-//func (s *MethodServers) ReadFile(path string) {
-//	gooo.Decode(gooo.ReadFile(path), s)
-//}

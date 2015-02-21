@@ -11,8 +11,6 @@ import (
 
 var BasePath = "../web"
 
-type Text string
-
 //var HelperFuncs = template.FuncMap{
 //	"text": func(s template.HTML) template.JS {
 //		return template.JS(s)

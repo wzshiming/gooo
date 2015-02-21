@@ -2,7 +2,7 @@ package main
 
 import (
 	"gooo"
-	"service/connect/route"
+	"gooo/route"
 	"time"
 )
 
@@ -10,25 +10,27 @@ type Status struct {
 	gooo.Status
 	Hand           *gooo.Handeln
 	Conf           *gooo.Configs
-	ServiceConnect *Connect
+	ServiceConnect *route.ConnRpc
 	CilentHandeln  *route.Handel
 }
 
 func (r *Status) Init(args gooo.InitRequest, reply *int) (err error) {
 	if args.State == 1 {
 		r.Conf = &args.Conf
-		if r.ServiceConnect == nil {
-			r.ServiceConnect = NewConnect(r)
-			r.Hand.Register(r.ServiceConnect)
-		}
 		if r.CilentHandeln == nil {
 			go func() {
 				time.Sleep(time.Second)
-				r.CilentHandeln = route.NewHandel(r.Conf, 4096,
-					"",
-					"Auth",
-					"Chan",
-				)
+				if r.CilentHandeln == nil {
+					r.CilentHandeln = route.NewHandel(r.Conf, 4096,
+						"",
+						"Auth",
+						"Chan",
+					)
+				}
+				if r.ServiceConnect == nil {
+					r.ServiceConnect = route.NewConnRpc(r.CilentHandeln)
+					r.Hand.Register(r.ServiceConnect)
+				}
 			}()
 		}
 	}
