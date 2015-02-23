@@ -1,25 +1,27 @@
 package main
 
 import (
-	"github.com/codegangsta/martini"
+	//"code.google.com/p/go.net/websocket"
+	"branch/rendertext"
+	"github.com/go-martini/martini"
 	"github.com/martini-contrib/render"
 	"gooo"
-	//"html/template"
+	"gooo/js"
 	"net/http"
-	"service/web/rendertext"
 )
 
 var BasePath = "../web"
 
-//var HelperFuncs = template.FuncMap{
-//	"text": func(s template.HTML) template.JS {
-//		return template.JS(s)
-//	},
-//}
+func Run(conf *gooo.Configs, h martini.Handler) {
 
-func Run(path string) {
+	port := gooo.GetPort(conf.Self().ClientPort)
+	gooo.EchoPublicPortInfo(gooo.Name, port)
+	//martini.Env = martini.Prod
 
 	m := martini.Classic()
+
+	m.Get("/conn", h)
+
 	m.Use(martini.Static(basepath("static")))
 
 	m.Get("/:name.html", render.Renderer(render.Options{
@@ -39,6 +41,7 @@ func Run(path string) {
 	m.Get("/js/:name.js", rendertext.Renderer(rendertext.Options{
 		Directory:  basepath("view/js"),
 		Extensions: []string{".tmpl", ".js"},
+		Funcs:      js.FuncMaps,
 		Delims:     rendertext.Delims{"{{", "}}"},
 		Charset:    "UTF-8",
 		IndentJSON: true,
@@ -47,7 +50,7 @@ func Run(path string) {
 		r.Text(200, params["name"], 10)
 	})
 
-	m.Get("/css/:name.js", rendertext.Renderer(rendertext.Options{
+	m.Get("/css/:name.css", rendertext.Renderer(rendertext.Options{
 		Directory:  basepath("view/css"),
 		Extensions: []string{".tmpl", ".css"},
 		Delims:     rendertext.Delims{"{{", "}}"},
@@ -59,6 +62,7 @@ func Run(path string) {
 	})
 
 	m.Get("/push", func(w http.ResponseWriter, r *http.Request) {
+
 		c, ok := w.(http.Hijacker)
 		if ok {
 			conn, _, err := c.Hijack()
@@ -68,14 +72,10 @@ func Run(path string) {
 			conn.Write([]byte("hello push"))
 		}
 	})
-	m.RunOnAddr(path)
+
+	m.RunOnAddr(port)
 }
 
 func basepath(path ...string) string {
 	return gooo.JoinPath(append([]string{BasePath}, path...)...)
-}
-
-func main() {
-	Run(gooo.Port)
-	return
 }

@@ -1,7 +1,7 @@
 {
-    "Connect":[
+     "Connect":[
          {"host":"127.0.0.1", "port":4000, "clientport":3005, "name":"tcp"}
-        ,{"host":"127.0.0.1", "port":4001, "clientport":3006, "name":"websocket"}
+        ,{"host":"127.0.0.1", "port":4001, "clientport":3006, "name":"websocket", "bin":"web"}
     ]
     ,"Random":[
          {"host":"127.0.0.1", "port":4010}
@@ -12,8 +12,5 @@
     ,"Chan":[
          {"host":"127.0.0.1", "port":5020, "name":"beta 1"}
         ,{"host":"127.0.0.1", "port":5021, "name":"beta 2"}
-    ]
-    ,"Web":[
-         {"host":"127.0.0.1", "port":8000}
     ]
 }

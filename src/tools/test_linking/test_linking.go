@@ -41,7 +41,7 @@ func AllLocalAddr() (addrs chan net.Addr) {
 
 func test() {
 
-	conn, err := TCPDial("127.0.0.1:3000")
+	conn, err := TCPDial("127.0.0.1:3005")
 	if err != nil {
 		return
 	}

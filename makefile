@@ -76,7 +76,7 @@ get: get_github.com_go-sql-driver_mysql\
      get_github.com_jinzhu_gorm\
      get_github.com_kortem_lingo\
      get_github.com_lib_pq\
-     get_github.com_codegangsta_martini\
+     get_github.com_go-martini_martini\
      get_github.com_martini-contrib_render\
      get_github.com_wzshiming_ffmt\
      get_code.google.com_p_go.net_websocket

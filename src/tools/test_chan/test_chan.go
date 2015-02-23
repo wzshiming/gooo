@@ -27,17 +27,17 @@ func (h *test) Join(c *gooo.Connect) {
 	log.Printf("%v %v Join\n", c.ToUint(), c.Conn.RemoteAddr())
 	var b []byte
 
-	cc := fmt.Sprintf("hallo%d", h.index)
+	cc := fmt.Sprintf("hello%d", h.index)
 
 	b = msf.ClientRequest("Auth.Auth.Register", protocol.RegisterRequest{
 		Username: cc,
-		Password: "aaasssss",
+		Password: "123456",
 	})
 	c.Write(b)
 
 	b = msf.ClientRequest("Auth.Auth.LogIn", protocol.LogInRequest{
 		Username: cc,
-		Password: "aaasssss",
+		Password: "123456",
 	})
 	c.Write(b)
 

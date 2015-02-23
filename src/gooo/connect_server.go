@@ -31,10 +31,14 @@ func (self *Server) StartTCP(port string) (err error) {
 	return self.start("tcp", port)
 }
 
-func (self *Server) StartWebsocket(port string) (err error) {
-	return http.ListenAndServe(port, websocket.Handler(func(conn *websocket.Conn) {
+func (self *Server) WebsocketHandler() websocket.Handler {
+	return websocket.Handler(func(conn *websocket.Conn) {
 		self.Listen(conn)
-	}))
+	})
+}
+
+func (self *Server) StartWebsocket(port string) (err error) {
+	return http.ListenAndServe(port, self.WebsocketHandler())
 }
 
 func (self *Server) start(name string, port string) (err error) {

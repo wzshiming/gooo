@@ -32,7 +32,7 @@ func (r *Auth) Register(args gooo.RpcRequest, reply *gooo.RpcResponse) error {
 	}
 	gooo.Decode(args.Session.Data, &d)
 	Trans := I18n.TranslationsForLocale(d.Language)
-	if len(p.Password) <= 6 {
+	if len(p.Password) < 6 {
 		return errors.New(Trans.Value("auth.pwdshort"))
 	}
 
@@ -41,7 +41,7 @@ func (r *Auth) Register(args gooo.RpcRequest, reply *gooo.RpcResponse) error {
 		return errors.New(Trans.Value("auth.userexists"))
 	}
 
-	if err := db.Create(protocol.User{
+	if err := db.Create(&protocol.User{
 		Username: p.Username,
 		Password: p.Password,
 	}).Error; err != nil {
@@ -79,12 +79,17 @@ func (r *Auth) LogIn(args gooo.RpcRequest, reply *gooo.RpcResponse) error {
 		return err
 	}
 
+	e, _ := gooo.Encode(map[string]string{
+		"exec": Temp.Get("passauth", nil),
+	})
+
 	*reply = gooo.RpcResponse{
 		Coverage: rr.Data,
 		Data: &map[string]interface{}{
 			"userId": ouser.Id,
 			"flag":   d.Flag | gooo.FlagLogin,
 		},
+		Response: e,
 	}
 	return nil
 }

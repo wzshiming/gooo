@@ -26,7 +26,8 @@ func (r *Status) Init(args gooo.InitRequest, reply *int) (err error) {
 						"Auth",
 						"Chan",
 					)
-					r.CilentHandeln.Start()
+					ser := gooo.NewServer(r.CilentHandeln, route.NewIORange(1024))
+					Run(r.Conf, ser.WebsocketHandler().ServeHTTP)
 				}
 				if r.ServiceConnect == nil {
 					r.ServiceConnect = route.NewConnRpc(r.CilentHandeln)

@@ -12,18 +12,22 @@ type Session struct {
 	LastPacketTime time.Time `json:"l"`
 	Dirtycount     uint      `json:"i"`
 	Uniq           Unique    `json:"u"`
+	ConnType       string    `json:"t"`
 	conn           *Connect
 }
 
 func NewSession(conn *Connect) *Session {
-	return &Session{
+	s := Session{
 		Data:           []byte("{}"),
 		ConnectTime:    time.Now(),
 		LastPacketTime: time.Now(),
 		Dirtycount:     0,
+		ConnType:       conn.Type(),
 		conn:           conn,
 		Uniq:           NewUnique(Id, conn.ToUint64()),
 	}
+
+	return &s
 }
 
 func (s *Session) Conn() *Connect {

@@ -7,8 +7,8 @@ import (
 
 type User struct {
 	Id        uint64
-	Username  string `sql:"type:varchar(100);not null;"`
-	Password  string `sql:"type:varchar(100);not null;"`
+	Username  string `sql:"type:varchar(64);not null;"`
+	Password  string `sql:"type:varchar(64);not null;"`
 	Email     Email
 	CreatedAt time.Time
 	UpdatedAt time.Time
@@ -26,6 +26,6 @@ func (s *User) DropTable(db *gorm.DB) {
 type Email struct {
 	Id         uint64
 	UserId     uint64
-	Email      string `sql:"type:varchar(100);"` // Set field's type
+	Email      string `sql:"type:varchar(64);"` // Set field's type
 	Subscribed bool
 }

@@ -1,10 +1,13 @@
 package main
 
 import (
+	"branch/rendertext"
 	i18n "github.com/kortem/lingo"
 	"gooo"
+	"gooo/js"
 )
 
+var Temp = rendertext.Compile("../web/view/js", js.FuncMaps, ".js")
 var I18n = i18n.New("zh_CN", "i18n")
 
 type Status struct {

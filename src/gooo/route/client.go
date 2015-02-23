@@ -6,7 +6,7 @@ import (
 	"log"
 )
 
-type Remap map[string][3]byte
+type Remap map[string]uint32
 
 func NewRemap() *Remap {
 	r := make(Remap)
@@ -20,11 +20,12 @@ func NewRemapFrom(path string) *Remap {
 }
 
 func (s *Remap) Get(name string) [3]byte {
-	return (*s)[name]
+	t := (*s)[name]
+	return [3]byte{byte(t), byte(t >> 8), byte(t >> 16)}
 }
 
 func (s *Remap) Set(name string, v [3]byte) {
-	(*s)[name] = v
+	(*s)[name] = (uint32(v[2]) << 16) | (uint32(v[1]) << 8) | uint32(v[0])
 }
 
 var lo byte = 0

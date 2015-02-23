@@ -1,6 +1,7 @@
 package gooo
 
 import (
+	"code.google.com/p/go.net/websocket"
 	"net"
 	"unsafe"
 )
@@ -34,6 +35,31 @@ func (self *Connect) ToUint64() uint64 {
 	return (uint64)((uintptr)(unsafe.Pointer(self)))
 }
 
+func (self *Connect) RemoteAddr() string {
+	if b := self.Websocket(); b != nil {
+		return b.Request().RemoteAddr
+	}
+	return self.Conn.RemoteAddr().String()
+}
+
+func (self *Connect) LocalAddr() string {
+	return self.Conn.LocalAddr().String()
+}
+
+func (self *Connect) Type() string {
+	if _, ok := self.Conn.(*websocket.Conn); ok {
+		return "websocket"
+	}
+	return "tcp"
+}
+
+func (self *Connect) Websocket() *websocket.Conn {
+	if t, ok := self.Conn.(*websocket.Conn); ok {
+		return t
+	}
+	return nil
+}
+
 func (self *Connect) Write(message []byte) {
 	err := self.ior.Writer(self.Conn, message)
 	if err != nil {
@@ -60,7 +86,7 @@ func (self *Connect) listen() {
 	}
 }
 
-func (self *Connect) Close() {
+func (self *Connect) Close() error {
 	self.Bc.Exit(self)
-	self.Conn.Close()
+	return self.Conn.Close()
 }

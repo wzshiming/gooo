@@ -15,7 +15,9 @@ type MethodServer struct {
 }
 
 func NewMethodServer(name string, conf *gooo.Configs) *MethodServer {
-
+	if name == "" {
+		return &MethodServer{}
+	}
 	c := gooo.NewCallServer(name, conf)
 
 	s := MethodServer{
@@ -33,7 +35,9 @@ func NewMethodServer(name string, conf *gooo.Configs) *MethodServer {
 		}
 		s.Methods[i] = make([]gooo.MethodsResponse, len(mr1.Method))
 		for k1, v1 := range mr1.Method {
-
+			if v1 == "" {
+				continue
+			}
 			err := c.CallBy(i, fmt.Sprintf("%s.Method", v1), 0, &s.Methods[i][k1])
 			if err != nil {
 				log.Fatalln(err, name)
@@ -41,6 +45,10 @@ func NewMethodServer(name string, conf *gooo.Configs) *MethodServer {
 			s.Methods[i][k1].Allow |= mr1.Allow
 			s.Methods[i][k1].Unallow |= mr1.Unallow
 			for k2, v2 := range s.Methods[i][k1].Method {
+				if v2 == "" {
+					s.Methods[i][k1].Method[k2] = ""
+					continue
+				}
 				s.Methods[i][k1].Method[k2] = fmt.Sprintf("%s.%s", v1, v2)
 			}
 		}
@@ -83,7 +91,7 @@ func (s *MethodServer) Type() string {
 type MethodServers []MethodServer
 
 func NewMethodServers(conf *gooo.Configs, names ...string) *MethodServers {
-	s := make(MethodServers, len(names))
+	s := make(MethodServers, len(names)+1)
 	for k, v := range names {
 		s[k] = *NewMethodServer(v, conf)
 	}

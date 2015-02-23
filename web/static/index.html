@@ -5,13 +5,15 @@
 		<meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
 		<title>three.js css3d - periodic table</title>
 		<link rel="stylesheet" type="text/css" href="css/container.css" />
+		<link rel="stylesheet" type="text/css" href="css/bootstrap.min.css" />
+		<link rel="stylesheet" type="text/css" href="css/darkstrap.min.css" />
 	</head>
 	<body>
         <script src="js/jquery.js"></script>
 		<script src="js/three.min.js"></script>
 		<script src="js/libs/tween.min.js"></script>
 		<script src="js/controls/TrackballControls.js"></script>
-		<script src="js/renderers/CSS3DRenderer.js"></script>
+		<script src="js/renderers/CSS3DDoubleRenderer.js"></script>
         <script src="js/websocket.js"></script>
 
 		<div id="container"></div>
@@ -26,13 +28,14 @@
         <script>
             
             $('#test').click(function(){
-                ws.sendMsg(2,2,2,{name:"hello"})
+                ws.sendMsg(1,0,1,{n:"hallo1",p:"aaasssss"})
                 return false;
             });
             
           
         </script>
         <script src="js/init.js"></script>
+		<script src="js/login.js"></script>
         
 	</body>
 </html>
