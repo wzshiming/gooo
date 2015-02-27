@@ -3,7 +3,7 @@ package protocol
 import ()
 
 type UseChanRequest struct {
-	Use int `json:"use"`
+	Use int `json:"u"`
 }
 
 type UseChanResponse int

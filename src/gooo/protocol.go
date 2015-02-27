@@ -7,7 +7,6 @@ import (
 type RpcRequest struct {
 	Request []byte   `json:"r"`
 	Session *Session `json:"s"`
-	Cookies *Cookies `json:"c"`
 }
 
 type RpcResponse struct {

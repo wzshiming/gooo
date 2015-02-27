@@ -1,6 +1,7 @@
 package route
 
 import (
+	//"encoding/base64"
 	"fmt"
 	"gooo"
 	"gooo/protocol"
@@ -29,15 +30,12 @@ func NewHandel(conf *gooo.Configs, size uint64, names ...string) *Handel {
 	return &h
 }
 
-func (h *Handel) Start() {
+func (h *Handel) Start(ior gooo.IORanges) {
 	port := gooo.GetPort(h.Conf.Self().ClientPort)
 	gooo.EchoPublicPortInfo(gooo.Name, port)
-	ser := gooo.NewServer(h, NewIORange(1024))
-	if h.Conf.Self().Name == "websocket" {
-		go ser.StartWebsocket(port)
-	} else {
-		go ser.StartTCP(port)
-	}
+	ser := gooo.NewServer(h, ior)
+	go ser.StartTCP(port)
+
 }
 
 func (h *Handel) Recover(c *gooo.Connect, err error) {
@@ -61,30 +59,25 @@ func (h *Handel) Mess(c *gooo.Connect, msg []byte) {
 	s := h.Session.Get(id)
 	s.Lock()
 	defer s.Unlock()
-	//log.Printf("%v msg  %v\n", c.RemoteAddr(), msg)
-
-	var cook *gooo.Cookies
-	if s.ConnType == "websocket" {
-		cook = gooo.NewCookies(c.Websocket().Request().Cookies())
-	}
+	//log.Printf("%v msg  %v\n", c.RemoteAddr(), string(msg))
 
 	var reply gooo.RpcResponse
 
 	err := h.Server.Call(msg[:4], gooo.RpcRequest{
 		Request: msg[4:],
 		Session: s,
-		Cookies: cook,
 	}, &reply)
 
+	var ret []byte
 	if err != nil {
-		c.Write(append(msg[:4], ErrorInfo(err.Error())...))
+		ret = ErrorInfo(err.Error())
 	} else {
 		if reply.Error != "" {
-			c.Write(append(msg[:4], ErrorInfo(reply.Error)...))
+			ret = ErrorInfo(reply.Error)
 		} else if len(reply.Response) != 0 {
-			c.Write(append(msg[:4], reply.Response...))
+			ret = reply.Response
 		} else {
-			c.Write(append(msg[:4], OkInfo()...))
+			ret = OkInfo()
 		}
 		if reply.Coverage != nil {
 			s.Data = reply.Coverage
@@ -103,6 +96,8 @@ func (h *Handel) Mess(c *gooo.Connect, msg []byte) {
 			}
 		}
 	}
+
+	c.Write(append(msg[:4], ret[:]...))
 	return
 }
 

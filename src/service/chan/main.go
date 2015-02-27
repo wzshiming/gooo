@@ -1,8 +1,11 @@
 package main
 
 import (
+	i18n "github.com/kortem/lingo"
 	"gooo"
 )
+
+var I18n = i18n.New("zh_CN", "i18n")
 
 type Status struct {
 	gooo.Methods
@@ -35,6 +38,7 @@ func (r *Status) Init(args gooo.InitRequest, reply *int) (err error) {
 			r.ServiceUse = NewUse(r)
 			r.Hand.Register(r.ServiceUse)
 		}
+
 	}
 	return nil
 }

@@ -79,17 +79,12 @@ func (r *Auth) LogIn(args gooo.RpcRequest, reply *gooo.RpcResponse) error {
 		return err
 	}
 
-	e, _ := gooo.Encode(map[string]string{
-		"exec": Temp.Get("passauth", nil),
-	})
-
 	*reply = gooo.RpcResponse{
 		Coverage: rr.Data,
 		Data: &map[string]interface{}{
 			"userId": ouser.Id,
 			"flag":   d.Flag | gooo.FlagLogin,
 		},
-		Response: e,
 	}
 	return nil
 }

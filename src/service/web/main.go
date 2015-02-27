@@ -1,10 +1,16 @@
 package main
 
 import (
+	"branch/rendertext"
+	i18n "github.com/kortem/lingo"
 	"gooo"
+	"gooo/helper"
 	"gooo/route"
 	"time"
 )
+
+var Temp = rendertext.Compile("../web/view/js", helper.FuncMapsText, ".js")
+var I18n = i18n.New("zh_CN", "i18n")
 
 type Status struct {
 	gooo.Status
@@ -26,8 +32,8 @@ func (r *Status) Init(args gooo.InitRequest, reply *int) (err error) {
 						"Auth",
 						"Chan",
 					)
-					ser := gooo.NewServer(r.CilentHandeln, route.NewIORange(1024))
-					Run(r.Conf, ser.WebsocketHandler().ServeHTTP)
+					ser := gooo.NewServer(r.CilentHandeln, NewIOFF(255*255))
+					Run(r.Conf, ser)
 				}
 				if r.ServiceConnect == nil {
 					r.ServiceConnect = route.NewConnRpc(r.CilentHandeln)

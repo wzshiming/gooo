@@ -1,16 +1,13 @@
 //var ws = new WebSocket("ws://127.0.0.1:3006/");
-var ws = new WebSocket("ws://127.0.0.1:3006/conn/");
+var ws = new WebSocket("ws://127.0.0.1:3006/conn");
 ws.onopen = function(e){
+	console.log("onopen");
 };
 ws.onmessage = function(e){
     d = e.data
-	msg = JSON.parse(d.slice(6, d.length))
-	if((typeof msg.exec == "string") && msg.exec != ""){
-		console.log(d);
-		Eval(msg.exec)
-		delete msg.exec 
-	}
-    this.event( d.charCodeAt(2), d.charCodeAt(3), d.charCodeAt(4), d.charCodeAt(5), msg )
+	msg = JSON.parse(d.slice(4, d.length))
+
+    this.event( d.charCodeAt(0), d.charCodeAt(1), d.charCodeAt(2), d.charCodeAt(3), msg )
 };
 ws.onclose = function(e){
     console.log("onclose");
@@ -24,13 +21,19 @@ ws.sendMsg = function(c1,c2,c3,msg) {
         if(typeof msg.exec != "string") {
             msg = JSON.stringify(msg)
         }
-        s = msg.length + 4;
         this.i += 1;
-        this.send(String.fromCharCode((s & 0xFF00) >> 8, s & 0xFF, this.i & 0xFF, c1 & 0xFF, c2 & 0xFF, c3 & 0xFF) + msg);  
+        this.send(String.fromCharCode(this.i & 0xFF, c1 & 0xFF, c2 & 0xFF, c3 & 0xFF) + msg);  
     } 
 }
 
 ws.event = function(i, c1, c2, c3, msg){
+	var n = c1 + "," + c2 + "," +c3
+	var f = FuncsInit[n]
+	if((typeof msg.e == "string") && msg.e != ""){
+		CurrentFunc();
+	}else if(typeof f == "function"){
+		f(msg)
+	}
     console.log(i,msg);
 };
 

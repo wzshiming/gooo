@@ -22,7 +22,6 @@ func NewSession(conn *Connect) *Session {
 		ConnectTime:    time.Now(),
 		LastPacketTime: time.Now(),
 		Dirtycount:     0,
-		ConnType:       conn.Type(),
 		conn:           conn,
 		Uniq:           NewUnique(Id, conn.ToUint64()),
 	}

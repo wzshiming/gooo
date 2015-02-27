@@ -63,9 +63,19 @@ func (c *ServersConfig) Size(name string) int {
 	return len((*c)[name])
 }
 
+func (c *ServersConfig) Get(name string) []ServerConfig {
+	defer Recover()
+	return (*c)[name]
+}
+
 func (c *ServersConfig) Self() *ServerConfig {
 	defer Recover()
 	return &((*c)[Type][Id])
+}
+
+func (c *ServersConfig) SelfType() []ServerConfig {
+	defer Recover()
+	return (*c)[Type]
 }
 
 func (c *ServersConfig) Start() {

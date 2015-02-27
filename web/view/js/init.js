@@ -251,43 +251,44 @@ function init() {
 	}
 	
 	fun()
-	window.setInterval(fun,9000)
+	var timer =  window.setInterval(fun,9000)
+	//clearInterval(timer)
 
 	window.addEventListener( 'resize', onWindowResize, false );
 
 }
 
+function Change(object, target, duration) {
+	
+	new TWEEN.Tween( object )
+		.to( target, duration )
+		.easing( TWEEN.Easing.Exponential.InOut )
+		.start();
+		
+}
 
 function Move( object, target, duration ) {
 
-	//TWEEN.removeAll();
+	Change(object.position,{ x: target.position.x, y: target.position.y, z: target.position.z },(Math.random() + 0.5 ) *  duration)
 	
-	new TWEEN.Tween( object.position )
-		.to( { x: target.position.x, y: target.position.y, z: target.position.z }, (Math.random() + 0.5 ) *  duration )
-		.easing( TWEEN.Easing.Exponential.InOut )
-		.start();
-
-	new TWEEN.Tween( object.rotation )
-		.to( { x: target.rotation.x, y: target.rotation.y, z: target.rotation.z }, (Math.random() + 0.5 )  *  duration )
-		.easing( TWEEN.Easing.Exponential.InOut )
-		.start();
-
-//	new TWEEN.Tween( this )
-//		.to( {}, duration * 1.5 )
-//		.onUpdate( render )
-//		.start();
+	Change(object.rotation,{ x: target.rotation.x, y: target.rotation.y, z: target.rotation.z },(Math.random() + 0.5 ) *  duration)
 
 }
 
 function Moves( objects, targets, duration ) {
 
-	TWEEN.removeAll();
+	//TWEEN.removeAll();
 	
 	for ( var i = 0; i < objects.length; i ++ ) {
 
 		Move(objects[ i ],targets[ i ],duration)
 
 	}
+	
+//	new TWEEN.Tween( this )
+//		.to( {}, duration * 1.5 )
+//		.onUpdate( render )
+//		.start();
 
 }
 
@@ -328,4 +329,101 @@ function Pos(x,y,z) {
 	target.position.z = z
 	return target
 }
+
+function Rand(){
+	return Math.random() * 4000 - 2000
+}
+
+function RandPos() {
+	var target = new THREE.Object3D();
+	target.position.x = Rand()
+	target.position.y = Rand()
+	target.position.z = Rand()
+	return target
+}
+
+
+function NewElement(pos,data) {
+
+	var element = document.createElement( 'div' );
+	if(typeof data == "string"){
+		element.innerHTML = data;
+	}else if(typeof data.documentElement == "object"){ 
+		element.innerHTML = data.documentElement.innerHTML;
+	}else {
+		console.log( typeof data.documentElement )
+		element = data;
+	}
+	element.addEventListener( 'click', function ( event ) {
+		event.target.focus();
+	})
+	var object = new THREE.CSS3DObject(element);
+	
+	object.position.x = pos.position.x;
+	object.position.y = pos.position.y;
+	object.position.z = pos.position.z;
+	object.rotation.x = pos.rotation.x;
+	object.rotation.y = pos.rotation.y;
+	object.rotation.z = pos.rotation.z;
+	scene.add( object );
+	return object;
+}
+
+var Funcs = {};
+
+var FuncsEvent = function(path,funcname,eventfunc){
+	CurrentFunc = function(){
+		$.get(path,function(data,status){
+			var obj = NewElement(Pos(Rand(),Rand(),-10000),data);
+			Change(obj.position,{x:0,y:0,z:2600},2000);
+			Funcs[funcname] = function(u){
+				eventfunc(u)
+				Change(obj.position,{x:0,y:0,z:4000},2000);
+				window.setTimeout(function(){
+					scene.remove(obj);
+				},2000);
+				return false;
+			};
+		});
+	}
+	CurrentFunc();
+}
+
+var CurrentFunc = function(){}
+
+
+var FuncsInit = {};
+FuncsInit['{{ key "Chan.Info.Rooms" }}'] = function(d){
+	for(var i = 0; i != d.length; i++){
+		var element = document.createElement( 'div' );
+		element.className = 'control-group';
+		//element.style.backgroundColor = 'rgba(0,127,127,0.5)';
+		var controls = document.createElement( 'div' );
+		controls.className = 'controls';
+		
+		element.appendChild( controls );
+	
+		var symbol = document.createElement( 'button' );
+		symbol.className = 'btn btn-lg btn-primary btn-block';
+		symbol.innerText = d[i].r + ". " + d[i].n;
+		//symbol.onclick = "Funcs.chan( " + i.i + " )";
+		controls.appendChild( symbol );
+		var obj = NewElement(RandPos(),element)
+		Change(obj.position,{x:(i%4)*80-150,y:Math.floor(i/4)*-80+50,z:2200},2000);
+	}
+}
+
+FuncsInit['{{ key "Auth.Auth.LogIn" }}'] = function(d){
+	FuncsEvent("/chan.html","chan",function(u){
+		ws.sendMsg({{ key "Chan.Use.Chan" }},{u:u});
+		ws.sendMsg({{ key "Chan.Info.Rooms" }},{});
+	})	
+}
+FuncsInit["login"] = function(d){
+	FuncsEvent("/login.html","login",function(){
+		var b = document.formlogin;
+		ws.sendMsg({{ key "Auth.Auth.LogIn" }},{n:b.username.value,p:b.password.value});
+	})	
+}
+FuncsInit['login']()
 

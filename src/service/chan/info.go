@@ -14,6 +14,7 @@ type Info struct {
 	name          string
 	nameResponse  []byte
 	roomsResponse []byte
+	tmp           []gooo.GameRoom
 }
 
 func NewInfo(m *Status, rooms *gooo.GameRooms) *Info {
@@ -34,7 +35,8 @@ func NewInfo(m *Status, rooms *gooo.GameRooms) *Info {
 	})
 	go func() {
 		for {
-			r.roomsResponse, _ = gooo.Encode(r.rooms.List())
+			r.tmp = r.rooms.List()
+			r.roomsResponse, _ = gooo.Encode(r.tmp)
 			//fmt.Println(string(r.roomsResponse))
 			time.Sleep(time.Second)
 		}

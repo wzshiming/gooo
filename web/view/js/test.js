@@ -1,3 +1,0 @@
-(function() {
-    transform( targets.helix, {{ . }} );
-}());
