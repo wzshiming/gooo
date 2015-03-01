@@ -1,8 +1,6 @@
 package main
 
 import (
-	//"code.google.com/p/go.net/websocket"
-	//"github.com\googollee\go-socket.io"
 	"branch/rendertext"
 	"github.com/go-martini/martini"
 	"github.com/gorilla/websocket"

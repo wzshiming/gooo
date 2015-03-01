@@ -1,4 +1,4 @@
-# /usr/bin/env make
+#!/usr/bin/env make -f
 
 BUILD_DIR     := ./bin
 CFLAGS        := 
@@ -15,7 +15,7 @@ ECHO_DATE     := echo `date +%R:%S`
 
 
 
-.PHONY:  all build deploy test run clean_pkg clean number_build number_build_record
+.PHONY:  all build makefile deploy test run clean_pkg clean number_build number_build_record
 
 default: build run
 
