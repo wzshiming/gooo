@@ -1,0 +1,43 @@
+{
+    "agents": [
+        {
+            "host": "127.0.0.1",
+            "port": 4000,
+            "clientport": 3005,
+            "name": "tcp"
+        },
+        {
+            "host": "127.0.0.1",
+            "port": 4001,
+            "clientport": 3006,
+            "name": "websocket",
+            "bin": "web"
+        }
+    ],
+    "apps": {
+        "Chan": [
+            {
+                "host": "127.0.0.1",
+                "port": 5020,
+                "name": "channel_1"
+            },
+            {
+                "host": "127.0.0.1",
+                "port": 5021,
+                "name": "channel_2"
+            }
+        ],
+        "Auth": [
+            {
+                "host": "127.0.0.1",
+                "port": 5030
+            }
+        ]
+    },
+    "dbs": {
+        "Users": {
+            "dialect": "sqlite3",
+            "source": "db/user.db"
+        }
+    }
+}
