@@ -48,8 +48,6 @@ func (i *IOFF) Reader(r io.Reader) (b []byte, err error) {
 	i.rbuf.Lock()
 	defer i.rbuf.Unlock()
 	j, err = r.Read(i.rbuf.Buf)
-	//log.Println(j)
-	//log.Println(cap(t), t)
 	return i.rbuf.Buf[:j], err
 }
 

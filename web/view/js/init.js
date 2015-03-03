@@ -336,12 +336,26 @@ function Rand(){
 
 function RandPos() {
 	var target = new THREE.Object3D();
-	target.position.x = Rand()
-	target.position.y = Rand()
-	target.position.z = Rand()
-	return target
+	target.position.x = Rand();
+	target.position.y = Rand();
+	target.position.z = -4000;
+	return target;
 }
 
+var ObjElements = [];
+
+var RemoveElements = function(){
+	var t = []
+	for(var i = 0; i != ObjElements.length; i++){
+		t.push(ObjElements[i]);
+		Change(ObjElements[i].position,{z:4000},3000);
+	}
+	window.setTimeout(function(){
+		while(t.length != 0){
+			scene.remove(t.pop())
+		}
+	},1000)
+}
 
 function NewElement(pos,data) {
 
@@ -365,23 +379,25 @@ function NewElement(pos,data) {
 	object.rotation.x = pos.rotation.x;
 	object.rotation.y = pos.rotation.y;
 	object.rotation.z = pos.rotation.z;
+	ObjElements.push( object );
 	scene.add( object );
 	return object;
 }
 
 var Funcs = {};
 
-var FuncsEvent = function(path,funcname,eventfunc){
+var FuncsHtmlEvent = function(path,funcname,eventfunc){
 	CurrentFunc = function(){
 		$.get(path,function(data,status){
-			var obj = NewElement(Pos(Rand(),Rand(),-10000),data);
+			var obj = NewElement(Pos(Rand(),Rand(),-4000),data);
 			Change(obj.position,{x:0,y:0,z:2600},2000);
 			Funcs[funcname] = function(u){
+				RemoveElements()
 				eventfunc(u)
-				Change(obj.position,{x:0,y:0,z:4000},2000);
-				window.setTimeout(function(){
-					scene.remove(obj);
-				},2000);
+				//Change(obj.position,{x:0,y:0,z:4000},2000);
+				//window.setTimeout(function(){
+				//	scene.remove(obj);
+				//},2000);
 				return false;
 			};
 		});
@@ -392,17 +408,44 @@ var FuncsEvent = function(path,funcname,eventfunc){
 var CurrentFunc = function(){}
 
 
-var FuncsInit = {};
-FuncsInit['{{ key "Chan.Info.Rooms" }}'] = function(d){
+var Callback  = {};
+Callback['{{ key "Chan.Info.Rooms" }}'] = function(d){
+	RoomsBox(d);
+}
+
+Callback['{{ key "Auth.Auth.LogIn" }}'] = function(d){
+	UseChanBox();
+}
+
+Callback['{{ key "Auth.PassAuth.LogOut" }}'] = function(d){
+	LogInBox();
+}
+
+var RoomsBox = function(d){
+	RemoveElements()
+	var element = document.createElement( 'div' );
+	element.className = 'control-group';
+	//element.style.backgroundColor = 'rgba(0,127,127,0.5)';
+	var controls = document.createElement( 'div' );
+	controls.className = 'controls';	
+	element.appendChild( controls );
+	var symbol = document.createElement( 'button' );
+	symbol.className = 'btn btn-lg btn-primary btn-block';
+	symbol.innerText = "back";
+	symbol.onclick  = function(){
+		RemoveElements();
+		UseChanBox();
+	};
+	controls.appendChild( symbol );
+	var obj = NewElement(RandPos(),element)
+	Change(obj.position,{x:-150,y:160,z:2200},2000);
 	for(var i = 0; i != d.length; i++){
 		var element = document.createElement( 'div' );
 		element.className = 'control-group';
 		//element.style.backgroundColor = 'rgba(0,127,127,0.5)';
 		var controls = document.createElement( 'div' );
 		controls.className = 'controls';
-		
 		element.appendChild( controls );
-	
 		var symbol = document.createElement( 'button' );
 		symbol.className = 'btn btn-lg btn-primary btn-block';
 		symbol.innerText = d[i].r + ". " + d[i].n;
@@ -413,17 +456,42 @@ FuncsInit['{{ key "Chan.Info.Rooms" }}'] = function(d){
 	}
 }
 
-FuncsInit['{{ key "Auth.Auth.LogIn" }}'] = function(d){
-	FuncsEvent("/chan.html","chan",function(u){
-		ws.sendMsg({{ key "Chan.Use.Chan" }},{u:u});
-		ws.sendMsg({{ key "Chan.Info.Rooms" }},{});
+var UseChanBox = function(){
+	FuncsHtmlEvent("/chan.html","chan",function(u){
+		if(u < 0 ){
+			ws.sendMsg({{ key "Auth.PassAuth.LogOut" }},{});
+		} else {
+			ws.sendMsg({{ key "Chan.Use.Chan" }},{u:u});
+			ws.sendMsg({{ key "Chan.Info.Rooms" }},{});
+		}
+
 	})	
 }
-FuncsInit["login"] = function(d){
-	FuncsEvent("/login.html","login",function(){
+
+var LogInBox = function(){
+	FuncsHtmlEvent("/login.html","login",function(){
 		var b = document.formlogin;
-		ws.sendMsg({{ key "Auth.Auth.LogIn" }},{n:b.username.value,p:b.password.value});
+		ws.sendMsg({{ key "Auth.Auth.LogIn" }},{u:b.username.value,p:b.password.value});
 	})	
 }
-FuncsInit['login']()
+
+var MsgErr = function(msg){
+	Messenger().post({
+	    message: msg,
+	    type: "error",
+		showCloseButton: true,
+		hideAfter: 10,
+		hideOnNavigate: true
+	})
+}
+
+var MsgInfo = function(msg){
+	Messenger().post({
+	    message: msg,
+	    type: "info",
+		showCloseButton: true,
+		hideAfter: 10,
+		hideOnNavigate: true
+	})
+}
 

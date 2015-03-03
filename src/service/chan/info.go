@@ -37,6 +37,7 @@ func NewInfo(m *Status, rooms *gooo.GameRooms) *Info {
 		for {
 			r.tmp = r.rooms.List()
 			r.roomsResponse, _ = gooo.Encode(r.tmp)
+
 			//fmt.Println(string(r.roomsResponse))
 			time.Sleep(time.Second)
 		}

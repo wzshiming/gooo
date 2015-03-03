@@ -23,7 +23,7 @@ func NewUse(m *Status) *Use {
 	}
 	r.Methods = *gooo.NewMethods(
 		gooo.FlagNone,
-		gooo.FlagChan|gooo.FlagRoom|gooo.FlagGame,
+		gooo.FlagRoom|gooo.FlagGame,
 		"Chan",
 	)
 	return &r
@@ -33,20 +33,20 @@ func (r *Use) Chan(args gooo.RpcRequest, reply *gooo.RpcResponse) error {
 	var p protocol.UseChanRequest
 	gooo.Decode(args.Request, &p)
 
-	if r.sizechan < p.Use {
+	if r.sizechan > p.Use && p.Use < 0 {
 		return errors.New("Out of range")
 	}
 
 	var d struct {
 		Flag     uint32 `json:"flag"`
 		Language string
-		UseChan  uint32 `json:"useChan"`
+		//UseChan  uint32 `json:"useChan"`
 	}
 	gooo.Decode(args.Session.Data, &d)
 
-	if d.UseChan != 0 {
-		return errors.New("Have chosen")
-	}
+	//if d.UseChan != 0 {
+	//	return errors.New("Have chosen")
+	//}
 
 	*reply = gooo.RpcResponse{
 		Data: &map[string]interface{}{

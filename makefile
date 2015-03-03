@@ -37,8 +37,10 @@ build_%:
 	 	$(ECHO) $(patsubst build_%,%,$@)/$$i;\
 	 done
 
-test: test_gooo test_service test_tools
+test: test_else test_gooo test_service test_tools
 
+test_else:
+	
 test_gooo:
 	@$(ECHO_DATE) Testing gooo...
 	@export GOPATH=`pwd` && $(GO) test gooo
@@ -75,11 +77,11 @@ get: get_github.com_go-sql-driver_mysql\
 	 get_github.com_mattn_go-sqlite3\
 	 get_github.com_jinzhu_gorm\
 	 get_github.com_kortem_lingo\
-	 get_github.com_lib_pq\
 	 get_github.com_go-martini_martini\
 	 get_github.com_martini-contrib_render\
 	 get_github.com_gorilla_websocket\
-	 get_github.com_wzshiming_ffmt
+	 get_github.com_wzshiming_ffmt\
+	 get_github.com_mitchellh_colorstring
 	
 get_%:
 	@export GOPATH=`pwd` &&\

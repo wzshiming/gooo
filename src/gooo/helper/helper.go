@@ -24,6 +24,9 @@ var helpfunc = map[string]interface{}{
 	"servers": func() []gooo.ServerConfig {
 		return Conf.Servers().Get("Chan")
 	},
+	"addr": func() string {
+		return gooo.GetIP() + gooo.GetPort(Conf.Self().ClientPort)
+	},
 }
 
 var FuncMapsText = []tt.FuncMap{

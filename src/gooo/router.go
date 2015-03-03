@@ -42,14 +42,28 @@ func (s *CallServer) CallBy(index int, method string, args, reply interface{}) (
 	return s.Client[index].Call(method, args, reply)
 }
 
+func (s *CallServer) CallByUniq(uniq *Unique, method string, args, reply interface{}) (err error) {
+	defer Recover()
+	return s.Client[uniq.Server].Call(method, args, reply)
+}
+
 func (s *CallServer) CallBySession(sess *Session, method string, args, reply interface{}) (err error) {
 	defer Recover()
 	return s.Client[sess.Uniq.Server].Call(method, args, reply)
 }
 
-func (s *CallServer) CallBySessions(sesss []*Session, method string, args, reply interface{}) (err error) {
+func (s *CallServer) CallByUniqs(uniqs []*Unique, method string, args interface{}) (err error) {
+	for _, uniq := range uniqs {
+		var t int
+		s.CallByUniq(uniq, method, args, &t)
+	}
+	return
+}
+
+func (s *CallServer) CallBySessions(sesss []*Session, method string, args interface{}) (err error) {
 	for _, sess := range sesss {
-		s.CallBySession(sess, method, args, reply)
+		var t int
+		s.CallBySession(sess, method, args, &t)
 	}
 	return
 }

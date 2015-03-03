@@ -67,6 +67,11 @@ func (r *Auth) LogIn(args gooo.RpcRequest, reply *gooo.RpcResponse) error {
 	if err := db.Where(&protocol.User{Username: p.Username}).First(&ouser).Error; err != nil {
 		return errors.New(Trans.Value("auth.usernotexists"))
 	}
+
+	if ouser.Username != p.Username {
+		return errors.New(Trans.Value("auth.usernotexists"))
+	}
+
 	if ouser.Password != p.Password {
 		return errors.New(Trans.Value("auth.pwderr"))
 	}

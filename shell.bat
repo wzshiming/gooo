@@ -12,9 +12,11 @@ set path=%path%;d:\lib\Apache2\bin
 set path=%path%;d:\lib\Git\bin
 set path=%path%;d:\lib\go\bin
 set GOROOT=d:\lib\go
+set GOPATH=D:\Projects\go\gooo
 rem set GOOS=linux
 rem set GOARCH=amd64
 rem set GOOS=windows
 rem set GOARCH=amd64
 rem set GOOS=linux
-start powershell -command zsh
+rem start powershell -command zsh
+start mintty -e zsh
