@@ -10,7 +10,7 @@ import (
 )
 
 var (
-	_DEBUG = true
+	DEBUG_ = true
 	err    = color.Color("[red]ERROR ")
 	warn   = color.Color("[magenta]WARN  ")
 	info   = color.Color("[blue]INFO  ")
@@ -50,7 +50,7 @@ func printf(h string, v ...interface{}) {
 }
 
 func DEBUG(v ...interface{}) {
-	if _DEBUG {
+	if DEBUG_ {
 		printf(debu, v...)
 		log.Println(debu, ffmt.Sputs(v...))
 	}

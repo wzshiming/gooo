@@ -8,16 +8,26 @@ import (
 )
 
 type Server struct {
-	rpc.Server
+	server rpc.Server
 	listen net.Listener
 	port   int
+	classs Classs
 }
 
 func NewServer(port int) *Server {
-	return &Server{
-		Server: *rpc.NewServer(),
+	se := Server{
+		server: *rpc.NewServer(),
 		port:   port,
 	}
+	if err := se.server.Register(se.classs); err != nil {
+		rego.ERR(err)
+		return nil
+	}
+	if err := se.server.Register(NewShutdown(se.Stop)); err != nil {
+		rego.ERR(err)
+		return nil
+	}
+	return &se
 }
 
 func (se *Server) Start() (err error) {
@@ -27,9 +37,10 @@ func (se *Server) Start() (err error) {
 		rego.ERR(err)
 		return
 	}
+
 	for {
 		if conn, err := se.listen.Accept(); err == nil {
-			go se.ServeConn(conn)
+			go se.server.ServeConn(conn)
 			//go h.Server.ServeCodec(jsonrpc.NewServerCodec(conn))
 		} else {
 			rego.ERR(err)
@@ -37,6 +48,31 @@ func (se *Server) Start() (err error) {
 		}
 	}
 	rego.NOTICE("Server stop")
+	return nil
+}
+
+func (se *Server) Register(rcvr interface{}) error {
+	err := se.server.Register(rcvr)
+	if err != nil {
+		return err
+	}
+	m := NewMethods(rcvr)
+	if len(m.Methods) != 0 {
+		se.classs = append(se.classs, *m)
+	}
+	return nil
+}
+
+func (se *Server) RegisterName(name string, rcvr interface{}) error {
+	err := se.server.RegisterName(name, rcvr)
+	if err != nil {
+		return err
+	}
+	m := NewMethods(rcvr)
+	m.Name = name
+	if len(m.Methods) != 0 {
+		se.classs = append(se.classs, *m)
+	}
 	return nil
 }
 

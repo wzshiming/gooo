@@ -15,47 +15,26 @@ ECHO_DATE     := echo `date +%R:%S`
 
 
 
-.PHONY:  all build makefile deploy test run clean_pkg clean number_build number_build_record
+.PHONY:  all build makefile test run clean_pkg clean number_build number_build_record
 
 default: build run
 
-all: clean info test build clean_pkg deploy run
+all: clean info test build clean_pkg run
 
-build: number_build build_service build_tools number_build_record deploy
+build: number_build build_ number_build_record 
 
-deploy:
-	@$(ECHO_DATE) Deploying...
-	@$(MKDIR) $(BUILD_DIR) && $(CD) $(BUILD_DIR) && $(MKDIR) conf log i18n db
-	@$(CP) ./conf ./i18n $(BUILD_DIR)
+build_:
+	@$(GO) install -v rego/...
 
-build_%:
-	@$(ECHO_DATE) Building $(patsubst build_%,%,$@) ...
-	@export GOPATH=`pwd` &&\
-	 for i in $(notdir $(wildcard ./src/$(patsubst build_%,%,$@)/*));\
-	 do\
-	 	$(GO) install $(patsubst build_%,%,$@)/$$i;\
-	 	$(ECHO) $(patsubst build_%,%,$@)/$$i;\
-	 done
+test:
+	@$(GO) test rego/...
 
-test: test_else test_gooo test_service test_tools
+test_v:
+	@$(GO) test -v rego/...
 
-test_else:
-	
-test_gooo:
-	@$(ECHO_DATE) Testing gooo...
-	@export GOPATH=`pwd` && $(GO) test gooo
-
-test_%:
-	@$(ECHO_DATE) Testing $(patsubst test_%,%,$@)...
-	@export GOPATH=`pwd` &&\
-	 for i in $(notdir $(wildcard ./src/$(patsubst test_%,%,$@)/*));\
-	 do\
-	 	$(GO) test $(patsubst test_%,%,$@)/$$i;\
-	 done
-
-run: deploy
+run: 
 	@$(ECHO_DATE) Running...
-	@$(CD) $(BUILD_DIR) && ./master
+	@$(CD) $(BUILD_DIR) && ./master || ./shutdown
 
 clean_pkg:
 	@$(ECHO_DATE) Cleaning pkg ...

@@ -1,6 +1,7 @@
 package server
 
 import (
+	"rego"
 	"testing"
 )
 
@@ -16,17 +17,28 @@ func (t *Te) Echo(a int, r *int) error {
 	return nil
 }
 
+func (te *Te) TT(a rego.Request, r *rego.Response) error {
+	return nil
+}
+
 func server(t *testing.T) {
-	s := NewServer(7799)
+	s := NewServer(7800)
 	s.Register(&Te{})
+	s.RegisterName("Hello", &Te{})
 	s.Start()
 }
 
 func client(t *testing.T) {
-	c := NewClient("127.0.0.1:7799")
+	c := NewClient("127.0.0.1:7800")
 	var a int
 	c.Call("Te.Echo", 1000, &a)
 	if a != 1000 {
 		t.Fail()
 	}
+
+	cl, err := c.TakeClasss()
+	if err != nil || len(cl) == 0 {
+		t.Fail()
+	}
+	t.Log(cl)
 }

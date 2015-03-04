@@ -1,4 +1,4 @@
-package conf
+package cfg
 
 import (
 	"rego"
@@ -6,11 +6,11 @@ import (
 )
 
 func Test_read(t *testing.T) {
-	b := NewWholeConfig("./test/server.json")
+	b := NewWholeConfig("../conf/server.json")
 	if b == nil {
 		t.Fail()
 	}
-	c := NewServerConfig("./test/master.json")
+	c := NewServerConfig("../conf/master.json")
 	if c == nil {
 		t.Fail()
 	}
