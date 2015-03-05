@@ -19,7 +19,7 @@ func NewServer(port int) *Server {
 		server: *rpc.NewServer(),
 		port:   port,
 	}
-	if err := se.server.Register(se.classs); err != nil {
+	if err := se.server.Register(&se.classs); err != nil {
 		rego.ERR(err)
 		return nil
 	}
@@ -28,6 +28,10 @@ func NewServer(port int) *Server {
 		return nil
 	}
 	return &se
+}
+
+func (se *Server) Classs() Classs {
+	return se.classs
 }
 
 func (se *Server) Start() (err error) {

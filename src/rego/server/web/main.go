@@ -4,8 +4,11 @@ import (
 	"rego/cfg"
 )
 
-func start() {
+func init() {
 	cfg.TakeConf()
+}
+
+func start() {
 	s := cfg.Self.Server()
 	s.Start()
 }

@@ -18,21 +18,21 @@
     ],
     "apps": [
         {
+            "type": "Auth",
+            "host": "127.0.0.1",
+            "port": 5030
+        },
+        {
             "type": "Chan",
             "host": "127.0.0.1",
             "port": 5020,
             "name": "channel_1"
-        },
-        {
-            "type": "Auth",
-            "host": "127.0.0.1",
-            "port": 5030
         }
     ],
     "dbs": {
         "Users": {
             "dialect": "sqlite3",
-            "source": "db/user.db"
+            "source": "../db/user.db"
         }
     }
 }

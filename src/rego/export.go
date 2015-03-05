@@ -17,7 +17,7 @@ var (
 	notice = color.Color("[cyan]NOTICE")
 	pani   = color.Color("[dark_gray]PANIC ")
 	debu   = color.Color("[yellow]DEBUG ")
-	head   = color.Color(fmt.Sprintf("[light_green]%s ", filepath.Base(os.Args[0])))
+	head   = color.Color(fmt.Sprintf("[light_green]\n%s ", filepath.Base(os.Args[0])))
 )
 
 func init() {

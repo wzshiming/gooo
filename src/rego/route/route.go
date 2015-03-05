@@ -1,13 +1,14 @@
 package route
 
 import (
+	"errors"
 	"rego"
 	"rego/cfg"
 	"rego/server"
 )
 
 type Route struct {
-	maps     CodeMaps
+	maps     *CodeMaps
 	connmaps map[string][]*server.Client
 	conns    []*server.Client
 }
@@ -15,12 +16,16 @@ type Route struct {
 func NewRoute(conf []cfg.ServerConfig) *Route {
 	ro := &Route{
 		connmaps: make(map[string][]*server.Client),
+		maps:     NewCodeMaps(),
 	}
 	for _, v1 := range conf {
 		ro.Register(v1)
-		rego.INFO("hello")
 	}
 	return ro
+}
+
+func (ro *Route) Code() *CodeMaps {
+	return ro.maps
 }
 
 func (ro *Route) Register(c cfg.ServerConfig) {
@@ -35,10 +40,7 @@ func (ro *Route) Register(c cfg.ServerConfig) {
 		if err != nil {
 			return
 		}
-		ro.maps = append(ro.maps, CodeMap{
-			Name:   c.Type,
-			Classs: classs,
-		})
+		ro.maps.Append(c.Type, classs)
 	}
 	ro.connmaps[c.Type] = append(ro.connmaps[c.Type], conn)
 }
@@ -51,11 +53,10 @@ func (ro *Route) CallCode(c1, c2, c3 byte, args rego.Request, reply *rego.Respon
 	return ro.Call(m1, m2, m3, args, reply)
 }
 
-func (ro *Route) Call(m1, m2, m3 string, args rego.Request, reply *rego.Response) error {
+func (ro *Route) Call(m1, m2, m3 string, args rego.Request, reply *rego.Response) (err error) {
 	defer func() {
-		if err := recover(); err != nil {
-			rego.PANIC(err)
-			return
+		if errr := recover(); errr != nil {
+			err = errors.New("Route.Call: index out of range")
 		}
 	}()
 	return ro.connmaps[m1][0].Call(m2+"."+m3, args, reply)

@@ -35,10 +35,9 @@ func (cl *Client) Take(serviceMethod string, reply interface{}) error {
 	return cl.Call(serviceMethod, 0, reply)
 }
 
-func (cl *Client) TakeClasss() (Classs, error) {
-	var c Classs
-	err := cl.Take("Classs.Take", &c)
-	return c, err
+func (cl *Client) TakeClasss() (c Classs, err error) {
+	err = cl.Take("Classs.Take", &c)
+	return
 }
 
 func (cl *Client) ShutdownNow() error {

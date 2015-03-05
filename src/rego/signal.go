@@ -1,20 +1,21 @@
-package main
+package rego
 
 import (
 	"os"
 	"os/signal"
-	"rego"
+
 	"syscall"
 )
 
-func over(funcs func()) {
+func Wait(funcs func()) {
 	for {
 		ch := make(chan os.Signal)
-
 		signal.Notify(ch, syscall.SIGINT, syscall.SIGHUP)
 		<-ch
-		funcs()
-		rego.NOTICE("exit")
+		if funcs != nil {
+			funcs()
+		}
+		NOTICE("exit")
 		os.Exit(1)
 	}
 }

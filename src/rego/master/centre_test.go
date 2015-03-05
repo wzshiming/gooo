@@ -7,5 +7,5 @@ import (
 
 func Test_get(t *testing.T) {
 	go start()
-	cfg.TakeWhole()
+	cfg.TakeConf()
 }

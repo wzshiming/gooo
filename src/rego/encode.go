@@ -36,7 +36,7 @@ func (en *EncodeStream) EnJson(s interface{}) {
 	return
 }
 
-func (en *EncodeStream) DnJson(s interface{}) {
+func (en *EncodeStream) DeJson(s interface{}) {
 	json.Unmarshal(*en, s)
 	return
 }
@@ -50,7 +50,7 @@ func (en *EncodeStream) EnGob(s interface{}) {
 	return
 }
 
-func (en *EncodeStream) DnGob(s interface{}) {
+func (en *EncodeStream) DeGob(s interface{}) {
 	buf := bytes.NewBuffer(*en)
 	dec := gob.NewDecoder(buf)
 	dec.Decode(s)

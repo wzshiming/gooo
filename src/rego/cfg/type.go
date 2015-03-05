@@ -43,7 +43,7 @@ func NewServerConfig(path string) *ServerConfig {
 	en := rego.NewEncodeStream()
 	var conf ServerConfig
 	en.Set(b)
-	en.DnJson(&conf)
+	en.DeJson(&conf)
 	conf.makeId()
 	return &conf
 }
@@ -57,7 +57,7 @@ func NewWholeConfig(path string) *WholeConfig {
 	en := rego.NewEncodeStream()
 	var conf WholeConfig
 	en.Set(b)
-	en.DnJson(&conf)
+	en.DeJson(&conf)
 	for k, _ := range conf.Apps {
 		conf.Apps[k].makeId()
 	}

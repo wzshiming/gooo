@@ -28,10 +28,18 @@ func (se *ServerConfig) makeId() {
 	}
 	se.Id = index
 	ConfForId[index] = se
+
+	if se.Name == "" {
+		se.Name = fmt.Sprintf("%s_%s_%d", se.Type, se.Bin, se.Id)
+	}
 }
 
 func (se *ServerConfig) Addr() string {
 	return fmt.Sprintf("%s:%d", se.Host, se.Port)
+}
+
+func (se *ServerConfig) ClientAddr() string {
+	return fmt.Sprintf("%s:%d", se.Host, se.ClientPort)
 }
 
 func (se *ServerConfig) ExposedAddr() string {

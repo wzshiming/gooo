@@ -6,10 +6,12 @@ import (
 
 func init() {
 	cfg.Whole = cfg.NewWholeConfig(cfg.DirConf + "server.json")
-	cfg.Self = cfg.Master
 }
 
 func main() {
+	defer func() {
+		recover()
+	}()
 	cfg.Whole.Shutdown()
 	cfg.Master.Client().ShutdownNow()
 }

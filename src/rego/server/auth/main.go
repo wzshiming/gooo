@@ -2,14 +2,18 @@ package main
 
 import (
 	"rego/cfg"
+	"rego/server"
 )
 
-func start() {
+var ser *server.Server
+
+func init() {
 	cfg.TakeConf()
-	s := cfg.Self.Server()
-	s.Start()
+	dbconn(cfg.Whole.Dbs["Users"])
+	ser = cfg.Self.Server()
 }
 
 func main() {
-	start()
+	ser.Register(NewAuth())
+	ser.Start()
 }

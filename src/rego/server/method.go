@@ -91,7 +91,7 @@ func isExported(name string) bool {
 
 type Classs []Methods
 
-func (cl Classs) Take(args int, reply *Classs) error {
-	*reply = cl
+func (cl *Classs) Take(args int, reply *Classs) error {
+	*reply = *cl
 	return nil
 }
