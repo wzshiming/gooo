@@ -4,12 +4,14 @@ import (
 	"bufio"
 	"encoding/binary"
 	"net"
+	"sync"
 )
 
 type ConnNet struct {
 	net.Conn
 	reader *bufio.Reader
 	writer *bufio.Writer
+	mutex  sync.Mutex
 }
 
 func NewConnNet(conn net.Conn) *ConnNet {
@@ -32,11 +34,23 @@ func (conn *ConnNet) ReadMsg() (b []byte, err error) {
 	}
 	size := binary.BigEndian.Uint16(head)
 	body := make([]byte, size)
-	_, err = conn.reader.Read(body)
+	sum := uint16(0)
+	i := 0
+	for {
+		i, err = conn.reader.Read(body[sum:])
+		if err != nil {
+			return nil, err
+		}
+		if sum += uint16(i); sum == size {
+			break
+		}
+	}
 	return body, err
 }
 
 func (conn *ConnNet) WriteMsg(b []byte) (err error) {
+	conn.mutex.Lock()
+	defer conn.mutex.Unlock()
 	size := uint16(len(b))
 	err = binary.Write(conn.writer, binary.BigEndian, size)
 	if err != nil {

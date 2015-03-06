@@ -2,9 +2,8 @@ package main
 
 import (
 	"rego/agent"
+	"rego/agent/defaul"
 	"rego/cfg"
-	"rego/defaul"
-
 	"rego/server"
 )
 
@@ -18,6 +17,7 @@ func init() {
 func start() {
 
 	ag := defaul.DefaulAgent()
+	ser.Register(agent.NewPush(ag))
 	go agent.NewListener(cfg.Self.ClientPort, ag.Join).Start()
 	ser.Start()
 }

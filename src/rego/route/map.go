@@ -20,11 +20,8 @@ func NewCodeMaps() *CodeMaps {
 }
 
 func (co *CodeMaps) Map(c1, c2, c3 byte) (m1, m2, m3 string, err error) {
-	defer func() {
-		if errr := recover(); errr != nil {
-			err = errors.New("CodeMaps.Map: index out of range")
-		}
-	}()
+
+	defer rego.PanicErr(&err, "CodeMaps.Map: index out of range")
 	i1 := (*co)[c1]
 	i2 := i1.Classs[c2]
 	m3 = i2.Methods[c3]
@@ -53,9 +50,7 @@ func (co *CodeMaps) MakeReCodeMap() *ReCodeMaps {
 }
 
 func (co *CodeMaps) WriteFile(name string) {
-	es := rego.NewEncodeStream()
-	es.EnJson(co)
-	ioutil.WriteFile(name, es.Bytes(), 0666)
+	ioutil.WriteFile(name, rego.EnJson(co).Bytes(), 0666)
 }
 
 func (co *CodeMaps) ReadFile(name string) {
@@ -64,9 +59,7 @@ func (co *CodeMaps) ReadFile(name string) {
 		rego.ERR(err)
 		return
 	}
-	es := rego.NewEncodeStream()
-	es.Set(b)
-	es.DeJson(co)
+	rego.NewEncodeBytes(b).DeJson(co)
 }
 
 type ReCodeMaps map[string]uint32

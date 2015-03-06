@@ -6,42 +6,40 @@ import (
 	"encoding/json"
 )
 
-const (
-	_unknown = byte(iota)
-	_json
-	_gob
-)
+type EncodeBytes []byte
 
-type EncodeStream []byte
-
-func NewEncodeStream() *EncodeStream {
-	return &EncodeStream{}
+func NewEncodeBytes(b []byte) *EncodeBytes {
+	r := &EncodeBytes{}
+	if b != nil {
+		r.Set(b)
+	}
+	return r
 }
 
-func (en *EncodeStream) ReSet() {
+func (en *EncodeBytes) ReSet() {
 	*en = []byte{}
 }
 
-func (en *EncodeStream) Set(b []byte) {
+func (en *EncodeBytes) Set(b []byte) {
 	*en = b
 	return
 }
 
-func (en *EncodeStream) Bytes() []byte {
+func (en *EncodeBytes) Bytes() []byte {
 	return []byte(*en)
 }
 
-func (en *EncodeStream) EnJson(s interface{}) {
+func (en *EncodeBytes) EnJson(s interface{}) {
 	*en, _ = json.Marshal(s)
 	return
 }
 
-func (en *EncodeStream) DeJson(s interface{}) {
+func (en *EncodeBytes) DeJson(s interface{}) {
 	json.Unmarshal(*en, s)
 	return
 }
 
-func (en *EncodeStream) EnGob(s interface{}) {
+func (en *EncodeBytes) EnGob(s interface{}) {
 	buf := bytes.NewBuffer(nil)
 	enc := gob.NewEncoder(buf)
 	if err := enc.Encode(s); err == nil {
@@ -50,9 +48,21 @@ func (en *EncodeStream) EnGob(s interface{}) {
 	return
 }
 
-func (en *EncodeStream) DeGob(s interface{}) {
+func (en *EncodeBytes) DeGob(s interface{}) {
 	buf := bytes.NewBuffer(*en)
 	dec := gob.NewDecoder(buf)
 	dec.Decode(s)
 	return
+}
+
+func EnJson(s interface{}) *EncodeBytes {
+	b := NewEncodeBytes(nil)
+	b.EnJson(s)
+	return b
+}
+
+func EnGob(s interface{}) *EncodeBytes {
+	b := NewEncodeBytes(nil)
+	b.EnGob(s)
+	return b
 }

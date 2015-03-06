@@ -17,9 +17,9 @@ ECHO_DATE     := echo `date +%R:%S`
 
 .PHONY:  all build makefile test run clean_pkg clean number_build number_build_record
 
-default: build shutdown run
+default: build run
 
-all: clean info test build clean_pkg shutdown run
+all: clean info test build clean_pkg run
 
 build: number_build build_ number_build_record 
 
@@ -32,7 +32,7 @@ test:
 test_v:
 	@$(GO) test -v rego/...
 
-run: 
+run: shutdown
 	@$(ECHO_DATE) Running...
 	@$(CD) $(BUILD_DIR) && ./master 
 

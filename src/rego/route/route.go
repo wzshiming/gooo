@@ -1,8 +1,8 @@
 package route
 
 import (
-	"errors"
 	"rego"
+	"rego/agent"
 	"rego/cfg"
 	"rego/server"
 )
@@ -45,7 +45,7 @@ func (ro *Route) Register(c cfg.ServerConfig) {
 	ro.connmaps[c.Type] = append(ro.connmaps[c.Type], conn)
 }
 
-func (ro *Route) CallCode(c1, c2, c3 byte, args rego.Request, reply *rego.Response) error {
+func (ro *Route) CallCode(c1, c2, c3 byte, args agent.Request, reply *agent.Response) error {
 	m1, m2, m3, err := ro.maps.Map(c1, c2, c3)
 	if err != nil {
 		return err
@@ -53,11 +53,8 @@ func (ro *Route) CallCode(c1, c2, c3 byte, args rego.Request, reply *rego.Respon
 	return ro.Call(m1, m2, m3, args, reply)
 }
 
-func (ro *Route) Call(m1, m2, m3 string, args rego.Request, reply *rego.Response) (err error) {
-	defer func() {
-		if errr := recover(); errr != nil {
-			err = errors.New("Route.Call: index out of range")
-		}
-	}()
+func (ro *Route) Call(m1, m2, m3 string, args agent.Request, reply *agent.Response) (err error) {
+	defer rego.PanicErr(&err, "Route.Call: index out of range")
+
 	return ro.connmaps[m1][0].Call(m2+"."+m3, args, reply)
 }

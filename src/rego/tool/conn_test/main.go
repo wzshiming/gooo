@@ -2,8 +2,8 @@ package main
 
 import (
 	"rego"
+	"rego/agent/defaul"
 	"rego/cfg"
-	"rego/defaul"
 )
 
 func init() {
@@ -11,14 +11,19 @@ func init() {
 }
 
 func main() {
-	send := defaul.DefaultClientCode(func(code string, v interface{}) {
+	send := defaul.DefaultClientCode(func(code string, v interface{}) error {
 		rego.INFO(code, v)
+		return nil
 	})
-	send("Auth.Auth.Register", map[string]interface{}{
-		"hello": 10,
-	})
-	send("Auth.Auth.Register", map[string]interface{}{
-		"hello": 11,
-	})
+	for {
+		err := send("Auth.Auth.Register", map[string]interface{}{
+			"hello": 10,
+		})
+		if err != nil {
+			break
+		}
+
+	}
+	rego.NOTICE("close")
 	rego.Wait(nil)
 }

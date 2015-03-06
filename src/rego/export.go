@@ -52,6 +52,5 @@ func printf(h string, v ...interface{}) {
 func DEBUG(v ...interface{}) {
 	if DEBUG_ {
 		printf(debu, v...)
-		log.Println(debu, ffmt.Sputs(v...))
 	}
 }

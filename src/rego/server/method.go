@@ -2,7 +2,6 @@ package server
 
 import (
 	"reflect"
-	"rego"
 	"unicode"
 	"unicode/utf8"
 )
@@ -10,8 +9,8 @@ import (
 var typeOfError = reflect.TypeOf((*error)(nil)).Elem()
 
 var (
-	request  = reflect.TypeOf(rego.Request{})
-	response = reflect.TypeOf(rego.Response{})
+	request  = "Request"
+	response = "Response"
 )
 
 type Methods struct {
@@ -38,7 +37,7 @@ func NewMethods(rcvr interface{}) *Methods {
 			continue
 		}
 		argType := mtype.In(1)
-		if argType.Name() != request.Name() {
+		if argType.Name() != request {
 			continue
 		}
 		// First arg need not be a pointer.
@@ -52,7 +51,7 @@ func NewMethods(rcvr interface{}) *Methods {
 			continue
 		}
 
-		if replyType.Elem().Name() != response.Name() {
+		if replyType.Elem().Name() != response {
 			continue
 		}
 

@@ -1,7 +1,6 @@
 package server
 
 import (
-	"rego"
 	"testing"
 )
 
@@ -12,12 +11,15 @@ func Test_cs(t *testing.T) {
 
 type Te struct{}
 
+type Request int
+type Response int
+
 func (t *Te) Echo(a int, r *int) error {
 	*r = a
 	return nil
 }
 
-func (te *Te) TT(a rego.Request, r *rego.Response) error {
+func (te *Te) TT(a Request, r *Response) error {
 	return nil
 }
 

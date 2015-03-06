@@ -41,10 +41,11 @@ func Test_tcp(t *testing.T) {
 }
 
 func server(t *testing.T) {
-	ag := NewAgent(16, func(conn Conn, sess *rego.Session, msg []byte) {
+	ag := NewAgent(16, func(user *User, msg []byte) error {
 		rego.NOTICE(string(msg))
-		conn.WriteMsg(msg)
-		conn.Close()
+		user.WriteMsg(msg)
+		user.Close()
+		return nil
 	})
 	err := NewListener(7710, func(conn Conn) {
 		ag.Join(conn)

@@ -28,7 +28,8 @@ func NewClient(addr string) *Client {
 }
 
 func (cl *Client) Send(serviceMethod string, args interface{}) error {
-	return cl.Call(serviceMethod, args, 0)
+	var t int
+	return cl.Call(serviceMethod, args, &t)
 }
 
 func (cl *Client) Take(serviceMethod string, reply interface{}) error {
