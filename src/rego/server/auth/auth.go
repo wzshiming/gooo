@@ -3,15 +3,33 @@ package main
 import (
 	"rego"
 	"rego/agent"
-	//"rego/server/proto"
+	"rego/misc"
+	"time"
 )
 
 type Auth struct {
+	room  *misc.Rooms
 	funcs func(args agent.Request, reply *agent.Response) (err error)
 }
 
 func NewAuth() *Auth {
-	r := Auth{}
+	r := Auth{
+		room: misc.NewRooms("login", 1000),
+	}
+	go func() {
+		for {
+			time.Sleep(time.Second)
+			//rego.NOTICE(r.room.Len())
+
+			r.room.Broadcast(&agent.Response{
+				Response: rego.EnJson(map[string]interface{}{
+					"err": "none",
+				}),
+			}, func(sess *agent.Session) {
+				r.room.LeaveMutex(sess)
+			})
+		}
+	}()
 	return &r
 }
 func (r *Auth) Register(args agent.Request, reply *agent.Response) (err error) {
@@ -20,7 +38,11 @@ func (r *Auth) Register(args agent.Request, reply *agent.Response) (err error) {
 	var t struct {
 		Size int
 	}
-	if err := args.Session.Send(append([]byte{0, 0, 0, 0}, []byte(`{"err":"hehe"}`)...)); err != nil {
+	if err := args.Session.Send(&agent.Response{
+		Response: rego.EnJson(map[string]interface{}{
+			"err": "hehe",
+		}),
+	}); err != nil {
 		rego.ERR(err)
 	}
 	args.Session.Data.DeJson(&t)
@@ -33,6 +55,42 @@ func (r *Auth) Register(args agent.Request, reply *agent.Response) (err error) {
 	})
 
 	reply.Data = rego.EnJson(t)
+	return nil
+}
+
+func (r *Auth) Join(args agent.Request, reply *agent.Response) (err error) {
+	reply.Data, err = r.room.Join(args.Session)
+	return
+}
+
+func (r *Auth) Loop(args agent.Request, reply *agent.Response) (err error) {
+	defer rego.PanicErr(&err)
+
+	go func() {
+		for i := 0; i != 3; i++ {
+			err = args.Session.LockSession()
+			if err != nil {
+				return
+			}
+			var t struct {
+				Size int
+			}
+			args.Session.Data.DeJson(&t)
+
+			t.Size++
+			rego.NOTICE(t.Size)
+			var rep agent.Response
+			rep.Data = rego.EnJson(t)
+			rep.Response = rego.EnJson(map[string]string{
+				"111": "333",
+			})
+			err = args.Session.UnlockSession(&rep)
+			if err != nil {
+				return
+			}
+
+		}
+	}()
 	return nil
 }
 

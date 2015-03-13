@@ -8,6 +8,7 @@ import (
 type User struct {
 	Session
 	Conn
+	sync.RWMutex
 }
 
 type Agent struct {
@@ -45,14 +46,13 @@ func (ag *Agent) Get(uniq uint) *User {
 }
 
 func (ag *Agent) loop(user *User) {
-	var sy sync.Mutex
 	for {
 		if b, err := user.Conn.ReadMsg(); err != nil {
 			return
 		} else {
-			sy.Lock()
+			user.Lock()
 			err = ag.msg(user, b)
-			sy.Unlock()
+			user.Unlock()
 			if err != nil {
 				return
 			}

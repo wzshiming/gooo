@@ -2,6 +2,7 @@ package agent
 
 import (
 	"errors"
+	"fmt"
 	"rego"
 	"rego/cfg"
 	"time"
@@ -39,14 +40,55 @@ func (s *Session) Refresh() {
 	s.LastPacketTime = time.Now()
 }
 
-func (s *Session) Send(b []byte) (err error) {
+func (s *Session) Send(reply *Response) (err error) {
 	defer func() {
 		if x := recover(); x != nil {
-			err = errors.New("Session.Send: index out of range")
+			err = errors.New("Session.Send: " + fmt.Sprintln(x))
 		}
 	}()
-	return cfg.ConfForId[s.SerId].Client().Send("Push.Send", PushRequest{
+	return cfg.ConfForId[s.SerId].Client().Send("Connect.Push", PushRequest{
+		Uniq:  s.Uniq,
+		Reply: reply,
+	})
+}
+
+func (s *Session) SyncSession() (err error) {
+	defer func() {
+		if x := recover(); x != nil {
+			err = errors.New("Session.SyncSession: " + fmt.Sprintln(x))
+		}
+	}()
+	var reply LockResponse
+	err = cfg.ConfForId[s.SerId].Client().Call("Connect.Sync", LockRequest{
 		Uniq: s.Uniq,
-		Msg:  b,
+	}, &reply)
+	if err != nil {
+		return err
+	}
+	*s = *reply.Session
+	return nil
+}
+
+func (s *Session) LockSession() (err error) {
+	defer func() {
+		if x := recover(); x != nil {
+			err = errors.New("Session.LockSession: " + fmt.Sprintln(x))
+		}
+	}()
+	var reply LockResponse
+	err = cfg.ConfForId[s.SerId].Client().Call("Connect.Lock", LockRequest{
+		Uniq: s.Uniq,
+	}, &reply)
+	if err != nil {
+		return err
+	}
+	*s = *reply.Session
+	return nil
+}
+
+func (s *Session) UnlockSession(reply *Response) error {
+	return cfg.ConfForId[s.SerId].Client().Send("Connect.Unlock", UnlockRequest{
+		Uniq:  s.Uniq,
+		Reply: reply,
 	})
 }

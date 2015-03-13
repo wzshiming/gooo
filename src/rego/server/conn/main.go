@@ -17,7 +17,7 @@ func init() {
 func start() {
 
 	ag := defaul.DefaulAgent()
-	ser.Register(agent.NewPush(ag))
+	ser.Register(agent.NewConnect(ag))
 	go agent.NewListener(cfg.Self.ClientPort, ag.Join).Start()
 	ser.Start()
 }

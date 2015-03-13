@@ -42,7 +42,7 @@ func (co *CodeMaps) MakeReCodeMap() *ReCodeMaps {
 	for k1, v1 := range *co {
 		for k2, v2 := range v1.Classs {
 			for k3, v3 := range v2.Methods {
-				re[v1.Name+"."+v2.Name+"."+v3] = uint32(k1|(k2<<8)|(k3<<16)) | (1 << 24)
+				re[v1.Name+"."+v2.Name+"."+v3] = K2i(k1, k2, k3)
 			}
 		}
 	}
@@ -64,10 +64,17 @@ func (co *CodeMaps) ReadFile(name string) {
 
 type ReCodeMaps map[string]uint32
 
-func (co *ReCodeMaps) Map(code string) (c1, c2, c3 byte, err error) {
-	c := (*co)[code]
-	if (uint32(c) >> 24) != 1 {
-		return 0, 0, 0, errors.New(code + ": inexistence")
+func (co *ReCodeMaps) Map(code string) (byte, byte, byte, error) {
+	return I2k((*co)[code])
+}
+
+func K2i(k1, k2, k3 int) uint32 {
+	return uint32(k1 | (k2 << 8) | (k3 << 16) | (1 << 24))
+}
+
+func I2k(i uint32) (byte, byte, byte, error) {
+	if (uint32(i) >> 24) != 1 {
+		return 0, 0, 0, errors.New("I2k: inexistence")
 	}
-	return byte(c), byte(c >> 8), byte(c >> 16), nil
+	return byte(i), byte(i >> 8), byte(i >> 16), nil
 }

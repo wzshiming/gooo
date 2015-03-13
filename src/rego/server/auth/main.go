@@ -15,5 +15,6 @@ func init() {
 
 func main() {
 	ser.Register(NewAuth())
+	ser.Register(NewUsers())
 	ser.Start()
 }

@@ -66,3 +66,11 @@ func EnGob(s interface{}) *EncodeBytes {
 	b.EnGob(s)
 	return b
 }
+
+func SumJson(d ...*EncodeBytes) *EncodeBytes {
+	var sum interface{}
+	for _, v := range d {
+		v.DeJson(&sum)
+	}
+	return EnJson(sum)
+}

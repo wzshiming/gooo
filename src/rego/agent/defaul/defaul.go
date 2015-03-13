@@ -2,6 +2,7 @@ package defaul
 
 import (
 	"errors"
+	"fmt"
 	"rego"
 	"rego/agent"
 	"rego/cfg"
@@ -24,28 +25,12 @@ func DefaulAgent() *agent.Agent {
 			Request: rego.NewEncodeBytes(msg[4:]),
 		}, &reply)
 
-		var ret []byte
 		if err != nil {
-			ret = []byte(`{"error":"` + err.Error() + `"}`)
+			ret := []byte(`{"error":"` + err.Error() + `"}`)
+			user.WriteMsg(append([]byte{255, 255, 255, 255}, ret...))
 		} else {
-			if reply.Coverage != nil {
-				user.Data = reply.Coverage
-			} else if reply.Data != nil {
-				var t interface{}
-				user.Data.DeJson(&t)
-				reply.Data.DeJson(&t)
-				user.Data.EnJson(&t)
-			}
-			if reply.Error != "" {
-				ret = []byte(`{"error":"` + reply.Error + `"}`)
-			} else if reply.Response != nil {
-				ret = reply.Response.Bytes()
-			} else {
-				return nil
-			}
+			reply.Hand(user, msg[:4])
 		}
-
-		user.WriteMsg(append(msg[:4], ret...))
 		return nil
 	})
 	return ag
@@ -98,17 +83,21 @@ func DefaultClientCode(hand func(code string, v interface{}) error) func(code st
 	rego.INFO(recod)
 	c := DefaulClient(func(m1 byte, m2 byte, m3 byte, b []byte) error {
 		c1, c2, c3, err := cod.Map(m1, m2, m3)
+		var code string
 		if err != nil {
-			return err
+			code = fmt.Sprintf("None.%d.%d.%d", m1, m2, m3)
+		} else {
+			code = c1 + "." + c2 + "." + c3
 		}
 		es := rego.NewEncodeBytes(b)
 		var r interface{}
 		es.DeJson(&r)
-		return hand(c1+"."+c2+"."+c3, r)
+		return hand(code, r)
 	})
 	return func(code string, v interface{}) error {
 		m1, m2, m3, err := recod.Map(code)
 		if err != nil {
+			rego.ERR(err)
 			return err
 		}
 		es := rego.EnJson(v)
