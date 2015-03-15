@@ -1,0 +1,75 @@
+
+
+<script src="js/jquery.label_better.js"></script>
+<script>
+	//输入框 动态效果
+	$(document).ready( function() {
+		$(".form-control").label_better({
+			easing: "bounce"
+		});
+	});
+</script>
+
+
+<script>
+	//平滑转跳
+	$(function(){
+		$('a[href*=#],area[href*=#]').click(function() {
+			if (location.pathname.replace(/^\//, '') == this.pathname.replace(/^\//, '') && location.hostname == this.hostname) {
+				var $target = $(this.hash);
+				$target = $target.length && $target || $('[name=' + this.hash.slice(1) + ']');
+				if ($target.length) {
+					var targetOffset = $target.offset().top;
+					$('html,body').animate({
+						scrollTop: targetOffset
+					},
+					500);
+					return false;
+				}
+			}
+		});
+	})
+</script>
+
+
+<link href="css/animate.min.css" rel="stylesheet">	
+<script>
+	//css 动态效果
+	function cartoonPlay(obj,x,func) {
+		if( typeof func == "function" ) {
+			$(obj).addClass(x + ' animated').one('webkitAnimationEnd mozAnimationEnd MSAnimationEnd oanimationend animationend', func);
+		}else {
+			$(obj).addClass(x + ' animated')
+		}
+	}
+	function cartoonFinish(obj,x) {
+		$(obj).removeClass(x + ' animated');
+	}
+	function cartoonSingle(obj,x,func) {
+		cartoonPlay(obj,x,function(){
+			cartoonFinish(this,x)
+			if( typeof func == "function" ) {
+				func(this,x)
+			}
+		})
+	};
+	//$("div.jumbotron.well").hover(function() {
+		//cartoonSingle(this,'pulse') 
+	//},function() {
+		//$(this).removeClass('pulse animated')
+		//cartoonSingle(this,'flash') 
+	//});
+
+</script>
+
+<link href="css/skins/square/square.css" rel="stylesheet">
+<script src="js/icheck.min.js"></script>
+
+<script>
+	// 选择框 美化
+	$('input').iCheck({
+		checkboxClass: 'icheckbox_square',
+		radioClass: 'iradio_square',
+		increaseArea: '20%' // optional
+	});
+</script>

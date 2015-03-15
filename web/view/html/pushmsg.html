@@ -1,0 +1,32 @@
+<link href="css/messenger.css" rel="stylesheet" >
+<link href="css/messenger-spinner.css" rel="stylesheet" >
+<link href="css/messenger-theme-flat.css" rel="stylesheet" >
+<script src="js/messenger.js"></script>
+<script src="js/messenger-theme-flat.js"></script>
+<script>
+	// 弹出信息框
+	Messenger.options = {
+		extraClasses: 'messenger-fixed messenger-on-bottom messenger-on-right',
+		theme: 'flat'
+	}
+	var MsgErr = function(msg){
+		Messenger().post({
+			message: msg,
+			type: "error",
+			showCloseButton: true,
+			hideAfter: 10,
+			hideOnNavigate: true
+		})
+	}
+	var MsgInfo = function(msg){
+		Messenger().post({
+			message: msg,
+			type: "info",
+			showCloseButton: true,
+			hideAfter: 10,
+			hideOnNavigate: true
+		})
+	}
+</script>
+
+

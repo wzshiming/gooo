@@ -13,9 +13,9 @@ type Users struct {
 	room *misc.Rooms
 }
 
-func NewUsers() *Users {
+func NewUsers(size int) *Users {
 	r := Users{
-		room: misc.NewRooms("login", 1000),
+		room: misc.NewRooms("Users", size),
 	}
 	go func() {
 		for {
@@ -25,9 +25,7 @@ func NewUsers() *Users {
 				Response: rego.EnJson(map[string]interface{}{
 					"err": "lalala",
 				}),
-			}, func(sess *agent.Session) {
-				r.room.Leave(sess)
-			})
+			}, nil)
 		}
 	}()
 	return &r
@@ -112,7 +110,7 @@ func (r *Users) ChangePwd(args agent.Request, reply *agent.Response) error {
 
 	// 判断用户是否登入
 	if sess := r.room.Sync(args.Session); sess == nil {
-		return errors.New(Trans.Value("auth.notinroot"))
+		return errors.New(Trans.Value("auth.nologin"))
 	}
 
 	// 判断新密码是否符合要求

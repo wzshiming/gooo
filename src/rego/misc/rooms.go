@@ -115,9 +115,12 @@ func (ro *Rooms) Broadcast(reply *agent.Response, fail func(*agent.Session)) {
 	var err error
 	ro.ForEach(func(sess *agent.Session) {
 		err = sess.Send(reply)
-		if err != nil && fail != nil {
+		if err != nil {
 			rego.ERR(err)
-			fail(sess)
+			ro.Leave(sess)
+			if fail != nil {
+				fail(sess)
+			}
 		}
 	})
 }

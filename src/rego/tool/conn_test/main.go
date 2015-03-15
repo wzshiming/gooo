@@ -18,12 +18,12 @@ func main() {
 	})
 	//	send("Auth.Auth.Loop", 1)
 	send("Auth.Users.Register", proto.LogInRequest{
-		Username: "hello1",
+		Username: "hello2",
 		Password: "123456",
 	})
 
 	send("Auth.Users.LogIn", proto.LogInRequest{
-		Username: "hello1",
+		Username: "hello2",
 		Password: "123456",
 	})
 

@@ -1,16 +1,26 @@
 package main
 
 import (
+	"rego/agent"
+	"rego/agent/defaul"
 	"rego/cfg"
+	"rego/server"
 )
+
+var ser *server.Server
 
 func init() {
 	cfg.TakeConf()
+	ser = cfg.Self.Server()
 }
 
 func start() {
-	s := cfg.Self.Server()
-	s.Start()
+
+	ag := defaul.DefaulAgent()
+	ser.Register(agent.NewConnect(ag))
+	go run(ag)
+	//go agent.NewListener(cfg.Self.ClientPort, ag.Join).Start()
+	ser.Start()
 }
 
 func main() {

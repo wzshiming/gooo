@@ -9,11 +9,11 @@ import (
 	"rego/route"
 )
 
-var mapFile = "map.json"
+var MapFile = "map.json"
 
 func DefaulAgent() *agent.Agent {
 	ro := route.NewRoute(cfg.Whole.Apps)
-	ro.Code().WriteFile(mapFile)
+	ro.Code().WriteFile(MapFile)
 
 	ag := agent.NewAgent(1024, func(user *agent.User, msg []byte) (err error) {
 		defer rego.PanicErr(&err)
@@ -78,7 +78,7 @@ func DefaulClient(hand func(byte, byte, byte, []byte) error) func(byte, byte, by
 
 func DefaultClientCode(hand func(code string, v interface{}) error) func(code string, v interface{}) error {
 	cod := route.NewCodeMaps()
-	cod.ReadFile(mapFile)
+	cod.ReadFile(MapFile)
 	recod := cod.MakeReCodeMap()
 	rego.INFO(recod)
 	c := DefaulClient(func(m1 byte, m2 byte, m3 byte, b []byte) error {

@@ -409,15 +409,13 @@ var CurrentFunc = function(){}
 
 
 var Callback  = {};
-Callback['{{ key "Chan.Info.Rooms" }}'] = function(d){
-	RoomsBox(d);
-}
 
-Callback['{{ key "Auth.Auth.LogIn" }}'] = function(d){
+
+Callback['{{ key "Auth.Users.LogIn" }}'] = function(d){
 	UseChanBox();
 }
 
-Callback['{{ key "Auth.PassAuth.LogOut" }}'] = function(d){
+Callback['{{ key "Auth.Users.LogOut" }}'] = function(d){
 	LogInBox();
 }
 
@@ -456,29 +454,17 @@ var RoomsBox = function(d){
 	}
 }
 
-var UseChanBox = function(){
-	FuncsHtmlEvent("/chan.html","chan",function(u){
-		if(u < 0 ){
-			ws.sendMsg({{ key "Auth.PassAuth.LogOut" }},{});
-		} else {
-			ws.sendMsg({{ key "Chan.Use.Chan" }},{u:u});
-			ws.sendMsg({{ key "Chan.Info.Rooms" }},{});
-		}
-
-	})	
-}
-
 var LogInBox = function(){
 	FuncsHtmlEvent("/login.html","login",function(){
 		var b = document.formlogin;
-		ws.sendMsg({{ key "Auth.Auth.LogIn" }},{u:b.username.value,p:b.password.value});
+		ws.sendMsg({{ key "Auth.Users.LogIn" }},{u:b.username.value,p:b.password.value});
 	})	
 }
 
 var MsgErr = function(msg){
 	Messenger().post({
-	    message: msg,
-	    type: "error",
+		message: msg,
+		type: "error",
 		showCloseButton: true,
 		hideAfter: 10,
 		hideOnNavigate: true
@@ -487,8 +473,8 @@ var MsgErr = function(msg){
 
 var MsgInfo = function(msg){
 	Messenger().post({
-	    message: msg,
-	    type: "info",
+		message: msg,
+		type: "info",
 		showCloseButton: true,
 		hideAfter: 10,
 		hideOnNavigate: true
