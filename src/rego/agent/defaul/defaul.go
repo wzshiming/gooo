@@ -27,11 +27,10 @@ func DefaulAgent() *agent.Agent {
 
 		if err != nil {
 			ret := []byte(`{"error":"` + err.Error() + `"}`)
-			user.WriteMsg(append([]byte{255, 255, 255, 255}, ret...))
-		} else {
-			reply.Hand(user, msg[:4])
+			return user.WriteMsg(append([]byte{255, 255, 255, 255}, ret...))
 		}
-		return nil
+		return reply.Hand(user, msg[:4])
+
 	})
 	return ag
 }

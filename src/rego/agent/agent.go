@@ -25,16 +25,30 @@ func NewAgent(max int, msg func(*User, []byte) error) *Agent {
 
 func (ag *Agent) Join(conn Conn) {
 	obj := NewSession()
-	uniq := obj.ToUint()
-	user := User{
+	user := &User{
 		Session: *obj,
 		Conn:    conn,
 	}
-	ag.maps[uniq] = &user
-	rego.NOTICE("Join ", conn.RemoteAddr())
-	ag.loop(&user)
+	ag.Loop(user)
+}
+
+func (ag *Agent) JoinSync(conn Conn) *User {
+	obj := NewSession()
+	user := &User{
+		Session: *obj,
+		Conn:    conn,
+	}
+	go ag.Loop(user)
+	return user
+}
+
+func (ag *Agent) Loop(user *User) {
+	uniq := user.Session.ToUint()
+	ag.maps[uniq] = user
+	rego.NOTICE("Join ", user.RemoteAddr())
+	ag.loop(user)
 	ag.leave(uniq)
-	rego.NOTICE("Leave ", conn.RemoteAddr())
+	rego.NOTICE("Leave ", user.RemoteAddr())
 }
 
 func (ag *Agent) leave(uniq uint) {

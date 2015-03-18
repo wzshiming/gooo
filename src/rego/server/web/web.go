@@ -6,6 +6,7 @@ import (
 	"github.com/go-martini/martini"
 	"github.com/gorilla/websocket"
 	"github.com/martini-contrib/render"
+	"github.com/martini-contrib/sessions"
 	ht "html/template"
 	"net/http"
 	"rego"
@@ -49,6 +50,8 @@ func run(ag *agent.Agent) {
 	m := martini.Classic()
 
 	m.Use(martini.Static(basepath("/static")))
+	store := sessions.NewCookieStore([]byte("gooo"))
+	m.Use(sessions.Sessions("session", store))
 
 	m.Get("/:name.html", render.Renderer(render.Options{
 		Directory:  basepath("/view/html"),     // Specify what path to load the templates from.
@@ -88,15 +91,43 @@ func run(ag *agent.Agent) {
 	}), func(params martini.Params, r rendertext.Render) {
 		r.Text(200, params["name"], map[string]interface{}{})
 	})
+	m.Get("/order/:code", func(w http.ResponseWriter, r *http.Request, params martini.Params, session sessions.Session) {
+		var user *agent.User
+		var conn *HttpConn
+		c1, c2, c3, err := rec.Map(params["code"])
+		if err != nil {
+			return
+		}
+		b := make(map[string]string, 16)
+		r.ParseForm()
+		for k, v := range r.Form {
+			b[k] = v[0]
+		}
+		reg := rego.EnJson(b).Bytes()
+		reg = append([]byte{0, c1, c2, c3}, reg...)
 
+		if s, ok := session.Get("_id").(uint); ok {
+			user = ag.Get(s)
+			if user != nil {
+				conn, ok = user.Conn.(*HttpConn)
+				if !ok {
+					return
+				}
+				conn.Refresh(w, r, reg)
+				return
+			}
+		}
+		conn = NewHttpConn(16)
+		user = ag.JoinSync(conn)
+		session.Set("_id", user.ToUint())
+		conn.Refresh(w, r, reg)
+	})
 	m.Get("/conn", func(w http.ResponseWriter, r *http.Request) {
 		conn, err := upgrader.Upgrade(w, r, nil)
 		if err != nil {
 			return
 		}
 		ag.Join(agent.NewConnWeb(conn))
-		//h.Listen(NewWebsocket(conn))
-		//conn.Close()
 	})
 
 	rego.NOTICE("Start from ")

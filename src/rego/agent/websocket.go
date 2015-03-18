@@ -14,19 +14,26 @@ func NewConnWeb(conn *websocket.Conn) ConnWeb {
 	return ConnWeb{Conn: conn}
 }
 
-func (s ConnWeb) ReadMsg() ([]byte, error) {
-	_, b, err := s.ReadMessage()
+func (conn ConnWeb) ReadMsg() ([]byte, error) {
+	_, b, err := conn.ReadMessage()
 	if err != nil {
 		return nil, err
 	}
 	return base64.StdEncoding.DecodeString(string(b))
 }
 
-func (s ConnWeb) WriteMsg(b []byte) error {
+func (conn ConnWeb) WriteMsg(b []byte) error {
 
-	return s.WriteMessage(websocket.TextMessage, []byte(base64.StdEncoding.EncodeToString(b)))
+	return conn.WriteMessage(websocket.TextMessage, []byte(base64.StdEncoding.EncodeToString(b)))
 }
 
-func (s ConnWeb) SetDeadline(t time.Time) error {
-	return s.UnderlyingConn().SetDeadline(t)
+func (conn ConnWeb) SetDeadline(t time.Time) error {
+	return conn.UnderlyingConn().SetDeadline(t)
+}
+
+func (conn ConnWeb) LocalAddr() string {
+	return conn.Conn.LocalAddr().String()
+}
+func (conn ConnWeb) RemoteAddr() string {
+	return conn.Conn.RemoteAddr().String()
 }

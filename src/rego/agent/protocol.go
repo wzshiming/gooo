@@ -19,7 +19,7 @@ type Response struct {
 	Response *rego.EncodeBytes
 }
 
-func (re Response) Hand(user *User, head []byte) {
+func (re Response) Hand(user *User, head []byte) error {
 	var ret []byte
 	if re.Coverage != nil {
 		user.Data = re.Coverage
@@ -38,5 +38,5 @@ func (re Response) Hand(user *User, head []byte) {
 	} else {
 		ret = append(head, ret...)
 	}
-	user.WriteMsg(ret)
+	return user.WriteMsg(ret)
 }

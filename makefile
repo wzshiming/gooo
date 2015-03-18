@@ -50,6 +50,7 @@ clean:
 
 
 number_build: number_build.txt
+	@$(GO) version
 	@$(ECHO_DATE) The $(shell expr 1 + `sed -n 1p $<`) build...
 
 number_build_record: number_build.txt
@@ -62,6 +63,7 @@ get: get_github.com_go-sql-driver_mysql\
 	 get_github.com_kortem_lingo\
 	 get_github.com_go-martini_martini\
 	 get_github.com_martini-contrib_render\
+	 get_github.com_martini-contrib_sessions\
 	 get_github.com_gorilla_websocket\
 	 get_github.com_wzshiming_ffmt\
 	 get_github.com_mitchellh_colorstring
@@ -76,6 +78,4 @@ get_else:
 	@$(GIT) clone https://github.com/mrdoob/three.js temp/three.js
 
 info:
-	@$(ECHO_DATE) Gooo source `cat ./src/gooo/*.go | wc -l` line...
-	@$(ECHO_DATE) Service source `cat ./src/service/*/*.go | wc -l` line...
-	@$(ECHO_DATE) Tools source `cat ./src/tools/*/*.go | wc -l` line...
+	@wc ./src/rego/*.go ./src/rego/*/*.go ./src/rego/*/*/*.go

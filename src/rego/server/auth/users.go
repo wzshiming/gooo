@@ -23,7 +23,7 @@ func NewUsers(size int) *Users {
 			rego.NOTICE(r.room.Len())
 			r.room.Broadcast(&agent.Response{
 				Response: rego.EnJson(map[string]interface{}{
-					"err": "lalala",
+					"hello": "world",
 				}),
 			}, nil)
 		}

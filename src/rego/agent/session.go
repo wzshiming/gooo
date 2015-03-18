@@ -25,15 +25,18 @@ func NewSession() *Session {
 		Dirtycount:     0,
 		SerId:          cfg.SelfId,
 	}
-	s.Uniq = s.ToUint()
+	s.Uniq = s.toUint()
 	s.Data = rego.EnJson(map[string]uint{
-		"_UID": s.Uniq,
+		"_Uniq": s.Uniq,
 	})
 	return &s
 }
 
-func (s *Session) ToUint() uint {
+func (s *Session) toUint() uint {
 	return (uint)((uintptr)(unsafe.Pointer(s)))
+}
+func (s *Session) ToUint() uint {
+	return s.Uniq
 }
 
 func (s *Session) Refresh() {

@@ -62,3 +62,10 @@ func (conn *ConnNet) WriteMsg(b []byte) (err error) {
 	}
 	return conn.writer.Flush()
 }
+
+func (conn *ConnNet) LocalAddr() string {
+	return conn.Conn.LocalAddr().String()
+}
+func (conn *ConnNet) RemoteAddr() string {
+	return conn.Conn.RemoteAddr().String()
+}
