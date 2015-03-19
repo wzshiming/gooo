@@ -3,12 +3,22 @@ package agent
 import (
 	"rego"
 	"sync"
+	"time"
 )
 
 type User struct {
 	Session
 	Conn
 	sync.RWMutex
+	outtime time.Duration
+}
+
+func NewUser(sess *Session, conn Conn) *User {
+	return &User{
+		Session: *sess,
+		Conn:    conn,
+		outtime: time.Second * 10,
+	}
 }
 
 type Agent struct {
@@ -25,19 +35,13 @@ func NewAgent(max int, msg func(*User, []byte) error) *Agent {
 
 func (ag *Agent) Join(conn Conn) {
 	obj := NewSession()
-	user := &User{
-		Session: *obj,
-		Conn:    conn,
-	}
+	user := NewUser(obj, conn)
 	ag.Loop(user)
 }
 
 func (ag *Agent) JoinSync(conn Conn) *User {
 	obj := NewSession()
-	user := &User{
-		Session: *obj,
-		Conn:    conn,
-	}
+	user := NewUser(obj, conn)
 	go ag.Loop(user)
 	return user
 }

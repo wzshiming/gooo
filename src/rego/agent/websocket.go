@@ -23,7 +23,6 @@ func (conn ConnWeb) ReadMsg() ([]byte, error) {
 }
 
 func (conn ConnWeb) WriteMsg(b []byte) error {
-
 	return conn.WriteMessage(websocket.TextMessage, []byte(base64.StdEncoding.EncodeToString(b)))
 }
 
@@ -34,6 +33,7 @@ func (conn ConnWeb) SetDeadline(t time.Time) error {
 func (conn ConnWeb) LocalAddr() string {
 	return conn.Conn.LocalAddr().String()
 }
+
 func (conn ConnWeb) RemoteAddr() string {
 	return conn.Conn.RemoteAddr().String()
 }

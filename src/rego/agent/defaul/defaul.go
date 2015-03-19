@@ -7,6 +7,7 @@ import (
 	"rego/agent"
 	"rego/cfg"
 	"rego/route"
+	"time"
 )
 
 var MapFile = "map.json"
@@ -14,11 +15,11 @@ var MapFile = "map.json"
 func DefaulAgent() *agent.Agent {
 	ro := route.NewRoute(cfg.Whole.Apps)
 	ro.Code().WriteFile(MapFile)
-
 	ag := agent.NewAgent(1024, func(user *agent.User, msg []byte) (err error) {
 		defer rego.PanicErr(&err)
 		var reply agent.Response
 		//rego.INFO(string(msg))
+		user.SetDeadline(time.Now().Add(time.Second * 20))
 		user.Refresh()
 		err = ro.CallCode(msg[1], msg[2], msg[3], agent.Request{
 			Session: &user.Session,

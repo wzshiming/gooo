@@ -39,10 +39,6 @@ var helpfunc = map[string]interface{}{
 		}
 		return fmt.Sprintf("%d,%d,%d", c1, c2, c3)
 	},
-	//	"servers": func() []gooo.ServerConfig {
-	//		return Conf.Servers().Get("Chan")
-	//	},
-
 }
 
 func run(ag *agent.Agent) {
@@ -91,7 +87,16 @@ func run(ag *agent.Agent) {
 	}), func(params martini.Params, r rendertext.Render) {
 		r.Text(200, params["name"], map[string]interface{}{})
 	})
-	m.Get("/order/:code", func(w http.ResponseWriter, r *http.Request, params martini.Params, session sessions.Session) {
+
+	m.Get("/conn", func(w http.ResponseWriter, r *http.Request) {
+		conn, err := upgrader.Upgrade(w, r, nil)
+		if err != nil {
+			return
+		}
+		ag.Join(agent.NewConnWeb(conn))
+	})
+
+	m.Get("/conn/:code", func(w http.ResponseWriter, r *http.Request, params martini.Params, session sessions.Session) {
 		var user *agent.User
 		var conn *HttpConn
 		c1, c2, c3, err := rec.Map(params["code"])
@@ -121,13 +126,6 @@ func run(ag *agent.Agent) {
 		user = ag.JoinSync(conn)
 		session.Set("_id", user.ToUint())
 		conn.Refresh(w, r, reg)
-	})
-	m.Get("/conn", func(w http.ResponseWriter, r *http.Request) {
-		conn, err := upgrader.Upgrade(w, r, nil)
-		if err != nil {
-			return
-		}
-		ag.Join(agent.NewConnWeb(conn))
 	})
 
 	rego.NOTICE("Start from ")

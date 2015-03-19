@@ -17,13 +17,16 @@ func NewUsers(size int) *Users {
 	r := Users{
 		room: misc.NewRooms("Users", size),
 	}
+	i := 0
 	go func() {
 		for {
 			time.Sleep(time.Second)
 			rego.NOTICE(r.room.Len())
+			i++
 			r.room.Broadcast(&agent.Response{
 				Response: rego.EnJson(map[string]interface{}{
 					"hello": "world",
+					"index": i,
 				}),
 			}, nil)
 		}
