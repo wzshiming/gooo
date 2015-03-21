@@ -2,17 +2,16 @@ package main
 
 import (
 	"rego/cfg"
+	"rego/server"
 )
+
+var ser *server.Server
 
 func init() {
 	cfg.TakeConf()
-}
-
-func start() {
-	s := cfg.Self.Server()
-	s.Start()
+	ser = cfg.Self.Server()
 }
 
 func main() {
-	start()
+	ser.Start()
 }

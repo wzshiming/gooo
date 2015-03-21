@@ -1,17 +1,15 @@
 package main
 
 import (
-	_ "github.com/go-sql-driver/mysql"
-	"github.com/jinzhu/gorm"
-	_ "github.com/mattn/go-sqlite3"
 	"rego/cfg"
+	"rego/dbs"
 	"rego/server/proto"
 )
 
-var db gorm.DB
+var db dbs.DB
 
 func dbconn(us cfg.DbConfig) (err error) {
-	db, err = gorm.Open(us.Dialect, us.Source)
+	db, err = dbs.Conn(us)
 	var users proto.User
 	users.CreateTable(&db)
 	return

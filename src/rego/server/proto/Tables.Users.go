@@ -1,7 +1,7 @@
 package proto
 
 import (
-	"github.com/jinzhu/gorm"
+	"rego/dbs"
 	"time"
 )
 
@@ -14,12 +14,12 @@ type User struct {
 	UpdatedAt time.Time
 }
 
-func (s *User) CreateTable(db *gorm.DB) {
+func (s *User) CreateTable(db *dbs.DB) {
 	db.CreateTable(s)
 	db.Model(s).AddUniqueIndex("idx_user_username", "username")
 }
 
-func (s *User) DropTable(db *gorm.DB) {
+func (s *User) DropTable(db *dbs.DB) {
 	db.DropTable(s)
 }
 

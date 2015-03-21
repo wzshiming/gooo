@@ -1,0 +1,109 @@
+package ygo
+
+import (
+	"errors"
+	"fmt"
+	"rego"
+	"rego/agent"
+	"time"
+)
+
+type Player struct {
+	// 规则属性
+	Session  *agent.Session
+	Index    int           // 玩家索引
+	Game     *YGO          // 属于游戏
+	OverTime time.Duration // 允许超出的时间
+	WaitTime time.Duration // 每次动作等待的时间
+
+	// 基础属性
+	Hp        int  // 生命值
+	Camp      uint // 阵营
+	RoundSize uint // 回合数
+	DrawSize  uint // 抽卡数
+	MaxHp     uint // 最大生命值
+	MaxSdi    uint // 最大手牌
+
+	// 卡牌区
+	Deck    CardPile   //卡组 40 ~ 60
+	Hand    CardPile   //手牌
+	Extra   CardPile   //额外卡组 < 15 融合怪物 同调怪物 超量怪物
+	Side    CardPile   //副卡组 < 15
+	Removed CardPile   //排除卡
+	Grave   CardPile   //墓地
+	Mzone   CardUnfold //怪物卡区
+	Szone   CardUnfold //魔法卡陷阱卡区
+	Place   Card       //场地卡
+
+	// 卡牌事件
+	ToExclude  Events // 排除场外
+	ToCemetery Events // 移动到墓地
+	ToSdi      Events // 返回手牌
+	ToDeck     Events // 返回卡组
+	Sustains   Events // 永续效果
+
+	// 怪兽卡事件
+	MonsterInitiative    Events // 怪兽卡发动效果
+	MonsterFreedom       Events // 解放 送去墓地
+	MonsterDestroy       Events // 破坏 送去墓地
+	MonsterFlip          Events // 反转
+	MonsterSummon        Events // 召唤
+	MonsterSummonCover   Events // 覆盖召唤
+	MonsterSummonFlip    Events // 反转召唤
+	MonsterSummonSpecial Events // 特殊召唤
+
+	// 魔法卡陷阱卡 事件
+	MagicAndTrapInitiative Events // 魔法卡陷阱卡发动效果
+	MagicAndTrapCover      Events // 魔法卡陷阱卡覆盖
+}
+
+func (pl *Player) Round() (err error) {
+	defer func() {
+		if x := recover(); err != nil {
+			rego.ERR(x)
+			err = errors.New(fmt.Sprintln(x))
+		}
+	}()
+	pl.RoundSize++
+	pl.draw()
+	pl.standby()
+	pl.main1()
+	pl.battle()
+	pl.main2()
+	pl.end()
+	return
+}
+
+func (pl *Player) draw() {
+	pl.ActionDraw()
+}
+
+func (pl *Player) standby() {
+
+}
+
+func (pl *Player) main1() {
+
+}
+
+func (pl *Player) battle() {
+
+}
+
+func (pl *Player) main2() {
+
+}
+
+func (pl *Player) end() {
+
+}
+
+func (pl *Player) Init() {
+	for i := 0; i != int(pl.MaxSdi-1); i++ {
+		pl.ActionDraw()
+	}
+}
+
+func (pl *Player) ActionDraw() {
+	pl.Hand.EndPush(pl.Deck.BeginPop())
+}

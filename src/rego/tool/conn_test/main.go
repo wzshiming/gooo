@@ -27,6 +27,8 @@ func main() {
 		Password: "123456",
 	})
 
+	//send("Auth.Users.LogOut", 1)
+
 	//	for i := 0; i != 10; i++ {
 	//		//for {
 	//		err := send("Auth.Auth.Register", map[string]interface{}{

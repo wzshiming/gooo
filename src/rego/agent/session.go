@@ -27,7 +27,7 @@ func NewSession() *Session {
 	}
 	s.Uniq = s.toUint()
 	s.Data = rego.EnJson(map[string]uint{
-		"_Uniq": s.Uniq,
+		"__Uniq__": s.Uniq,
 	})
 	return &s
 }

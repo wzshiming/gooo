@@ -14,6 +14,12 @@ type datafmt struct {
 	Rooms map[string]uint `json:"__Rooms__"`
 }
 
+func GetFromRoom(sess *agent.Session, name string) uint {
+	var r datafmt
+	sess.Data.DeJson(&r)
+	return r.Rooms[name]
+}
+
 func NewRooms(name string, size int) *Rooms {
 	return &Rooms{
 		name: name,
@@ -73,7 +79,8 @@ func (ro *Rooms) Leave(sess *agent.Session) *rego.EncodeBytes {
 	sess.Data.DeJson(&r)
 	delete(r.Rooms, ro.name)
 	delete(ro.list, uniq)
-	return rego.EnJson(r)
+	sess.Data = rego.EnJson(r)
+	return rego.EnJson(map[string]interface{}{ro.name: nil})
 }
 
 func (ro *Rooms) SyncMutex(sess *agent.Session) *agent.Session {
