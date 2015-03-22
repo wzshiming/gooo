@@ -1,6 +1,6 @@
 package ygo
 
-type Action func()
+type Action func(pl *Player)
 
 type Event struct {
 	Owner *Card
@@ -13,9 +13,9 @@ type Events struct {
 	Type   string
 }
 
-func NewEvent(max int, name string) *Events {
+func NewEvent(name string) *Events {
 	r := Events{
-		Events: make(map[string]Event, max),
+		Events: make(map[string]Event),
 		Type:   name,
 	}
 	return &r

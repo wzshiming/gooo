@@ -3,7 +3,7 @@ package main
 import (
 	"rego/cfg"
 	"rego/dbs"
-	"rego/server/proto"
+	"service/proto"
 )
 
 var db dbs.DB

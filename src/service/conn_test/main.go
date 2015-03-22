@@ -4,7 +4,7 @@ import (
 	"rego"
 	"rego/agent/defaul"
 	"rego/cfg"
-	"rego/server/proto"
+	"service/proto"
 )
 
 func init() {

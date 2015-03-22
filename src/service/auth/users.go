@@ -5,7 +5,7 @@ import (
 	"rego"
 	"rego/agent"
 	"rego/misc"
-	"rego/server/proto"
+	"service/proto"
 	"time"
 )
 

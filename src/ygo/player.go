@@ -27,13 +27,13 @@ type Player struct {
 	// 卡牌区
 	Deck    CardPile   //卡组 40 ~ 60
 	Hand    CardPile   //手牌
-	Extra   CardPile   //额外卡组 < 15 融合怪物 同调怪物 超量怪物
-	Side    CardPile   //副卡组 < 15
+	Extra   CardPile   //额外卡组 <= 15 融合怪物 同调怪物 超量怪物
+	Side    CardPile   //副卡组 <= 15
 	Removed CardPile   //排除卡
 	Grave   CardPile   //墓地
-	Mzone   CardUnfold //怪物卡区
-	Szone   CardUnfold //魔法卡陷阱卡区
-	Place   Card       //场地卡
+	Mzone   CardUnfold //怪物卡区 5
+	Szone   CardUnfold //魔法卡陷阱卡区 5
+	Field   CardUnfold //场地卡 5
 
 	// 卡牌事件
 	ToExclude  Events // 排除场外
@@ -57,7 +57,11 @@ type Player struct {
 	MagicAndTrapCover      Events // 魔法卡陷阱卡覆盖
 }
 
-func (pl *Player) Round() (err error) {
+func (pl *Player) ForEachPlayer(fun func(p *Player)) {
+	pl.Game.ForEachPlayer(fun)
+}
+
+func (pl *Player) round() (err error) {
 	defer func() {
 		if x := recover(); err != nil {
 			rego.ERR(x)
@@ -75,7 +79,7 @@ func (pl *Player) Round() (err error) {
 }
 
 func (pl *Player) draw() {
-	pl.ActionDraw()
+	pl.ActionDraw(1)
 }
 
 func (pl *Player) standby() {
@@ -98,12 +102,16 @@ func (pl *Player) end() {
 
 }
 
-func (pl *Player) Init() {
-	for i := 0; i != int(pl.MaxSdi-1); i++ {
-		pl.ActionDraw()
+func (pl *Player) init() {
+	pl.ActionDraw(pl.MaxSdi - 1)
+}
+
+func (pl *Player) ActionDraw(s uint) {
+	for i := uint(0); i != s; i++ {
+		pl.Hand.EndPush(pl.Deck.BeginPop())
 	}
 }
 
-func (pl *Player) ActionDraw() {
-	pl.Hand.EndPush(pl.Deck.BeginPop())
+func (pl *Player) Select() {
+
 }
