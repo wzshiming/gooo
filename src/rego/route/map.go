@@ -64,6 +64,10 @@ func (co *CodeMaps) ReadFile(name string) {
 
 type ReCodeMaps map[string]uint32
 
+func (co *ReCodeMaps) Register(code string, k1, k2, k3 int) {
+	(*co)[code] = K2i(k1, k2, k3)
+}
+
 func (co *ReCodeMaps) Map(code string) (byte, byte, byte, error) {
 	return I2k((*co)[code])
 }
@@ -74,7 +78,7 @@ func K2i(k1, k2, k3 int) uint32 {
 
 func I2k(i uint32) (byte, byte, byte, error) {
 	if (uint32(i) >> 24) != 1 {
-		return 0, 0, 0, errors.New("I2k: inexistence")
+		return 255, 255, 255, errors.New("I2k: inexistence")
 	}
 	return byte(i), byte(i >> 8), byte(i >> 16), nil
 }

@@ -23,6 +23,7 @@ func NewServer(port int) *Server {
 		rego.ERR(err)
 		return nil
 	}
+
 	if err := se.server.Register(NewShutdown(se.Stop)); err != nil {
 		rego.ERR(err)
 		return nil
@@ -67,18 +68,18 @@ func (se *Server) Register(rcvr interface{}) error {
 	return nil
 }
 
-func (se *Server) RegisterName(name string, rcvr interface{}) error {
-	err := se.server.RegisterName(name, rcvr)
-	if err != nil {
-		return err
-	}
-	m := NewMethods(rcvr)
-	m.Name = name
-	if len(m.Methods) != 0 {
-		se.classs = append(se.classs, *m)
-	}
-	return nil
-}
+//func (se *Server) RegisterName(name string, rcvr interface{}) error {
+//	err := se.server.RegisterName(name, rcvr)
+//	if err != nil {
+//		return err
+//	}
+//	m := NewMethods(rcvr)
+//	m.Name = name
+//	if len(m.Methods) != 0 {
+//		se.classs = append(se.classs, *m)
+//	}
+//	return nil
+//}
 
 func (se *Server) Stop() {
 	se.listen.Close()

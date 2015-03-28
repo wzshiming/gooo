@@ -13,14 +13,15 @@ type Users struct {
 	room *misc.Rooms
 }
 
-func NewUsers(size int) *Users {
+func NewUsers() *Users {
 	r := Users{
-		room: misc.NewRooms("Users", size),
+		room: misc.NewRooms("Users"),
 	}
 	i := 0
+	tick := time.Tick(time.Second * 10)
 	go func() {
 		for {
-			time.Sleep(time.Second)
+			<-tick
 			rego.NOTICE(r.room.Len())
 			i++
 			r.room.Broadcast(&agent.Response{
@@ -28,6 +29,7 @@ func NewUsers(size int) *Users {
 					"hello": "world",
 					"index": i,
 				}),
+				Head: []byte{0, 0, 0, 255},
 			}, nil)
 		}
 	}()

@@ -19,16 +19,17 @@ func DefaulAgent() *agent.Agent {
 		defer rego.PanicErr(&err)
 		var reply agent.Response
 		//rego.INFO(string(msg))
-		user.SetDeadline(time.Now().Add(time.Second * 20))
+		user.SetDeadline(time.Now().Add(time.Second * 60 * 60))
 		user.Refresh()
 		err = ro.CallCode(msg[1], msg[2], msg[3], agent.Request{
 			Session: &user.Session,
 			Request: rego.NewEncodeBytes(msg[4:]),
+			Head:    msg[:4],
 		}, &reply)
 
 		if err != nil {
 			ret := []byte(`{"error":"` + err.Error() + `"}`)
-			return user.WriteMsg(append([]byte{255, 255, 255, 255}, ret...))
+			return user.WriteMsg(append(msg[:4], ret...))
 		}
 		return reply.Hand(user, msg[:4])
 

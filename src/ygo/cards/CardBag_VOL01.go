@@ -35,4 +35,69 @@ func init() {
 		Defense:  500,
 	}
 	CardBag_VOL01.Register(co)
+
+	co = &ygo.CardOriginal{
+		Id:       1,
+		Name:     "1",
+		Describe: "1",
+		Lc:       ygo.LC_OrdinaryMonster,
+		Star:     2,
+		La:       ygo.LA_Earth,
+		Lr:       ygo.LR_Rock,
+		Attack:   500,
+		Defense:  500,
+	}
+	CardBag_VOL01.Register(co)
+
+	co = &ygo.CardOriginal{
+		Id:       2,
+		Name:     "2",
+		Describe: "2",
+		Lc:       ygo.LC_OrdinaryMonster,
+		Star:     2,
+		La:       ygo.LA_Earth,
+		Lr:       ygo.LR_Rock,
+		Attack:   500,
+		Defense:  500,
+	}
+	CardBag_VOL01.Register(co)
+
+	co = &ygo.CardOriginal{
+		Id:       3,
+		Name:     "3",
+		Describe: "3",
+		Lc:       ygo.LC_OrdinaryMonster,
+		Star:     2,
+		La:       ygo.LA_Earth,
+		Lr:       ygo.LR_Rock,
+		Attack:   500,
+		Defense:  500,
+	}
+	CardBag_VOL01.Register(co)
+
+	co = &ygo.CardOriginal{
+		Id:       4,
+		Name:     "4",
+		Describe: "4",
+		Lc:       ygo.LC_OrdinaryMonster,
+		Star:     2,
+		La:       ygo.LA_Earth,
+		Lr:       ygo.LR_Rock,
+		Attack:   500,
+		Defense:  500,
+	}
+	CardBag_VOL01.Register(co)
+
+	co = &ygo.CardOriginal{
+		Id:       5,
+		Name:     "5",
+		Describe: "5",
+		Lc:       ygo.LC_OrdinaryMonster,
+		Star:     2,
+		La:       ygo.LA_Earth,
+		Lr:       ygo.LR_Rock,
+		Attack:   500,
+		Defense:  500,
+	}
+	CardBag_VOL01.Register(co)
 }

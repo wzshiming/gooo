@@ -9,6 +9,7 @@ import (
 type Request struct {
 	Request *rego.EncodeBytes
 	Session *Session
+	Head    []byte
 }
 
 type Response struct {

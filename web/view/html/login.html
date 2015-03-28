@@ -40,18 +40,19 @@
 			p: obj.password.value
 		}
 		if(obj.user.value == "true"){
-			ws.sendMsg({{ key "Auth.Users.Register" }},sub)
-			Callback['{{ key "Auth.Users.Register" }}'] = function(r){
+			ws.SendMsg({{ key "Auth.Users.Register" }},sub,function(r){
 				console.log(r)
-			}
+			})
+
 		} else {
-			ws.sendMsg( {{ key "Auth.Users.LogIn" }} ,sub)
-			Callback['{{ key "Auth.Users.LogIn" }}'] = function(){
-				cartoonSingle('#box-login','slideOutLeft',function(r){
-					console.log(r)
+			ws.SendMsg( {{ key "Auth.Users.LogIn" }} ,sub,function(r){
+                console.log(r)
+				cartoonSingle('#box-login','slideOutLeft',function(f){
+					console.log(f)
 					//$('#box-login').hide();
 				}) 
-			}
+			})
+
 		}
 	}
 </script>

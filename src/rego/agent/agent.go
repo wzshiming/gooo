@@ -53,6 +53,7 @@ func (ag *Agent) Loop(user *User) {
 	ag.loop(user)
 	ag.leave(uniq)
 	rego.NOTICE("Leave ", user.RemoteAddr())
+	user.Close()
 }
 
 func (ag *Agent) leave(uniq uint) {

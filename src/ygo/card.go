@@ -46,7 +46,6 @@ func (co *CardsOriginal) Make(ow *Player) (c *CardPile) {
 	for _, v := range *co {
 		c.BeginPush(v.Make(ow))
 	}
-	c.Shuffle()
 	return
 }
 

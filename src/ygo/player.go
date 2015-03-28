@@ -25,36 +25,36 @@ type Player struct {
 	MaxSdi    uint // 最大手牌
 
 	// 卡牌区
-	Deck    CardPile   //卡组 40 ~ 60
-	Hand    CardPile   //手牌
-	Extra   CardPile   //额外卡组 <= 15 融合怪物 同调怪物 超量怪物
-	Side    CardPile   //副卡组 <= 15
-	Removed CardPile   //排除卡
-	Grave   CardPile   //墓地
-	Mzone   CardUnfold //怪物卡区 5
-	Szone   CardUnfold //魔法卡陷阱卡区 5
-	Field   CardUnfold //场地卡 5
+	Deck    *CardPile   //卡组 40 ~ 60
+	Hand    *CardPile   //手牌
+	Extra   *CardPile   //额外卡组 <= 15 融合怪物 同调怪物 超量怪物
+	Side    *CardPile   //副卡组 <= 15
+	Removed *CardPile   //排除卡
+	Grave   *CardPile   //墓地
+	Mzone   *CardUnfold //怪物卡区 5
+	Szone   *CardUnfold //魔法卡陷阱卡区 5
+	Field   *CardUnfold //场地卡 5
 
 	// 卡牌事件
-	ToExclude  Events // 排除场外
-	ToCemetery Events // 移动到墓地
-	ToSdi      Events // 返回手牌
-	ToDeck     Events // 返回卡组
-	Sustains   Events // 永续效果
+	ToExclude  *Events // 排除场外
+	ToCemetery *Events // 移动到墓地
+	ToSdi      *Events // 返回手牌
+	ToDeck     *Events // 返回卡组
+	Sustains   *Events // 永续效果
 
 	// 怪兽卡事件
-	MonsterInitiative    Events // 怪兽卡发动效果
-	MonsterFreedom       Events // 解放 送去墓地
-	MonsterDestroy       Events // 破坏 送去墓地
-	MonsterFlip          Events // 反转
-	MonsterSummon        Events // 召唤
-	MonsterSummonCover   Events // 覆盖召唤
-	MonsterSummonFlip    Events // 反转召唤
-	MonsterSummonSpecial Events // 特殊召唤
+	MonsterInitiative    *Events // 怪兽卡发动效果
+	MonsterFreedom       *Events // 解放 送去墓地
+	MonsterDestroy       *Events // 破坏 送去墓地
+	MonsterFlip          *Events // 反转
+	MonsterSummon        *Events // 召唤
+	MonsterSummonCover   *Events // 覆盖召唤
+	MonsterSummonFlip    *Events // 反转召唤
+	MonsterSummonSpecial *Events // 特殊召唤
 
 	// 魔法卡陷阱卡 事件
-	MagicAndTrapInitiative Events // 魔法卡陷阱卡发动效果
-	MagicAndTrapCover      Events // 魔法卡陷阱卡覆盖
+	MagicAndTrapInitiative *Events // 魔法卡陷阱卡发动效果
+	MagicAndTrapCover      *Events // 魔法卡陷阱卡覆盖
 }
 
 func (pl *Player) ForEachPlayer(fun func(p *Player)) {
@@ -108,7 +108,8 @@ func (pl *Player) init() {
 
 func (pl *Player) ActionDraw(s uint) {
 	for i := uint(0); i != s; i++ {
-		pl.Hand.EndPush(pl.Deck.BeginPop())
+		t := pl.Deck.BeginPop()
+		pl.Hand.EndPush(t)
 	}
 }
 

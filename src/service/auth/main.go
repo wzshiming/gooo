@@ -14,6 +14,6 @@ func init() {
 }
 
 func main() {
-	ser.Register(NewUsers(1000))
+	ser.Register(NewUsers())
 	ser.Start()
 }

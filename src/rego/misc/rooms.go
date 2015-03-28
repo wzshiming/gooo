@@ -20,10 +20,10 @@ func GetFromRoom(sess *agent.Session, name string) uint {
 	return r.Rooms[name]
 }
 
-func NewRooms(name string, size int) *Rooms {
+func NewRooms(name string) *Rooms {
 	return &Rooms{
 		name: name,
-		list: make(map[uint]*agent.Session, size),
+		list: make(map[uint]*agent.Session),
 	}
 }
 
