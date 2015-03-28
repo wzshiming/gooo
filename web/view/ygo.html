@@ -1,4 +1,23 @@
+<link rel="stylesheet" type="text/css" href="css/container.css" />
+<script src="js/three.min.js"></script>
+<script src="js/libs/tween.min.js"></script>
+<script src="js/controls/TrackballControls.js"></script>
+<script src="js/renderers/CSS3DDoubleRenderer.js"></script>
 
+
+<div id="container">
+<div id="menu">
+	<button id="table">TABLE</button>
+	<button id="sphere">SPHERE</button>
+	<button id="helix">HELIX</button>
+	<button id="grid">GRID</button>
+    <button id="test">TEST</button>
+</div>
+</div>
+
+<script>
+
+// 场地位置
 var site = [
 	1,3,
 	1,5,
@@ -24,10 +43,10 @@ var controls;
 var objects = [];
 var targets = { table: [], sphere: [], helix: [], grid: [] };
 
-init();
-animate();
-
-
+function Start(){
+    init();
+    animate();
+}
 
 function NewCard(name,x,y,z,hand) {
 	var element = document.createElement( 'div' );
@@ -242,12 +261,16 @@ function init() {
 	object.rotation.y = 2
 	object.rotation.z = 3
 
-	Move(objects[0],object,3000)
+	//Move(objects[0],object,3000)
 	
 	var fun = function(){
 		Moves(objects, targets.grid, 2000 )
-		window.setTimeout("Moves(objects, targets.helix, 2000 )",3000)
-		window.setTimeout("Moves(objects, targets.sphere, 2000 )",6000)
+		window.setTimeout(function(){
+			Moves(objects, targets.helix, 2000 )
+		},3000)
+		window.setTimeout(function(){
+			Moves(objects, targets.sphere, 2000 )
+		},6000)
 	}
 	
 	fun()
@@ -383,101 +406,4 @@ function NewElement(pos,data) {
 	scene.add( object );
 	return object;
 }
-
-var Funcs = {};
-
-var FuncsHtmlEvent = function(path,funcname,eventfunc){
-	CurrentFunc = function(){
-		$.get(path,function(data,status){
-			var obj = NewElement(Pos(Rand(),Rand(),-4000),data);
-			Change(obj.position,{x:0,y:0,z:2600},2000);
-			Funcs[funcname] = function(u){
-				RemoveElements()
-				eventfunc(u)
-				//Change(obj.position,{x:0,y:0,z:4000},2000);
-				//window.setTimeout(function(){
-				//	scene.remove(obj);
-				//},2000);
-				return false;
-			};
-		});
-	}
-	CurrentFunc();
-}
-
-var CurrentFunc = function(){}
-
-
-var Callback  = {};
-
-
-Callback['{{ key "Auth.Users.LogIn" }}'] = function(d){
-	UseChanBox();
-}
-
-Callback['{{ key "Auth.Users.LogOut" }}'] = function(d){
-	LogInBox();
-}
-
-var RoomsBox = function(d){
-	RemoveElements()
-	var element = document.createElement( 'div' );
-	element.className = 'control-group';
-	//element.style.backgroundColor = 'rgba(0,127,127,0.5)';
-	var controls = document.createElement( 'div' );
-	controls.className = 'controls';	
-	element.appendChild( controls );
-	var symbol = document.createElement( 'button' );
-	symbol.className = 'btn btn-lg btn-primary btn-block';
-	symbol.innerText = "back";
-	symbol.onclick  = function(){
-		RemoveElements();
-		UseChanBox();
-	};
-	controls.appendChild( symbol );
-	var obj = NewElement(RandPos(),element)
-	Change(obj.position,{x:-150,y:160,z:2200},2000);
-	for(var i = 0; i != d.length; i++){
-		var element = document.createElement( 'div' );
-		element.className = 'control-group';
-		//element.style.backgroundColor = 'rgba(0,127,127,0.5)';
-		var controls = document.createElement( 'div' );
-		controls.className = 'controls';
-		element.appendChild( controls );
-		var symbol = document.createElement( 'button' );
-		symbol.className = 'btn btn-lg btn-primary btn-block';
-		symbol.innerText = d[i].r + ". " + d[i].n;
-		//symbol.onclick = "Funcs.chan( " + i.i + " )";
-		controls.appendChild( symbol );
-		var obj = NewElement(RandPos(),element)
-		Change(obj.position,{x:(i%4)*80-150,y:Math.floor(i/4)*-80+50,z:2200},2000);
-	}
-}
-
-var LogInBox = function(){
-	FuncsHtmlEvent("/login.html","login",function(){
-		var b = document.formlogin;
-		ws.sendMsg({{ key "Auth.Users.LogIn" }},{u:b.username.value,p:b.password.value});
-	})	
-}
-
-var MsgErr = function(msg){
-	Messenger().post({
-		message: msg,
-		type: "error",
-		showCloseButton: true,
-		hideAfter: 10,
-		hideOnNavigate: true
-	})
-}
-
-var MsgInfo = function(msg){
-	Messenger().post({
-		message: msg,
-		type: "info",
-		showCloseButton: true,
-		hideAfter: 10,
-		hideOnNavigate: true
-	})
-}
-
+</script>

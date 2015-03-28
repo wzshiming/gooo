@@ -6,7 +6,7 @@ import (
 	"ygo/cards"
 )
 
-func DefaultRuleFrom(sess *agent.Session, camp uint, deck []uint) *ygo.Player {
+func DefaultRuleFrom(sess *agent.Session, camp int, deck []uint) *ygo.Player {
 	player := &ygo.Player{
 		Session:  sess,
 		Camp:     camp,
@@ -28,6 +28,6 @@ func DefaultRuleFrom(sess *agent.Session, camp uint, deck []uint) *ygo.Player {
 	return player
 }
 
-func DefaultTest(sess *agent.Session, camp uint) *ygo.Player {
+func DefaultTest(sess *agent.Session, camp int) *ygo.Player {
 	return DefaultRuleFrom(sess, camp, cards.CardBag_VOL01.Keys())
 }

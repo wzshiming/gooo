@@ -1,7 +1,6 @@
 package main
 
 import (
-	"branch/rendertext"
 	"fmt"
 	"github.com/go-martini/martini"
 	"github.com/gorilla/websocket"
@@ -14,7 +13,6 @@ import (
 	"rego/agent/defaul"
 	"rego/cfg"
 	"rego/route"
-	tt "text/template"
 )
 
 var upgrader = websocket.Upgrader{
@@ -49,9 +47,9 @@ func run(ag *agent.Agent) {
 	store := sessions.NewCookieStore([]byte("gooo"))
 	m.Use(sessions.Sessions("session", store))
 
-	m.Get("/:name.html", render.Renderer(render.Options{
-		Directory:  basepath("/view/html"),     // Specify what path to load the templates from.
-		Layout:     "layout",                   // Specify a layout template. Layouts can call {{ yield }} to render the current template.
+	m.Use(render.Renderer(render.Options{
+		//Layout:          "layout",                   // Specify a layout template. Layouts can call {{ yield }} to render the current template.
+		Directory:  basepath("/view"),          // Specify what path to load the templates from.
 		Extensions: []string{".tmpl", ".html"}, // Specify extensions to load for templates.
 		Funcs:      []ht.FuncMap{helpfunc},     // Specify helper function maps for templates to access.
 		Delims:     render.Delims{"{{", "}}"},  // Sets delimiters to the specified strings.
@@ -59,33 +57,16 @@ func run(ag *agent.Agent) {
 		IndentJSON: true,                       // Output human readable JSON
 		IndentXML:  true,                       // Output human readable XML
 		//HTMLContentType: "application/xhtml+xml",    // Output XHTML content type instead of default "text/html"
-	}), func(params martini.Params, r render.Render) {
+	}))
+	m.Get("/", func(params martini.Params, r render.Render) {
+		r.HTML(200, "index", map[string]interface{}{}, render.HTMLOptions{Layout: "layout"})
+	})
+
+	m.Patch("/:name", func(params martini.Params, r render.Render) {
 		if params["name"] == "layout" || params["name"] == "" {
 			params["name"] = "index"
 		}
 		r.HTML(200, params["name"], map[string]interface{}{}) //, render.HTMLOptions{Layout: "layout"}
-	})
-	m.Get("/js/:name.js", rendertext.Renderer(rendertext.Options{
-		Directory:  basepath("/view/js"),
-		Extensions: []string{".tmpl", ".js"},
-		Funcs:      []tt.FuncMap{helpfunc},
-		Delims:     rendertext.Delims{"{{", "}}"},
-		Charset:    "UTF-8",
-		IndentJSON: true,
-		IndentXML:  true,
-	}), func(params martini.Params, r rendertext.Render) {
-		r.Text(200, params["name"], map[string]interface{}{})
-	})
-
-	m.Get("/css/:name.css", rendertext.Renderer(rendertext.Options{
-		Directory:  basepath("/view/css"),
-		Extensions: []string{".tmpl", ".css"},
-		Delims:     rendertext.Delims{"{{", "}}"},
-		Charset:    "UTF-8",
-		IndentJSON: true,
-		IndentXML:  true,
-	}), func(params martini.Params, r rendertext.Render) {
-		r.Text(200, params["name"], map[string]interface{}{})
 	})
 
 	m.Get("/conn", func(w http.ResponseWriter, r *http.Request) {
@@ -126,6 +107,10 @@ func run(ag *agent.Agent) {
 		user = ag.JoinSync(conn)
 		session.Set("_id", user.ToUint())
 		conn.Refresh(w, r, reg)
+	})
+
+	m.NotFound(func(w http.ResponseWriter, r *http.Request) {
+		w.Write([]byte("The page not found"))
 	})
 
 	rego.NOTICE("Start from ")

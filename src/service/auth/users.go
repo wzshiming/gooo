@@ -29,7 +29,7 @@ func NewUsers() *Users {
 					"hello": "world",
 					"index": i,
 				}),
-				Head: []byte{0, 0, 0, 255},
+				Head: []byte{255, 255, 255, 255},
 			}, nil)
 		}
 	}()

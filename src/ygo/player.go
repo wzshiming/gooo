@@ -18,7 +18,7 @@ type Player struct {
 
 	// 基础属性
 	Hp        int  // 生命值
-	Camp      uint // 阵营
+	Camp      int  // 阵营
 	RoundSize uint // 回合数
 	DrawSize  uint // 抽卡数
 	MaxHp     uint // 最大生命值
@@ -55,6 +55,18 @@ type Player struct {
 	// 魔法卡陷阱卡 事件
 	MagicAndTrapInitiative *Events // 魔法卡陷阱卡发动效果
 	MagicAndTrapCover      *Events // 魔法卡陷阱卡覆盖
+
+	// 是否失败
+	fail bool
+}
+
+func (pl *Player) Fail() {
+	pl.Game.AddLoser(pl.Camp)
+	pl.fail = true
+}
+
+func (pl *Player) IsFail() bool {
+	return pl.fail
 }
 
 func (pl *Player) ForEachPlayer(fun func(p *Player)) {
@@ -79,6 +91,10 @@ func (pl *Player) round() (err error) {
 }
 
 func (pl *Player) draw() {
+	if pl.Deck.Len() == 0 {
+		pl.Fail()
+		return
+	}
 	pl.ActionDraw(1)
 }
 
@@ -108,6 +124,9 @@ func (pl *Player) init() {
 
 func (pl *Player) ActionDraw(s uint) {
 	for i := uint(0); i != s; i++ {
+		if pl.Deck.Len() == 0 {
+			return
+		}
 		t := pl.Deck.BeginPop()
 		pl.Hand.EndPush(t)
 	}

@@ -16,6 +16,10 @@ func NewCardUnfold(max int) *CardUnfold {
 	return &r
 }
 
+func (cu *CardUnfold) Len() int {
+	return len(*cu)
+}
+
 func (cu *CardUnfold) Exist(index int) (c *Card) {
 	c = (*cu)[index]
 	return
@@ -97,6 +101,11 @@ func (cp *CardPile) EndPush(c *Card) {
 }
 
 func (cp *CardPile) BeginPop() (c *Card) {
+	if len(cp.CardUnfold) == 1 {
+		c = (cp.CardUnfold)[0]
+		cp.CardUnfold = CardUnfold{}
+		return
+	}
 	c = (cp.CardUnfold)[len(cp.CardUnfold)-1]
 	cp.CardUnfold = (cp.CardUnfold)[:len(cp.CardUnfold)-2]
 	c.Place = nil
@@ -104,6 +113,11 @@ func (cp *CardPile) BeginPop() (c *Card) {
 }
 
 func (cp *CardPile) EndPop() (c *Card) {
+	if len(cp.CardUnfold) == 1 {
+		c = (cp.CardUnfold)[0]
+		cp.CardUnfold = CardUnfold{}
+		return
+	}
 	c = (cp.CardUnfold)[0]
 	cp.CardUnfold = (cp.CardUnfold)[1:]
 	c.Place = nil

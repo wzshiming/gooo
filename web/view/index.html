@@ -1,0 +1,15 @@
+
+<div id="home">
+    {{ template "home" . }}
+</div>
+<div id="ygo">
+    {{ template "ygo" . }}
+</div>
+{{ template "websocket" . }}
+{{ template "pushmsg" . }}
+{{ template "better" . }}
+{{ template "else" . }}
+
+<script>
+    Start()
+</script>
