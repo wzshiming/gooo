@@ -1,5 +1,7 @@
 package ygo
 
+import ()
+
 // 卡牌类型 Card Types
 type LC_TYPE uint32
 
@@ -29,8 +31,6 @@ const (
 	LC_Trap = LC_OrdinaryTrap | LC_SustainsTrap | LC_ReactionTrap
 	// 魔法卡与陷阱卡
 	LC_MagicAndTrap = LC_Magic | LC_Trap
-	// 所有类型的卡
-	LC_Card = LC_Monster | LC_MagicAndTrap
 )
 
 // 表示形式 Expression

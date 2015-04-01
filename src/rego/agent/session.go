@@ -42,7 +42,11 @@ func (s *Session) ToUint() uint {
 func (s *Session) Refresh() {
 	s.LastPacketTime = time.Now()
 }
-
+func (s *Session) Push(reply interface{}) (err error) {
+	return s.Send(&Response{
+		Response: rego.EnJson(reply),
+	})
+}
 func (s *Session) Send(reply *Response) (err error) {
 	defer func() {
 		if x := recover(); x != nil {

@@ -48,13 +48,15 @@
 		var n2 = i+","+n;
 		if((typeof msg.e == "string") && msg.e != ""){
 			MsgErr(msg.e);
-		}else if(typeof this.Callback[n2] == "function"){
-			this.Callback[n2](msg);
-			this.Unregister(n2)
 		}else if(typeof this.Callback[n] == "function"){
 			var t = this.Callback[n](msg);
 			if(t == true){
 				this.Unregister(n);
+			}
+		}else if(typeof this.Callback[n2] == "function"){
+			var t = this.Callback[n2](msg);
+			if(t == true){
+				this.Unregister(n2);
 			}
 		}else {
 			this.Missing(i, c1, c2, c3, msg);

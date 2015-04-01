@@ -1,5 +1,7 @@
+<div id="ygo">
+
 <link rel="stylesheet" type="text/css" href="css/container.css" />
-<script src="js/three.min.js"></script>
+<script src="js/three.js"></script>
 <script src="js/libs/tween.min.js"></script>
 <script src="js/controls/TrackballControls.js"></script>
 <script src="js/renderers/CSS3DDoubleRenderer.js"></script>
@@ -16,26 +18,37 @@
 </div>
 
 <script>
+var PI = 3.1415926539
 
-// 场地位置
-var site = [
-	1,3,
-	1,5,
-	19,1,
-	19,3,
-	19,5,
-	4,4,
-	7,4,
-	10,4,
-	13,4,
-	16,4,
-	4,2,
-	7,2,
-	10,2,
-	13,2,
-	16,2
-]
-
+function place(angle,x,y){
+    var site = [
+    	1,3,
+    	1,5, //融合卡
+    	19,1,
+    	19,3, //墓地
+    	19,5, //卡组
+    	4,4,  //魔陷
+    	7,4,
+    	10,4,
+    	13,4,
+    	16,4,
+    	4,2,  //怪兽
+    	7,2,
+    	10,2,
+    	13,2,
+    	16,2
+    ]
+	var rotation = new THREE.Matrix4().makeRotationZ(angle);
+    return function(index){
+		var object = new THREE.Object3D();
+		object.matrix.makeTranslation(
+				( site[ index*2 ] * 100 ) - 1000 + x,
+				- ( site[ index*2 + 1 ] * 150 ) + y ,
+				0);
+		object.applyMatrix(rotation)
+        return object;
+    }
+}
 
 var camera, scene, renderer;
 var controls;
@@ -51,13 +64,13 @@ function Start(){
 function NewCard(name,x,y,z,hand) {
 	var element = document.createElement( 'div' );
 	element.className = 'card';
-	element.style.backgroundColor = 'rgba(0,127,127,' + ( Math.random() * 0.5 + 0.25 ) + ')';
-	element.style.backgroundImage = 'url(/pics/' + name + '.jpg)';
+	//element.style.backgroundColor = 'rgba(0,127,127,' + ( Math.random() * 0.5 + 0.25 ) + ')';
+	//element.style.backgroundImage = 'url(/cards/img/' + name + '.jpg)';
+    element.innerHTML = '<img class="card" src="/cards/img/' + name + '.jpg"  alt="" />'
 
 	var element2 = document.createElement( 'div' );
-	element2.className = 'card';
-	element2.style.backgroundImage = 'url(/textures/cover.jpg)';
-
+	//element2.style.backgroundImage = 'url(/textures/cover.jpg)';
+    element2.innerHTML = '<img class="card" src="/cards/cover/0.jpg"  alt="" />'
 	if(typeof hand == "function") {
 		element.addEventListener( 'click', hand )
 		element2.addEventListener( 'click', hand )	
@@ -74,7 +87,7 @@ function NewUnknownCard(x,y,z) {
 	var element = document.createElement( 'div' );
 	element.className = 'card';
 	element.style.backgroundColor = 'rgba(0,127,127,' + ( Math.random() * 0.5 + 0.25 ) + ')';
-	element.style.backgroundImage = 'url(/textures/cover.jpg)';
+	element.innerHTML = '<img class="card" src="/cards/cover/0.jpg"  alt="" />'
 	var object = new THREE.CSS3DObject( element);
 	object.position.x = x;
 	object.position.y = y;
@@ -94,27 +107,9 @@ function init() {
 	// table
 	
 	console.dir(document);
-//	for ( var i = 0; i < site.length; i += 2 ) {
 
-//		//var obj = NewUnknownCard(0,0,0)
-//		var obj = NewCard((1000 +( i / 2 )).toString()
-//			,Math.random() * 4000 - 2000
-//			,Math.random() * 4000 - 2000
-//			,Math.random() * 4000 - 2000
-//			,function ( event ) {
-//				console.log("log");
-//			})
-//		objects.push( obj );
-
-
-//		var object = new THREE.Object3D();
-//		object.position.x = ( site[ i ] * 100 ) - 1260;
-//		object.position.y = - ( site[ i + 1 ] * 150 ) + 600;
-
-//		targets.table.push( object );
-
-//	}
-	for ( var i = 0; i < 20; i += 1 ) {
+    var pl = place(0,0,0);
+	for ( var i = 0; i < 15; i += 1 ) {
 
 		//var obj = NewUnknownCard(0,0,0)
 		var obj = NewCard((1000 + i ).toString()
@@ -126,12 +121,27 @@ function init() {
 			})
 		objects.push( obj );
 
+        var pos = pl(i)
 
-//		var object = new THREE.Object3D();
-//		object.position.x = ( site[ i ] * 100 ) - 1260;
-//		object.position.y = - ( site[ i + 1 ] * 150 ) + 600;
+		targets.table.push( pos );
 
-//		targets.table.push( object );
+	}
+	var pl = place(PI,0,0);
+	for ( var i = 0; i < 15; i += 1 ) {
+
+		//var obj = NewUnknownCard(0,0,0)
+		var obj = NewCard((1015 + i ).toString()
+				,Math.random() * 4000 - 2000
+				,Math.random() * 4000 - 2000
+				,Math.random() * 4000 - 2000
+				,function ( event ) {
+					console.log("log");
+				})
+		objects.push( obj );
+
+		var pos = pl(i)
+
+		targets.table.push( pos );
 
 	}
 	//scene.remove(objects[0])
@@ -253,18 +263,9 @@ function init() {
 	}, false );
 
 
-	//Moves(objects, targets.table, 200 );
-
-	var object = new THREE.Object3D();
-
-	object.rotation.x = 1
-	object.rotation.y = 2
-	object.rotation.z = 3
-
-	//Move(objects[0],object,3000)
 	
 	var fun = function(){
-		Moves(objects, targets.grid, 2000 )
+		Moves(objects, targets.table, 2000 )
 		window.setTimeout(function(){
 			Moves(objects, targets.helix, 2000 )
 		},3000)
@@ -300,7 +301,7 @@ function Move( object, target, duration ) {
 
 function Moves( objects, targets, duration ) {
 
-	//TWEEN.removeAll();
+	TWEEN.removeAll();
 	
 	for ( var i = 0; i < objects.length; i ++ ) {
 
@@ -406,4 +407,6 @@ function NewElement(pos,data) {
 	scene.add( object );
 	return object;
 }
+$('#ygo').hide();
 </script>
+</div>

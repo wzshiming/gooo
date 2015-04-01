@@ -33,6 +33,7 @@ func (yg *YGO) Loop() {
 		yg.Players[k].Index = k
 		yg.Players[k].Game = yg
 		yg.Players[k].init()
+
 	}
 	for {
 		for _, v := range yg.Players {

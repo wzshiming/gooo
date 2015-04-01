@@ -13,5 +13,6 @@ func init() {
 }
 
 func main() {
+	ser.Register(NewRoom())
 	ser.Start()
 }

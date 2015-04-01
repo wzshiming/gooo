@@ -49,8 +49,12 @@
 				console.log(r)
 				cartoonSingle('#box-login','slideOutLeft',function(f){
 					console.log(f)
-					//$('#box-login').hide();
-				}) 
+					$('#box-login').hide();
+				});
+                ws.Register( {{ key "Auth.Users.LogIn" }},function(r){
+                    console.log(r)
+                });
+                return true
 			})
 
 		}

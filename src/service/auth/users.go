@@ -29,7 +29,6 @@ func NewUsers() *Users {
 					"hello": "world",
 					"index": i,
 				}),
-				Head: []byte{255, 255, 255, 255},
 			}, nil)
 		}
 	}()
@@ -95,10 +94,9 @@ func (r *Users) LogIn(args agent.Request, reply *agent.Response) error {
 	}
 
 	// 用户登入
-	if ret, err := r.room.JoinFrom(uint(ouser.Id), args.Session); err != nil {
+	if ret, err := r.room.JoinFrom(uint(ouser.Id), args.Session, args.Head); err != nil {
 		return errors.New(Trans.Value("auth.islogin"))
 	} else {
-		args.Session.Data = rego.SumJson(args.Session.Data, ret)
 		reply.Data = ret
 	}
 	return nil

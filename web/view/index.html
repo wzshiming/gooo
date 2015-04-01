@@ -1,15 +1,12 @@
-
-<div id="home">
-    {{ template "home" . }}
-</div>
-<div id="ygo">
-    {{ template "ygo" . }}
-</div>
 {{ template "websocket" . }}
 {{ template "pushmsg" . }}
+
+<div id="main">
+{{ template "top" . }}
+{{ template "home" . }}
+{{ template "ygo" . }}
+</div>
+
 {{ template "better" . }}
 {{ template "else" . }}
 
-<script>
-    Start()
-</script>
