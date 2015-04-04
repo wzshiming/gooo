@@ -29,7 +29,7 @@
 				msg = JSON.stringify(msg);
 			}
 
-			this.i = (this.i+1)& 0xFF;
+			this.i = (this.i+1)& 0x7F;
 			var cs = c.split(",");
 			c1 = Number(cs[0]);
 			c2 = Number(cs[1]);
@@ -46,17 +46,19 @@
 	ws.event = function(i, c1, c2, c3, msg){
 		var n = c1 + "," + c2 + "," +c3;
 		var n2 = i+","+n;
-		if((typeof msg.e == "string") && msg.e != ""){
-			MsgErr(msg.e);
-		}else if(typeof this.Callback[n] == "function"){
-			var t = this.Callback[n](msg);
-			if(t == true){
-				this.Unregister(n);
-			}
+		if((typeof msg.error == "string") && msg.error != ""){
+			MsgErr(msg.error);
 		}else if(typeof this.Callback[n2] == "function"){
 			var t = this.Callback[n2](msg);
+            console.log(n2, msg);
 			if(t == true){
 				this.Unregister(n2);
+			}
+		}else if(typeof this.Callback[n] == "function"){
+			var t = this.Callback[n](msg);
+            console.log(n, msg);
+			if(t == true){
+				this.Unregister(n);
 			}
 		}else {
 			this.Missing(i, c1, c2, c3, msg);

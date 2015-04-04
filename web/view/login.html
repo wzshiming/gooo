@@ -41,20 +41,27 @@
 		}
 		if(obj.user.value == "true"){
 			ws.SendMsg({{ key "Auth.Users.Register" }},sub,function(r){
-				console.log(r)
+				if(r && r.error == ""){
+					MsgInfo("Register finish")
+					return true
+				}
+				MsgErr(r.error)
+				return true
 			})
-
 		} else {
 			ws.SendMsg( {{ key "Auth.Users.LogIn" }} ,sub,function(r){
-				console.log(r)
-				cartoonSingle('#box-login','slideOutLeft',function(f){
-					console.log(f)
-					$('#box-login').hide();
-				});
-                ws.Register( {{ key "Auth.Users.LogIn" }},function(r){
-                    console.log(r)
-                });
-                return true
+				if(r && r.error == ""){
+					cartoonSingle('#box-login','slideOutLeft',function(f){
+						console.log(f)
+						$('#box-login').hide();
+					});
+					ws.Register( {{ key "Auth.Users.LogIn" }},function(r){
+						console.log(r)
+					});
+				} else {
+                    MsgErr(r.error)
+                }
+				return true
 			})
 
 		}

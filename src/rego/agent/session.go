@@ -16,6 +16,7 @@ type Session struct {
 	Dirtycount     uint
 	Uniq           uint
 	SerId          int
+	readlist       chan *rego.EncodeBytes
 }
 
 func NewSession() *Session {
@@ -32,6 +33,13 @@ func NewSession() *Session {
 	return &s
 }
 
+func (s *Session) Readlist() chan *rego.EncodeBytes {
+	if s.readlist == nil {
+		s.readlist = make(chan *rego.EncodeBytes, 10)
+	}
+	return s.readlist
+}
+
 func (s *Session) toUint() uint {
 	return (uint)((uintptr)(unsafe.Pointer(s)))
 }
@@ -42,11 +50,13 @@ func (s *Session) ToUint() uint {
 func (s *Session) Refresh() {
 	s.LastPacketTime = time.Now()
 }
+
 func (s *Session) Push(reply interface{}) (err error) {
 	return s.Send(&Response{
 		Response: rego.EnJson(reply),
 	})
 }
+
 func (s *Session) Send(reply *Response) (err error) {
 	defer func() {
 		if x := recover(); x != nil {

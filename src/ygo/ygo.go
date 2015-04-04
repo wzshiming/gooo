@@ -2,21 +2,24 @@ package ygo
 
 import (
 	"rego"
+	"rego/misc"
 	"time"
 )
 
 type YGO struct {
+	Room     *misc.Rooms
 	StartAt  time.Time
 	Players  []*Player
 	Survival map[int]int
 	Over     bool
 }
 
-func NewYGO(players ...*Player) *YGO {
+func NewYGO(r *misc.Rooms) *YGO {
 	return &YGO{
+		Room:     r,
 		Survival: make(map[int]int),
 		StartAt:  time.Now(),
-		Players:  players,
+		//Players:  players,
 	}
 }
 

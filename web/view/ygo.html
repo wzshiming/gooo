@@ -7,406 +7,237 @@
 <script src="js/renderers/CSS3DDoubleRenderer.js"></script>
 
 
-<div id="container">
-<div id="menu">
-	<button id="table">TABLE</button>
-	<button id="sphere">SPHERE</button>
-	<button id="helix">HELIX</button>
-	<button id="grid">GRID</button>
-    <button id="test">TEST</button>
-</div>
-</div>
+<div id="container"></div>
 
 <script>
+
 var PI = 3.1415926539
 
-function place(angle,x,y){
+var place= function (angle,x,y){
     var site = [
-    	1,3,
-    	1,5, //融合卡
-    	19,1,
-    	19,3, //墓地
-    	19,5, //卡组
-    	4,4,  //魔陷
-    	7,4,
-    	10,4,
-    	13,4,
-    	16,4,
-    	4,2,  //怪兽
-    	7,2,
-    	10,2,
-    	13,2,
-    	16,2
+        1,3,
+        1,5, //融合卡
+        19,1,
+        19,3, //墓地
+        19,5, //卡组
+        4,4,  //魔陷
+        7,4,
+        10,4,
+        13,4,
+        16,4,
+        4,2,  //怪兽
+        7,2,
+        10,2,
+        13,2,
+        16,2,
+        7,7,  //手牌
+        8,7,
+        9,7,
+        10,7,
+        11,7,
+        12,7,
     ]
-	var rotation = new THREE.Matrix4().makeRotationZ(angle);
+    var rotation = new THREE.Matrix4().makeRotationZ(angle);
     return function(index){
-		var object = new THREE.Object3D();
-		object.matrix.makeTranslation(
-				( site[ index*2 ] * 100 ) - 1000 + x,
-				- ( site[ index*2 + 1 ] * 150 ) + y ,
-				0);
-		object.applyMatrix(rotation)
+        var object = new THREE.Object3D();
+        object.matrix.makeTranslation(
+                ( site[ index*2 ] * 100 ) - 1000 + x,
+                - ( site[ index*2 + 1 ] * 150 ) + y ,
+                0);
+        object.applyMatrix(rotation)
         return object;
     }
 }
+
+var NewDeck = function () {
+    var deck = []
+    var cards = {}
+    cards.push = function(i){
+        deck.push(i)
+    }
+    cards.pop = function(){
+        return deck.pop()
+    }
+    return cards
+}
+
+var player = function (angle){
+    var pl = place(angle,0,0);
+    var deck = []
+    var hand = []
+    players = {}
+    players.init = function (size){
+        for ( var i = 0; i < size; i += 1 ) {
+            var obj = NewCards()
+            deck.push(obj)
+            obj.Move(pl(4))
+            obj.FaceDown()
+        }
+    }
+    players.draw = function (size){
+        for ( var i = 0; i < size; i += 1 ) {
+            var obj = deck.pop()
+            hand.push(obj)
+            //hand.length()
+            obj.Move(pl(15+i))
+            if(angle==0) {
+                obj.FaceUp()
+            } else {
+                obj.FaceDown()
+            }
+        }
+    }
+    return players
+}
+
 
 var camera, scene, renderer;
 var controls;
 
 var objects = [];
-var targets = { table: [], sphere: [], helix: [], grid: [] };
+
+
+
+function CardFront(i) {
+    return '<img class="card" src="/cards/img/' + i + '.jpg"  alt="" />'
+}
+
+function CardBack(i) {
+    return '<img class="card" src="/cards/cover/' + i + '.jpg"  alt="" />'
+}
+
+function NewCards() {
+    var element = document.createElement( 'div' );
+    element.innerHTML = CardFront(0);
+    var element2 = document.createElement( 'div' );
+    element2.innerHTML = CardBack(0);
+    var object = new THREE.CSS3DDoubleObject( element,element2 );
+    object.position.x = Math.random() * 4000 - 2000;
+    object.position.y = Math.random() * 4000 - 2000;
+    object.position.z = 4000;
+    scene.add( object );
+    var target = new THREE.Object3D();
+
+    object.SetType = function (name,id){
+        object.element.innerHTML = CardFront(name)
+        object.CardsType = name;
+        object.CardsId = id;
+    }
+
+    object.Move = function (pos){
+        Translate(object,pos.position,1000)
+    }
+
+    object.FaceUp = function(){
+        Rotate(object,{y:0},1000)
+    }
+
+    object.FaceDown = function(){
+        Rotate(object,{y:PI},1000)
+
+    }
+
+    object.Attack = function(){
+        Rotate(object,{z:0},1000)
+
+    }
+
+    object.Defense = function(){
+        Rotate(object,{z:PI},1000)
+    }
+    object.SetType(0,0);
+    return object
+}
+
+function init() {
+//    ws.Register({{ key "Chan.Room.Game" }},function(msg){
+//        if(msg.status == "gameinit"){
+
+//        }
+    //MsgInfo(JSON.stringify(msg))
+//    })
+//    ws.SendMsg( {{ key "Chan.Room.Game" }} ,{hand:"init"})
+
+    console.dir(document);
+    var user1 = player(0)
+    var user2 = player(PI)
+    user1.init(60)
+    user2.init(60)
+    //window.setInterval(fun,9000)
+    window.setTimeout(function(){
+        user1.draw(5)
+        user2.draw(5)
+    },2200)
+}
+
+function Tween(object, target, duration) {
+    new TWEEN.Tween( object )
+            .to( target, duration )
+            .easing( TWEEN.Easing.Exponential.InOut )
+            .start();
+}
+
+function Translate(object, target, duration){
+    Tween(object.position,target,(Math.random() + 0.3 ) *  duration)
+}
+
+function Rotate(object, target, duration){
+    Tween(object.rotation,target,(Math.random() + 0.1 ) *  duration)
+}
+
+function Move( object, target, duration ) {
+    //TWEEN.remove(object)
+    Translate(object,{ x: target.position.x, y: target.position.y, z: target.position.z },duration)
+    Rotate(object,{ x: target.rotation.x, y: target.rotation.y, z: target.rotation.z },duration)
+}
+
+function Moves( objects, targets, duration ) {
+    //TWEEN.removeAll();
+    for ( var i = 0; i < objects.length; i ++ ) {
+        Move(objects[ i ],targets[ i ],duration)
+    }
+}
+
+function onWindowResize() {
+    camera.aspect = window.innerWidth / window.innerHeight;
+    camera.updateProjectionMatrix();
+    renderer.setSize( window.innerWidth, window.innerHeight );
+    render();
+}
+
+function animate() {
+    requestAnimationFrame( animate );
+    TWEEN.update();
+    controls.update();
+    render()
+}
+
+function render() {
+    renderer.render( scene, camera );
+}
 
 function Start(){
+    camera = new THREE.PerspectiveCamera( 40, window.innerWidth / window.innerHeight, 1, 10000 );
+    camera.position.z = 3000;
+    scene = new THREE.Scene();
+    renderer = new THREE.CSS3DRenderer();
+    renderer.setSize( window.innerWidth, window.innerHeight );
+    renderer.domElement.style.position = 'absolute';
+    document.getElementById( 'container' ).appendChild( renderer.domElement );
+    controls = new THREE.TrackballControls( camera, renderer.domElement );
+    //controls.rotateSpeed = 0;
+    //controls.minDistance = 3000;
+    //controls.maxDistance = 3000;
+    controls.addEventListener( 'Tween', render );
+    controls.noRotate = true;
+    controls.noZoom = true;
+    controls.noPan = true;
+    controls.noRoll = true;
+    window.addEventListener( 'resize', onWindowResize, false );
     init();
     animate();
 }
 
-function NewCard(name,x,y,z,hand) {
-	var element = document.createElement( 'div' );
-	element.className = 'card';
-	//element.style.backgroundColor = 'rgba(0,127,127,' + ( Math.random() * 0.5 + 0.25 ) + ')';
-	//element.style.backgroundImage = 'url(/cards/img/' + name + '.jpg)';
-    element.innerHTML = '<img class="card" src="/cards/img/' + name + '.jpg"  alt="" />'
-
-	var element2 = document.createElement( 'div' );
-	//element2.style.backgroundImage = 'url(/textures/cover.jpg)';
-    element2.innerHTML = '<img class="card" src="/cards/cover/0.jpg"  alt="" />'
-	if(typeof hand == "function") {
-		element.addEventListener( 'click', hand )
-		element2.addEventListener( 'click', hand )	
-	}
-	var object = new THREE.CSS3DDoubleObject( element,element2 );
-	object.position.x = x;
-	object.position.y = y;
-	object.position.z = z;
-	scene.add( object );
-	return object
-}
-
-function NewUnknownCard(x,y,z) {
-	var element = document.createElement( 'div' );
-	element.className = 'card';
-	element.style.backgroundColor = 'rgba(0,127,127,' + ( Math.random() * 0.5 + 0.25 ) + ')';
-	element.innerHTML = '<img class="card" src="/cards/cover/0.jpg"  alt="" />'
-	var object = new THREE.CSS3DObject( element);
-	object.position.x = x;
-	object.position.y = y;
-	object.position.z = z;
-	scene.add( object );
-	return object
-}
-
-
-function init() {
-
-	camera = new THREE.PerspectiveCamera( 40, window.innerWidth / window.innerHeight, 1, 10000 );
-	camera.position.z = 3000;
-
-	scene = new THREE.Scene();
-
-	// table
-	
-	console.dir(document);
-
-    var pl = place(0,0,0);
-	for ( var i = 0; i < 15; i += 1 ) {
-
-		//var obj = NewUnknownCard(0,0,0)
-		var obj = NewCard((1000 + i ).toString()
-			,Math.random() * 4000 - 2000
-			,Math.random() * 4000 - 2000
-			,Math.random() * 4000 - 2000
-			,function ( event ) {
-				console.log("log");
-			})
-		objects.push( obj );
-
-        var pos = pl(i)
-
-		targets.table.push( pos );
-
-	}
-	var pl = place(PI,0,0);
-	for ( var i = 0; i < 15; i += 1 ) {
-
-		//var obj = NewUnknownCard(0,0,0)
-		var obj = NewCard((1015 + i ).toString()
-				,Math.random() * 4000 - 2000
-				,Math.random() * 4000 - 2000
-				,Math.random() * 4000 - 2000
-				,function ( event ) {
-					console.log("log");
-				})
-		objects.push( obj );
-
-		var pos = pl(i)
-
-		targets.table.push( pos );
-
-	}
-	//scene.remove(objects[0])
-
-	// sphere
-
-	var vector = new THREE.Vector3();
-
-	for ( var i = 0, l = objects.length; i < l; i ++ ) {
-
-		var phi = Math.acos( -1 + ( 2 * i ) / l );
-		var theta = Math.sqrt( l * Math.PI ) * phi;
-
-		var object = new THREE.Object3D();
-
-		object.position.x = 1000 * Math.cos( theta ) * Math.sin( phi );
-		object.position.y = 1000 * Math.sin( theta ) * Math.sin( phi );
-		object.position.z = 1000 * Math.cos( phi );
-
-		vector.copy( object.position ).multiplyScalar( 2 );
-
-		object.lookAt( vector );
-
-		targets.sphere.push( object );
-
-	}
-
-	// helix
-
-	var vector = new THREE.Vector3();
-
-	for ( var i = 0, l = objects.length; i < l; i ++ ) {
-
-		var phi = i * 0.175 + Math.PI;
-
-		var object = new THREE.Object3D();
-
-		object.position.x = 1000 * Math.sin( phi );
-		object.position.y = - ( i * 8 ) + 500;
-		object.position.z = 1000 * Math.cos( phi );
-
-		vector.x = object.position.x * 2;
-		vector.y = object.position.y;
-		vector.z = object.position.z * 2;
-
-		object.lookAt( vector );
-
-		targets.helix.push( object );
-
-	}
-
-	// grid
-
-	for ( var i = 0; i < objects.length; i ++ ) {
-
-		var object = new THREE.Object3D();
-
-		object.position.x = ( ( i % 5 ) * 400 ) - 800;
-		object.position.y = ( - ( Math.floor( i / 5 ) % 5 ) * 400 ) + 800;
-		object.position.z = ( Math.floor( i / 25 ) ) * 1000 - 2000;
-
-		targets.grid.push( object );
-
-	}
-	
-	
-	//
-
-	renderer = new THREE.CSS3DRenderer();
-	renderer.setSize( window.innerWidth, window.innerHeight );
-	renderer.domElement.style.position = 'absolute';
-	document.getElementById( 'container' ).appendChild( renderer.domElement );
-	controls = new THREE.TrackballControls( camera, renderer.domElement );
-	//controls.rotateSpeed = 0;
-	//controls.minDistance = 3000;
-	//controls.maxDistance = 3000;
-	controls.addEventListener( 'change', render );
-	controls.noRotate = true;
-	controls.noZoom = true;
-	controls.noPan = true;
-	controls.noRoll = true;
-	//
-
-	//controls = new THREE.TrackballControls( camera, renderer.domElement );
-	//controls.rotateSpeed = 0.5;
-	//controls.minDistance = 500;
-	//controls.maxDistance = 6000;
-	//controls.addEventListener( 'change', render );
-
-	var button = document.getElementById( 'table' );
-	button.addEventListener( 'click', function ( event ) {
-
-		Moves(objects, targets.table, 2000 );
-
-	}, false );
-
-	var button = document.getElementById( 'sphere' );
-	button.addEventListener( 'click', function ( event ) {
-
-		Moves(objects, targets.sphere, 1000 );
-
-	}, false );
-
-	var button = document.getElementById( 'helix' );
-	button.addEventListener( 'click', function ( event ) {
-
-		Moves(objects, targets.helix, 2000 );
-
-	}, false );
-
-	var button = document.getElementById( 'grid' );
-	button.addEventListener( 'click', function ( event ) {
-		Moves(objects, targets.grid, 2000 );
-	}, false );
-	
-	var button = document.getElementById( 'test' );
-	button.addEventListener( 'click', function ( event ) {
-		Eval("Moves(objects, targets.grid, 2000 );")
-	}, false );
-
-
-	
-	var fun = function(){
-		Moves(objects, targets.table, 2000 )
-		window.setTimeout(function(){
-			Moves(objects, targets.helix, 2000 )
-		},3000)
-		window.setTimeout(function(){
-			Moves(objects, targets.sphere, 2000 )
-		},6000)
-	}
-	
-	fun()
-	var timer =  window.setInterval(fun,9000)
-	//clearInterval(timer)
-
-	window.addEventListener( 'resize', onWindowResize, false );
-
-}
-
-function Change(object, target, duration) {
-	
-	new TWEEN.Tween( object )
-		.to( target, duration )
-		.easing( TWEEN.Easing.Exponential.InOut )
-		.start();
-		
-}
-
-function Move( object, target, duration ) {
-
-	Change(object.position,{ x: target.position.x, y: target.position.y, z: target.position.z },(Math.random() + 0.5 ) *  duration)
-	
-	Change(object.rotation,{ x: target.rotation.x, y: target.rotation.y, z: target.rotation.z },(Math.random() + 0.5 ) *  duration)
-
-}
-
-function Moves( objects, targets, duration ) {
-
-	TWEEN.removeAll();
-	
-	for ( var i = 0; i < objects.length; i ++ ) {
-
-		Move(objects[ i ],targets[ i ],duration)
-
-	}
-	
-//	new TWEEN.Tween( this )
-//		.to( {}, duration * 1.5 )
-//		.onUpdate( render )
-//		.start();
-
-}
-
-function onWindowResize() {
-
-	camera.aspect = window.innerWidth / window.innerHeight;
-
-	camera.updateProjectionMatrix();
-
-	renderer.setSize( window.innerWidth, window.innerHeight );
-
-	render();
-
-}
-
-function animate() {
-
-	requestAnimationFrame( animate );
-	
-	TWEEN.update();
-
-	controls.update();
-
-	render()
-
-}
-
-function render() {
-
-	renderer.render( scene, camera );
-
-}
-
-function Pos(x,y,z) {
-	var target = new THREE.Object3D();
-	target.position.x = x
-	target.position.y = y
-	target.position.z = z
-	return target
-}
-
-function Rand(){
-	return Math.random() * 4000 - 2000
-}
-
-function RandPos() {
-	var target = new THREE.Object3D();
-	target.position.x = Rand();
-	target.position.y = Rand();
-	target.position.z = -4000;
-	return target;
-}
-
-var ObjElements = [];
-
-var RemoveElements = function(){
-	var t = []
-	for(var i = 0; i != ObjElements.length; i++){
-		t.push(ObjElements[i]);
-		Change(ObjElements[i].position,{z:4000},3000);
-	}
-	window.setTimeout(function(){
-		while(t.length != 0){
-			scene.remove(t.pop())
-		}
-	},1000)
-}
-
-function NewElement(pos,data) {
-
-	var element = document.createElement( 'div' );
-	if(typeof data == "string"){
-		element.innerHTML = data;
-	}else if(typeof data.documentElement == "object"){ 
-		element.innerHTML = data.documentElement.innerHTML;
-	}else {
-		console.log( typeof data.documentElement )
-		element = data;
-	}
-	element.addEventListener( 'click', function ( event ) {
-		event.target.focus();
-	})
-	var object = new THREE.CSS3DObject(element);
-	
-	object.position.x = pos.position.x;
-	object.position.y = pos.position.y;
-	object.position.z = pos.position.z;
-	object.rotation.x = pos.rotation.x;
-	object.rotation.y = pos.rotation.y;
-	object.rotation.z = pos.rotation.z;
-	ObjElements.push( object );
-	scene.add( object );
-	return object;
-}
 $('#ygo').hide();
 </script>
 </div>

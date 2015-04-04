@@ -120,9 +120,9 @@ func (pl *Player) end() {
 
 func (pl *Player) init() {
 	pl.ActionDraw(pl.MaxSdi - 1)
-	pl.Session.Push(map[string]string{
-		"geme": "ygo",
-	})
+	//	pl.Game.Room.Push(map[string]string{
+	//		"status": "init",
+	//	}, pl.Session)
 }
 
 func (pl *Player) ActionDraw(s uint) {

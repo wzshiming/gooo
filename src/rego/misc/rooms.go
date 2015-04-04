@@ -2,6 +2,7 @@ package misc
 
 import (
 	"errors"
+	//"fmt"
 	"rego"
 	"rego/agent"
 )
@@ -26,10 +27,20 @@ func GetFromRoom(sess *agent.Session, name string) uint {
 	return r.Rooms[name].ID
 }
 
-func GetFromRoomHead(sess *agent.Session, name string) []byte {
+func GetFromHead(sess *agent.Session, name string) []byte {
 	var r datafmt
 	sess.Data.DeJson(&r)
 	return r.Rooms[name].Head
+}
+
+func SetFromHead(sess *agent.Session, name string, head []byte) {
+	var r datafmt
+	sess.Data.DeJson(&r)
+	r.Rooms[name] = data{
+		ID:   r.Rooms[name].ID,
+		Head: head,
+	}
+	sess.Data = rego.SumJson(sess.Data, rego.EnJson(r))
 }
 
 func NewRooms(name string) *Rooms {
@@ -104,7 +115,10 @@ func (ro *Rooms) Leave(sess *agent.Session) *rego.EncodeBytes {
 func (ro *Rooms) SyncMutex(sess *agent.Session) *agent.Session {
 	se := ro.Sync(sess)
 	if se != nil {
-		se.SyncSession()
+		if err := se.SyncSession(); err != nil {
+			rego.ERR(err)
+			ro.Leave(se)
+		}
 	}
 	return se
 }
@@ -114,7 +128,11 @@ func (ro *Rooms) Uniq(sess *agent.Session) uint {
 }
 
 func (ro *Rooms) Head(sess *agent.Session) []byte {
-	return GetFromRoomHead(sess, ro.name)
+	return GetFromHead(sess, ro.name)
+}
+
+func (ro *Rooms) SetHead(sess *agent.Session, head []byte) {
+	SetFromHead(sess, ro.name, head)
 }
 
 func (ro *Rooms) Sync(sess *agent.Session) *agent.Session {
@@ -138,23 +156,58 @@ func (ro *Rooms) ForEach(fun func(*agent.Session)) {
 	}
 }
 
-func (ro *Rooms) Random() *agent.Session {
-	for _, v := range ro.list {
-		return v
+func (ro *Rooms) Group(name string, sesss ...*agent.Session) (r *Rooms) {
+	r = NewRooms(name)
+	for _, v := range sesss {
+		if i := ro.Sync(v); i != nil {
+			head := ro.Head(i)
+			ro.LeaveMutex(i)
+			r.JoinMutex(i, head)
+		}
 	}
-	return nil
+	return
+}
+
+func (ro *Rooms) GroupFromSize(size int) (sesss []*agent.Session) {
+	for _, v := range ro.list {
+		if size == len(sesss) {
+			return
+		}
+		sesss = append(sesss, v)
+	}
+	return
+}
+
+func (ro *Rooms) Push(reply interface{}, sess *agent.Session) (err error) {
+	return ro.Send(&agent.Response{
+		Response: rego.EnJson(reply),
+	},
+		sess,
+	)
+}
+
+func (ro *Rooms) Send(reply *agent.Response, sess *agent.Session) (err error) {
+	if reply.Head == nil {
+		reply.Head = ro.Head(sess)
+	}
+	if err = sess.Send(reply); err != nil {
+		rego.ERR(err)
+		ro.Leave(sess)
+	}
+	return
+}
+
+func (ro *Rooms) BroadcastPush(reply interface{}, fail func(*agent.Session)) {
+	ro.Broadcast(&agent.Response{
+		Response: rego.EnJson(reply),
+	},
+		fail,
+	)
 }
 
 func (ro *Rooms) Broadcast(reply *agent.Response, fail func(*agent.Session)) {
-	var err error
 	ro.ForEach(func(sess *agent.Session) {
-		if reply.Head == nil {
-			reply.Head = ro.Head(sess)
-		}
-		err = sess.Send(reply)
-		if err != nil {
-			rego.ERR(err)
-			ro.Leave(sess)
+		if err := ro.Send(reply, sess); err == nil {
 			if fail != nil {
 				fail(sess)
 			}

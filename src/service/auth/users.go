@@ -24,11 +24,9 @@ func NewUsers() *Users {
 			<-tick
 			rego.NOTICE(r.room.Len())
 			i++
-			r.room.Broadcast(&agent.Response{
-				Response: rego.EnJson(map[string]interface{}{
-					"hello": "world",
-					"index": i,
-				}),
+			r.room.BroadcastPush(map[string]interface{}{
+				"hello": "world",
+				"index": i,
 			}, nil)
 		}
 	}()
