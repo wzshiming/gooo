@@ -25,15 +25,15 @@ type Player struct {
 	MaxSdi    uint // 最大手牌
 
 	// 卡牌区
-	Deck    *CardPile   //卡组 40 ~ 60
-	Hand    *CardPile   //手牌
-	Extra   *CardPile   //额外卡组 <= 15 融合怪物 同调怪物 超量怪物
-	Side    *CardPile   //副卡组 <= 15
-	Removed *CardPile   //排除卡
-	Grave   *CardPile   //墓地
-	Mzone   *CardUnfold //怪物卡区 5
-	Szone   *CardUnfold //魔法卡陷阱卡区 5
-	Field   *CardUnfold //场地卡 5
+	Deck    *CardPile //卡组 40 ~ 60
+	Hand    *CardPile //手牌
+	Extra   *CardPile //额外卡组 <= 15 融合怪物 同调怪物 超量怪物
+	Side    *CardPile //副卡组 <= 15
+	Removed *CardPile //排除卡
+	Grave   *CardPile //墓地
+	Mzone   *CardTile //怪物卡区 5
+	Szone   *CardTile //魔法卡陷阱卡区 5
+	Field   *CardTile //场地卡 5
 
 	// 卡牌事件
 	ToExclude  *Events // 排除场外

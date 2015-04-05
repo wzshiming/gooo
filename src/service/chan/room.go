@@ -6,9 +6,10 @@ import (
 	//"fmt"
 	"rego/agent"
 	"rego/misc"
+	"service/proto"
 	"time"
 	"ygo"
-	//"ygo/defaul"
+	"ygo/defaul"
 )
 
 type Room struct {
@@ -16,7 +17,7 @@ type Room struct {
 	gameList map[uint]*ygo.YGO
 }
 type dataUniq struct {
-	Uniq uint `json:"__YGOGame__"`
+	Uniq uint `json:"__YGOGame__,string"`
 }
 
 func NewRoom() *Room {
@@ -33,21 +34,25 @@ func (r *Room) YGOGame(sesss ...*agent.Session) {
 	room := misc.NewRooms("YGO")
 	for _, v := range sesss {
 		head := r.room.Head(v)
-		res0 := r.room.Leave(v)
 		v.LockSession()
+		r.room.Leave(v)
 		res, err := room.Join(v, head)
 		if err != nil {
 			v.UnlockSession(nil)
 		} else {
 			v.UnlockSession(&agent.Response{
-				Data: rego.SumJson(res0, res, rego.EnJson(dataUniq{uniq})),
+				Head: head,
+				Data: rego.SumJson(rego.EnJson(dataUniq{uniq}), res),
+				Response: rego.EnJson(map[string]string{
+					"status": "init",
+				}),
 			})
 		}
 	}
 	r.gameList[uniq] = ygo.NewYGO(room)
-	room.BroadcastPush(map[string]string{
-		"status": "init",
-	}, nil)
+	//	room.BroadcastPush(map[string]string{
+	//		"status": "init",
+	//	}, nil)
 }
 
 func (r *Room) Games() {
@@ -113,6 +118,50 @@ func (r *Room) StopSearching(args agent.Request, reply *agent.Response) error {
 	} else {
 		r.room.Leave(s)
 	}
+
+	return nil
+}
+
+func (r *Room) SelectDeck(args agent.Request, reply *agent.Response) error {
+	reply.Response = rego.EnJson(proto.SelectDeckResponse{
+		Deck: defaul.DefaultDeck,
+	})
+
+	return nil
+}
+
+func (r *Room) GameInit(args agent.Request, reply *agent.Response) error {
+	var d0 struct {
+		Language string
+	}
+	args.Session.Data.DeJson(&d0)
+	Trans := i18n.TranslationsForLocale(d0.Language)
+
+	var d dataUniq
+	args.Session.Data.DeJson(&d)
+	if d.Uniq == 0 {
+		return errors.New(Trans.Value("chan.nogame1"))
+	}
+	game := r.gameList[d.Uniq]
+	if game == nil {
+		return errors.New(Trans.Value("chan.nogame2"))
+	}
+	sess := game.Room.Sync(args.Session)
+	if sess == nil {
+		return errors.New(Trans.Value("chan.nogame3"))
+	}
+	gi := proto.GameInitResponse{}
+	game.Room.ForEach(func(se *agent.Session) {
+		gi.Users = append(gi.Users, proto.PlayerInit{
+			Deck: defaul.DefaultDeck,
+			Hp:   8000,
+			Name: "no name",
+		})
+		if se == sess {
+			gi.Index = len(gi.Users) - 1
+		}
+	})
+	reply.Response = rego.EnJson(gi)
 
 	return nil
 }

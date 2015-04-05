@@ -2,6 +2,7 @@ package agent
 
 import (
 	"errors"
+	"rego"
 )
 
 type Connect struct {
@@ -69,4 +70,17 @@ func (r *Connect) Unlock(args UnlockRequest, reply *int) (err error) {
 		return nil
 	}
 	return errors.New("Connect.Unlock: use of closed network connection")
+}
+
+type ChangeRequest struct {
+	Data *rego.EncodeBytes
+	Uniq uint
+}
+
+func (r *Connect) Change(args ChangeRequest, reply *int) (err error) {
+	if conn := r.agent.Get(args.Uniq); conn != nil {
+		conn.Data = rego.SumJson(conn.Data, args.Data)
+		return nil
+	}
+	return errors.New("Connect.Change: use of closed network connection")
 }

@@ -9,23 +9,23 @@ type Cards interface {
 	Find(fun func(*Card) bool) (indexs []int)
 }
 
-type CardUnfold []*Card
+type CardTile []*Card
 
-func NewCardUnfold(max int) *CardUnfold {
-	r := make(CardUnfold, max)
+func NewCardTile(max int) *CardTile {
+	r := make(CardTile, max)
 	return &r
 }
 
-func (cu *CardUnfold) Len() int {
+func (cu *CardTile) Len() int {
 	return len(*cu)
 }
 
-func (cu *CardUnfold) Exist(index int) (c *Card) {
+func (cu *CardTile) Exist(index int) (c *Card) {
 	c = (*cu)[index]
 	return
 }
 
-func (cu *CardUnfold) Index(c *Card) int {
+func (cu *CardTile) Index(c *Card) int {
 	for k, v := range *cu {
 		if v != nil {
 			if c == v {
@@ -36,20 +36,20 @@ func (cu *CardUnfold) Index(c *Card) int {
 	return -1
 }
 
-func (cu *CardUnfold) Placed(index int, c *Card) {
+func (cu *CardTile) Placed(index int, c *Card) {
 	c.Place = cu
 	(*cu)[index] = c
 	return
 }
 
-func (cu *CardUnfold) Picked(index int) (c *Card) {
+func (cu *CardTile) Picked(index int) (c *Card) {
 	c = (*cu)[index]
 	(*cu)[index] = nil
 	c.Place = nil
 	return
 }
 
-func (cu *CardUnfold) PickedFor(c *Card) {
+func (cu *CardTile) PickedFor(c *Card) {
 	for k, v := range *cu {
 		if v != nil {
 			if v == c {
@@ -61,7 +61,7 @@ func (cu *CardUnfold) PickedFor(c *Card) {
 	return
 }
 
-func (cu *CardUnfold) ForEach(fun func(*Card)) {
+func (cu *CardTile) ForEach(fun func(*Card)) {
 	for _, v := range *cu {
 		if v != nil {
 			fun(v)
@@ -69,7 +69,7 @@ func (cu *CardUnfold) ForEach(fun func(*Card)) {
 	}
 }
 
-func (cu *CardUnfold) Find(fun func(*Card) bool) (indexs []int) {
+func (cu *CardTile) Find(fun func(*Card) bool) (indexs []int) {
 	for k, v := range *cu {
 		if v != nil {
 			if fun(v) {
@@ -81,45 +81,45 @@ func (cu *CardUnfold) Find(fun func(*Card) bool) (indexs []int) {
 }
 
 type CardPile struct {
-	CardUnfold
+	CardTile
 }
 
 func NewCardPile() *CardPile {
 	return &CardPile{
-		CardUnfold: CardUnfold{},
+		CardTile: CardTile{},
 	}
 }
 
 func (cp *CardPile) BeginPush(c *Card) {
 	c.Place = cp
-	cp.CardUnfold = append(cp.CardUnfold, c)
+	cp.CardTile = append(cp.CardTile, c)
 }
 
 func (cp *CardPile) EndPush(c *Card) {
 	c.Place = cp
-	cp.CardUnfold = append(CardUnfold{c}, cp.CardUnfold...)
+	cp.CardTile = append(CardTile{c}, cp.CardTile...)
 }
 
 func (cp *CardPile) BeginPop() (c *Card) {
-	if len(cp.CardUnfold) == 1 {
-		c = (cp.CardUnfold)[0]
-		cp.CardUnfold = CardUnfold{}
+	if len(cp.CardTile) == 1 {
+		c = (cp.CardTile)[0]
+		cp.CardTile = CardTile{}
 		return
 	}
-	c = (cp.CardUnfold)[len(cp.CardUnfold)-1]
-	cp.CardUnfold = (cp.CardUnfold)[:len(cp.CardUnfold)-2]
+	c = (cp.CardTile)[len(cp.CardTile)-1]
+	cp.CardTile = (cp.CardTile)[:len(cp.CardTile)-2]
 	c.Place = nil
 	return
 }
 
 func (cp *CardPile) EndPop() (c *Card) {
-	if len(cp.CardUnfold) == 1 {
-		c = (cp.CardUnfold)[0]
-		cp.CardUnfold = CardUnfold{}
+	if len(cp.CardTile) == 1 {
+		c = (cp.CardTile)[0]
+		cp.CardTile = CardTile{}
 		return
 	}
-	c = (cp.CardUnfold)[0]
-	cp.CardUnfold = (cp.CardUnfold)[1:]
+	c = (cp.CardTile)[0]
+	cp.CardTile = (cp.CardTile)[1:]
 	c.Place = nil
 	return
 }

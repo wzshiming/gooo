@@ -6,6 +6,14 @@ import (
 	"ygo/cards"
 )
 
+var DefaultDeck = []uint{}
+
+func init() {
+	for i := uint(1); i != 60; i++ {
+		DefaultDeck = append(DefaultDeck, i)
+	}
+}
+
 func DefaultRuleFrom(sess *agent.Session, camp int, deck []uint) *ygo.Player {
 	player := &ygo.Player{
 		Session:  sess,
@@ -20,14 +28,14 @@ func DefaultRuleFrom(sess *agent.Session, camp int, deck []uint) *ygo.Player {
 		Side:     ygo.NewCardPile(),
 		Removed:  ygo.NewCardPile(),
 		Grave:    ygo.NewCardPile(),
-		Mzone:    ygo.NewCardUnfold(5),
-		Szone:    ygo.NewCardUnfold(5),
-		Field:    ygo.NewCardUnfold(1),
+		Mzone:    ygo.NewCardTile(5),
+		Szone:    ygo.NewCardTile(5),
+		Field:    ygo.NewCardTile(1),
 	}
 	player.Deck = cards.CardBag_VOL01.Deck(player, deck)
 	return player
 }
 
 func DefaultTest(sess *agent.Session, camp int) *ygo.Player {
-	return DefaultRuleFrom(sess, camp, cards.CardBag_VOL01.Keys())
+	return DefaultRuleFrom(sess, camp, DefaultDeck)
 }

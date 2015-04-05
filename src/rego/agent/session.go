@@ -28,7 +28,7 @@ func NewSession() *Session {
 	}
 	s.Uniq = s.toUint()
 	s.Data = rego.EnJson(map[string]uint{
-		"__Uniq__": s.Uniq,
+		"none": 0,
 	})
 	return &s
 }
@@ -107,5 +107,12 @@ func (s *Session) UnlockSession(reply *Response) error {
 	return cfg.ConfForId[s.SerId].Client().Send("Connect.Unlock", UnlockRequest{
 		Uniq:  s.Uniq,
 		Reply: reply,
+	})
+}
+
+func (s *Session) Change(i interface{}) error {
+	return cfg.ConfForId[s.SerId].Client().Send("Connect.Change", ChangeRequest{
+		Uniq: s.Uniq,
+		Data: rego.EnJson(i),
 	})
 }

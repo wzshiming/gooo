@@ -32,6 +32,7 @@ func (re Response) Hand(user *User, head []byte) error {
 	} else if re.Response != nil {
 		ret = re.Response.Bytes()
 	} else {
+		//return nil
 		ret = []byte(`{"error":""}`)
 	}
 	if re.Head != nil && len(re.Head) != 0 {
