@@ -47,7 +47,7 @@ clean_pkg:
 	@$(ECHO_DATE) Cleaning pkg ...
 	@-$(RM) pkg
 
-clean:
+clean: shutdown
 	@$(ECHO_DATE) Cleaning...
 	@-$(RM) $(BUILD_DIR)/* pkg
 

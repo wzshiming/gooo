@@ -9,8 +9,8 @@ import (
 var DefaultDeck = []uint{}
 
 func init() {
-	for i := uint(1); i != 60; i++ {
-		DefaultDeck = append(DefaultDeck, i)
+	for i := uint(0); i != 60; i++ {
+		DefaultDeck = append(DefaultDeck, i+1)
 	}
 }
 
@@ -32,7 +32,7 @@ func DefaultRuleFrom(sess *agent.Session, camp int, deck []uint) *ygo.Player {
 		Szone:    ygo.NewCardTile(5),
 		Field:    ygo.NewCardTile(1),
 	}
-	player.Deck = cards.CardBag_VOL01.Deck(player, deck)
+	player.Deck = cards.CardBag_test.Deck(player, deck)
 	return player
 }
 

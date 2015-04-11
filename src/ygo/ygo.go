@@ -2,11 +2,13 @@ package ygo
 
 import (
 	"rego"
+	"rego/agent"
 	"rego/misc"
 	"time"
 )
 
 type YGO struct {
+	CardVer  *CardVersion
 	Room     *misc.Rooms
 	StartAt  time.Time
 	Players  []*Player
@@ -15,17 +17,28 @@ type YGO struct {
 }
 
 func NewYGO(r *misc.Rooms) *YGO {
-	return &YGO{
+	yg := &YGO{
 		Room:     r,
 		Survival: make(map[int]int),
 		StartAt:  time.Now(),
 		//Players:  players,
 	}
+	yg.Room.ForEach(func(sess *agent.Session) {
+		p := NewPlayer()
+		p.Game = yg
+		p.Session = sess
+		yg.Players = append(yg.Players, p)
+	})
+	return yg
+}
+
+func (yg *YGO) AddPlayer(pl *Player) {
+	yg.Players = append(yg.Players, pl)
 }
 
 func (yg *YGO) ForEachPlayer(fun func(*Player)) {
-	for k, _ := range yg.Players {
-		fun(yg.Players[k])
+	for _, v := range yg.Players {
+		fun(v)
 	}
 }
 

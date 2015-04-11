@@ -6,17 +6,15 @@ import (
 	"rego"
 	"rego/cfg"
 	"time"
-	"unsafe"
 )
 
 type Session struct {
+	rego.Unique
 	Data           *rego.EncodeBytes
 	ConnectTime    time.Time
 	LastPacketTime time.Time
 	Dirtycount     uint
-	Uniq           uint
 	SerId          int
-	readlist       chan *rego.EncodeBytes
 }
 
 func NewSession() *Session {
@@ -26,25 +24,11 @@ func NewSession() *Session {
 		Dirtycount:     0,
 		SerId:          cfg.SelfId,
 	}
-	s.Uniq = s.toUint()
+	s.InitUint()
 	s.Data = rego.EnJson(map[string]uint{
 		"none": 0,
 	})
 	return &s
-}
-
-func (s *Session) Readlist() chan *rego.EncodeBytes {
-	if s.readlist == nil {
-		s.readlist = make(chan *rego.EncodeBytes, 10)
-	}
-	return s.readlist
-}
-
-func (s *Session) toUint() uint {
-	return (uint)((uintptr)(unsafe.Pointer(s)))
-}
-func (s *Session) ToUint() uint {
-	return s.Uniq
 }
 
 func (s *Session) Refresh() {
@@ -64,7 +48,7 @@ func (s *Session) Send(reply *Response) (err error) {
 		}
 	}()
 	return cfg.ConfForId[s.SerId].Client().Send("Connect.Push", PushRequest{
-		Uniq:  s.Uniq,
+		Uniq:  s.ToUint(),
 		Reply: reply,
 	})
 }
@@ -77,7 +61,7 @@ func (s *Session) SyncSession() (err error) {
 	}()
 	var reply LockResponse
 	err = cfg.ConfForId[s.SerId].Client().Call("Connect.Sync", LockRequest{
-		Uniq: s.Uniq,
+		Uniq: s.ToUint(),
 	}, &reply)
 	if err != nil {
 		return err
@@ -94,7 +78,7 @@ func (s *Session) LockSession() (err error) {
 	}()
 	var reply LockResponse
 	err = cfg.ConfForId[s.SerId].Client().Call("Connect.Lock", LockRequest{
-		Uniq: s.Uniq,
+		Uniq: s.ToUint(),
 	}, &reply)
 	if err != nil {
 		return err
@@ -105,14 +89,14 @@ func (s *Session) LockSession() (err error) {
 
 func (s *Session) UnlockSession(reply *Response) error {
 	return cfg.ConfForId[s.SerId].Client().Send("Connect.Unlock", UnlockRequest{
-		Uniq:  s.Uniq,
+		Uniq:  s.ToUint(),
 		Reply: reply,
 	})
 }
 
 func (s *Session) Change(i interface{}) error {
 	return cfg.ConfForId[s.SerId].Client().Send("Connect.Change", ChangeRequest{
-		Uniq: s.Uniq,
+		Uniq: s.ToUint(),
 		Data: rego.EnJson(i),
 	})
 }

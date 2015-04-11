@@ -80,6 +80,13 @@ func (cu *CardTile) Find(fun func(*Card) bool) (indexs []int) {
 	return nil
 }
 
+func (cu *CardTile) Uniqs() (us []uint) {
+	cu.ForEach(func(c *Card) {
+		us = append(us, c.ToUint())
+	})
+	return
+}
+
 type CardPile struct {
 	CardTile
 }

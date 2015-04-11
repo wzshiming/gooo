@@ -60,6 +60,26 @@ type Player struct {
 	fail bool
 }
 
+func NewPlayer() *Player {
+	player := &Player{
+		Camp:     1,
+		Hp:       4000,
+		DrawSize: 1,
+		MaxHp:    ^uint(0),
+		MaxSdi:   6,
+		Deck:     NewCardPile(),
+		Hand:     NewCardPile(),
+		Extra:    NewCardPile(),
+		Side:     NewCardPile(),
+		Removed:  NewCardPile(),
+		Grave:    NewCardPile(),
+		Mzone:    NewCardTile(5),
+		Szone:    NewCardTile(5),
+		Field:    NewCardTile(1),
+	}
+	return player
+}
+
 func (pl *Player) Fail() {
 	pl.Game.AddLoser(pl.Camp)
 	pl.fail = true
@@ -123,6 +143,10 @@ func (pl *Player) init() {
 	//	pl.Game.Room.Push(map[string]string{
 	//		"status": "init",
 	//	}, pl.Session)
+}
+
+func (pl *Player) InitDeck(a []uint) {
+	pl.Deck = pl.Game.CardVer.Deck(pl, a)
 }
 
 func (pl *Player) ActionDraw(s uint) {

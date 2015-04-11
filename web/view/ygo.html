@@ -19,6 +19,9 @@ var objects = [];
 var PI = 3.1415926539
 
 
+var Step = function(func){
+    window.setTimeout(func,1000)
+}
 
 var Desk = function(i){
     this.site = [
@@ -103,85 +106,17 @@ Desk.prototype.Tile = function(x,y,a){
 
 
 
-var Cards = function (place) {
-    this.place = place
-    this.deck = []
-}
-
-Cards.prototype.push = function(i){
-    i.Stop()
-    i.Move(this.place(this.length()))
-    this.deck.push(i)
-}
-
-Cards.prototype.pop = function(){
-    //i.Move(this.place.leave())
-    return this.deck.pop()
-}
-
-Cards.prototype.length = function(){
-    return this.deck.length
-}
-
-
-var Player = function(i){
-    var c = new Desk(i)
-    this.hand= new Cards(c.hand())    //手牌
-    this.deck= new Cards(c.deck())    //卡组 40 ~ 60
-//    this.extra= new Cards()   //额外卡组 <= 15 融合怪物 同调怪物 超量怪物
-//    this.side= new Cards()    //副卡组 <= 15
-//    this.removed= new Cards() //排除卡
-//    this.grave= new Cards()   //墓地
-//    this.mzone= new Cards()   //怪物卡区 5
-//    this.szone= new Cards()   //魔法卡陷阱卡区 5
-//    this.field= new Cards()   //场地卡 5
-}
-
-Player.prototype.Draw = function(){
-    this.hand.push(this.deck.pop())
-}
-
-var YGO = function(){
-}
-
-
-YGO.prototype.Init = function(){
-    ws.SendMsg( {{ key "Chan.Room.GameInit" }} ,{},function(e){
-        this.players = [];
-        this.users = e.users;
-        this.index = e.index;
-        if(this.users instanceof Array) {
-            for(var i = 0;i!=this.users.length;i++){
-                var k = i + this.index;
-                if(k >= this.users.length){
-                    k = k - this.users.length;
-                }
-                var p = new Player(k)
-                console.log(this)
-                for(tt in this.users[i].deck){
-                    var cc = new Card(tt)
-                    cc.FaceDown()
-                    p.deck.push(cc)
-                }
-                this.players[i] = p;
-            }
-        }else {
-            MsgErr("初始化游戏错误")
-        }
-    });
-}
-
-
-
 function CardFront(i) {
-    return '<img class="card" src="/cards/img/' + i + '.jpg"  alt="" />'
+    return '<img class="card" src="/cards/img/' + i + '.jpg"  alt="" />';
 }
 
 function CardBack(i) {
-    return '<img class="card" src="/cards/cover/' + i + '.jpg"  alt="" />'
+    return '<img class="card" src="/cards/cover/' + i + '.jpg"  alt="" />';
 }
 
-var Card = function(id){
+var allCard = {}
+
+var Card = function(uniq){
     var element = document.createElement( 'div' );
     element.innerHTML = CardFront(0);
     var element2 = document.createElement( 'div' );
@@ -190,8 +125,26 @@ var Card = function(id){
     this.object.position.x = Math.random() * 4000 - 2000;
     this.object.position.y = Math.random() * 4000 - 2000;
     this.object.position.z = 4000;
-    this.id = id;
+    this.uniq = uniq;
+    this.hold = null;
+    allCard[uniq] = this;
     scene.add( this.object );
+    element.hold = this
+    element.onclick = function(){
+        console.dir(this.hold.uniq)
+    }
+    element2.hold = element.hold
+    element2.onclick = element.onclick
+}
+Card.prototype.placed = function(){
+    if(this.hold!=null){
+        return this.hold.placed(this.uniq)
+    }
+    return this
+}
+
+Card.prototype.SetFront = function(i){
+    this.object.element.innerHTML = CardFront(i);
 }
 
 Card.prototype.Move = function(pos){
@@ -217,6 +170,118 @@ Card.prototype.Defense = function(){
 Card.prototype.Stop = function(){
     TWEEN.remove(this.object)
 }
+
+var Cards = function (place) {
+    this.place = place
+    this.deck = []
+}
+
+Cards.prototype.placed = function(u){
+    var i = this.index(u)
+    if(i>=0){
+        var c = this.deck.splice(i,1)[0]
+        c.hold = null
+        return c
+    }
+    return null
+}
+
+Cards.prototype.index = function(u){
+    for(var i in this.deck){
+        if(this.deck[i].uniq == u){
+            return i
+        }
+    }
+    return -1
+}
+
+Cards.prototype.push = function(obj){
+    var i = obj.placed()
+    i.Stop()
+    i.Move(this.place(this.length()))
+    i.hold = this
+    this.deck.push(i)
+}
+
+Cards.prototype.pop = function(){
+    //i.Move(this.place.leave())
+    var c= this.deck.pop()
+    c.hold = null
+    return c
+}
+
+Cards.prototype.length = function(){
+    return this.deck.length
+}
+
+
+var Player = function(i){
+    var c = new Desk(i)
+    this.index = i
+    this.hand= new Cards(c.hand())    //手牌
+    this.deck= new Cards(c.deck())    //卡组 40 ~ 60
+//    this.extra= new Cards()   //额外卡组 <= 15 融合怪物 同调怪物 超量怪物
+//    this.side= new Cards()    //副卡组 <= 15
+//    this.removed= new Cards() //排除卡
+//    this.grave= new Cards()   //墓地
+//    this.mzone= new Cards()   //怪物卡区 5
+//    this.szone= new Cards()   //魔法卡陷阱卡区 5
+//    this.field= new Cards()   //场地卡 5
+}
+
+
+Player.prototype.Draw = function(u){
+    console.log(u)
+    var c = this.deck.placed(u)
+    if(c==null){
+        return
+    }
+    this.hand.push(c)
+    if(this.index == 0){
+        c.FaceUp()
+    }
+}
+
+var YGO = function(){
+    this.players = []
+}
+
+
+YGO.prototype.Init = function(){
+    var t = this
+    ws.SendMsg( {{ key "Chan.Room.GameInit" }} ,{},function(e){
+        t.users = e.users;
+        t.index = e.index;
+        if(t.users instanceof Array) {
+            for(var i = 0;i!=t.users.length;i++){
+                var k = i + t.index;
+                if(k >= t.users.length){
+                    k = k - t.users.length;
+                }
+
+                var p = new Player(k)
+                for(var j in t.users[i].deck){
+                    var cc = new Card(t.users[i].deck[j])
+                    cc.FaceDown()
+                    p.deck.push(cc)
+                }
+
+                t.players[k] = p;
+            }
+//            window.setTimeout(function(){
+//                for(var i in t.players){
+//                    for(var j in t.users[i].hand){
+//                        t.players[i].Draw(t.users[i].hand[j])
+//                    }
+//                }
+//            },2000)
+        }else {
+            MsgErr("初始化游戏错误");
+        }
+        return true;
+    });
+}
+
 
 
 function init() {

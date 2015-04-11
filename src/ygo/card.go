@@ -1,5 +1,9 @@
 package ygo
 
+import (
+	"rego"
+)
+
 type CardOriginal struct {
 	Id       uint    // 卡牌id
 	Lc       LC_TYPE // 卡牌类型
@@ -30,13 +34,15 @@ type CardOriginal struct {
 }
 
 func (co *CardOriginal) Make(ow *Player) *Card {
-	return &Card{
+	c := &Card{
 		CardOriginal: *co,
 		IsValid:      true,
 		Owner:        ow,
 		Le:           LE_None,
 		AttackRound:  0,
 	}
+	c.InitUint()
+	return c
 }
 
 type CardsOriginal []CardOriginal
@@ -50,6 +56,7 @@ func (co *CardsOriginal) Make(ow *Player) (c *CardPile) {
 }
 
 type Card struct {
+	rego.Unique
 	CardOriginal
 	Place   Cards   // 所在位置
 	Owner   *Player // 所有者

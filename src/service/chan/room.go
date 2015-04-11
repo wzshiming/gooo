@@ -9,6 +9,7 @@ import (
 	"service/proto"
 	"time"
 	"ygo"
+	"ygo/cards"
 	"ygo/defaul"
 )
 
@@ -49,7 +50,12 @@ func (r *Room) YGOGame(sesss ...*agent.Session) {
 			})
 		}
 	}
-	r.gameList[uniq] = ygo.NewYGO(room)
+	game := ygo.NewYGO(room)
+	r.gameList[uniq] = game
+	game.CardVer = cards.CardBag_test
+	game.ForEachPlayer(func(player *ygo.Player) {
+		player.InitDeck(defaul.DefaultDeck)
+	})
 	//	room.BroadcastPush(map[string]string{
 	//		"status": "init",
 	//	}, nil)
@@ -130,7 +136,7 @@ func (r *Room) SelectDeck(args agent.Request, reply *agent.Response) error {
 	return nil
 }
 
-func (r *Room) GameInit(args agent.Request, reply *agent.Response) error {
+func (r *Room) GameBC(args agent.Request, bc func(*ygo.YGO, *agent.Session) error) error {
 	var d0 struct {
 		Language string
 	}
@@ -150,42 +156,28 @@ func (r *Room) GameInit(args agent.Request, reply *agent.Response) error {
 	if sess == nil {
 		return errors.New(Trans.Value("chan.nogame3"))
 	}
-	gi := proto.GameInitResponse{}
-	game.Room.ForEach(func(se *agent.Session) {
-		gi.Users = append(gi.Users, proto.PlayerInit{
-			Deck: defaul.DefaultDeck,
-			Hp:   8000,
-			Name: "no name",
-		})
-		if se == sess {
-			gi.Index = len(gi.Users) - 1
-		}
-	})
-	reply.Response = rego.EnJson(gi)
-
-	return nil
+	return bc(game, sess)
 }
 
-func (r *Room) Game(args agent.Request, reply *agent.Response) error {
-	var d0 struct {
-		Language string
-	}
-	args.Session.Data.DeJson(&d0)
-	Trans := i18n.TranslationsForLocale(d0.Language)
-	var d dataUniq
-	args.Session.Data.DeJson(&d)
-	if d.Uniq == 0 {
-		return errors.New(Trans.Value("chan.nogame"))
-	}
-	game := r.gameList[d.Uniq]
-	if game == nil {
-		return errors.New(Trans.Value("chan.nogame"))
-	}
-	sess := game.Room.Sync(args.Session)
-	if sess == nil {
-		return errors.New(Trans.Value("chan.nogame"))
-	}
-	game.Room.SetHead(sess, args.Head)
-	sess.Readlist() <- args.Request
-	return nil
+func (r *Room) GameInit(args agent.Request, reply *agent.Response) error {
+	return r.GameBC(args, func(game *ygo.YGO, sess *agent.Session) error {
+		gi := proto.GameInitResponse{}
+
+		game.ForEachPlayer(func(player *ygo.Player) {
+			pi := proto.PlayerInit{
+				Deck: player.Deck.Uniqs(),
+				Hp:   8000,
+				Name: "no name",
+			}
+			//player.ActionDraw(5)
+			//pi.Hand = player.Hand.Uniqs()
+			gi.Users = append(gi.Users, pi)
+
+			if player.Session == sess {
+				gi.Index = len(gi.Users) - 1
+			}
+		})
+		reply.Response = rego.EnJson(gi)
+		return nil
+	})
 }
