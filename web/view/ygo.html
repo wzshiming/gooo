@@ -116,7 +116,7 @@ function CardBack(i) {
 
 var allCard = {}
 
-var Card = function(uniq){
+var Card = function(uniq,master){
     var element = document.createElement( 'div' );
     element.innerHTML = CardFront(0);
     var element2 = document.createElement( 'div' );
@@ -127,6 +127,7 @@ var Card = function(uniq){
     this.object.position.z = 4000;
     this.uniq = uniq;
     this.hold = null;
+    this.master = master;
     allCard[uniq] = this;
     scene.add( this.object );
     element.hold = this
@@ -214,9 +215,11 @@ Cards.prototype.length = function(){
     return this.deck.length
 }
 
-
-var Player = function(i){
-    var c = new Desk(i)
+var Player = function(k,i){
+    var c = new Desk(k)
+    if(k==0){
+        this.self = true;
+    }
     this.index = i
     this.hand= new Cards(c.hand())    //手牌
     this.deck= new Cards(c.deck())    //卡组 40 ~ 60
@@ -229,25 +232,50 @@ var Player = function(i){
 //    this.field= new Cards()   //场地卡 5
 }
 
-
-Player.prototype.Draw = function(u){
-    console.log(u)
+Player.prototype.move2head = function(u){
     var c = this.deck.placed(u)
     if(c==null){
         return
     }
     this.hand.push(c)
-    if(this.index == 0){
+    if(this.self == true){
+        c.FaceUp()
+    }
+}
+
+Player.prototype.Draw = function(u){
+    var c = this.deck.placed(u)
+    if(c==null){
+        return
+    }
+    this.hand.push(c)
+    if(this.self == true){
         c.FaceUp()
     }
 }
 
 var YGO = function(){
     this.players = []
+    var t = this
+    ws.SendMsg({{ key "Chan.Room.GameRegister" }},{} ,function(e){
+        if(typeof e.method  == "string"){
+            if(typeof t[e.method] == "function") {
+                t[e.method](e.args);
+            }
+            else MsgErr(e.method)
+        }
+    });
 }
 
+YGO.prototype.move2head = function(args){
+    allCard[args.uniq].master.move2head(args.uniq)
+}
 
-YGO.prototype.Init = function(){
+YGO.prototype.setFront = function(args){
+    allCard[args.uniq].SetFront(args.desk)
+}
+
+YGO.prototype.init = function(){
     var t = this
     ws.SendMsg( {{ key "Chan.Room.GameInit" }} ,{},function(e){
         t.users = e.users;
@@ -259,22 +287,14 @@ YGO.prototype.Init = function(){
                     k = k - t.users.length;
                 }
 
-                var p = new Player(k)
+                var p = new Player(k,i)
                 for(var j in t.users[i].deck){
-                    var cc = new Card(t.users[i].deck[j])
+                    var cc = new Card(t.users[i].deck[j],p)
                     cc.FaceDown()
                     p.deck.push(cc)
                 }
-
-                t.players[k] = p;
+                t.players[i] = p;
             }
-//            window.setTimeout(function(){
-//                for(var i in t.players){
-//                    for(var j in t.users[i].hand){
-//                        t.players[i].Draw(t.users[i].hand[j])
-//                    }
-//                }
-//            },2000)
         }else {
             MsgErr("初始化游戏错误");
         }
@@ -286,7 +306,6 @@ YGO.prototype.Init = function(){
 
 function init() {
     var ygo = new YGO()
-    ygo.Init()
 //    ws.Register({{ key "Chan.Room.Game" }},function(msg){
 //        if(msg.status == "gameinit"){
 

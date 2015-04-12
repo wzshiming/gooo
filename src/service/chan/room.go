@@ -56,6 +56,7 @@ func (r *Room) YGOGame(sesss ...*agent.Session) {
 	game.ForEachPlayer(func(player *ygo.Player) {
 		player.InitDeck(defaul.DefaultDeck)
 	})
+	game.Loop()
 	//	room.BroadcastPush(map[string]string{
 	//		"status": "init",
 	//	}, nil)
@@ -142,7 +143,6 @@ func (r *Room) GameBC(args agent.Request, bc func(*ygo.YGO, *agent.Session) erro
 	}
 	args.Session.Data.DeJson(&d0)
 	Trans := i18n.TranslationsForLocale(d0.Language)
-
 	var d dataUniq
 	args.Session.Data.DeJson(&d)
 	if d.Uniq == 0 {
@@ -162,7 +162,6 @@ func (r *Room) GameBC(args agent.Request, bc func(*ygo.YGO, *agent.Session) erro
 func (r *Room) GameInit(args agent.Request, reply *agent.Response) error {
 	return r.GameBC(args, func(game *ygo.YGO, sess *agent.Session) error {
 		gi := proto.GameInitResponse{}
-
 		game.ForEachPlayer(func(player *ygo.Player) {
 			pi := proto.PlayerInit{
 				Deck: player.Deck.Uniqs(),
@@ -178,6 +177,13 @@ func (r *Room) GameInit(args agent.Request, reply *agent.Response) error {
 			}
 		})
 		reply.Response = rego.EnJson(gi)
+		return nil
+	})
+}
+
+func (r *Room) GameRegister(args agent.Request, reply *agent.Response) error {
+	return r.GameBC(args, func(game *ygo.YGO, sess *agent.Session) error {
+		game.Room.SetHead(sess, args.Head)
 		return nil
 	})
 }

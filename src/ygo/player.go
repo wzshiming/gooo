@@ -156,9 +156,24 @@ func (pl *Player) ActionDraw(s uint) {
 		}
 		t := pl.Deck.BeginPop()
 		pl.Hand.EndPush(t)
+		pl.Game.CallAll("move2head", map[string]interface{}{
+			"uniq": t.ToUint(),
+		})
+		pl.Call("setFront", map[string]interface{}{
+			"desk": t.Id,
+			"uniq": t.ToUint(),
+		})
 	}
 }
 
-func (pl *Player) Select() {
+type Call struct {
+	Method string      `json:"method"`
+	Args   interface{} `json:"args"`
+}
 
+func (pl *Player) Call(method string, reply interface{}) error {
+	return pl.Game.Room.Push(Call{
+		Method: method,
+		Args:   reply,
+	}, pl.Session)
 }

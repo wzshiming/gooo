@@ -42,15 +42,26 @@ func (yg *YGO) ForEachPlayer(fun func(*Player)) {
 	}
 }
 
+func (yg *YGO) CallAll(method string, reply interface{}) error {
+	yg.Room.BroadcastPush(Call{
+		Method: method,
+		Args:   reply,
+	}, nil)
+	return nil
+}
+
 func (yg *YGO) Loop() {
+	time.Sleep(time.Second)
+	yg.CallAll("init", nil)
+	time.Sleep(time.Second)
 	for k, _ := range yg.Players {
 		ca := yg.Players[k].Camp
 		yg.Survival[ca] = yg.Survival[ca] + 1
 		yg.Players[k].Index = k
 		yg.Players[k].Game = yg
 		yg.Players[k].init()
-
 	}
+	time.Sleep(time.Second)
 	for {
 		for _, v := range yg.Players {
 			if !v.IsFail() {
