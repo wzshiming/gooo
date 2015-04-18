@@ -123,7 +123,16 @@ func (pl *Player) standby() {
 }
 
 func (pl *Player) main1() {
-
+	//	pl.Game.CallAll("moveCard", map[string]interface{}{
+	//			"uniq": t.ToUint(),
+	//			"pos":  "hand",
+	//		})
+	for {
+		select {
+		case <-time.After(time.Second * 30):
+			return
+		}
+	}
 }
 
 func (pl *Player) battle() {
@@ -140,13 +149,13 @@ func (pl *Player) end() {
 
 func (pl *Player) init() {
 	pl.ActionDraw(pl.MaxSdi - 1)
-	//	pl.Game.Room.Push(map[string]string{
-	//		"status": "init",
-	//	}, pl.Session)
 }
 
 func (pl *Player) InitDeck(a []uint) {
 	pl.Deck = pl.Game.CardVer.Deck(pl, a)
+	pl.Deck.ForEach(func(c *Card) {
+		pl.Game.RegisterCards(c)
+	})
 }
 
 func (pl *Player) ActionDraw(s uint) {
@@ -156,8 +165,9 @@ func (pl *Player) ActionDraw(s uint) {
 		}
 		t := pl.Deck.BeginPop()
 		pl.Hand.EndPush(t)
-		pl.Game.CallAll("move2head", map[string]interface{}{
+		pl.Game.CallAll("moveCard", map[string]interface{}{
 			"uniq": t.ToUint(),
+			"pos":  "hand",
 		})
 		pl.Call("setFront", map[string]interface{}{
 			"desk": t.Id,

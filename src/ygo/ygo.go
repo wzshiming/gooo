@@ -11,6 +11,7 @@ type YGO struct {
 	CardVer  *CardVersion
 	Room     *misc.Rooms
 	StartAt  time.Time
+	Cards    map[uint]*Card
 	Players  []*Player
 	Survival map[int]int
 	Over     bool
@@ -19,6 +20,7 @@ type YGO struct {
 func NewYGO(r *misc.Rooms) *YGO {
 	yg := &YGO{
 		Room:     r,
+		Cards:    make(map[uint]*Card),
 		Survival: make(map[int]int),
 		StartAt:  time.Now(),
 		//Players:  players,
@@ -30,6 +32,14 @@ func NewYGO(r *misc.Rooms) *YGO {
 		yg.Players = append(yg.Players, p)
 	})
 	return yg
+}
+
+func (yg *YGO) GetCard(u uint) *Card {
+	return yg.Cards[u]
+}
+
+func (yg *YGO) RegisterCards(c *Card) {
+	yg.Cards[c.ToUint()] = c
 }
 
 func (yg *YGO) AddPlayer(pl *Player) {

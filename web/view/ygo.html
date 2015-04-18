@@ -61,6 +61,22 @@ var Desk = function(i){
     }
 }
 
+Desk.prototype.flag = function(){
+    var x = 2
+    var y = 0.5
+    var a = this.angle
+    return function(i){
+        var object = new THREE.Object3D();
+        var rotation = new THREE.Matrix4().makeRotationZ(a);
+        object.matrix.makeTranslation(
+                ( (x + i) * 250 ) - 1130 ,
+                - ( y * 150 ),
+                0);
+        object.applyMatrix(rotation)
+        return object
+    }
+}
+
 Desk.prototype.deck = function(){
     var x = 19
     var y = 5
@@ -68,35 +84,95 @@ Desk.prototype.deck = function(){
     return this.Pile(x,y,a)
 }
 
+Desk.prototype.removed = function(){
+    var x = 19
+    var y = 1
+    var a = this.angle
+    return this.Pile(x,y,a)
+}
+
+Desk.prototype.grave = function(){
+    var x = 19
+    var y = 3
+    var a = this.angle
+    return this.Pile(x,y,a)
+}
+
+Desk.prototype.field = function(){
+    var x = 1
+    var y = 3
+    var a = this.angle
+    return this.Pile(x,y,a)
+}
+
+Desk.prototype.extra = function(){
+    var x = 1
+    var y = 5
+    var a = this.angle
+    return this.Pile(x,y,a)
+}
 
 Desk.prototype.hand = function(){
     var x = 7
-    var y = 7
+    var y = 6
     var a = this.angle
     return this.Tile(x,y,a)
 }
 
+Desk.prototype.mzone = function(){
+    var x = 10
+    var y = 2
+    var a = this.angle
+    return this.Mid(x,y,a)
+}
 
-Desk.prototype.Pile = function(x,y,a){
+
+Desk.prototype.szone = function(){
+    var x = 10
+    var y = 4
+    var a = this.angle
+    return this.Mid(x,y,a)
+}
+
+Desk.prototype.Mid = function(x,y,a){
+    var rotation = new THREE.Matrix4().makeRotationZ(a);
     return function(i){
         var object = new THREE.Object3D();
-        var rotation = new THREE.Matrix4().makeRotationZ(a);
+        if(i%2==0){
+            object.matrix.makeTranslation(
+                    ( (x + i) * 150 ) - 1500 ,
+                    - ( y * 150 ),
+                    0);
+        }else {
+            object.matrix.makeTranslation(
+                    ( (x - i) * 150 ) - 1650 ,
+                    - ( y * 150 ),
+                    0);
+        }
+        object.applyMatrix(rotation)
+        return object
+    }
+}
+
+Desk.prototype.Pile = function(x,y,a){
+    var rotation = new THREE.Matrix4().makeRotationZ(a);
+    return function(i){
+        var object = new THREE.Object3D();
         object.matrix.makeTranslation(
-                ( x * 100 ) - 1000 + i,
-                - ( y * 150 ) + i,
+                ( x * 100 ) - 1000,
+                - ( y * 150 ),
                 i);
         object.applyMatrix(rotation)
         return object
     }
 }
 
-
 Desk.prototype.Tile = function(x,y,a){
+    var rotation = new THREE.Matrix4().makeRotationZ(a);
     return function(i){
         var object = new THREE.Object3D();
-        var rotation = new THREE.Matrix4().makeRotationZ(a);
         object.matrix.makeTranslation(
-                ( (x + i) * 100 ) - 1000 ,
+                ( (x + i) * 150 ) - 1500 ,
                 - ( y * 150 ),
                 0);
         object.applyMatrix(rotation)
@@ -113,6 +189,7 @@ function CardFront(i) {
 function CardBack(i) {
     return '<img class="card" src="/cards/cover/' + i + '.jpg"  alt="" />';
 }
+
 
 var allCard = {}
 
@@ -133,6 +210,9 @@ var Card = function(uniq,master){
     element.hold = this
     element.onclick = function(){
         console.dir(this.hold.uniq)
+        ws.SendMsg({{ key "Chan.Room.GameCardActionSelectable" }},{uniq:this.hold.uniq} ,function(e){
+            console.dir(e)
+        });
     }
     element2.hold = element.hold
     element2.onclick = element.onclick
@@ -215,40 +295,79 @@ Cards.prototype.length = function(){
     return this.deck.length
 }
 
+var Element = function(){
+    this.element = document.createElement( 'div' );
+    this.object =  new THREE.CSS3DSprite(this.element);
+    this.object.position.x = 0;
+    this.object.position.y = 0;
+    this.object.position.z = 2000;
+    scene.add( this.object );
+}
+
+var Shade = function(t){
+    this.element = document.createElement( 'div' );
+    this.element.className = "shade"
+    this.element.innerHTML = t
+    this.object =  new THREE.CSS3DObject(this.element);
+    this.object.position.x = 0;
+    this.object.position.y = 0;
+    this.object.position.z = 2000;
+    scene.add( this.object );
+}
+
 var Player = function(k,i){
     var c = new Desk(k)
     if(k==0){
         this.self = true;
     }
     this.index = i
+
+    var flag = c.flag()
+    //var flags=["Draw","Standby","Main1","Battle","Main2","End"]
+    var flags=["DP","SP","MP1","BP","MP2","EP"]
+    for(var i =0;i!=6;i++){
+        var e = new Element()
+        e.element.innerHTML="<h1>"+ flags[i]+"</h1>"
+        Move(e.object,flag(i),0)
+    }
+
     this.hand= new Cards(c.hand())    //手牌
+
     this.deck= new Cards(c.deck())    //卡组 40 ~ 60
-//    this.extra= new Cards()   //额外卡组 <= 15 融合怪物 同调怪物 超量怪物
+    Move((new Shade("<h1>卡组图片</h1>")).object,this.deck.place(0),0)
+    this.extra= new Cards(c.extra())   //额外卡组 <= 15 融合怪物 同调怪物 超量怪物
+    Move((new Shade("<h1>融合图</h1>")).object,this.extra.place(0),0)
 //    this.side= new Cards()    //副卡组 <= 15
-//    this.removed= new Cards() //排除卡
-//    this.grave= new Cards()   //墓地
-//    this.mzone= new Cards()   //怪物卡区 5
-//    this.szone= new Cards()   //魔法卡陷阱卡区 5
-//    this.field= new Cards()   //场地卡 5
+    this.removed= new Cards(c.removed()) //排除卡
+    Move((new Shade("<h1>除外图</h1>")).object,this.removed.place(0),0)
+    this.grave= new Cards(c.grave())   //墓地
+    Move((new Shade("<h1>墓地图</h1>")).object,this.grave.place(0),0)
+    this.mzone= new Cards(c.mzone())   //怪物卡区 5
+    for(var i =0;i!=5;i++){
+        Move((new Shade("<h1>怪兽区"+i+"</h1>")).object,this.mzone.place(i),0)
+    }
+
+    this.szone= new Cards(c.szone())   //魔法卡陷阱卡区 5
+    for(var i =0;i!=5;i++){
+        Move((new Shade("<h1>魔陷区"+i+"</h1>")).object,this.szone.place(i),0)
+    }
+    this.field= new Cards(c.field())   //场地卡 5
+    Move((new Shade("<h1>场地图</h1>")).object,this.field.place(0),0)
 }
 
-Player.prototype.move2head = function(u){
+
+Player.prototype.moveCard = function(u,cards){
+    if(typeof cards != "string" ){
+        return
+    }
+    if(!(this[cards] instanceof Cards)){
+        return
+    }
     var c = this.deck.placed(u)
     if(c==null){
         return
     }
-    this.hand.push(c)
-    if(this.self == true){
-        c.FaceUp()
-    }
-}
-
-Player.prototype.Draw = function(u){
-    var c = this.deck.placed(u)
-    if(c==null){
-        return
-    }
-    this.hand.push(c)
+    this[cards].push(c)
     if(this.self == true){
         c.FaceUp()
     }
@@ -257,6 +376,7 @@ Player.prototype.Draw = function(u){
 var YGO = function(){
     this.players = []
     var t = this
+
     ws.SendMsg({{ key "Chan.Room.GameRegister" }},{} ,function(e){
         if(typeof e.method  == "string"){
             if(typeof t[e.method] == "function") {
@@ -267,8 +387,8 @@ var YGO = function(){
     });
 }
 
-YGO.prototype.move2head = function(args){
-    allCard[args.uniq].master.move2head(args.uniq)
+YGO.prototype.moveCard = function(args){
+    allCard[args.uniq].master.moveCard(args.uniq,args.pos)
 }
 
 YGO.prototype.setFront = function(args){
@@ -365,6 +485,8 @@ function render() {
 function Start(){
     camera = new THREE.PerspectiveCamera( 40, window.innerWidth / window.innerHeight, 1, 10000 );
     camera.position.z = 3000;
+
+
     scene = new THREE.Scene();
     renderer = new THREE.CSS3DRenderer();
     renderer.setSize( window.innerWidth, window.innerHeight );
@@ -375,10 +497,12 @@ function Start(){
     //controls.minDistance = 3000;
     //controls.maxDistance = 3000;
     controls.addEventListener( 'Tween', render );
+
     controls.noRotate = true;
     controls.noZoom = true;
     controls.noPan = true;
     controls.noRoll = true;
+
     window.addEventListener( 'resize', onWindowResize, false );
     init();
     animate();

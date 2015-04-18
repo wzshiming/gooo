@@ -5,6 +5,10 @@ import ()
 type GameInitRequest struct {
 }
 
+type GameCardActionSelectableRequest struct {
+	Uniq uint `json:"uniq"`
+}
+
 type PlayerInit struct {
 	// user 表示当前游戏中 卡片的id
 	Deck  []uint `json:"deck"`
@@ -21,7 +25,7 @@ type GameInitResponse struct {
 }
 
 type SelectDeckRequest struct {
-	ID uint `json:id`
+	ID uint `json:"id"`
 }
 
 type SelectDeckResponse struct {

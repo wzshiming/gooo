@@ -168,8 +168,7 @@ func (r *Room) GameInit(args agent.Request, reply *agent.Response) error {
 				Hp:   8000,
 				Name: "no name",
 			}
-			//player.ActionDraw(5)
-			//pi.Hand = player.Hand.Uniqs()
+
 			gi.Users = append(gi.Users, pi)
 
 			if player.Session == sess {
@@ -184,6 +183,19 @@ func (r *Room) GameInit(args agent.Request, reply *agent.Response) error {
 func (r *Room) GameRegister(args agent.Request, reply *agent.Response) error {
 	return r.GameBC(args, func(game *ygo.YGO, sess *agent.Session) error {
 		game.Room.SetHead(sess, args.Head)
+		return nil
+	})
+}
+
+func (r *Room) GameCardActionSelectable(args agent.Request, reply *agent.Response) error {
+	return r.GameBC(args, func(game *ygo.YGO, sess *agent.Session) error {
+		ar := proto.GameCardActionSelectableRequest{}
+		args.Request.DeJson(&ar)
+		c := game.GetCard(ar.Uniq)
+		if c.Owner.Session == sess {
+			rego.INFO(c)
+		}
+
 		return nil
 	})
 }
