@@ -69,7 +69,7 @@ Desk.prototype.flag = function(){
         var object = new THREE.Object3D();
         var rotation = new THREE.Matrix4().makeRotationZ(a);
         object.matrix.makeTranslation(
-                ( (x + i) * 250 ) - 1130 ,
+                ( (x + i) * 200 ) - 1000 ,
                 - ( y * 150 ),
                 0);
         object.applyMatrix(rotation)
@@ -322,15 +322,6 @@ var Player = function(k,i){
     }
     this.index = i
 
-    var flag = c.flag()
-    //var flags=["Draw","Standby","Main1","Battle","Main2","End"]
-    var flags=["DP","SP","MP1","BP","MP2","EP"]
-    for(var i =0;i!=6;i++){
-        var e = new Element()
-        e.element.innerHTML="<h1>"+ flags[i]+"</h1>"
-        Move(e.object,flag(i),0)
-    }
-
     this.hand= new Cards(c.hand())    //手牌
 
     this.deck= new Cards(c.deck())    //卡组 40 ~ 60
@@ -377,6 +368,17 @@ var YGO = function(){
     this.players = []
     var t = this
 
+    var flag = (new Desk(0)).flag()
+    //var flags=["Draw","Standby","Main1","Battle","Main2","End"]
+    this.flags=["INIT","DP","SP","MP1","BP","MP2","EP"]
+    for(var i =0;i!=7;i++){
+        var e = new Element();
+        e.element.innerHTML="<h1>"+ this.flags[i]+ "</h1>";
+        e.element.className="flag0";
+        this["flag"+i] = e;
+        Move(e.object,flag(i),0)
+    }
+
     ws.SendMsg({{ key "Chan.Room.GameRegister" }},{} ,function(e){
         if(typeof e.method  == "string"){
             if(typeof t[e.method] == "function") {
@@ -385,6 +387,36 @@ var YGO = function(){
             else MsgErr(e.method)
         }
     });
+}
+
+
+
+YGO.prototype.flagName = function(args){
+    var t = this.users[args.player]
+    this["flag0"].element.innerHTML = "<h1>"+ t.name + "("+ args.round+")</h1>";
+}
+
+YGO.prototype.flagStep = function(args){
+    window.clearInterval(this.stepInterval)
+    for(var i =1;i!=7;i++){
+        var e = this["flag"+i].element
+        e.innerHTML="<h1>"+ this.flags[i]+ "</h1>";
+        if(args.step==i){
+            e.className="flag1";
+            if(typeof args.wait == "number" ){
+                var ti = args.wait/1000000000;
+                var tf = this.flags[i]
+                var e1 = this["flag"+i].element
+                e1.innerHTML="<h1>"+ this.flags[i]+ "(" +ti+ "s)</h1>";
+                this.stepInterval = window.setInterval(function(){
+                    ti--
+                    e1.innerHTML="<h1>"+ tf+ "(" +ti+ "s)</h1>";
+                },1000)
+            }
+        }else{
+            e.className="flag0";
+        }
+    }
 }
 
 YGO.prototype.moveCard = function(args){

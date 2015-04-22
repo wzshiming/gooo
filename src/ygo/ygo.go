@@ -76,9 +76,9 @@ func (yg *YGO) Loop() {
 		for _, v := range yg.Players {
 			if !v.IsFail() {
 				v.round()
-				if yg.CheckWinner(); yg.Over {
-					return
-				}
+				//				if yg.CheckWinner(); yg.Over {
+				//					return
+				//				}
 			}
 		}
 	}

@@ -9,8 +9,11 @@ import (
 )
 
 type Player struct {
+	//
+	Name    string         //用户名
+	Session *agent.Session //会话
+
 	// 规则属性
-	Session  *agent.Session
 	Index    int           // 玩家索引
 	Game     *YGO          // 属于游戏
 	OverTime time.Duration // 允许超出的时间
@@ -67,6 +70,8 @@ func NewPlayer() *Player {
 		DrawSize: 1,
 		MaxHp:    ^uint(0),
 		MaxSdi:   6,
+		OverTime: time.Second * 120,
+		WaitTime: time.Second * 5,
 		Deck:     NewCardPile(),
 		Hand:     NewCardPile(),
 		Extra:    NewCardPile(),
@@ -101,6 +106,10 @@ func (pl *Player) round() (err error) {
 		}
 	}()
 	pl.RoundSize++
+	pl.Game.CallAll("flagName", map[string]interface{}{
+		"round":  pl.RoundSize,
+		"player": pl.Index,
+	})
 	pl.draw()
 	pl.standby()
 	pl.main1()
@@ -111,15 +120,22 @@ func (pl *Player) round() (err error) {
 }
 
 func (pl *Player) draw() {
+	pl.Game.CallAll("flagStep", map[string]interface{}{
+		"step": 1,
+	})
 	if pl.Deck.Len() == 0 {
 		pl.Fail()
 		return
 	}
 	pl.ActionDraw(1)
+	<-time.After(time.Second)
 }
 
 func (pl *Player) standby() {
-
+	pl.Game.CallAll("flagStep", map[string]interface{}{
+		"step": 2,
+	})
+	<-time.After(time.Second)
 }
 
 func (pl *Player) main1() {
@@ -127,24 +143,49 @@ func (pl *Player) main1() {
 	//			"uniq": t.ToUint(),
 	//			"pos":  "hand",
 	//		})
+	pl.Game.CallAll("flagStep", map[string]interface{}{
+		"step": 3,
+		"wait": pl.WaitTime,
+	})
 	for {
 		select {
-		case <-time.After(time.Second * 30):
+		case <-time.After(pl.WaitTime):
 			return
 		}
 	}
 }
 
 func (pl *Player) battle() {
-
+	pl.Game.CallAll("flagStep", map[string]interface{}{
+		"step": 4,
+		"wait": pl.WaitTime,
+	})
+	for {
+		select {
+		case <-time.After(pl.WaitTime):
+			return
+		}
+	}
 }
 
 func (pl *Player) main2() {
-
+	pl.Game.CallAll("flagStep", map[string]interface{}{
+		"step": 5,
+		"wait": pl.WaitTime,
+	})
+	for {
+		select {
+		case <-time.After(pl.WaitTime):
+			return
+		}
+	}
 }
 
 func (pl *Player) end() {
-
+	pl.Game.CallAll("flagStep", map[string]interface{}{
+		"step": 6,
+	})
+	<-time.After(time.Second)
 }
 
 func (pl *Player) init() {
