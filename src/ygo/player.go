@@ -25,7 +25,7 @@ type Player struct {
 	RoundSize uint // 回合数
 	DrawSize  uint // 抽卡数
 	MaxHp     uint // 最大生命值
-	MaxSdi    uint // 最大手牌
+	MaxSdi    int  // 最大手牌
 
 	// 卡牌区
 	Deck    *CardPile //卡组 40 ~ 60
@@ -106,7 +106,7 @@ func (pl *Player) round() (err error) {
 		}
 	}()
 	pl.RoundSize++
-	pl.Game.CallAll("flagName", map[string]interface{}{
+	pl.CallAll("flagName", map[string]interface{}{
 		"round":  pl.RoundSize,
 		"player": pl.Index,
 	})
@@ -120,7 +120,7 @@ func (pl *Player) round() (err error) {
 }
 
 func (pl *Player) draw() {
-	pl.Game.CallAll("flagStep", map[string]interface{}{
+	pl.CallAll("flagStep", map[string]interface{}{
 		"step": 1,
 	})
 	if pl.Deck.Len() == 0 {
@@ -128,67 +128,106 @@ func (pl *Player) draw() {
 		return
 	}
 	pl.ActionDraw(1)
-	<-time.After(time.Second)
+	select {
+	case <-time.After(time.Second):
+		return
+	}
 }
 
 func (pl *Player) standby() {
-	pl.Game.CallAll("flagStep", map[string]interface{}{
+	pl.CallAll("flagStep", map[string]interface{}{
 		"step": 2,
 	})
-	<-time.After(time.Second)
+	select {
+	case <-time.After(time.Second):
+		return
+	}
 }
 
 func (pl *Player) main1() {
-	//	pl.Game.CallAll("moveCard", map[string]interface{}{
+	//	pl.CallAll("moveCard", map[string]interface{}{
 	//			"uniq": t.ToUint(),
 	//			"pos":  "hand",
 	//		})
-	pl.Game.CallAll("flagStep", map[string]interface{}{
+	pl.CallAll("flagStep", map[string]interface{}{
 		"step": 3,
 		"wait": pl.WaitTime,
 	})
-	for {
-		select {
-		case <-time.After(pl.WaitTime):
-			return
-		}
+
+	select {
+	case <-time.After(pl.WaitTime):
+		return
 	}
+
 }
 
 func (pl *Player) battle() {
-	pl.Game.CallAll("flagStep", map[string]interface{}{
+	pl.CallAll("flagStep", map[string]interface{}{
 		"step": 4,
 		"wait": pl.WaitTime,
 	})
-	for {
-		select {
-		case <-time.After(pl.WaitTime):
-			return
-		}
+
+	select {
+	case <-time.After(pl.WaitTime):
+		return
 	}
+
 }
 
 func (pl *Player) main2() {
-	pl.Game.CallAll("flagStep", map[string]interface{}{
+	pl.CallAll("flagStep", map[string]interface{}{
 		"step": 5,
 		"wait": pl.WaitTime,
 	})
-	for {
-		select {
-		case <-time.After(pl.WaitTime):
-			return
-		}
+	select {
+	case <-time.After(pl.WaitTime):
+		return
 	}
 }
 
 func (pl *Player) end() {
-	pl.Game.CallAll("flagStep", map[string]interface{}{
-		"step": 6,
-	})
-	<-time.After(time.Second)
+	if i := pl.Hand.Len() - pl.MaxSdi; i > 0 {
+		pl.CallAll("flagStep", map[string]interface{}{
+			"step": 6,
+			"wait": pl.WaitTime,
+		})
+		pl.Call("selectCard", map[string]interface{}{
+			"size": i,
+		})
+		select {
+		case <-time.After(pl.WaitTime):
+			for j := 0; j != i; j++ {
+				t := pl.Hand.EndPop()
+				pl.Grave.EndPush(t)
+				pl.CallAll("moveCard", map[string]interface{}{
+					"uniq": t.ToUint(),
+					"pos":  "grave",
+				})
+				pl.CallAll("setFront", map[string]interface{}{
+					"desk": t.Id,
+					"uniq": t.ToUint(),
+				})
+				pl.CallAll("exprCard", map[string]interface{}{
+					"uniq": t.ToUint(),
+					"expr": LE_FaceUp,
+				})
+			}
+			return
+		}
+	} else {
+		pl.CallAll("flagStep", map[string]interface{}{
+			"step": 6,
+		})
+		select {
+		case <-time.After(time.Second):
+			return
+		}
+	}
+
 }
 
 func (pl *Player) init() {
+	pl.ActionShuffle()
 	pl.ActionDraw(pl.MaxSdi - 1)
 }
 
@@ -197,22 +236,34 @@ func (pl *Player) InitDeck(a []uint) {
 	pl.Deck.ForEach(func(c *Card) {
 		pl.Game.RegisterCards(c)
 	})
+	pl.ActionShuffle()
 }
 
-func (pl *Player) ActionDraw(s uint) {
-	for i := uint(0); i != s; i++ {
+func (pl *Player) ActionShuffle() {
+	pl.Deck.Shuffle()
+}
+
+func (pl *Player) ActionDraw(s int) {
+	if s <= 0 {
+		return
+	}
+	for i := 0; i != s; i++ {
 		if pl.Deck.Len() == 0 {
 			return
 		}
 		t := pl.Deck.BeginPop()
 		pl.Hand.EndPush(t)
-		pl.Game.CallAll("moveCard", map[string]interface{}{
+		pl.CallAll("moveCard", map[string]interface{}{
 			"uniq": t.ToUint(),
 			"pos":  "hand",
 		})
 		pl.Call("setFront", map[string]interface{}{
 			"desk": t.Id,
 			"uniq": t.ToUint(),
+		})
+		pl.Call("exprCard", map[string]interface{}{
+			"uniq": t.ToUint(),
+			"expr": LE_FaceUp,
 		})
 	}
 }
@@ -227,4 +278,8 @@ func (pl *Player) Call(method string, reply interface{}) error {
 		Method: method,
 		Args:   reply,
 	}, pl.Session)
+}
+
+func (pl *Player) CallAll(method string, reply interface{}) error {
+	return pl.Game.CallAll(method, reply)
 }

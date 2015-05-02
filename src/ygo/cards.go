@@ -1,5 +1,9 @@
 package ygo
 
+import (
+	"rego"
+)
+
 type Cards interface {
 	Index(c *Card) int
 	Placed(index int, c *Card)
@@ -94,6 +98,17 @@ type CardPile struct {
 func NewCardPile() *CardPile {
 	return &CardPile{
 		CardTile: CardTile{},
+	}
+}
+
+func (cp *CardPile) Shuffle() {
+	array := cp.CardTile
+	for i := 0; i < len(array); i++ {
+		for j := 0; j < len(array)-i-1; j++ {
+			if ((<-rego.LCG) % 4) != 0 {
+				array[j], array[j+1] = array[j+1], array[j]
+			}
+		}
 	}
 }
 

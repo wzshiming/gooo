@@ -354,14 +354,11 @@ Player.prototype.moveCard = function(u,cards){
     if(!(this[cards] instanceof Cards)){
         return
     }
-    var c = this.deck.placed(u)
+    var c = allCard[u]
     if(c==null){
         return
     }
     this[cards].push(c)
-    if(this.self == true){
-        c.FaceUp()
-    }
 }
 
 var YGO = function(){
@@ -396,8 +393,28 @@ YGO.prototype.flagName = function(args){
     this["flag0"].element.innerHTML = "<h1>"+ t.name + "("+ args.round+")</h1>";
 }
 
+YGO.prototype.selectCard = function(args){
+
+}
+
+YGO.prototype.exprCard = function(args){
+    var t = allCard[args.uniq];
+    console.dir(args.expr)
+    console.dir(1 << 30)
+    if(args.expr == (1 << 30)){
+        t.FaceUp()
+    }else if(args.expr == (1 << 29)){
+        t.FaceDown()
+    }
+    if(args.expr == (1 << 28)){
+        t.Attack()
+    }else if(args.expr == (1 << 27)){
+        t.Defense()
+    }
+}
+
 YGO.prototype.flagStep = function(args){
-    window.clearInterval(this.stepInterval)
+    //window.clearInterval(this.stepInterval)
     for(var i =1;i!=7;i++){
         var e = this["flag"+i].element
         e.innerHTML="<h1>"+ this.flags[i]+ "</h1>";
@@ -408,9 +425,12 @@ YGO.prototype.flagStep = function(args){
                 var tf = this.flags[i]
                 var e1 = this["flag"+i].element
                 e1.innerHTML="<h1>"+ this.flags[i]+ "(" +ti+ "s)</h1>";
-                this.stepInterval = window.setInterval(function(){
+                var stepInterval = window.setInterval(function(){
                     ti--
                     e1.innerHTML="<h1>"+ tf+ "(" +ti+ "s)</h1>";
+                    if(ti <= 0){
+                        window.clearInterval(stepInterval)
+                    }
                 },1000)
             }
         }else{
