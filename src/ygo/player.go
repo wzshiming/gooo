@@ -12,6 +12,7 @@ type Player struct {
 	//
 	Name    string         //用户名
 	Session *agent.Session //会话
+	Selec   chan uint
 
 	// 规则属性
 	Index    int           // 玩家索引
@@ -81,12 +82,27 @@ func NewPlayer() *Player {
 		Mzone:    NewCardTile(5),
 		Szone:    NewCardTile(5),
 		Field:    NewCardTile(1),
+		Selec:    make(chan uint, 128),
 	}
 	return player
 }
-
+func (pl *Player) SelecAdd(u uint) {
+	select {
+	case pl.Selec <- u:
+	default:
+		return
+	}
+}
+func (pl *Player) SelecClear() {
+	for {
+		select {
+		case <-pl.Selec:
+		default:
+			return
+		}
+	}
+}
 func (pl *Player) Fail() {
-	pl.Game.AddLoser(pl.Camp)
 	pl.fail = true
 }
 
@@ -123,11 +139,12 @@ func (pl *Player) draw() {
 	pl.CallAll("flagStep", map[string]interface{}{
 		"step": 1,
 	})
+	pl.Call(Message("抽牌阶段"))
 	if pl.Deck.Len() == 0 {
 		pl.Fail()
 		return
 	}
-	pl.ActionDraw(1)
+	pl.ActionDraw(2)
 	select {
 	case <-time.After(time.Second):
 		return
@@ -138,6 +155,7 @@ func (pl *Player) standby() {
 	pl.CallAll("flagStep", map[string]interface{}{
 		"step": 2,
 	})
+	pl.Call(Message("准备阶段"))
 	select {
 	case <-time.After(time.Second):
 		return
@@ -153,7 +171,7 @@ func (pl *Player) main1() {
 		"step": 3,
 		"wait": pl.WaitTime,
 	})
-
+	pl.Call(Message("主要阶段1"))
 	select {
 	case <-time.After(pl.WaitTime):
 		return
@@ -166,7 +184,7 @@ func (pl *Player) battle() {
 		"step": 4,
 		"wait": pl.WaitTime,
 	})
-
+	pl.Call(Message("战斗阶段"))
 	select {
 	case <-time.After(pl.WaitTime):
 		return
@@ -179,6 +197,7 @@ func (pl *Player) main2() {
 		"step": 5,
 		"wait": pl.WaitTime,
 	})
+	pl.Call(Message("主要阶段2"))
 	select {
 	case <-time.After(pl.WaitTime):
 		return
@@ -187,43 +206,46 @@ func (pl *Player) main2() {
 
 func (pl *Player) end() {
 	if i := pl.Hand.Len() - pl.MaxSdi; i > 0 {
-		pl.CallAll("flagStep", map[string]interface{}{
-			"step": 6,
-			"wait": pl.WaitTime,
-		})
-		pl.Call("selectCard", map[string]interface{}{
-			"size": i,
-		})
-		select {
-		case <-time.After(pl.WaitTime):
-			for j := 0; j != i; j++ {
-				t := pl.Hand.EndPop()
-				pl.Grave.EndPush(t)
-				pl.CallAll("moveCard", map[string]interface{}{
-					"uniq": t.ToUint(),
-					"pos":  "grave",
-				})
-				pl.CallAll("setFront", map[string]interface{}{
-					"desk": t.Id,
-					"uniq": t.ToUint(),
-				})
-				pl.CallAll("exprCard", map[string]interface{}{
-					"uniq": t.ToUint(),
-					"expr": LE_FaceUp,
-				})
-			}
-			return
-		}
-	} else {
-		pl.CallAll("flagStep", map[string]interface{}{
-			"step": 6,
-		})
-		select {
-		case <-time.After(time.Second):
-			return
-		}
-	}
 
+		pl.Call(Message("选择丢弃的手牌"))
+		pl.SelecClear()
+	loop:
+		for {
+			pl.CallAll("flagStep", map[string]interface{}{
+				"step": 6,
+				"wait": pl.WaitTime,
+			})
+			pl.Call("selectCard", map[string]interface{}{
+				"size": i,
+				"pos":  "hand",
+			})
+			var t *Card
+			select {
+			case <-time.After(pl.WaitTime):
+				t = pl.Hand.EndPop()
+			case p := <-pl.Selec:
+				t = pl.Hand.PickedForUniq(p)
+			}
+			if t != nil {
+				pl.Grave.EndPush(t)
+				pl.CallAll(MoveCard(t, "grave"))
+				pl.CallAll(SetFront(t))
+				pl.CallAll(ExprCard(t, LE_FaceUp))
+				if i--; i == 0 {
+					break loop
+				}
+			}
+		}
+		pl.Call("finishSelect", map[string]interface{}{})
+	}
+	pl.CallAll("flagStep", map[string]interface{}{
+		"step": 6,
+	})
+	select {
+	case <-time.After(time.Second):
+
+	}
+	pl.Call(Message("对方回合"))
 }
 
 func (pl *Player) init() {
@@ -253,18 +275,9 @@ func (pl *Player) ActionDraw(s int) {
 		}
 		t := pl.Deck.BeginPop()
 		pl.Hand.EndPush(t)
-		pl.CallAll("moveCard", map[string]interface{}{
-			"uniq": t.ToUint(),
-			"pos":  "hand",
-		})
-		pl.Call("setFront", map[string]interface{}{
-			"desk": t.Id,
-			"uniq": t.ToUint(),
-		})
-		pl.Call("exprCard", map[string]interface{}{
-			"uniq": t.ToUint(),
-			"expr": LE_FaceUp,
-		})
+		pl.CallAll(MoveCard(t, "hand"))
+		pl.Call(SetFront(t))
+		pl.Call(ExprCard(t, LE_FaceUp))
 	}
 }
 
@@ -282,4 +295,31 @@ func (pl *Player) Call(method string, reply interface{}) error {
 
 func (pl *Player) CallAll(method string, reply interface{}) error {
 	return pl.Game.CallAll(method, reply)
+}
+
+func ExprCard(t *Card, le LE_TYPE) (string, interface{}) {
+	return "exprCard", map[string]interface{}{
+		"uniq": t.ToUint(),
+		"expr": le,
+	}
+}
+
+func SetFront(t *Card) (string, interface{}) {
+	return "setFront", map[string]interface{}{
+		"desk": t.Id,
+		"uniq": t.ToUint(),
+	}
+}
+
+func Message(msg string) (string, interface{}) {
+	return "message", map[string]interface{}{
+		"message": msg,
+	}
+}
+
+func MoveCard(t *Card, pos string) (string, interface{}) {
+	return "moveCard", map[string]interface{}{
+		"uniq": t.ToUint(),
+		"pos":  pos,
+	}
 }

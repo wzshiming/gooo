@@ -191,10 +191,12 @@ func (r *Room) GameCardActionSelectable(args agent.Request, reply *agent.Respons
 	return r.GameBC(args, func(game *ygo.YGO, sess *agent.Session) error {
 		ar := proto.GameCardActionSelectableRequest{}
 		args.Request.DeJson(&ar)
-		c := game.GetCard(ar.Uniq)
-		if c.Owner.Session == sess {
-			rego.INFO(c)
-		}
+		game.GetPlayer(sess).SelecAdd(ar.Uniq)
+		//game.SelecAdd(ar.Uniq)
+		//c := game.GetCard(ar.Uniq)
+		//if c.Owner.Session == sess {
+		//	rego.INFO(c)
+		//}
 
 		return nil
 	})

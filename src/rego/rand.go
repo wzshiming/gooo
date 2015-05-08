@@ -1,21 +1,23 @@
 package rego
 
 import (
+	"math/rand"
 	"time"
 )
 
 var x0 uint32 = uint32(time.Now().UnixNano())
-var a uint32 = 1664525
-var c uint32 = 1013904223
+var a uint32 = 147852
+var c uint32 = 963852741
 
 var LCG chan uint32
 
 func init() {
+	r := rand.New(rand.NewSource(time.Now().UnixNano()))
+
 	LCG = make(chan uint32, 1024)
 	go func() {
 		for {
-			x0 = a*x0 + c
-			LCG <- x0
+			LCG <- r.Uint32()
 		}
 	}()
 }

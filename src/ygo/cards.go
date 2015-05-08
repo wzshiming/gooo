@@ -53,16 +53,20 @@ func (cu *CardTile) Picked(index int) (c *Card) {
 	return
 }
 
-func (cu *CardTile) PickedFor(c *Card) {
+func (cu *CardTile) PickedForUniq(uniq uint) (c *Card) {
 	for k, v := range *cu {
 		if v != nil {
-			if v == c {
-				c.Place = nil
-				cu.Picked(k)
+			if v.ToUint() == uniq {
+				v.Place = nil
+				return cu.Picked(k)
 			}
 		}
 	}
 	return
+}
+
+func (cu *CardTile) PickedFor(c *Card) {
+	cu.PickedForUniq(c.ToUint())
 }
 
 func (cu *CardTile) ForEach(fun func(*Card)) {
@@ -104,7 +108,7 @@ func NewCardPile() *CardPile {
 func (cp *CardPile) Shuffle() {
 	array := cp.CardTile
 	for i := 0; i < len(array); i++ {
-		for j := 0; j < len(array)-i-1; j++ {
+		for j := 0; j < len(array)-1; j++ {
 			if ((<-rego.LCG) % 4) != 0 {
 				array[j], array[j+1] = array[j+1], array[j]
 			}
@@ -113,11 +117,17 @@ func (cp *CardPile) Shuffle() {
 }
 
 func (cp *CardPile) BeginPush(c *Card) {
+	if c.Place != nil {
+		c.Place.PickedFor(c)
+	}
 	c.Place = cp
 	cp.CardTile = append(cp.CardTile, c)
 }
 
 func (cp *CardPile) EndPush(c *Card) {
+	if c.Place != nil {
+		c.Place.PickedFor(c)
+	}
 	c.Place = cp
 	cp.CardTile = append(CardTile{c}, cp.CardTile...)
 }

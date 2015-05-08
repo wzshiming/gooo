@@ -14,6 +14,8 @@
 	
 	<link href="css/bootstrap.min.css" rel="stylesheet">
 	<link href="css/darkstrap.min.css" rel="stylesheet">
+	<link href="css/grumble.min.css" rel="stylesheet">
+
 	<!--<link href="css/style.css" rel="stylesheet">-->	
 	{{ with .css }}
 		{{ range . }}
@@ -37,6 +39,7 @@
 		
 		<script src="js/jquery.min.js"></script>
 		<script src="js/bootstrap.min.js"></script>
+		<script src="js/jquery.grumble.min.js"></script>
 		{{ with .js }}
 			{{ range . }}
 				<script src="js/{{.}}"></script>

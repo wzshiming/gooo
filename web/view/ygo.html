@@ -16,11 +16,11 @@ var controls;
 
 var objects = [];
 
-var PI = 3.1415926539
+var PI = 3.1415926539;
 
 
 var Step = function(func){
-    window.setTimeout(func,1000)
+    window.setTimeout(func,1000);
 }
 
 var Desk = function(i){
@@ -47,24 +47,31 @@ var Desk = function(i){
         11,7,
         12,7,
     ]
-    this.x = 0
-    this.y = 0
+    this.x = 0;
+    this.y = 0;
 
     if(i == 0){
-        this.angle =  0
+        this.angle =  0;
     }else if(i == 1){
-        this.angle =  PI
+        this.angle =  PI;
     }else if(i == 1){
-        this.angle =  PI*0.5
+        this.angle =  PI*0.5;
     }else if(i == 1){
-        this.angle =  PI*1.5
+        this.angle =  PI*1.5;
     }
 }
 
+Desk.prototype.flagup = function(){
+    var object = new THREE.Object3D();
+    object.position.x = 0;
+    object.position.y = 50;
+    return object;
+}
+
 Desk.prototype.flag = function(){
-    var x = 2
-    var y = 0.5
-    var a = this.angle
+    var x = 2;
+    var y = 0.5;
+    var a = this.angle;
     return function(i){
         var object = new THREE.Object3D();
         var rotation = new THREE.Matrix4().makeRotationZ(a);
@@ -72,67 +79,76 @@ Desk.prototype.flag = function(){
                 ( (x + i) * 200 ) - 1000 ,
                 - ( y * 150 ),
                 0);
-        object.applyMatrix(rotation)
-        return object
+        object.applyMatrix(rotation);
+        return object;
     }
 }
 
+
+Desk.prototype.datum = function(){
+    var x = 4;
+    var y = 6;
+    var a = this.angle;
+    return this.Pile(x,y,a);
+}
+
 Desk.prototype.deck = function(){
-    var x = 19
-    var y = 5
-    var a = this.angle
-    return this.Pile(x,y,a)
+    var x = 16;
+    var y = 5;
+    var a = this.angle;
+    return this.Pile(x,y,a);
 }
 
 Desk.prototype.removed = function(){
-    var x = 19
-    var y = 1
-    var a = this.angle
-    return this.Pile(x,y,a)
+    var x = 16;
+    var y = 1;
+    var a = this.angle;
+    return this.Pile(x,y,a);
 }
 
 Desk.prototype.grave = function(){
-    var x = 19
-    var y = 3
-    var a = this.angle
-    return this.Pile(x,y,a)
+    var x = 16;
+    var y = 3;
+    var a = this.angle;
+    return this.Pile(x,y,a);
 }
 
 Desk.prototype.field = function(){
-    var x = 1
-    var y = 3
-    var a = this.angle
-    return this.Pile(x,y,a)
+    var x = 4;
+    var y = 2;
+    var a = this.angle;
+    return this.Pile(x,y,a);
 }
 
 Desk.prototype.extra = function(){
-    var x = 1
-    var y = 5
-    var a = this.angle
-    return this.Pile(x,y,a)
+    var x = 4;
+    var y = 4;
+    var a = this.angle;
+    return this.Pile(x,y,a);
 }
 
 Desk.prototype.hand = function(){
-    var x = 7
-    var y = 6
-    var a = this.angle
-    return this.Tile(x,y,a)
+    var x = 7;
+    var y = 6;
+    var a = this.angle;
+    return this.Tile(x,y,a);
 }
 
 Desk.prototype.mzone = function(){
-    var x = 10
-    var y = 2
-    var a = this.angle
-    return this.Mid(x,y,a)
+    var x = 10;
+    var y = 2;
+    var a = this.angle;
+    return this.Mid(x,y,a);
 }
 
 
 Desk.prototype.szone = function(){
-    var x = 10
-    var y = 4
-    var a = this.angle
-    return this.Mid(x,y,a)
+    var x = 10;
+    var y = 4;
+    var a = this.angle;
+    return this.Mid(x,y,a);
 }
+
 
 Desk.prototype.Mid = function(x,y,a){
     var rotation = new THREE.Matrix4().makeRotationZ(a);
@@ -140,13 +156,13 @@ Desk.prototype.Mid = function(x,y,a){
         var object = new THREE.Object3D();
         if(i%2==0){
             object.matrix.makeTranslation(
-                    ( (x + i) * 150 ) - 1500 ,
-                    - ( y * 150 ),
+                    ( (x + i) * 130 ) - 1300 ,
+                    - ( y * 130 ),
                     0);
         }else {
             object.matrix.makeTranslation(
-                    ( (x - i) * 150 ) - 1650 ,
-                    - ( y * 150 ),
+                    ( (x - i - 1) * 130 ) - 1300 ,
+                    - ( y * 130 ),
                     0);
         }
         object.applyMatrix(rotation)
@@ -159,8 +175,8 @@ Desk.prototype.Pile = function(x,y,a){
     return function(i){
         var object = new THREE.Object3D();
         object.matrix.makeTranslation(
-                ( x * 100 ) - 1000,
-                - ( y * 150 ),
+                ( x * 130 ) - 1300,
+                - ( y * 130 ),
                 i);
         object.applyMatrix(rotation)
         return object
@@ -172,8 +188,8 @@ Desk.prototype.Tile = function(x,y,a){
     return function(i){
         var object = new THREE.Object3D();
         object.matrix.makeTranslation(
-                ( (x + i) * 150 ) - 1500 ,
-                - ( y * 150 ),
+                ( (x + i) * 130 ) - 1300 ,
+                - ( y * 130 ),
                 0);
         object.applyMatrix(rotation)
         return object
@@ -193,6 +209,44 @@ function CardBack(i) {
 
 var allCard = {}
 
+var Selectable = function(){
+    this.selec = {}
+    this.func = null
+}
+
+Selectable.prototype.click = function(uniq){
+    if(this.selec[uniq] == true){
+        delete(this.selec[uniq])
+        allCard[uniq].Unselectable()
+    } else {
+        this.selec[uniq] = true
+        allCard[uniq].Selectable()
+        if(typeof this.func == "function"){
+            this.func(allCard[uniq])
+        }
+    }
+}
+
+Selectable.prototype.removeall = function(){
+    for(var i in this){
+        if(this[i] == true){
+            allCard[i].Unselectable()
+            delete(this.selec[uniq])
+        }
+    }
+}
+
+
+Selectable.prototype.register = function(func){
+    this.func = func
+}
+
+Selectable.prototype.unregister = function(){
+    this.func = null
+}
+
+var selectable = new Selectable()
+
 var Card = function(uniq,master){
     var element = document.createElement( 'div' );
     element.innerHTML = CardFront(0);
@@ -209,10 +263,12 @@ var Card = function(uniq,master){
     scene.add( this.object );
     element.hold = this
     element.onclick = function(){
+        selectable.click(this.hold.uniq)
         console.dir(this.hold.uniq)
-        ws.SendMsg({{ key "Chan.Room.GameCardActionSelectable" }},{uniq:this.hold.uniq} ,function(e){
-            console.dir(e)
-        });
+
+        //ws.SendMsg({{ key "Chan.Room.GameCardActionSelectable" }},{uniq:this.hold.uniq} ,function(e){
+        //    console.dir(e)
+        //});
     }
     element2.hold = element.hold
     element2.onclick = element.onclick
@@ -226,6 +282,20 @@ Card.prototype.placed = function(){
 
 Card.prototype.SetFront = function(i){
     this.object.element.innerHTML = CardFront(i);
+}
+
+Card.prototype.SetBack = function(i){
+    this.object.elementB.innerHTML = CardBack(i);
+}
+
+Card.prototype.Selectable = function(){
+    this.object.element.className = "selectable"
+    this.object.elementB.className = "selectable"
+}
+
+Card.prototype.Unselectable = function(){
+    this.object.element.className = ""
+    this.object.elementB.className = ""
 }
 
 Card.prototype.Move = function(pos){
@@ -259,16 +329,20 @@ var Cards = function (place) {
 
 Cards.prototype.placed = function(u){
     var i = this.index(u)
+    if(i==this.length()-1){
+        return this.pop()
+    }
     if(i>=0){
         var c = this.deck.splice(i,1)[0]
         c.hold = null
+        //this.flash()                                                                                                                                                                                                                                                                                                                                                                                                                                                               //this.flash()
         return c
     }
     return null
 }
 
 Cards.prototype.index = function(u){
-    for(var i in this.deck){
+    for(var i = 0; i!= this.deck.length;i++){
         if(this.deck[i].uniq == u){
             return i
         }
@@ -295,6 +369,12 @@ Cards.prototype.length = function(){
     return this.deck.length
 }
 
+Cards.prototype.flash = function(){
+    for(var i = 0; i!= this.deck.length;i++){
+        this.deck[i].Move(this.place(i))
+    }
+}
+
 var Element = function(){
     this.element = document.createElement( 'div' );
     this.object =  new THREE.CSS3DSprite(this.element);
@@ -315,35 +395,42 @@ var Shade = function(t){
     scene.add( this.object );
 }
 
-var Player = function(k,i){
+var Player = function(k,i,user){
     var c = new Desk(k)
     if(k==0){
         this.self = true;
     }
     this.index = i
+    this.datum = (c.datum())(0)           //玩家资料显示位置
+    var e = new Element();
+    e.element.innerHTML="<h1>名字："+user.name+"</h1>"+"<h1>HP："+user.hp+"</h1>";
+    e.element.className="flag0";
+    Move(e.object,this.datum,1000)
 
-    this.hand= new Cards(c.hand())    //手牌
+    this.hand = new Cards(c.hand())    //手牌
 
-    this.deck= new Cards(c.deck())    //卡组 40 ~ 60
+    this.deck = new Cards(c.deck())    //卡组 40 ~ 60
     Move((new Shade("<h1>卡组图片</h1>")).object,this.deck.place(0),0)
-    this.extra= new Cards(c.extra())   //额外卡组 <= 15 融合怪物 同调怪物 超量怪物
+    this.extra = new Cards(c.extra())   //额外卡组 <= 15 融合怪物 同调怪物 超量怪物
     Move((new Shade("<h1>融合图</h1>")).object,this.extra.place(0),0)
 //    this.side= new Cards()    //副卡组 <= 15
-    this.removed= new Cards(c.removed()) //排除卡
+    this.removed = new Cards(c.removed()) //排除卡
     Move((new Shade("<h1>除外图</h1>")).object,this.removed.place(0),0)
-    this.grave= new Cards(c.grave())   //墓地
+    this.grave = new Cards(c.grave())   //墓地
     Move((new Shade("<h1>墓地图</h1>")).object,this.grave.place(0),0)
-    this.mzone= new Cards(c.mzone())   //怪物卡区 5
+    this.mzone = new Cards(c.mzone())   //怪物卡区 5
     for(var i =0;i!=5;i++){
         Move((new Shade("<h1>怪兽区"+i+"</h1>")).object,this.mzone.place(i),0)
     }
 
-    this.szone= new Cards(c.szone())   //魔法卡陷阱卡区 5
+    this.szone = new Cards(c.szone())   //魔法卡陷阱卡区 5
     for(var i =0;i!=5;i++){
         Move((new Shade("<h1>魔陷区"+i+"</h1>")).object,this.szone.place(i),0)
     }
-    this.field= new Cards(c.field())   //场地卡 5
+    this.field = new Cards(c.field())   //场地卡 5
     Move((new Shade("<h1>场地图</h1>")).object,this.field.place(0),0)
+
+
 }
 
 
@@ -364,8 +451,11 @@ Player.prototype.moveCard = function(u,cards){
 var YGO = function(){
     this.players = []
     var t = this
-
     var flag = (new Desk(0)).flag()
+    this.msg = new Element();
+    this.msg.element.innerHTML="<h1>游戏开始</h1>";
+    this.msg.element.className="flag0";
+    Move(this.msg.object,(new Desk(0)).flagup(),1000)
     //var flags=["Draw","Standby","Main1","Battle","Main2","End"]
     this.flags=["INIT","DP","SP","MP1","BP","MP2","EP"]
     for(var i =0;i!=7;i++){
@@ -373,7 +463,7 @@ var YGO = function(){
         e.element.innerHTML="<h1>"+ this.flags[i]+ "</h1>";
         e.element.className="flag0";
         this["flag"+i] = e;
-        Move(e.object,flag(i),0)
+        Move(e.object,flag(i),1000)
     }
 
     ws.SendMsg({{ key "Chan.Room.GameRegister" }},{} ,function(e){
@@ -390,17 +480,27 @@ var YGO = function(){
 
 YGO.prototype.flagName = function(args){
     var t = this.users[args.player]
-    this["flag0"].element.innerHTML = "<h1>"+ t.name + "("+ args.round+")</h1>";
+    this["flag0"].element.innerHTML = "<h1>回合"+ args.round+"</h1>";
+}
+YGO.prototype.message = function(args) {
+    MsgInfo(args.message)
+    this.msg.element.innerHTML = "<h1>"+args.message+"</h1>"
+}
+YGO.prototype.selectCard = function(args){
+    selectable.removeall()
+    selectable.register(function(obj){
+        console.dir(obj)
+        ws.SendMsg({{ key "Chan.Room.GameCardActionSelectable" }},{uniq:obj.uniq} ,null);
+    })
 }
 
-YGO.prototype.selectCard = function(args){
-
+YGO.prototype.finishSelect = function(args){
+    selectable.removeall()
+    selectable.unregister()
 }
 
 YGO.prototype.exprCard = function(args){
     var t = allCard[args.uniq];
-    console.dir(args.expr)
-    console.dir(1 << 30)
     if(args.expr == (1 << 30)){
         t.FaceUp()
     }else if(args.expr == (1 << 29)){
@@ -414,7 +514,7 @@ YGO.prototype.exprCard = function(args){
 }
 
 YGO.prototype.flagStep = function(args){
-    //window.clearInterval(this.stepInterval)
+    window.clearInterval(this.stepInterval)
     for(var i =1;i!=7;i++){
         var e = this["flag"+i].element
         e.innerHTML="<h1>"+ this.flags[i]+ "</h1>";
@@ -424,13 +524,10 @@ YGO.prototype.flagStep = function(args){
                 var ti = args.wait/1000000000;
                 var tf = this.flags[i]
                 var e1 = this["flag"+i].element
-                e1.innerHTML="<h1>"+ this.flags[i]+ "(" +ti+ "s)</h1>";
-                var stepInterval = window.setInterval(function(){
+                e1.innerHTML="<h1>"+ tf+ "(" +ti+ "s)</h1>";
+                this.stepInterval = window.setInterval(function(){
                     ti--
                     e1.innerHTML="<h1>"+ tf+ "(" +ti+ "s)</h1>";
-                    if(ti <= 0){
-                        window.clearInterval(stepInterval)
-                    }
                 },1000)
             }
         }else{
@@ -459,19 +556,26 @@ YGO.prototype.init = function(){
                     k = k - t.users.length;
                 }
 
-                var p = new Player(k,i)
+                var p = new Player(k,i,t.users[i])
                 for(var j in t.users[i].deck){
                     var cc = new Card(t.users[i].deck[j],p)
+                    cc.SetBack(i*3)
                     cc.FaceDown()
                     p.deck.push(cc)
                 }
+                p.deck.flash()
                 t.players[i] = p;
             }
+            MsgInfo("游戏开始")
         }else {
             MsgErr("初始化游戏错误");
         }
         return true;
     });
+}
+
+YGO.prototype.over = function(){
+
 }
 
 
@@ -550,10 +654,10 @@ function Start(){
     //controls.maxDistance = 3000;
     controls.addEventListener( 'Tween', render );
 
-    controls.noRotate = true;
-    controls.noZoom = true;
-    controls.noPan = true;
-    controls.noRoll = true;
+    //controls.noRotate = true;
+    //controls.noZoom = true;
+    //controls.noPan = true;
+    //controls.noRoll = true;
 
     window.addEventListener( 'resize', onWindowResize, false );
     init();

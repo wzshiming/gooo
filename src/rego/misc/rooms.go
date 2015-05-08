@@ -207,7 +207,7 @@ func (ro *Rooms) BroadcastPush(reply interface{}, fail func(*agent.Session)) {
 
 func (ro *Rooms) Broadcast(reply *agent.Response, fail func(*agent.Session)) {
 	ro.ForEach(func(sess *agent.Session) {
-		if err := ro.Send(reply, sess); err == nil {
+		if err := ro.Send(reply, sess); err != nil {
 			if fail != nil {
 				fail(sess)
 			}

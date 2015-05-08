@@ -23,7 +23,7 @@ all: clean info test build clean_pkg run
 
 build: number_build build_ number_build_record 
 
-build_:
+build_: shutdown
 	@$(GO) install -v rego/...
 	@$(GO) install -v service/...
 
@@ -41,7 +41,7 @@ run: shutdown
 
 shutdown: 
 	@$(ECHO_DATE) Shutdown...
-	@$(CD) $(BUILD_DIR) && ./shutdown
+	@-$(CD) $(BUILD_DIR) && ./shutdown
 
 clean_pkg:
 	@$(ECHO_DATE) Cleaning pkg ...
