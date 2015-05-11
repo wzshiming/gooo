@@ -4,109 +4,20 @@ import (
 	"rego"
 )
 
-type Cards interface {
-	Index(c *Card) int
-	Placed(index int, c *Card)
-	Picked(index int) (c *Card)
-	PickedFor(c *Card)
-	ForEach(fun func(*Card))
-	Find(fun func(*Card) bool) (indexs []int)
-}
-
-type CardTile []*Card
-
-func NewCardTile(max int) *CardTile {
-	r := make(CardTile, max)
-	return &r
-}
-
-func (cu *CardTile) Len() int {
-	return len(*cu)
-}
-
-func (cu *CardTile) Exist(index int) (c *Card) {
-	c = (*cu)[index]
-	return
-}
-
-func (cu *CardTile) Index(c *Card) int {
-	for k, v := range *cu {
-		if v != nil {
-			if c == v {
-				return k
-			}
-		}
-	}
-	return -1
-}
-
-func (cu *CardTile) Placed(index int, c *Card) {
-	c.Place = cu
-	(*cu)[index] = c
-	return
-}
-
-func (cu *CardTile) Picked(index int) (c *Card) {
-	c = (*cu)[index]
-	(*cu)[index] = nil
-	c.Place = nil
-	return
-}
-
-func (cu *CardTile) PickedForUniq(uniq uint) (c *Card) {
-	for k, v := range *cu {
-		if v != nil {
-			if v.ToUint() == uniq {
-				v.Place = nil
-				return cu.Picked(k)
-			}
-		}
-	}
-	return
-}
-
-func (cu *CardTile) PickedFor(c *Card) {
-	cu.PickedForUniq(c.ToUint())
-}
-
-func (cu *CardTile) ForEach(fun func(*Card)) {
-	for _, v := range *cu {
-		if v != nil {
-			fun(v)
-		}
-	}
-}
-
-func (cu *CardTile) Find(fun func(*Card) bool) (indexs []int) {
-	for k, v := range *cu {
-		if v != nil {
-			if fun(v) {
-				indexs = append(indexs, k)
-			}
-		}
-	}
-	return nil
-}
-
-func (cu *CardTile) Uniqs() (us []uint) {
-	cu.ForEach(func(c *Card) {
-		us = append(us, c.ToUint())
-	})
-	return
-}
-
 type CardPile struct {
-	CardTile
+	list []*Card
 }
 
 func NewCardPile() *CardPile {
-	return &CardPile{
-		CardTile: CardTile{},
-	}
+	return &CardPile{}
+}
+
+func (cp *CardPile) Len() int {
+	return len(cp.list)
 }
 
 func (cp *CardPile) Shuffle() {
-	array := cp.CardTile
+	array := cp.list
 	for i := 0; i < len(array); i++ {
 		for j := 0; j < len(array)-1; j++ {
 			if ((<-rego.LCG) % 4) != 0 {
@@ -117,41 +28,71 @@ func (cp *CardPile) Shuffle() {
 }
 
 func (cp *CardPile) BeginPush(c *Card) {
-	if c.Place != nil {
-		c.Place.PickedFor(c)
-	}
-	c.Place = cp
-	cp.CardTile = append(cp.CardTile, c)
+	cp.Insert(c, len(cp.list))
 }
 
 func (cp *CardPile) EndPush(c *Card) {
+	cp.Insert(c, 0)
+}
+
+func (cp *CardPile) Insert(c *Card, index int) {
 	if c.Place != nil {
 		c.Place.PickedFor(c)
 	}
 	c.Place = cp
-	cp.CardTile = append(CardTile{c}, cp.CardTile...)
+	cp.list = append(cp.list[:index], append([]*Card{c}, cp.list[index:]...)...)
 }
 
 func (cp *CardPile) BeginPop() (c *Card) {
-	if len(cp.CardTile) == 1 {
-		c = (cp.CardTile)[0]
-		cp.CardTile = CardTile{}
-		return
-	}
-	c = (cp.CardTile)[len(cp.CardTile)-1]
-	cp.CardTile = (cp.CardTile)[:len(cp.CardTile)-2]
-	c.Place = nil
-	return
+	return cp.Remove(len(cp.list) - 1)
 }
 
 func (cp *CardPile) EndPop() (c *Card) {
-	if len(cp.CardTile) == 1 {
-		c = (cp.CardTile)[0]
-		cp.CardTile = CardTile{}
+	return cp.Remove(0)
+}
+
+func (cp *CardPile) Remove(index int) (c *Card) {
+	if len(cp.list) == 0 {
 		return
 	}
-	c = (cp.CardTile)[0]
-	cp.CardTile = (cp.CardTile)[1:]
+	c = cp.list[index]
 	c.Place = nil
+	cp.list = append(cp.list[:index], cp.list[index+1:]...)
+	return
+}
+
+func (cp *CardPile) PickedForUniq(uniq uint) (c *Card) {
+	for k, v := range cp.list {
+		if v.ToUint() == uniq {
+			v.Place = nil
+			return cp.Remove(k)
+		}
+	}
+	return
+}
+
+func (cp *CardPile) PickedFor(c *Card) {
+	cp.PickedForUniq(c.ToUint())
+}
+
+func (cp *CardPile) Uniqs() (us []uint) {
+	cp.ForEach(func(c *Card) {
+		us = append(us, c.ToUint())
+	})
+	return
+}
+
+func (cp *CardPile) ForEach(fun func(*Card)) {
+	for _, v := range cp.list {
+		fun(v)
+	}
+}
+
+func (cp *CardPile) Find(fun func(*Card) bool) (indexs []int) {
+	for k, v := range cp.list {
+		if fun(v) {
+			indexs = append(indexs, k)
+		}
+	}
 	return
 }

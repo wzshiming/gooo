@@ -10,12 +10,8 @@ type GameCardActionSelectableRequest struct {
 }
 
 type PlayerInit struct {
-	// user 表示当前游戏中 卡片的id
-	Deck  []uint `json:"deck"`
-	Extra []uint `json:"extra"`
-	Side  []uint `json:"side"`
-	Hp    int    `json:"hp"`
-	Name  string `json:"name"`
+	Hp   int    `json:"hp"`
+	Name string `json:"name"`
 }
 
 type GameInitResponse struct {

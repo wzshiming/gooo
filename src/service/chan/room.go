@@ -164,13 +164,10 @@ func (r *Room) GameInit(args agent.Request, reply *agent.Response) error {
 		gi := proto.GameInitResponse{}
 		game.ForEachPlayer(func(player *ygo.Player) {
 			pi := proto.PlayerInit{
-				Deck: player.Deck.Uniqs(),
 				Hp:   8000,
 				Name: "no name",
 			}
-
 			gi.Users = append(gi.Users, pi)
-
 			if player.Session == sess {
 				gi.Index = len(gi.Users) - 1
 			}

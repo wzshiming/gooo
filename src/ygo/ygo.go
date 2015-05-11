@@ -65,22 +65,27 @@ func (yg *YGO) CallAll(method string, reply interface{}) error {
 func (yg *YGO) Loop() {
 	time.Sleep(time.Second)
 	yg.CallAll("init", nil)
-	time.Sleep(time.Second * 3)
-	i := 0
-	for _, v := range yg.Players {
+	time.Sleep(time.Second)
+
+	round := []uint{}
+	for k, v := range yg.Players {
 		ca := v.Camp
 		yg.Survival[ca] = yg.Survival[ca] + 1
-		v.Index = i
+		v.Index = len(round)
 		v.Game = yg
-		v.init()
-		i++
+		v.initCards()
+		round = append(round, k)
+	}
+	time.Sleep(time.Second)
+	for _, v := range round {
+		yg.Players[v].init()
 	}
 	time.Sleep(time.Second)
 	for {
-		for _, v := range yg.Players {
+		for _, v := range round {
 			time.Sleep(time.Second)
-			if !v.IsFail() {
-				v.round()
+			if !yg.Players[v].IsFail() {
+				yg.Players[v].round()
 				//				if yg.CheckWinner(); yg.Over {
 				//					return
 				//				}

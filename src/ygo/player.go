@@ -35,9 +35,9 @@ type Player struct {
 	Side    *CardPile //副卡组 <= 15
 	Removed *CardPile //排除卡
 	Grave   *CardPile //墓地
-	Mzone   *CardTile //怪物卡区 5
-	Szone   *CardTile //魔法卡陷阱卡区 5
-	Field   *CardTile //场地卡 5
+	Mzone   *CardPile //怪物卡区 5
+	Szone   *CardPile //魔法卡陷阱卡区 5
+	Field   *CardPile //场地卡 5
 
 	// 卡牌事件
 	ToExclude  *Events // 排除场外
@@ -79,9 +79,9 @@ func NewPlayer() *Player {
 		Side:     NewCardPile(),
 		Removed:  NewCardPile(),
 		Grave:    NewCardPile(),
-		Mzone:    NewCardTile(5),
-		Szone:    NewCardTile(5),
-		Field:    NewCardTile(1),
+		Mzone:    NewCardPile(),
+		Szone:    NewCardPile(),
+		Field:    NewCardPile(),
 		Selec:    make(chan uint, 128),
 	}
 	return player
@@ -206,51 +206,65 @@ func (pl *Player) main2() {
 
 func (pl *Player) end() {
 	if i := pl.Hand.Len() - pl.MaxSdi; i > 0 {
-
-		pl.Call(Message("选择丢弃的手牌"))
 		pl.SelecClear()
+		pl.Call(Message("选择丢弃的手牌"))
+		pl.Call("selectCard", map[string]interface{}{
+			"master": pl.Index,
+			"pos":    "hand",
+		})
 	loop:
 		for {
 			pl.CallAll("flagStep", map[string]interface{}{
 				"step": 6,
 				"wait": pl.WaitTime,
 			})
-			pl.Call("selectCard", map[string]interface{}{
-				"size": i,
-				"pos":  "hand",
-			})
 			var t *Card
 			select {
 			case <-time.After(pl.WaitTime):
 				t = pl.Hand.EndPop()
 			case p := <-pl.Selec:
-				t = pl.Hand.PickedForUniq(p)
-			}
-			if t != nil {
-				pl.Grave.EndPush(t)
-				pl.CallAll(MoveCard(t, "grave"))
-				pl.CallAll(SetFront(t))
-				pl.CallAll(ExprCard(t, LE_FaceUp))
-				if i--; i == 0 {
-					break loop
+				if t = pl.Hand.PickedForUniq(p); t == nil {
+					t = pl.Hand.EndPop()
 				}
 			}
+			pl.Grave.EndPush(t)
+			pl.CallAll(MoveCard(t, "grave"))
+			pl.CallAll(SetFront(t))
+			pl.CallAll(ExprCard(t, LE_FaceUp))
+
+			if i--; i == 0 {
+				break loop
+			}
 		}
-		pl.Call("finishSelect", map[string]interface{}{})
+		pl.CallAll("flashCards", map[string]interface{}{
+			"master": pl.Index,
+			"pos":    "hand",
+		})
 	}
+
 	pl.CallAll("flagStep", map[string]interface{}{
 		"step": 6,
 	})
 	select {
 	case <-time.After(time.Second):
-
 	}
 	pl.Call(Message("对方回合"))
 }
 
 func (pl *Player) init() {
+	pl.ActionDraw(5)
+}
+
+func (pl *Player) initCards() {
 	pl.ActionShuffle()
-	pl.ActionDraw(pl.MaxSdi - 1)
+	pl.Deck.ForEach(func(t *Card) {
+		pl.CallAll(MoveCard(t, "deck"))
+		pl.CallAll(ExprCard(t, LE_FaceDown))
+	})
+	pl.Extra.ForEach(func(t *Card) {
+		pl.CallAll(MoveCard(t, "extra"))
+		pl.CallAll(ExprCard(t, LE_FaceUp))
+	})
 }
 
 func (pl *Player) InitDeck(a []uint) {
@@ -258,7 +272,6 @@ func (pl *Player) InitDeck(a []uint) {
 	pl.Deck.ForEach(func(c *Card) {
 		pl.Game.RegisterCards(c)
 	})
-	pl.ActionShuffle()
 }
 
 func (pl *Player) ActionShuffle() {
@@ -287,6 +300,7 @@ type Call struct {
 }
 
 func (pl *Player) Call(method string, reply interface{}) error {
+	//time.Sleep(time.Millisecond * 10)
 	return pl.Game.Room.Push(Call{
 		Method: method,
 		Args:   reply,
@@ -294,6 +308,7 @@ func (pl *Player) Call(method string, reply interface{}) error {
 }
 
 func (pl *Player) CallAll(method string, reply interface{}) error {
+	//time.Sleep(time.Millisecond * 10)
 	return pl.Game.CallAll(method, reply)
 }
 
@@ -319,7 +334,8 @@ func Message(msg string) (string, interface{}) {
 
 func MoveCard(t *Card, pos string) (string, interface{}) {
 	return "moveCard", map[string]interface{}{
-		"uniq": t.ToUint(),
-		"pos":  pos,
+		"uniq":   t.ToUint(),
+		"master": t.Owner.Index,
+		"pos":    pos,
 	}
 }

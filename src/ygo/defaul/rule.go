@@ -28,9 +28,9 @@ func DefaultRuleFrom(sess *agent.Session, camp int, deck []uint) *ygo.Player {
 		Side:     ygo.NewCardPile(),
 		Removed:  ygo.NewCardPile(),
 		Grave:    ygo.NewCardPile(),
-		Mzone:    ygo.NewCardTile(5),
-		Szone:    ygo.NewCardTile(5),
-		Field:    ygo.NewCardTile(1),
+		Mzone:    ygo.NewCardPile(),
+		Szone:    ygo.NewCardPile(),
+		Field:    ygo.NewCardPile(),
 	}
 	player.Deck = cards.CardBag_test.Deck(player, deck)
 	return player

@@ -55,7 +55,7 @@ func (cv *CardVersion) Deck(player *Player, deck []uint) (c *CardPile) {
 	for _, v := range deck {
 		t := cv.Get(v)
 		if t != nil {
-			c.BeginPush(t.Make(player))
+			c.EndPush(t.Make(player))
 		}
 	}
 	return

@@ -58,10 +58,10 @@ func (co *CardsOriginal) Make(ow *Player) (c *CardPile) {
 type Card struct {
 	rego.Unique
 	CardOriginal
-	Place   Cards   // 所在位置
-	Owner   *Player // 所有者
-	IsValid bool    // 是否有效
-	Le      LE_TYPE // 表示形式
+	Place   *CardPile // 所在位置
+	Owner   *Player   // 所有者
+	IsValid bool      // 是否有效
+	Le      LE_TYPE   // 表示形式
 	//怪兽卡 属性
 	AttackRound int // 最后攻击的回合 判断该回合是否攻击
 }
