@@ -45,16 +45,6 @@ func (co *CardOriginal) Make(ow *Player) *Card {
 	return c
 }
 
-type CardsOriginal []CardOriginal
-
-func (co *CardsOriginal) Make(ow *Player) (c *CardPile) {
-	c = NewCardPile()
-	for _, v := range *co {
-		c.BeginPush(v.Make(ow))
-	}
-	return
-}
-
 type Card struct {
 	rego.Unique
 	CardOriginal
@@ -64,6 +54,10 @@ type Card struct {
 	Le      LE_TYPE   // 表示形式
 	//怪兽卡 属性
 	AttackRound int // 最后攻击的回合 判断该回合是否攻击
+}
+
+func (ca *Card) SetLE(l LE_TYPE) {
+	ca.Owner.CallAll(ExprCard(ca, l))
 }
 
 func (ca *Card) Placed() {

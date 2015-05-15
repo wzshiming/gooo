@@ -3,6 +3,7 @@ package cfg
 import (
 	"io/ioutil"
 	"rego"
+	"time"
 )
 
 type WholeConfig struct {
@@ -23,6 +24,7 @@ func (wh *WholeConfig) Start() {
 	for _, v := range wh.Apps {
 		v.Start()
 	}
+	time.Sleep(time.Second * 2)
 	for _, v := range wh.Agents {
 		v.Start()
 	}

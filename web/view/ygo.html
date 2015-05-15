@@ -551,12 +551,10 @@ YGO.prototype.flashCards = function(args){
 
 YGO.prototype.moveCard = function(args){
     if(allCard[args.uniq] == null){
-        var cc = new Card(args.uniq,this.players[args.master])
-        allCard[args.uniq] = cc;
-        this.players[args.master][args.pos].push(cc)
-    } else {
-        allCard[args.uniq].master.moveCard(args.uniq,args.pos)
+        allCard[args.uniq] = new Card(args.uniq,this.players[args.master]);
     }
+    allCard[args.uniq].master.moveCard(args.uniq,args.pos)
+
 }
 
 YGO.prototype.setFront = function(args){
@@ -564,25 +562,24 @@ YGO.prototype.setFront = function(args){
 }
 
 
-YGO.prototype.init = function(){
+YGO.prototype.init = function(args){
     var t = this
-    ws.SendMsg( {{ key "Chan.Room.GameInit" }} ,{},function(e){
-        t.users = e.users;
-        t.index = e.index;
-        if(t.users instanceof Array) {
-            for(var i = 0;i!=t.users.length;i++){
-                var k = i + t.index;
-                if(k >= t.users.length){
-                    k = k - t.users.length;
-                }
-                t.players[i] = new Player(k,i,t.users[i]);
+    t.users = args.users;
+    t.index = args.index;
+    if(t.users instanceof Array) {
+        for(var i = 0;i!=t.users.length;i++){
+            var k = i + t.index;
+            if(k >= t.users.length){
+                k = k - t.users.length;
             }
-            MsgInfo("游戏开始")
-        }else {
-            MsgErr("初始化游戏错误");
+            t.players[i] = new Player(k,i,t.users[i]);
         }
-        return true;
-    });
+        MsgInfo("游戏开始")
+    }else {
+        MsgErr("初始化游戏错误");
+    }
+    return true;
+
 }
 
 YGO.prototype.over = function(){

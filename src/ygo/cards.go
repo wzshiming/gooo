@@ -5,11 +5,24 @@ import (
 )
 
 type CardPile struct {
+	name string
 	list []*Card
+	join func(*Card)
 }
 
-func NewCardPile() *CardPile {
-	return &CardPile{}
+func NewCardPile(name string) *CardPile {
+	return &CardPile{name: name}
+}
+
+func (cp *CardPile) SetJoin(fun func(*Card)) {
+	cp.join = fun
+}
+
+func (cp *CardPile) SetName(name string) {
+	cp.name = name
+}
+func (cp *CardPile) GetName() string {
+	return cp.name
 }
 
 func (cp *CardPile) Len() int {
@@ -25,6 +38,9 @@ func (cp *CardPile) Shuffle() {
 			}
 		}
 	}
+	//	for i := 0; i < len(array); i++ {
+	//		array[i].Owner.CallAll(MoveCard(array[i], cp.GetName()))
+	//	}
 }
 
 func (cp *CardPile) BeginPush(c *Card) {
@@ -38,6 +54,10 @@ func (cp *CardPile) EndPush(c *Card) {
 func (cp *CardPile) Insert(c *Card, index int) {
 	if c.Place != nil {
 		c.Place.PickedFor(c)
+	}
+	c.Owner.CallAll(MoveCard(c, cp.GetName()))
+	if cp.join != nil {
+		cp.join(c)
 	}
 	c.Place = cp
 	cp.list = append(cp.list[:index], append([]*Card{c}, cp.list[index:]...)...)

@@ -50,13 +50,13 @@ func (cv *CardVersion) Sum(cv2 *CardVersion) *CardVersion {
 	return rcv
 }
 
-func (cv *CardVersion) Deck(player *Player, deck []uint) (c *CardPile) {
-	c = NewCardPile()
+func (cv *CardVersion) Deck(cp *CardPile, player *Player, deck []uint) {
 	for _, v := range deck {
 		t := cv.Get(v)
 		if t != nil {
-			c.EndPush(t.Make(player))
+			c := t.Make(player)
+			cp.EndPush(c)
+			player.Game.RegisterCards(c)
 		}
 	}
-	return
 }

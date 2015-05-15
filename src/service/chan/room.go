@@ -53,9 +53,7 @@ func (r *Room) YGOGame(sesss ...*agent.Session) {
 	game := ygo.NewYGO(room)
 	r.gameList[uniq] = game
 	game.CardVer = cards.CardBag_test
-	game.ForEachPlayer(func(player *ygo.Player) {
-		player.InitDeck(defaul.DefaultDeck)
-	})
+
 	game.Loop()
 	//	room.BroadcastPush(map[string]string{
 	//		"status": "init",
@@ -157,24 +155,6 @@ func (r *Room) GameBC(args agent.Request, bc func(*ygo.YGO, *agent.Session) erro
 		return errors.New(Trans.Value("chan.nogame3"))
 	}
 	return bc(game, sess)
-}
-
-func (r *Room) GameInit(args agent.Request, reply *agent.Response) error {
-	return r.GameBC(args, func(game *ygo.YGO, sess *agent.Session) error {
-		gi := proto.GameInitResponse{}
-		game.ForEachPlayer(func(player *ygo.Player) {
-			pi := proto.PlayerInit{
-				Hp:   8000,
-				Name: "no name",
-			}
-			gi.Users = append(gi.Users, pi)
-			if player.Session == sess {
-				gi.Index = len(gi.Users) - 1
-			}
-		})
-		reply.Response = rego.EnJson(gi)
-		return nil
-	})
 }
 
 func (r *Room) GameRegister(args agent.Request, reply *agent.Response) error {

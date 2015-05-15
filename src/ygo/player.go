@@ -6,6 +6,7 @@ import (
 	"rego"
 	"rego/agent"
 	"time"
+	"ygo/defaul"
 )
 
 type Player struct {
@@ -72,20 +73,33 @@ func NewPlayer() *Player {
 		MaxHp:    ^uint(0),
 		MaxSdi:   6,
 		OverTime: time.Second * 120,
-		WaitTime: time.Second * 5,
-		Deck:     NewCardPile(),
-		Hand:     NewCardPile(),
-		Extra:    NewCardPile(),
-		Side:     NewCardPile(),
-		Removed:  NewCardPile(),
-		Grave:    NewCardPile(),
-		Mzone:    NewCardPile(),
-		Szone:    NewCardPile(),
-		Field:    NewCardPile(),
+		WaitTime: time.Second * 3,
+		Deck:     NewCardPile("deck"),
+		Hand:     NewCardPile("hand"),
+		Extra:    NewCardPile("extra"),
+		Side:     NewCardPile("side"),
+		Removed:  NewCardPile("remove"),
+		Grave:    NewCardPile("grave"),
+		Mzone:    NewCardPile("mzone"),
+		Szone:    NewCardPile("szone"),
+		Field:    NewCardPile("field"),
 		Selec:    make(chan uint, 128),
 	}
+
+	player.Deck.SetJoin(func(c *Card) {
+		player.CallAll(ExprCard(c, LE_FaceDown))
+	})
+	player.Hand.SetJoin(func(c *Card) {
+		player.Call(SetFront(c))
+		player.Call(ExprCard(c, LE_FaceUp))
+	})
+	player.Grave.SetJoin(func(c *Card) {
+		player.CallAll(SetFront(c))
+		c.SetLE(LE_FaceUp)
+	})
 	return player
 }
+
 func (pl *Player) SelecAdd(u uint) {
 	select {
 	case pl.Selec <- u:
@@ -93,6 +107,7 @@ func (pl *Player) SelecAdd(u uint) {
 		return
 	}
 }
+
 func (pl *Player) SelecClear() {
 	for {
 		select {
@@ -102,6 +117,7 @@ func (pl *Player) SelecClear() {
 		}
 	}
 }
+
 func (pl *Player) Fail() {
 	pl.fail = true
 }
@@ -163,10 +179,6 @@ func (pl *Player) standby() {
 }
 
 func (pl *Player) main1() {
-	//	pl.CallAll("moveCard", map[string]interface{}{
-	//			"uniq": t.ToUint(),
-	//			"pos":  "hand",
-	//		})
 	pl.CallAll("flagStep", map[string]interface{}{
 		"step": 3,
 		"wait": pl.WaitTime,
@@ -189,7 +201,6 @@ func (pl *Player) battle() {
 	case <-time.After(pl.WaitTime):
 		return
 	}
-
 }
 
 func (pl *Player) main2() {
@@ -228,9 +239,6 @@ func (pl *Player) end() {
 				}
 			}
 			pl.Grave.EndPush(t)
-			pl.CallAll(MoveCard(t, "grave"))
-			pl.CallAll(SetFront(t))
-			pl.CallAll(ExprCard(t, LE_FaceUp))
 
 			if i--; i == 0 {
 				break loop
@@ -256,22 +264,15 @@ func (pl *Player) init() {
 }
 
 func (pl *Player) initCards() {
+	pl.InitDeck(defaul.DefaultDeck)
 	pl.ActionShuffle()
-	pl.Deck.ForEach(func(t *Card) {
-		pl.CallAll(MoveCard(t, "deck"))
-		pl.CallAll(ExprCard(t, LE_FaceDown))
-	})
-	pl.Extra.ForEach(func(t *Card) {
-		pl.CallAll(MoveCard(t, "extra"))
-		pl.CallAll(ExprCard(t, LE_FaceUp))
-	})
 }
 
 func (pl *Player) InitDeck(a []uint) {
-	pl.Deck = pl.Game.CardVer.Deck(pl, a)
-	pl.Deck.ForEach(func(c *Card) {
-		pl.Game.RegisterCards(c)
-	})
+	if pl.Deck.Len() > 0 {
+		return
+	}
+	pl.Game.CardVer.Deck(pl.Deck, pl, a)
 }
 
 func (pl *Player) ActionShuffle() {
@@ -288,9 +289,6 @@ func (pl *Player) ActionDraw(s int) {
 		}
 		t := pl.Deck.BeginPop()
 		pl.Hand.EndPush(t)
-		pl.CallAll(MoveCard(t, "hand"))
-		pl.Call(SetFront(t))
-		pl.Call(ExprCard(t, LE_FaceUp))
 	}
 }
 

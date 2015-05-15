@@ -2,8 +2,10 @@ package ygo
 
 import (
 	//"rego"
+	"fmt"
 	"rego/agent"
 	"rego/misc"
+	"service/proto"
 	"time"
 )
 
@@ -63,24 +65,43 @@ func (yg *YGO) CallAll(method string, reply interface{}) error {
 }
 
 func (yg *YGO) Loop() {
-	time.Sleep(time.Second)
-	yg.CallAll("init", nil)
-	time.Sleep(time.Second)
 
+	time.Sleep(time.Second) // 初始化
 	round := []uint{}
 	for k, v := range yg.Players {
 		ca := v.Camp
 		yg.Survival[ca] = yg.Survival[ca] + 1
 		v.Index = len(round)
 		v.Game = yg
-		v.initCards()
+		v.Name = fmt.Sprintf("player %d", len(round))
 		round = append(round, k)
 	}
-	time.Sleep(time.Second)
+
+	time.Sleep(time.Second) // 客户端初始化
+	gi := proto.GameInitResponse{}
+	for _, v := range round {
+		pi := proto.PlayerInit{
+			Hp:   yg.Players[v].Hp,
+			Name: yg.Players[v].Name,
+		}
+		gi.Users = append(gi.Users, pi)
+	}
+	for _, v := range round {
+		gi.Index = yg.Players[v].Index
+		yg.Players[v].Call("init", gi)
+	}
+
+	time.Sleep(time.Second) // 牌组初始化
+	for _, v := range round {
+		yg.Players[v].initCards()
+	}
+
+	time.Sleep(time.Second) // 手牌初始化
 	for _, v := range round {
 		yg.Players[v].init()
 	}
-	time.Sleep(time.Second)
+
+	time.Sleep(time.Second) // 循环
 	for {
 		for _, v := range round {
 			time.Sleep(time.Second)
