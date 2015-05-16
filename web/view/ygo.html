@@ -1,6 +1,6 @@
 <div id="ygo">
-
 <link rel="stylesheet" type="text/css" href="css/container.css" />
+
 <script src="js/three.js"></script>
 <script src="js/libs/tween.min.js"></script>
 <script src="js/controls/TrackballControls.js"></script>
@@ -15,8 +15,9 @@ var camera, scene, renderer;
 var controls;
 
 var objects = [];
-
+var selectable;
 var PI = 3.1415926539;
+
 
 
 var Step = function(func){
@@ -212,18 +213,57 @@ var allCard = {}
 var Selectable = function(){
     this.selec = {}
     this.func = null
+    this.subm = {}
+
+}
+Selectable.prototype.submit = function(uniq,name,index){
+    if(name instanceof Array){
+        for(var i =0;i!=name.length;i++){
+            this.submit(uniq,name[i],i)
+        }
+        for(var j in this.subm){
+            var b = false;
+            for(var i =0;i!=name.length;i++){
+                if(j == i){
+                    b = true;
+                    break;
+                }
+            }
+            if(b){
+                Translate(this.subm[i].object,{x:0,y:0,z:4000},1000);
+            }
+        }
+    }else if(this.subm[name] == null){
+        this.subm[name] =  new Element();
+        this.subm[name].element.innerHTML='<button type="submit" class="btn btn-primary btn-block"><h2>'+name+'</h2></button>';
+    }
+    if(index == null){
+        index = 0
+    }
+
+    var tmp = allCard[uniq].object.position
+    Translate(this.subm[name].object,{x:tmp.x - 60 + (index % 2) * 100,y:tmp.y+200 + Math.floor(index/2)*100,z:tmp.z},1000)
+}
+
+Selectable.prototype.unsubmit = function(){
+    for(var i in this.subm){
+        Translate(this.subm[i].object,{x:0,y:0,z:4000},1000)
+    }
 }
 
 Selectable.prototype.click = function(uniq){
     if(this.selec[uniq] == true){
         delete(this.selec[uniq])
         allCard[uniq].Unselectable()
+        this.unsubmit()
     } else {
+        this.removeall()
         this.selec[uniq] = true
         allCard[uniq].Selectable()
         if(typeof this.func == "function"){
             this.func(allCard[uniq])
         }
+        this.submit(uniq,["Call","Place","Use"])
     }
 }
 
@@ -245,7 +285,16 @@ Selectable.prototype.unregister = function(){
     this.func = null
 }
 
-var selectable = new Selectable()
+
+
+var Element = function(){
+    this.element = document.createElement( 'div' );
+    this.object =  new THREE.CSS3DSprite(this.element);
+    this.object.position.x = 0;
+    this.object.position.y = 0;
+    this.object.position.z = 2000;
+    scene.add( this.object );
+}
 
 var Card = function(uniq,master){
     var element = document.createElement( 'div' );
@@ -260,6 +309,7 @@ var Card = function(uniq,master){
     this.hold = null;
     this.master = master;
     scene.add( this.object );
+    element.id = "Card"+uniq
     element.hold = this
     element.onclick = function(){
         selectable.click(this.hold.uniq)
@@ -374,14 +424,6 @@ Cards.prototype.flash = function(){
     }
 }
 
-var Element = function(){
-    this.element = document.createElement( 'div' );
-    this.object =  new THREE.CSS3DSprite(this.element);
-    this.object.position.x = 0;
-    this.object.position.y = 0;
-    this.object.position.z = 2000;
-    scene.add( this.object );
-}
 
 var Shade = function(t){
     this.element = document.createElement( 'div' );
@@ -461,6 +503,7 @@ var YGO = function(){
         var e = new Element();
         e.element.innerHTML="<h1>"+ this.flags[i]+ "</h1>";
         e.element.className="flag0";
+        e.element.id = this.flags[i];
         this["flag"+i] = e;
         Move(e.object,flag(i),1000)
     }
@@ -523,20 +566,24 @@ YGO.prototype.exprCard = function(args){
 }
 
 YGO.prototype.flagStep = function(args){
-    window.clearInterval(this.stepInterval)
+    var t = this
+    window.clearInterval(t.stepInterval)
     for(var i =1;i!=7;i++){
-        var e = this["flag"+i].element
-        e.innerHTML="<h1>"+ this.flags[i]+ "</h1>";
+        var e = t["flag"+i].element
+        e.innerHTML="<h1>"+ t.flags[i]+ "</h1>";
         if(args.step==i){
             e.className="flag1";
             if(typeof args.wait == "number" ){
                 var ti = args.wait/1000000000;
-                var tf = this.flags[i]
-                var e1 = this["flag"+i].element
+                var tf = t.flags[i]
+                var e1 = t["flag"+i].element
                 e1.innerHTML="<h1>"+ tf+ "(" +ti+ "s)</h1>";
-                this.stepInterval = window.setInterval(function(){
+                t.stepInterval = window.setInterval(function(){
                     ti--
                     e1.innerHTML="<h1>"+ tf+ "(" +ti+ "s)</h1>";
+                    if(ti == 0){
+                        window.clearInterval(t.stepInterval)
+                    }
                 },1000)
             }
         }else{
@@ -608,13 +655,15 @@ function Tween(object, target, duration) {
 }
 
 function Translate(object, target, duration){
-    //Tween(object.position,target,(Math.random() + 0.3 ) *  duration)
-    Tween(object.position,target,duration)
+    //TWEEN.remove(object)
+    Tween(object.position,target,(Math.random() / 10 + 1) *  duration)
+    //Tween(object.position,target,duration)
 }
 
 function Rotate(object, target, duration){
-    //Tween(object.rotation,target,(Math.random() + 0.1 ) *  duration)
-    Tween(object.rotation,target,duration)
+    //TWEEN.remove(object)
+    Tween(object.rotation,target,(Math.random() / 10 + 1) *  duration)
+    //Tween(object.rotation,target,duration)
 }
 
 function Move( object, target, duration ) {
@@ -650,7 +699,8 @@ function render() {
 
 function Start(){
     camera = new THREE.PerspectiveCamera( 40, window.innerWidth / window.innerHeight, 1, 10000 );
-    camera.position.z = 3000;
+    camera.position.z = 2500;
+    camera.position.y = -2500;
 
 
     scene = new THREE.Scene();
@@ -659,17 +709,19 @@ function Start(){
     renderer.domElement.style.position = 'absolute';
     document.getElementById( 'container' ).appendChild( renderer.domElement );
     controls = new THREE.TrackballControls( camera, renderer.domElement );
-    //controls.rotateSpeed = 0;
-    //controls.minDistance = 3000;
-    //controls.maxDistance = 3000;
-    controls.addEventListener( 'Tween', render );
+//    controls.rotateSpeed = 0.5;
+//    controls.minDistance = 500;
+//    controls.maxDistance = 6000;
+    controls.addEventListener( 'change', render );
 
-    //controls.noRotate = true;
+
+    controls.noRotate = true;
     //controls.noZoom = true;
-    //controls.noPan = true;
-    //controls.noRoll = true;
+    controls.noPan = true;
+    controls.noRoll = true;
 
     window.addEventListener( 'resize', onWindowResize, false );
+    selectable = new Selectable();
     init();
     animate();
 }

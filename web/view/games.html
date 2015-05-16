@@ -1,0 +1,55 @@
+
+<div class="row clearfix">
+	<div class="col-md-4 column">
+		<div class="jumbotron well">
+			<!--<img alt="300x200" src="http://lorempixel.com/600/200/people" width="200"/>-->
+			<div class="caption">
+
+				<p>
+					<a id="playygo" class="btn btn-primary" href="javascript:function(){}">play YGO</a>
+				</p>
+			</div>
+		</div>
+	</div>
+</div>
+
+<script>
+//$('#ygo').hide();
+//Start();
+
+$('#playygo').click(function(){
+    //$.post("ygo", function(result){
+    //$("#main").append(result);
+    ws.SendMsg( {{ key "Chan.Room.MatchCompetitors" }} ,{},function(r){
+        if(!r){
+            return true
+        }
+        console.log(r)
+        if(r.status == "init"){
+            MsgErr("Game start")
+            $('#home').hide();
+            $('#ygo').show();
+            Start();
+            return true
+        }else if(r.error == ""){
+            MsgInfo("MatchCompetitors")
+        }else {
+            MsgErr(r.error)
+        }
+        return false
+	})
+   
+    //});
+
+});
+$("#playygo").grumble(
+        {
+            text: 'Click me! 点我啊！',
+            hideOnClick: true,
+            angle: 150,
+            distance: 20,
+            showAfter: 100,
+            hideAfter: false
+        }
+);
+</script>
