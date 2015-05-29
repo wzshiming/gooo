@@ -8,6 +8,7 @@ import (
 var CardBag_test = ygo.NewCardVersion()
 
 func init() {
+	original(CardBag_test)
 	for i := uint(0); i != 10000; i++ {
 		var co *ygo.CardOriginal
 		co = &ygo.CardOriginal{

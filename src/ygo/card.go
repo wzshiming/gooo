@@ -9,6 +9,7 @@ type CardOriginal struct {
 	Lc       LC_TYPE // 卡牌类型
 	Name     string  // 名字
 	Describe string  // 描述
+	Password string  // 卡牌密码
 
 	// 主动效果
 	Initiative Action // 发动效果

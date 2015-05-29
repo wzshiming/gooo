@@ -166,9 +166,9 @@ func (r *Room) GameRegister(args agent.Request, reply *agent.Response) error {
 
 func (r *Room) GameCardActionSelectable(args agent.Request, reply *agent.Response) error {
 	return r.GameBC(args, func(game *ygo.YGO, sess *agent.Session) error {
-		ar := proto.GameCardActionSelectableRequest{}
+		ar := proto.SelectableRequest{}
 		args.Request.DeJson(&ar)
-		game.GetPlayer(sess).SelecAdd(ar.Uniq)
+		game.GetPlayer(sess).SelecAdd(ar)
 		//game.SelecAdd(ar.Uniq)
 		//c := game.GetCard(ar.Uniq)
 		//if c.Owner.Session == sess {

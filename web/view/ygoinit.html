@@ -1,0 +1,96 @@
+<script>
+
+
+    function init() {
+        var ygo = new YGO()
+//    ws.Register({{ key "Chan.Room.Game" }},function(msg){
+//        if(msg.status == "gameinit"){
+
+//        }
+        //MsgInfo(JSON.stringify(msg))
+//    })
+//    ws.SendMsg( {{ key "Chan.Room.Game" }} ,{hand:"init"})
+
+    }
+
+    function Tween(object, target, duration) {
+        new TWEEN.Tween( object )
+                .to( target, duration )
+                .easing( TWEEN.Easing.Exponential.InOut )
+                .start();
+    }
+
+    function Translate(object, target, duration){
+        //TWEEN.remove(object)
+        Tween(object.position,target,(Math.random() / 10 + 1) *  duration)
+        //Tween(object.position,target,duration)
+    }
+
+    function Rotate(object, target, duration){
+        //TWEEN.remove(object)
+        Tween(object.rotation,target,(Math.random() / 10 + 1) *  duration)
+        //Tween(object.rotation,target,duration)
+    }
+
+    function Move( object, target, duration ) {
+        //TWEEN.remove(object)
+        Translate(object,{ x: target.position.x, y: target.position.y, z: target.position.z },duration)
+        Rotate(object,{ x: target.rotation.x, y: target.rotation.y, z: target.rotation.z },duration)
+    }
+
+    function Moves( objects, targets, duration ) {
+        //TWEEN.removeAll();
+        for ( var i = 0; i < objects.length; i ++ ) {
+            Move(objects[ i ],targets[ i ],duration)
+        }
+    }
+
+    function onWindowResize() {
+        camera.aspect = window.innerWidth / window.innerHeight;
+        camera.updateProjectionMatrix();
+        renderer.setSize( window.innerWidth, window.innerHeight );
+        render();
+    }
+
+    function animate() {
+        requestAnimationFrame( animate );
+        TWEEN.update();
+        controls.update();
+        render()
+    }
+
+    function render() {
+        renderer.render( scene, camera );
+    }
+
+    function Start(){
+        camera = new THREE.PerspectiveCamera( 40, window.innerWidth / window.innerHeight, 1, 10000 );
+        camera.position.z = 2500;
+        camera.position.y = -2500;
+
+
+        scene = new THREE.Scene();
+        renderer = new THREE.CSS3DRenderer();
+        renderer.setSize( window.innerWidth, window.innerHeight );
+        renderer.domElement.style.position = 'absolute';
+        document.getElementById( 'container' ).appendChild( renderer.domElement );
+        controls = new THREE.TrackballControls( camera, renderer.domElement );
+//    controls.rotateSpeed = 0.5;
+//    controls.minDistance = 500;
+//    controls.maxDistance = 6000;
+        controls.addEventListener( 'change', render );
+
+
+        controls.noRotate = true;
+        //controls.noZoom = true;
+        controls.noPan = true;
+        controls.noRoll = true;
+
+        window.addEventListener( 'resize', onWindowResize, false );
+        selectable = new Selectable();
+        init();
+        animate();
+    }
+
+    $('#ygo').hide();
+</script>

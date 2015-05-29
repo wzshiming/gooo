@@ -1,0 +1,78 @@
+<script>
+
+
+    var Selectable = function(){
+        this.selec = {}
+        this.func = null
+        this.subm = {}
+
+    }
+    Selectable.prototype.submit = function(uniq,name,index){
+        if(name instanceof Array){
+            for(var i =0;i!=name.length;i++){
+                this.submit(uniq,name[i],i)
+            }
+            for(var j in this.subm){
+                var b = false;
+                for(var i =0;i!=name.length;i++){
+                    if(j == i){
+                        b = true;
+                        break;
+                    }
+                }
+                if(b){
+                    Translate(this.subm[i].object,{x:0,y:0,z:4000},1000);
+                }
+            }
+        }else if(this.subm[name] == null){
+            this.subm[name] =  new Element();
+
+        }
+        if(index == null){
+            index = 0
+        }
+        this.subm[name].element.innerHTML='<button type="submit" class="btn btn-primary btn-block" onclick="WsSelectable(' + uniq + ',1)"><h2>'+name+'</h2></button>';
+
+        var tmp = allCard[uniq].object.position
+        Translate(this.subm[name].object,{x:tmp.x - 60 + (index % 2) * 100,y:tmp.y+220 + Math.floor(index/2)*100,z:tmp.z},1000)
+    }
+
+    Selectable.prototype.unsubmit = function(){
+        for(var i in this.subm){
+            Translate(this.subm[i].object,{x:0,y:0,z:4000},1000)
+        }
+    }
+
+    Selectable.prototype.click = function(uniq){
+        if(this.selec[uniq] == true){
+            delete(this.selec[uniq])
+            allCard[uniq].Unselectable()
+            this.unsubmit()
+        } else {
+            this.selec[uniq] = true
+            allCard[uniq].Selectable()
+            if(typeof this.func == "function"){
+                this.func(allCard[uniq])
+            }
+        }
+    }
+
+    Selectable.prototype.removeall = function(){
+        for(var i in this.selec){
+            if(this.selec[i] == true){
+                allCard[i].Unselectable()
+                delete(this.selec[i])
+            }
+        }
+    }
+
+
+    Selectable.prototype.register = function(func){
+        this.func = func;
+    }
+
+    Selectable.prototype.unregister = function(){
+        this.func = null
+    }
+
+</script>

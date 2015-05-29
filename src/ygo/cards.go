@@ -91,6 +91,15 @@ func (cp *CardPile) PickedForUniq(uniq uint) (c *Card) {
 	return
 }
 
+func (cp *CardPile) ExistForUniq(uniq uint) (c *Card) {
+	for _, v := range cp.list {
+		if v.ToUint() == uniq {
+			c = v
+		}
+	}
+	return
+}
+
 func (cp *CardPile) PickedFor(c *Card) {
 	cp.PickedForUniq(c.ToUint())
 }

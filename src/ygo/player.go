@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"rego"
 	"rego/agent"
+	"service/proto"
 	"time"
 	"ygo/defaul"
 )
@@ -13,7 +14,7 @@ type Player struct {
 	//
 	Name    string         //用户名
 	Session *agent.Session //会话
-	Selec   chan uint
+	Selec   chan proto.SelectableRequest
 
 	// 规则属性
 	Index    int           // 玩家索引
@@ -28,6 +29,7 @@ type Player struct {
 	DrawSize  uint // 抽卡数
 	MaxHp     uint // 最大生命值
 	MaxSdi    int  // 最大手牌
+	Phases    int  //阶段
 
 	// 卡牌区
 	Deck    *CardPile //卡组 40 ~ 60
@@ -83,7 +85,7 @@ func NewPlayer() *Player {
 		Mzone:    NewCardPile("mzone"),
 		Szone:    NewCardPile("szone"),
 		Field:    NewCardPile("field"),
-		Selec:    make(chan uint, 128),
+		Selec:    make(chan proto.SelectableRequest, 128),
 	}
 
 	player.Deck.SetJoin(func(c *Card) {
@@ -100,7 +102,7 @@ func NewPlayer() *Player {
 	return player
 }
 
-func (pl *Player) SelecAdd(u uint) {
+func (pl *Player) SelecAdd(u proto.SelectableRequest) {
 	select {
 	case pl.Selec <- u:
 	default:
@@ -142,25 +144,31 @@ func (pl *Player) round() (err error) {
 		"round":  pl.RoundSize,
 		"player": pl.Index,
 	})
+	pl.Phases = 1
 	pl.draw()
+	pl.Phases = 2
 	pl.standby()
-	pl.main1()
+	pl.Phases = 3
+	pl.main()
+	pl.Phases = 4
 	pl.battle()
-	pl.main2()
+	pl.Phases = 5
+	pl.main()
+	pl.Phases = 6
 	pl.end()
 	return
 }
 
 func (pl *Player) draw() {
 	pl.CallAll("flagStep", map[string]interface{}{
-		"step": 1,
+		"step": pl.Phases,
 	})
 	pl.Call(Message("抽牌阶段"))
 	if pl.Deck.Len() == 0 {
 		pl.Fail()
 		return
 	}
-	pl.ActionDraw(2)
+	pl.ActionDraw(1)
 	select {
 	case <-time.After(time.Second):
 		return
@@ -169,7 +177,7 @@ func (pl *Player) draw() {
 
 func (pl *Player) standby() {
 	pl.CallAll("flagStep", map[string]interface{}{
-		"step": 2,
+		"step": pl.Phases,
 	})
 	pl.Call(Message("准备阶段"))
 	select {
@@ -178,37 +186,50 @@ func (pl *Player) standby() {
 	}
 }
 
-func (pl *Player) main1() {
-	pl.CallAll("flagStep", map[string]interface{}{
-		"step": 3,
-		"wait": pl.WaitTime,
-	})
-	pl.Call(Message("主要阶段1"))
-	select {
-	case <-time.After(pl.WaitTime):
-		return
-	}
+func (pl *Player) main() {
 
+	pl.Call(Message("主要阶段1"))
+	pl.Call("useCard", map[string]interface{}{
+		"master": pl.Index,
+		"pos":    "hand",
+	})
+loop:
+	for {
+		pl.SelecClear()
+		pl.CallAll("flagStep", map[string]interface{}{
+			"step": pl.Phases,
+			"wait": pl.WaitTime * 3,
+		})
+		var t *Card
+		select {
+		case <-time.After(pl.WaitTime * 3):
+			break loop
+		case p := <-pl.Selec:
+			if t = pl.Hand.ExistForUniq(p.Uniq); t != nil {
+				if p.Method == 0 {
+					pl.Call("optionCard", map[string]interface{}{
+						"uniq": p.Uniq,
+						"list": []string{"Call", "Place", "Use", "Discard"},
+					})
+				} else {
+					pl.Mzone.EndPush(t)
+				}
+			}
+		}
+	}
+	pl.CallAll("flashCards", map[string]interface{}{
+		"master": pl.Index,
+		"pos":    "hand",
+	})
+	pl.Call("finishSelect", map[string]interface{}{})
 }
 
 func (pl *Player) battle() {
 	pl.CallAll("flagStep", map[string]interface{}{
-		"step": 4,
+		"step": pl.Phases,
 		"wait": pl.WaitTime,
 	})
 	pl.Call(Message("战斗阶段"))
-	select {
-	case <-time.After(pl.WaitTime):
-		return
-	}
-}
-
-func (pl *Player) main2() {
-	pl.CallAll("flagStep", map[string]interface{}{
-		"step": 5,
-		"wait": pl.WaitTime,
-	})
-	pl.Call(Message("主要阶段2"))
 	select {
 	case <-time.After(pl.WaitTime):
 		return
@@ -226,7 +247,7 @@ func (pl *Player) end() {
 	loop:
 		for {
 			pl.CallAll("flagStep", map[string]interface{}{
-				"step": 6,
+				"step": pl.Phases,
 				"wait": pl.WaitTime,
 			})
 			var t *Card
@@ -234,7 +255,7 @@ func (pl *Player) end() {
 			case <-time.After(pl.WaitTime):
 				t = pl.Hand.EndPop()
 			case p := <-pl.Selec:
-				if t = pl.Hand.PickedForUniq(p); t == nil {
+				if t = pl.Hand.ExistForUniq(p.Uniq); t == nil {
 					t = pl.Hand.EndPop()
 				}
 			}
@@ -248,10 +269,11 @@ func (pl *Player) end() {
 			"master": pl.Index,
 			"pos":    "hand",
 		})
+		//pl.Call("finishSelect", map[string]interface{}{})
 	}
 
 	pl.CallAll("flagStep", map[string]interface{}{
-		"step": 6,
+		"step": pl.Phases,
 	})
 	select {
 	case <-time.After(time.Second):

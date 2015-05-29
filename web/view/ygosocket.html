@@ -1,0 +1,9 @@
+<script>
+function WsSelectable(uniq,method) {
+    ws.SendMsg({{ key "Chan.Room.GameCardActionSelectable" }},{uniq:uniq,method:method} ,null);
+}
+
+function WsRegister(i) {
+    ws.SendMsg({{ key "Chan.Room.GameRegister" }},{} ,i);
+}
+</script>

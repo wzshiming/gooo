@@ -7,13 +7,13 @@ type LC_TYPE uint32
 
 const (
 	LC_None            = LC_TYPE(1 << (32 - 1 - iota))
-	LC_OrdinaryMonster //普通怪兽 黄色
+	LC_OrdinaryMonster //普通怪兽 通常 黄色
 	LC_EffectMonster   //效果怪兽 橙色
 	LC_FusionMonster   //融合怪兽 紫色
-	LC_ExcessMonster   //超量怪兽 黑色
+	LC_ExcessMonster   //超量怪兽 xyz 黑色
 	LC_HomologyMonster //同调怪兽 白色
 	LC_RiteMonster     //仪式怪兽 蓝色
-	LC_OrdinaryMagic   //普通魔法
+	LC_OrdinaryMagic   //普通魔法 通常
 	LC_RiteMagic       //仪式魔法
 	LC_SustainsMagic   //永续魔法 速度2
 	LC_EquipMagic      //装备魔法
@@ -89,6 +89,8 @@ const (
 	LR_Seaserpent  //海龙族
 	LR_Reptile     //爬虫族
 	LR_Psycho      //念动力族
+	LR_DivineBeast //幻神兽族
 	LR_Devine      //神族
 	LR_CreatorGod  //创造神族
+	LR_MagicDragon //幻龙族
 )

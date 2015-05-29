@@ -5,8 +5,9 @@ import ()
 type GameInitRequest struct {
 }
 
-type GameCardActionSelectableRequest struct {
-	Uniq uint `json:"uniq"`
+type SelectableRequest struct {
+	Uniq   uint `json:"uniq"`
+	Method uint `json:"method"`
 }
 
 type PlayerInit struct {
