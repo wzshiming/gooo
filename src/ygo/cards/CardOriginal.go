@@ -4,7 +4,7 @@ import (
 	"ygo"
 )
 
-func original(CardBag *ygo.CardVersion) {
+func original(cardBag *ygo.CardVersion) {
 	var co *ygo.CardOriginal
 
 	co = &ygo.CardOriginal{
@@ -24,8 +24,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_Reptile, // 爬虫类
 		Attack:   2450,
 		Defense:  1500,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -44,8 +45,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_Beast, // 兽
 		Attack:   1900,
 		Defense:  1400,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -64,8 +66,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_Insect, // 昆虫
 		Attack:   1800,
 		Defense:  1700,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -84,8 +87,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_Seaserpent, // 海龙
 		Attack:   1800,
 		Defense:  1500,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -104,8 +108,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_Fish,  // 鱼
 		Attack:   2400,
 		Defense:  1000,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -124,8 +129,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_Pyro, // 炎
 		Attack:   1850,
 		Defense:  0,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -144,8 +150,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_Reptile, // 爬虫类
 		Attack:   2950,
 		Defense:  2800,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -164,8 +171,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_Warrior, // 战士
 		Attack:   1600,
 		Defense:  1600,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -184,8 +192,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_Spellcaster, // 魔法师
 		Attack:   1100,
 		Defense:  900,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -204,8 +213,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_Devine, // 天使
 		Attack:   500,
 		Defense:  500,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -224,8 +234,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_Insect, // 昆虫
 		Attack:   2800,
 		Defense:  1500,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -244,8 +255,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_Machine, // 机械
 		Attack:   1650,
 		Defense:  1600,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -264,8 +276,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_Dragon, // 龙
 		Attack:   2500,
 		Defense:  2300,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -284,8 +297,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_Devine, // 天使
 		Attack:   1800,
 		Defense:  1050,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -304,8 +318,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_Rock,  // 岩石
 		Attack:   1400,
 		Defense:  1700,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -324,8 +339,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_Rock,  // 岩石
 		Attack:   1700,
 		Defense:  1600,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -344,8 +360,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_Machine, // 机械
 		Attack:   2500,
 		Defense:  1600,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -364,8 +381,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_Rock,  // 岩石
 		Attack:   1500,
 		Defense:  1800,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -384,8 +402,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_Machine, // 机械
 		Attack:   1600,
 		Defense:  1900,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -404,16 +423,17 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_Fiend, // 恶魔
 		Attack:   2600,
 		Defense:  1900,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
-		        [14/04/27]
-		此卡是通常怪物。
-		        无限制
-		        金字UR，爆闪PR，金碎USR，平卡N
-		        PP05，LE01，GLD04，TP21，ST14
+			        [14/04/27]
+			此卡是通常怪物。
+			        无限制
+			        金字UR，爆闪PR，金碎USR，平卡N
+			        PP05，LE01，GLD04，TP21，ST14
 		*/
 		Id:       1211,
 		Password: "32012841",
@@ -425,8 +445,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_Warrior, // 战士
 		Attack:   0,
 		Defense:  3000,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -445,8 +466,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_None,  // 水
 		Attack:   1200,
 		Defense:  1000,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -465,8 +487,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_Warrior, // 战士
 		Attack:   1200,
 		Defense:  900,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -485,8 +508,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_Machine, // 机械
 		Attack:   1500,
 		Defense:  1800,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -505,8 +529,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_Dragon, // 龙
 		Attack:   1600,
 		Defense:  1800,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -525,8 +550,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_Spellcaster, // 魔法师
 		Attack:   1400,
 		Defense:  1000,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -545,8 +571,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_Seaserpent, // 海龙
 		Attack:   1500,
 		Defense:  1200,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -565,8 +592,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_Zombie, // 不死
 		Attack:   1100,
 		Defense:  800,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -585,8 +613,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_Zombie, // 不死
 		Attack:   1300,
 		Defense:  1500,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -605,8 +634,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_Beast, // 兽
 		Attack:   1500,
 		Defense:  1200,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -625,8 +655,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_Machine, // 机械
 		Attack:   1750,
 		Defense:  2000,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -645,8 +676,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_Fiend, // 恶魔
 		Attack:   1800,
 		Defense:  1000,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -665,8 +697,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_Warrior, // 战士
 		Attack:   1500,
 		Defense:  1600,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -685,8 +718,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_Warrior, // 战士
 		Attack:   1900,
 		Defense:  1000,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -705,8 +739,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_Fiend, // 恶魔
 		Attack:   1800,
 		Defense:  1200,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -725,8 +760,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_BeastWarror, // 兽战士
 		Attack:   1900,
 		Defense:  1200,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -745,8 +781,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_Spellcaster, // 魔法师
 		Attack:   2900,
 		Defense:  2450,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -765,8 +802,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_Dragon, // 龙
 		Attack:   2200,
 		Defense:  2350,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -785,8 +823,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_Dragon, // 龙
 		Attack:   1800,
 		Defense:  2000,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -805,8 +844,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_Machine, // 机械
 		Attack:   900,
 		Defense:  500,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -825,8 +865,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_None,  // 水
 		Attack:   700,
 		Defense:  500,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -845,8 +886,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_None,  // 水
 		Attack:   450,
 		Defense:  500,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -865,8 +907,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_Devine, // 天使
 		Attack:   300,
 		Defense:  200,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -885,8 +928,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_Beast, // 兽
 		Attack:   2250,
 		Defense:  1800,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -905,8 +949,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_Dragon, // 龙
 		Attack:   2850,
 		Defense:  2350,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -925,8 +970,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_BeastWarror, // 兽战士
 		Attack:   2750,
 		Defense:  2500,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -945,8 +991,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_Dragon, // 龙
 		Attack:   2350,
 		Defense:  2400,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -965,8 +1012,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_Fiend, // 恶魔
 		Attack:   2400,
 		Defense:  2150,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -985,8 +1033,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_Reptile, // 爬虫类
 		Attack:   350,
 		Defense:  300,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -1005,8 +1054,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_Devine, // 天使
 		Attack:   300,
 		Defense:  100,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -1025,8 +1075,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_Fiend, // 恶魔
 		Attack:   400,
 		Defense:  400,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -1045,8 +1096,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_Insect, // 昆虫
 		Attack:   900,
 		Defense:  200,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -1065,8 +1117,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_Zombie, // 不死
 		Attack:   900,
 		Defense:  0,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -1085,8 +1138,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_Zombie, // 不死
 		Attack:   900,
 		Defense:  0,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -1105,8 +1159,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_Pyro, // 炎
 		Attack:   1700,
 		Defense:  1100,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -1125,8 +1180,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_Machine, // 机械
 		Attack:   1400,
 		Defense:  1200,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -1145,8 +1201,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_Insect, // 昆虫
 		Attack:   1500,
 		Defense:  800,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -1165,8 +1222,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_WindBeast, // 鸟兽
 		Attack:   1800,
 		Defense:  600,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -1185,8 +1243,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_Pyro, // 炎
 		Attack:   100,
 		Defense:  2100,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -1205,8 +1264,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_Spellcaster, // 魔法师
 		Attack:   1200,
 		Defense:  3000,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -1225,8 +1285,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_Beast, // 兽
 		Attack:   1350,
 		Defense:  2000,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -1245,8 +1306,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_Fiend, // 恶魔
 		Attack:   400,
 		Defense:  400,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -1265,8 +1327,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_Dragon, // 龙
 		Attack:   3000,
 		Defense:  2500,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -1285,8 +1348,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_BeastWarror, // 兽战士
 		Attack:   1200,
 		Defense:  1000,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -1305,8 +1369,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_Zombie, // 不死
 		Attack:   300,
 		Defense:  200,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -1325,8 +1390,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_Machine, // 机械
 		Attack:   500,
 		Defense:  2500,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -1345,8 +1411,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_Machine, // 机械
 		Attack:   500,
 		Defense:  1200,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -1365,8 +1432,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_Machine, // 机械
 		Attack:   500,
 		Defense:  500,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -1385,8 +1453,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_WindBeast, // 鸟兽
 		Attack:   500,
 		Defense:  500,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -1405,8 +1474,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_Spellcaster, // 魔法师
 		Attack:   2500,
 		Defense:  2100,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -1425,8 +1495,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_Warrior, // 战士
 		Attack:   2300,
 		Defense:  2100,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -1445,8 +1516,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_Warrior, // 战士
 		Attack:   1400,
 		Defense:  1200,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -1465,8 +1537,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_Insect, // 昆虫
 		Attack:   500,
 		Defense:  700,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -1485,8 +1558,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_Dinosaur, // 恐龙
 		Attack:   1200,
 		Defense:  800,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -1505,8 +1579,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_Beast, // 兽
 		Attack:   1200,
 		Defense:  800,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -1525,8 +1600,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_Fiend, // 恶魔
 		Attack:   1300,
 		Defense:  900,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -1545,8 +1621,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_Fish,  // 鱼
 		Attack:   1700,
 		Defense:  1000,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -1565,8 +1642,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_Dragon, // 龙
 		Attack:   1500,
 		Defense:  1000,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -1585,8 +1663,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_Beast, // 兽
 		Attack:   1200,
 		Defense:  0,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -1605,8 +1684,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_Zombie, // 不死
 		Attack:   1200,
 		Defense:  900,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -1625,8 +1705,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_Insect, // 昆虫
 		Attack:   1900,
 		Defense:  1500,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -1645,8 +1726,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_Spellcaster, // 魔法师
 		Attack:   900,
 		Defense:  1000,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -1665,8 +1747,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_Fiend, // 恶魔
 		Attack:   1200,
 		Defense:  800,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -1685,8 +1768,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_WindBeast, // 鸟兽
 		Attack:   1100,
 		Defense:  1400,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -1705,8 +1789,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_Spellcaster, // 魔法师
 		Attack:   1200,
 		Defense:  2000,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -1725,8 +1810,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_Dinosaur, // 恐龙
 		Attack:   900,
 		Defense:  700,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -1745,8 +1831,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_Devine, // 天使
 		Attack:   1000,
 		Defense:  1000,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -1765,8 +1852,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_Fiend, // 恶魔
 		Attack:   1000,
 		Defense:  900,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -1785,8 +1873,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_Warrior, // 战士
 		Attack:   1000,
 		Defense:  1000,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -1805,8 +1894,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_Warrior, // 战士
 		Attack:   1200,
 		Defense:  800,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -1825,8 +1915,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_Warrior, // 战士
 		Attack:   800,
 		Defense:  2000,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -1845,8 +1936,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_Warrior, // 战士
 		Attack:   1100,
 		Defense:  1100,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -1865,8 +1957,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_None,  // 水
 		Attack:   1650,
 		Defense:  1300,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -1885,8 +1978,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_Machine, // 机械
 		Attack:   800,
 		Defense:  1000,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -1905,8 +1999,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_Devine, // 天使
 		Attack:   0,
 		Defense:  0,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -1925,8 +2020,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_None,  // 水
 		Attack:   1700,
 		Defense:  1000,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -1945,8 +2041,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_Plant, // 植物
 		Attack:   1750,
 		Defense:  0,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -1965,8 +2062,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_Fiend, // 恶魔
 		Attack:   1800,
 		Defense:  1500,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -1985,8 +2083,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_Machine, // 机械
 		Attack:   1600,
 		Defense:  1800,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -2005,8 +2104,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_Warrior, // 战士
 		Attack:   1400,
 		Defense:  1500,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -2025,16 +2125,17 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_Machine, // 机械
 		Attack:   2000,
 		Defense:  2300,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
-		        [14/04/27]
-		此卡是通常怪物
-		        无限制
-		        平卡N
-		        PG，BE01，EX-R(EX)，VOL02，DL02，SY2，ST13，ST14，15AY
+			        [14/04/27]
+			此卡是通常怪物
+			        无限制
+			        平卡N
+			        PG，BE01，EX-R(EX)，VOL02，DL02，SY2，ST13，ST14，15AY
 		*/
 		Id:       181,
 		Password: "15025844",
@@ -2046,8 +2147,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_Spellcaster, // 魔法师
 		Attack:   800,
 		Defense:  2000,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -2066,8 +2168,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_WindBeast, // 鸟兽
 		Attack:   1200,
 		Defense:  1400,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -2086,8 +2189,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_BeastWarror, // 兽战士
 		Attack:   1200,
 		Defense:  1500,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -2106,8 +2210,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_Dragon, // 龙
 		Attack:   2000,
 		Defense:  1500,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -2126,8 +2231,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_Rock,  // 岩石
 		Attack:   1300,
 		Defense:  2000,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -2146,8 +2252,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_Dinosaur, // 恐龙
 		Attack:   1500,
 		Defense:  800,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -2166,8 +2273,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_Fiend, // 恶魔
 		Attack:   1400,
 		Defense:  1300,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -2186,8 +2294,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_Devine, // 天使
 		Attack:   800,
 		Defense:  2000,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -2206,8 +2315,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_Fiend, // 恶魔
 		Attack:   1200,
 		Defense:  1300,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -2226,8 +2336,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_Warrior, // 战士
 		Attack:   2500,
 		Defense:  2000,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -2246,8 +2357,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_Fish,  // 鱼
 		Attack:   1200,
 		Defense:  900,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -2266,8 +2378,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_Dinosaur, // 恐龙
 		Attack:   1900,
 		Defense:  500,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -2286,8 +2399,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_Pyro, // 炎
 		Attack:   1300,
 		Defense:  1000,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -2306,8 +2420,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_Warrior, // 战士
 		Attack:   1600,
 		Defense:  1400,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -2326,8 +2441,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_None,  // 水
 		Attack:   1400,
 		Defense:  1500,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -2346,8 +2462,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_Seaserpent, // 海龙
 		Attack:   1600,
 		Defense:  1300,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -2366,8 +2483,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_WindBeast, // 鸟兽
 		Attack:   1550,
 		Defense:  1200,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -2386,8 +2504,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_BeastWarror, // 兽战士
 		Attack:   2000,
 		Defense:  100,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -2406,8 +2525,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_Rock,  // 岩石
 		Attack:   1300,
 		Defense:  1600,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -2426,8 +2546,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_Dinosaur, // 恐龙
 		Attack:   2600,
 		Defense:  1700,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -2446,8 +2567,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_Machine, // 机械
 		Attack:   1400,
 		Defense:  1800,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -2466,8 +2588,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_Seaserpent, // 海龙
 		Attack:   2900,
 		Defense:  2900,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -2486,8 +2609,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_Dragon, // 龙
 		Attack:   1200,
 		Defense:  1000,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -2506,8 +2630,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_Warrior, // 战士
 		Attack:   1650,
 		Defense:  1300,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -2526,8 +2651,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_Spellcaster, // 魔法师
 		Attack:   200,
 		Defense:  300,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -2546,8 +2672,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_Spellcaster, // 魔法师
 		Attack:   200,
 		Defense:  300,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -2566,8 +2693,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_Spellcaster, // 魔法师
 		Attack:   200,
 		Defense:  300,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -2586,8 +2714,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_Spellcaster, // 魔法师
 		Attack:   200,
 		Defense:  300,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -2606,8 +2735,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_Devine, // 天使
 		Attack:   600,
 		Defense:  900,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -2626,8 +2756,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_Beast, // 兽
 		Attack:   800,
 		Defense:  900,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -2646,8 +2777,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_Warrior, // 战士
 		Attack:   800,
 		Defense:  400,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -2666,8 +2798,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_WindBeast, // 鸟兽
 		Attack:   800,
 		Defense:  800,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -2686,8 +2819,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_Spellcaster, // 魔法师
 		Attack:   800,
 		Defense:  700,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -2706,8 +2840,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_Fiend, // 恶魔
 		Attack:   700,
 		Defense:  800,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -2726,8 +2861,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_None,  // 水
 		Attack:   800,
 		Defense:  700,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -2746,8 +2882,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_Devine, // 天使
 		Attack:   700,
 		Defense:  600,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -2766,8 +2903,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_Fiend, // 恶魔
 		Attack:   700,
 		Defense:  600,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -2786,8 +2924,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_Zombie, // 不死
 		Attack:   700,
 		Defense:  500,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -2806,8 +2945,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_Dragon, // 龙
 		Attack:   600,
 		Defense:  700,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -2826,8 +2966,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_Beast, // 兽
 		Attack:   700,
 		Defense:  600,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -2846,8 +2987,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_Plant, // 植物
 		Attack:   700,
 		Defense:  600,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -2866,8 +3008,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_Fiend, // 恶魔
 		Attack:   1300,
 		Defense:  1400,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -2886,8 +3029,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_Insect, // 昆虫
 		Attack:   700,
 		Defense:  700,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -2906,8 +3050,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_Spellcaster, // 魔法师
 		Attack:   700,
 		Defense:  500,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -2926,8 +3071,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_None,  // 水
 		Attack:   600,
 		Defense:  700,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -2946,8 +3092,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_Thunder, // 雷
 		Attack:   700,
 		Defense:  600,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -2966,8 +3113,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_Warrior, // 战士
 		Attack:   600,
 		Defense:  500,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -2986,8 +3134,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_Thunder, // 雷
 		Attack:   600,
 		Defense:  600,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -3006,8 +3155,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_Fiend, // 恶魔
 		Attack:   600,
 		Defense:  600,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -3026,8 +3176,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_Spellcaster, // 魔法师
 		Attack:   600,
 		Defense:  500,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -3046,8 +3197,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_Zombie, // 不死
 		Attack:   600,
 		Defense:  600,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -3066,8 +3218,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_Beast, // 兽
 		Attack:   400,
 		Defense:  600,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -3086,8 +3239,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_Dragon, // 龙
 		Attack:   1400,
 		Defense:  1200,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -3106,8 +3260,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_Dinosaur, // 恐龙
 		Attack:   500,
 		Defense:  400,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -3126,8 +3281,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_Rock,  // 岩石
 		Attack:   500,
 		Defense:  500,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -3146,8 +3302,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_Insect, // 昆虫
 		Attack:   700,
 		Defense:  1400,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -3166,8 +3323,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_Warrior, // 战士
 		Attack:   700,
 		Defense:  1300,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -3186,8 +3344,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_Dragon, // 龙
 		Attack:   700,
 		Defense:  1300,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -3206,8 +3365,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_Rock,  // 岩石
 		Attack:   800,
 		Defense:  1200,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -3226,8 +3386,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_Warrior, // 战士
 		Attack:   300,
 		Defense:  1200,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -3246,8 +3407,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_Fiend, // 恶魔
 		Attack:   2500,
 		Defense:  1200,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -3266,8 +3428,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_Machine, // 机械
 		Attack:   1100,
 		Defense:  700,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -3286,8 +3449,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_BeastWarror, // 兽战士
 		Attack:   1050,
 		Defense:  1000,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -3306,8 +3470,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_Beast, // 兽
 		Attack:   800,
 		Defense:  1000,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -3326,8 +3491,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_Fiend, // 恶魔
 		Attack:   1000,
 		Defense:  800,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -3346,8 +3512,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_Zombie, // 不死
 		Attack:   1000,
 		Defense:  900,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -3366,8 +3533,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_Warrior, // 战士
 		Attack:   1000,
 		Defense:  1000,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -3386,8 +3554,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_Warrior, // 战士
 		Attack:   1000,
 		Defense:  500,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -3406,8 +3575,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_Warrior, // 战士
 		Attack:   500,
 		Defense:  1000,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -3426,8 +3596,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_Rock,  // 岩石
 		Attack:   800,
 		Defense:  1200,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -3446,8 +3617,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_None,  // 水
 		Attack:   900,
 		Defense:  800,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -3466,8 +3638,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_Zombie, // 不死
 		Attack:   900,
 		Defense:  700,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -3486,8 +3659,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_Plant, // 植物
 		Attack:   800,
 		Defense:  600,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -3506,8 +3680,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_Fiend, // 恶魔
 		Attack:   800,
 		Defense:  400,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -3526,8 +3701,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_Spellcaster, // 魔法师
 		Attack:   700,
 		Defense:  700,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -3546,8 +3722,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_Warrior, // 战士
 		Attack:   1700,
 		Defense:  1200,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -3566,8 +3743,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_None,  // 水
 		Attack:   1700,
 		Defense:  1400,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -3586,8 +3764,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_Machine, // 机械
 		Attack:   1750,
 		Defense:  1900,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -3606,8 +3785,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_Spellcaster, // 魔法师
 		Attack:   1600,
 		Defense:  1000,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -3626,8 +3806,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_Fiend, // 恶魔
 		Attack:   1700,
 		Defense:  1400,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -3646,8 +3827,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_Reptile, // 爬虫类
 		Attack:   1500,
 		Defense:  1200,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -3666,8 +3848,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_None,  // 水
 		Attack:   850,
 		Defense:  1400,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -3686,8 +3869,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_Reptile, // 爬虫类
 		Attack:   900,
 		Defense:  800,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -3706,8 +3890,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_Spellcaster, // 魔法师
 		Attack:   950,
 		Defense:  1000,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -3726,8 +3911,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_Insect, // 昆虫
 		Attack:   600,
 		Defense:  800,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -3746,8 +3932,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_Insect, // 昆虫
 		Attack:   1150,
 		Defense:  1400,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -3766,8 +3953,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_Dinosaur, // 恐龙
 		Attack:   1000,
 		Defense:  850,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -3786,8 +3974,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_Beast, // 兽
 		Attack:   1200,
 		Defense:  1000,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -3806,8 +3995,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_Zombie, // 不死
 		Attack:   800,
 		Defense:  600,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -3826,8 +4016,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_Thunder, // 雷
 		Attack:   1200,
 		Defense:  1300,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -3846,8 +4037,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_Warrior, // 战士
 		Attack:   900,
 		Defense:  800,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -3866,8 +4058,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_Insect, // 昆虫
 		Attack:   1200,
 		Defense:  1000,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -3886,8 +4079,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_Fish,  // 鱼
 		Attack:   1400,
 		Defense:  1600,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -3906,8 +4100,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_Beast, // 兽
 		Attack:   700,
 		Defense:  1700,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -3926,8 +4121,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_Devine, // 天使
 		Attack:   1000,
 		Defense:  1100,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -3946,8 +4142,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_Plant, // 植物
 		Attack:   1200,
 		Defense:  900,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -3966,8 +4163,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_Fiend, // 恶魔
 		Attack:   550,
 		Defense:  400,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -3986,8 +4184,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_Fish,  // 鱼
 		Attack:   1650,
 		Defense:  1700,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -4006,8 +4205,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_Devine, // 天使
 		Attack:   1550,
 		Defense:  1650,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -4026,8 +4226,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_Devine, // 天使
 		Attack:   1600,
 		Defense:  1400,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -4046,8 +4247,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_Insect, // 昆虫
 		Attack:   1600,
 		Defense:  1400,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -4066,8 +4268,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_Fiend, // 恶魔
 		Attack:   1550,
 		Defense:  1300,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -4086,8 +4289,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_Spellcaster, // 魔法师
 		Attack:   1450,
 		Defense:  1200,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -4106,8 +4310,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_BeastWarror, // 兽战士
 		Attack:   1200,
 		Defense:  1400,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -4126,8 +4331,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_WindBeast, // 鸟兽
 		Attack:   1300,
 		Defense:  1400,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -4146,8 +4352,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_Fish,  // 鱼
 		Attack:   1350,
 		Defense:  800,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -4166,8 +4373,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_Warrior, // 战士
 		Attack:   1300,
 		Defense:  1100,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -4186,8 +4394,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_WindBeast, // 鸟兽
 		Attack:   1300,
 		Defense:  1400,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -4206,8 +4415,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_Dinosaur, // 恐龙
 		Attack:   1300,
 		Defense:  800,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -4226,8 +4436,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_Beast, // 兽
 		Attack:   1250,
 		Defense:  1300,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -4246,8 +4457,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_None,  // 水
 		Attack:   1250,
 		Defense:  1000,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -4266,8 +4478,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_Zombie, // 不死
 		Attack:   900,
 		Defense:  1200,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -4286,8 +4499,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_Zombie, // 不死
 		Attack:   1200,
 		Defense:  1200,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -4306,8 +4520,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_Spellcaster, // 魔法师
 		Attack:   1200,
 		Defense:  900,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -4326,8 +4541,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_Beast, // 兽
 		Attack:   1100,
 		Defense:  900,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -4346,8 +4562,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_Plant, // 植物
 		Attack:   1100,
 		Defense:  600,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -4366,8 +4583,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_Thunder, // 雷
 		Attack:   750,
 		Defense:  600,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -4386,8 +4604,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_Pyro,  // 炎
 		Attack:   400,
 		Defense:  450,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -4406,8 +4625,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_Insect, // 昆虫
 		Attack:   250,
 		Defense:  300,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -4426,8 +4646,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_Plant, // 植物
 		Attack:   1500,
 		Defense:  1800,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -4446,8 +4667,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_WindBeast, // 鸟兽
 		Attack:   1850,
 		Defense:  1600,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -4466,8 +4688,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_Insect, // 昆虫
 		Attack:   1800,
 		Defense:  1500,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -4486,8 +4709,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_Warrior, // 战士
 		Attack:   1500,
 		Defense:  1200,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -4506,8 +4730,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_BeastWarror, // 兽战士
 		Attack:   1800,
 		Defense:  1600,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -4526,8 +4751,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_Beast, // 兽
 		Attack:   1100,
 		Defense:  1500,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -4546,8 +4772,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_Warrior, // 战士
 		Attack:   1450,
 		Defense:  1000,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -4566,8 +4793,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_Zombie, // 不死
 		Attack:   1300,
 		Defense:  1400,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -4586,8 +4814,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_Machine, // 机械
 		Attack:   1350,
 		Defense:  1000,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -4606,8 +4835,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_Fiend, // 恶魔
 		Attack:   600,
 		Defense:  1300,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -4626,8 +4856,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_Rock,  // 岩石
 		Attack:   1200,
 		Defense:  1300,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -4646,8 +4877,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_Machine, // 机械
 		Attack:   1000,
 		Defense:  1300,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -4666,8 +4898,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_Devine, // 天使
 		Attack:   500,
 		Defense:  1300,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -4686,8 +4919,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_Warrior, // 战士
 		Attack:   800,
 		Defense:  1200,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -4706,8 +4940,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_Beast, // 兽
 		Attack:   1200,
 		Defense:  1000,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -4726,8 +4961,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_Plant, // 植物
 		Attack:   1000,
 		Defense:  1200,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -4746,8 +4982,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_Beast, // 兽
 		Attack:   950,
 		Defense:  1100,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -4766,8 +5003,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_Warrior, // 战士
 		Attack:   1000,
 		Defense:  500,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -4786,8 +5024,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_None,  // 水
 		Attack:   1000,
 		Defense:  1000,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -4806,8 +5045,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_Fiend, // 恶魔
 		Attack:   1000,
 		Defense:  1000,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -4826,8 +5066,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_Insect, // 昆虫
 		Attack:   900,
 		Defense:  700,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -4846,8 +5087,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_Dragon, // 龙
 		Attack:   1600,
 		Defense:  1400,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -4866,8 +5108,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_Seaserpent, // 海龙
 		Attack:   2000,
 		Defense:  1700,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -4886,8 +5129,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_BeastWarror, // 兽战士
 		Attack:   1900,
 		Defense:  2000,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -4906,8 +5150,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_Machine, // 机械
 		Attack:   1650,
 		Defense:  1800,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -4926,8 +5171,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_WindBeast, // 鸟兽
 		Attack:   1600,
 		Defense:  1200,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -4946,8 +5192,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_None,  // 水
 		Attack:   1550,
 		Defense:  800,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -4966,8 +5213,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_Thunder, // 雷
 		Attack:   1400,
 		Defense:  1500,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -4986,8 +5234,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_Fiend, // 恶魔
 		Attack:   1300,
 		Defense:  1000,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -5006,8 +5255,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_Fiend, // 恶魔
 		Attack:   1300,
 		Defense:  1000,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -5026,8 +5276,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_Beast, // 兽
 		Attack:   1200,
 		Defense:  1500,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -5046,8 +5297,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_Zombie, // 不死
 		Attack:   1500,
 		Defense:  0,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -5066,8 +5318,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_Insect, // 昆虫
 		Attack:   1200,
 		Defense:  1400,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -5086,8 +5339,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_Beast, // 兽
 		Attack:   1200,
 		Defense:  600,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -5106,8 +5360,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_None,  // 水
 		Attack:   1150,
 		Defense:  900,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -5126,8 +5381,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_Insect, // 昆虫
 		Attack:   1100,
 		Defense:  1000,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -5146,8 +5402,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_Warrior, // 战士
 		Attack:   1000,
 		Defense:  1200,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -5166,8 +5423,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_Machine, // 机械
 		Attack:   900,
 		Defense:  1200,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -5186,8 +5444,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_WindBeast, // 鸟兽
 		Attack:   900,
 		Defense:  800,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -5206,8 +5465,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_Plant, // 植物
 		Attack:   900,
 		Defense:  500,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -5226,8 +5486,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_Beast, // 兽
 		Attack:   850,
 		Defense:  800,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -5246,8 +5507,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_Warrior, // 战士
 		Attack:   800,
 		Defense:  1500,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -5266,8 +5528,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_Rock,  // 岩石
 		Attack:   800,
 		Defense:  1000,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -5286,8 +5549,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_Machine, // 机械
 		Attack:   750,
 		Defense:  700,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -5306,8 +5570,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_Devine, // 天使
 		Attack:   700,
 		Defense:  1400,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -5326,8 +5591,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_None,  // 水
 		Attack:   650,
 		Defense:  900,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -5346,8 +5612,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_Pyro, // 炎
 		Attack:   2100,
 		Defense:  1800,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -5366,8 +5633,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_Fiend, // 恶魔
 		Attack:   2100,
 		Defense:  1600,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -5386,8 +5654,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_Machine, // 机械
 		Attack:   1900,
 		Defense:  2200,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -5406,8 +5675,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_Machine, // 机械
 		Attack:   1700,
 		Defense:  1800,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -5426,8 +5696,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_Machine, // 机械
 		Attack:   1700,
 		Defense:  1400,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -5446,8 +5717,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_Fiend, // 恶魔
 		Attack:   1610,
 		Defense:  1460,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -5466,8 +5738,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_Beast, // 兽
 		Attack:   1600,
 		Defense:  1800,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -5486,8 +5759,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_Zombie, // 不死
 		Attack:   1600,
 		Defense:  1200,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -5506,8 +5780,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_Fish,  // 鱼
 		Attack:   1600,
 		Defense:  1200,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -5526,8 +5801,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_Machine, // 机械
 		Attack:   1500,
 		Defense:  1800,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -5546,8 +5822,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_Machine, // 机械
 		Attack:   1500,
 		Defense:  1700,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -5566,8 +5843,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_Warrior, // 战士
 		Attack:   1500,
 		Defense:  1700,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -5586,8 +5864,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_Machine, // 机械
 		Attack:   1450,
 		Defense:  1500,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -5606,8 +5885,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_Warrior, // 战士
 		Attack:   1400,
 		Defense:  800,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -5626,8 +5906,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_Zombie, // 不死
 		Attack:   1350,
 		Defense:  0,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -5646,8 +5927,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_Warrior, // 战士
 		Attack:   1100,
 		Defense:  1000,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -5666,8 +5948,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_None,  // 水
 		Attack:   1100,
 		Defense:  700,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -5686,8 +5969,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_None,  // 水
 		Attack:   1000,
 		Defense:  1200,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -5706,8 +5990,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_Spellcaster, // 魔法师
 		Attack:   1000,
 		Defense:  800,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -5726,8 +6011,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_Reptile, // 爬虫类
 		Attack:   800,
 		Defense:  1600,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -5746,8 +6032,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_Plant, // 植物
 		Attack:   800,
 		Defense:  1000,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -5766,8 +6053,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_Beast, // 兽
 		Attack:   500,
 		Defense:  2000,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -5786,8 +6074,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_Dragon, // 龙
 		Attack:   2100,
 		Defense:  1800,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -5806,8 +6095,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_WindBeast, // 鸟兽
 		Attack:   2000,
 		Defense:  1900,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -5826,8 +6116,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_Warrior, // 战士
 		Attack:   900,
 		Defense:  700,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -5846,8 +6137,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_Devine, // 天使
 		Attack:   600,
 		Defense:  400,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -5866,8 +6158,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_None,  // 水
 		Attack:   900,
 		Defense:  700,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -5886,8 +6179,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_Fiend, // 恶魔
 		Attack:   1000,
 		Defense:  500,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -5906,8 +6200,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_Warrior, // 战士
 		Attack:   700,
 		Defense:  1000,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -5926,8 +6221,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_Spellcaster, // 魔法师
 		Attack:   700,
 		Defense:  900,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -5946,8 +6242,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_None,  // 水
 		Attack:   900,
 		Defense:  700,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -5966,8 +6263,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_Zombie, // 不死
 		Attack:   600,
 		Defense:  800,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -5986,8 +6284,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_Spellcaster, // 魔法师
 		Attack:   700,
 		Defense:  600,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -6006,8 +6305,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_Pyro, // 炎
 		Attack:   700,
 		Defense:  600,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -6026,8 +6326,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_WindBeast, // 鸟兽
 		Attack:   600,
 		Defense:  500,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -6046,8 +6347,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_Devine, // 天使
 		Attack:   700,
 		Defense:  700,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -6066,8 +6368,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_Zombie, // 不死
 		Attack:   500,
 		Defense:  400,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -6086,8 +6389,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_Plant, // 植物
 		Attack:   300,
 		Defense:  400,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -6106,8 +6410,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_Rock,  // 岩石
 		Attack:   400,
 		Defense:  200,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -6126,8 +6431,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_None,  // 水
 		Attack:   1400,
 		Defense:  1200,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -6146,8 +6452,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_Beast, // 兽
 		Attack:   500,
 		Defense:  800,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -6166,8 +6473,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_Zombie, // 不死
 		Attack:   700,
 		Defense:  900,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -6186,8 +6494,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_Warrior, // 战士
 		Attack:   900,
 		Defense:  500,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -6206,8 +6515,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_None,  // 水
 		Attack:   500,
 		Defense:  700,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -6226,8 +6536,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_Insect, // 昆虫
 		Attack:   900,
 		Defense:  800,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -6246,8 +6557,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_Devine, // 天使
 		Attack:   800,
 		Defense:  500,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -6266,8 +6578,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_Spellcaster, // 魔法师
 		Attack:   900,
 		Defense:  200,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -6286,8 +6599,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_Plant, // 植物
 		Attack:   800,
 		Defense:  600,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -6306,8 +6620,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_Pyro, // 炎
 		Attack:   800,
 		Defense:  600,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -6326,8 +6641,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_Beast, // 兽
 		Attack:   800,
 		Defense:  900,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -6346,8 +6662,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_Machine, // 机械
 		Attack:   1500,
 		Defense:  1000,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -6366,8 +6683,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_Beast, // 兽
 		Attack:   700,
 		Defense:  800,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -6386,8 +6704,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_Spellcaster, // 魔法师
 		Attack:   600,
 		Defense:  800,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -6406,8 +6725,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_Dragon, // 龙
 		Attack:   900,
 		Defense:  900,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -6426,8 +6746,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_Fiend, // 恶魔
 		Attack:   500,
 		Defense:  750,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -6446,8 +6767,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_Fiend, // 恶魔
 		Attack:   800,
 		Defense:  600,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -6466,8 +6788,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_Dragon, // 龙
 		Attack:   900,
 		Defense:  300,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -6486,8 +6809,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_Fiend, // 恶魔
 		Attack:   800,
 		Defense:  700,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -6506,8 +6830,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_Beast, // 兽
 		Attack:   750,
 		Defense:  800,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -6526,8 +6851,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_Insect, // 昆虫
 		Attack:   950,
 		Defense:  700,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -6546,8 +6872,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_Beast, // 兽
 		Attack:   1000,
 		Defense:  1200,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -6566,8 +6893,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_Insect, // 昆虫
 		Attack:   300,
 		Defense:  200,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -6586,8 +6914,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_Warrior, // 战士
 		Attack:   800,
 		Defense:  1200,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -6606,8 +6935,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_Spellcaster, // 魔法师
 		Attack:   800,
 		Defense:  1000,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -6626,8 +6956,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_Warrior, // 战士
 		Attack:   1250,
 		Defense:  700,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -6646,8 +6977,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_Fish,  // 鱼
 		Attack:   1250,
 		Defense:  900,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -6666,8 +6998,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_None,  // 水
 		Attack:   600,
 		Defense:  700,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -6686,8 +7019,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_Plant, // 植物
 		Attack:   750,
 		Defense:  400,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -6706,8 +7040,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_Rock,  // 岩石
 		Attack:   1200,
 		Defense:  1000,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -6726,8 +7061,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_BeastWarror, // 兽战士
 		Attack:   1100,
 		Defense:  1000,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -6746,8 +7082,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_Zombie, // 不死
 		Attack:   1100,
 		Defense:  700,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -6766,8 +7103,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_Machine, // 机械
 		Attack:   300,
 		Defense:  350,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -6786,8 +7124,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_Plant, // 植物
 		Attack:   1400,
 		Defense:  1300,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -6806,8 +7145,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_Spellcaster, // 魔法师
 		Attack:   650,
 		Defense:  500,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -6826,8 +7166,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_Dinosaur, // 恐龙
 		Attack:   1100,
 		Defense:  700,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -6846,8 +7187,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_Zombie, // 不死
 		Attack:   400,
 		Defense:  300,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -6866,8 +7208,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_Thunder, // 雷
 		Attack:   1100,
 		Defense:  800,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -6886,8 +7229,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_Fish,  // 鱼
 		Attack:   500,
 		Defense:  400,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -6906,8 +7250,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_Fiend, // 恶魔
 		Attack:   900,
 		Defense:  600,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -6926,8 +7271,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_Fiend, // 恶魔
 		Attack:   1050,
 		Defense:  1200,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -6946,8 +7292,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_WindBeast, // 鸟兽
 		Attack:   1200,
 		Defense:  1000,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -6966,8 +7313,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_Warrior, // 战士
 		Attack:   1200,
 		Defense:  1300,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -6986,8 +7334,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_Plant, // 植物
 		Attack:   900,
 		Defense:  1100,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -7006,8 +7355,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_Fiend, // 恶魔
 		Attack:   1200,
 		Defense:  1000,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -7026,8 +7376,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_Rock,  // 岩石
 		Attack:   1300,
 		Defense:  1200,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -7046,8 +7397,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_Warrior, // 战士
 		Attack:   1200,
 		Defense:  900,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -7066,8 +7418,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_Fish,  // 鱼
 		Attack:   1600,
 		Defense:  800,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -7086,8 +7439,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_Insect, // 昆虫
 		Attack:   1250,
 		Defense:  1000,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -7106,8 +7460,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_Machine, // 机械
 		Attack:   900,
 		Defense:  1600,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -7126,8 +7481,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_Beast, // 兽
 		Attack:   1300,
 		Defense:  1300,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -7146,8 +7502,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_Warrior, // 战士
 		Attack:   1600,
 		Defense:  800,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -7166,8 +7523,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_Beast, // 兽
 		Attack:   1350,
 		Defense:  1600,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -7186,8 +7544,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_Warrior, // 战士
 		Attack:   1400,
 		Defense:  700,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -7206,8 +7565,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_Zombie, // 不死
 		Attack:   900,
 		Defense:  1300,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -7226,8 +7586,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_Spellcaster, // 魔法师
 		Attack:   1200,
 		Defense:  1400,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -7246,8 +7607,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_Fiend, // 恶魔
 		Attack:   1500,
 		Defense:  1000,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -7266,8 +7628,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_None,  // 水
 		Attack:   1200,
 		Defense:  900,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -7286,8 +7649,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_Insect, // 昆虫
 		Attack:   1500,
 		Defense:  2000,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -7306,8 +7670,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_WindBeast, // 鸟兽
 		Attack:   1400,
 		Defense:  1200,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -7326,8 +7691,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_Machine, // 机械
 		Attack:   1400,
 		Defense:  1200,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -7346,8 +7712,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_Devine, // 天使
 		Attack:   850,
 		Defense:  900,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -7366,8 +7733,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_Beast, // 兽
 		Attack:   1300,
 		Defense:  1400,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -7386,8 +7754,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_Plant, // 植物
 		Attack:   800,
 		Defense:  600,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -7406,8 +7775,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_Reptile, // 爬虫类
 		Attack:   1200,
 		Defense:  900,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -7426,8 +7796,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_Spellcaster, // 魔法师
 		Attack:   1200,
 		Defense:  1700,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -7446,8 +7817,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_Spellcaster, // 魔法师
 		Attack:   1350,
 		Defense:  1200,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -7466,8 +7838,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_None,  // 水
 		Attack:   1900,
 		Defense:  1700,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -7486,8 +7859,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_Machine, // 机械
 		Attack:   1800,
 		Defense:  1500,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -7506,8 +7880,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_Reptile, // 爬虫类
 		Attack:   1800,
 		Defense:  1500,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -7526,8 +7901,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_Plant, // 植物
 		Attack:   1800,
 		Defense:  1500,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -7546,8 +7922,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_Devine, // 天使
 		Attack:   1800,
 		Defense:  1500,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -7566,8 +7943,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_Spellcaster, // 魔法师
 		Attack:   1300,
 		Defense:  1800,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -7586,8 +7964,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_Devine, // 天使
 		Attack:   1400,
 		Defense:  1700,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -7606,8 +7985,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_Insect, // 昆虫
 		Attack:   1200,
 		Defense:  1500,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -7626,8 +8006,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_WindBeast, // 鸟兽
 		Attack:   1500,
 		Defense:  1100,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -7646,8 +8027,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_None,  // 水
 		Attack:   1200,
 		Defense:  1400,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -7666,8 +8048,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_Fish,  // 鱼
 		Attack:   1300,
 		Defense:  1400,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -7686,8 +8069,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_None,  // 水
 		Attack:   1300,
 		Defense:  700,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -7706,8 +8090,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_Machine, // 机械
 		Attack:   1300,
 		Defense:  1000,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -7726,8 +8111,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_None,  // 水
 		Attack:   1100,
 		Defense:  1300,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -7746,8 +8132,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_Rock,  // 岩石
 		Attack:   1000,
 		Defense:  1300,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -7766,8 +8153,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_Fiend, // 恶魔
 		Attack:   1300,
 		Defense:  1100,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -7786,8 +8174,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_Fiend, // 恶魔
 		Attack:   300,
 		Defense:  1300,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -7806,8 +8195,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_Dragon, // 龙
 		Attack:   1100,
 		Defense:  1200,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -7826,8 +8216,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_WindBeast, // 鸟兽
 		Attack:   1800,
 		Defense:  1500,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -7846,8 +8237,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_Machine, // 机械
 		Attack:   1600,
 		Defense:  1300,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -7866,8 +8258,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_Dinosaur, // 恐龙
 		Attack:   1600,
 		Defense:  1200,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -7886,8 +8279,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_Fish,  // 鱼
 		Attack:   1550,
 		Defense:  1700,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -7906,8 +8300,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_Zombie, // 不死
 		Attack:   1500,
 		Defense:  1200,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -7926,8 +8321,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_None,  // 水
 		Attack:   1400,
 		Defense:  1000,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -7946,8 +8342,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_None,  // 水
 		Attack:   1350,
 		Defense:  1000,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -7966,8 +8363,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_None,  // 水
 		Attack:   1250,
 		Defense:  2100,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -7986,8 +8384,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_Beast, // 兽
 		Attack:   1200,
 		Defense:  800,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -8006,8 +8405,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_Reptile, // 爬虫类
 		Attack:   1100,
 		Defense:  1200,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -8026,8 +8426,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_None,  // 水
 		Attack:   1050,
 		Defense:  900,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -8046,8 +8447,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_None,  // 水
 		Attack:   1000,
 		Defense:  900,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -8066,8 +8468,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_Fiend, // 恶魔
 		Attack:   950,
 		Defense:  1400,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -8086,8 +8489,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_Beast, // 兽
 		Attack:   1750,
 		Defense:  1550,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -8106,8 +8510,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_Reptile, // 爬虫类
 		Attack:   800,
 		Defense:  900,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -8126,8 +8531,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_None,  // 水
 		Attack:   700,
 		Defense:  900,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -8146,8 +8552,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_Insect, // 昆虫
 		Attack:   550,
 		Defense:  400,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -8166,8 +8573,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_Plant, // 植物
 		Attack:   500,
 		Defense:  600,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -8186,8 +8594,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_Rock,  // 岩石
 		Attack:   400,
 		Defense:  400,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -8206,8 +8615,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_Fiend, // 恶魔
 		Attack:   400,
 		Defense:  300,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -8226,8 +8636,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_Fiend, // 恶魔
 		Attack:   2150,
 		Defense:  1950,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -8246,8 +8657,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_Beast, // 兽
 		Attack:   2000,
 		Defense:  1700,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -8266,8 +8678,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_Dragon, // 龙
 		Attack:   2000,
 		Defense:  1300,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -8286,8 +8699,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_Dragon, // 龙
 		Attack:   1900,
 		Defense:  1800,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -8306,8 +8720,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_BeastWarror, // 兽战士
 		Attack:   1800,
 		Defense:  1500,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -8326,8 +8741,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_Dinosaur, // 恐龙
 		Attack:   1750,
 		Defense:  2030,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -8346,8 +8762,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_Fiend, // 恶魔
 		Attack:   1750,
 		Defense:  1900,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -8366,8 +8783,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_Spellcaster, // 魔法师
 		Attack:   1700,
 		Defense:  1400,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -8386,8 +8804,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_BeastWarror, // 兽战士
 		Attack:   1700,
 		Defense:  1000,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -8406,8 +8825,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_Spellcaster, // 魔法师
 		Attack:   1650,
 		Defense:  1900,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -8426,8 +8846,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_Spellcaster, // 魔法师
 		Attack:   1600,
 		Defense:  1500,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -8446,8 +8867,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_None,  // 水
 		Attack:   1450,
 		Defense:  2200,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -8466,8 +8888,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_None,  // 水
 		Attack:   1300,
 		Defense:  1000,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -8486,8 +8909,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_Warrior, // 战士
 		Attack:   1100,
 		Defense:  900,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -8506,8 +8930,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_Reptile, // 爬虫类
 		Attack:   800,
 		Defense:  600,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -8526,8 +8951,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_Fiend, // 恶魔
 		Attack:   1150,
 		Defense:  2150,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -8546,8 +8972,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_Spellcaster, // 魔法师
 		Attack:   1000,
 		Defense:  1300,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -8566,8 +8993,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_Dragon, // 龙
 		Attack:   1500,
 		Defense:  1200,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -8586,8 +9014,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_Machine, // 机械
 		Attack:   850,
 		Defense:  1800,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -8606,8 +9035,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_Fiend, // 恶魔
 		Attack:   800,
 		Defense:  1300,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -8626,8 +9056,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_Fiend, // 恶魔
 		Attack:   1000,
 		Defense:  700,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -8646,8 +9077,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_Rock,  // 岩石
 		Attack:   2000,
 		Defense:  2300,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -8666,8 +9098,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_Rock,  // 岩石
 		Attack:   2000,
 		Defense:  2200,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -8686,8 +9119,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_Dinosaur, // 恐龙
 		Attack:   1800,
 		Defense:  2000,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -8706,8 +9140,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_Rock,  // 岩石
 		Attack:   1500,
 		Defense:  1000,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -8726,8 +9161,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_Warrior, // 战士
 		Attack:   1750,
 		Defense:  1500,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -8746,8 +9182,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_Warrior, // 战士
 		Attack:   1800,
 		Defense:  1600,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -8766,8 +9203,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_Plant, // 植物
 		Attack:   800,
 		Defense:  600,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -8786,8 +9224,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_Reptile, // 爬虫类
 		Attack:   1300,
 		Defense:  1200,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -8806,8 +9245,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_None,  // 水
 		Attack:   1150,
 		Defense:  1300,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -8826,8 +9266,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_Warrior, // 战士
 		Attack:   1100,
 		Defense:  1000,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -8846,8 +9287,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_None,  // 水
 		Attack:   1000,
 		Defense:  1500,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -8866,8 +9308,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_Warrior, // 战士
 		Attack:   800,
 		Defense:  600,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -8886,8 +9329,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_Warrior, // 战士
 		Attack:   600,
 		Defense:  900,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -8906,8 +9350,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_Warrior, // 战士
 		Attack:   500,
 		Defense:  700,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -8926,8 +9371,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_BeastWarror, // 兽战士
 		Attack:   600,
 		Defense:  1000,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -8946,8 +9392,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_Spellcaster, // 魔法师
 		Attack:   800,
 		Defense:  900,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -8966,8 +9413,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_Spellcaster, // 魔法师
 		Attack:   600,
 		Defense:  900,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -8986,8 +9434,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_Devine, // 天使
 		Attack:   750,
 		Defense:  1100,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -9006,8 +9455,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_Devine, // 天使
 		Attack:   400,
 		Defense:  300,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -9026,8 +9476,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_Fiend, // 恶魔
 		Attack:   600,
 		Defense:  1000,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -9046,8 +9497,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_Fiend, // 恶魔
 		Attack:   600,
 		Defense:  800,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -9066,8 +9518,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_Beast, // 兽
 		Attack:   1500,
 		Defense:  1200,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -9086,8 +9539,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_Fiend, // 恶魔
 		Attack:   500,
 		Defense:  500,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -9106,8 +9560,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_Zombie, // 不死
 		Attack:   500,
 		Defense:  200,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -9126,8 +9581,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_Beast, // 兽
 		Attack:   800,
 		Defense:  1000,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -9146,8 +9602,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_Plant, // 植物
 		Attack:   600,
 		Defense:  1500,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -9166,8 +9623,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_Plant, // 植物
 		Attack:   500,
 		Defense:  1600,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -9186,8 +9644,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_Insect, // 昆虫
 		Attack:   700,
 		Defense:  1300,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -9206,8 +9665,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_Reptile, // 爬虫类
 		Attack:   700,
 		Defense:  600,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -9226,8 +9686,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_Fish,  // 鱼
 		Attack:   900,
 		Defense:  800,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -9246,8 +9707,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_None,  // 水
 		Attack:   800,
 		Defense:  1000,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -9266,8 +9728,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_None,  // 水
 		Attack:   400,
 		Defense:  300,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -9286,8 +9749,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_Pyro, // 炎
 		Attack:   600,
 		Defense:  500,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -9306,8 +9770,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_Rock,  // 岩石
 		Attack:   900,
 		Defense:  1000,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -9326,8 +9791,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_Rock,  // 岩石
 		Attack:   700,
 		Defense:  1400,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -9346,8 +9812,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_Spellcaster, // 魔法师
 		Attack:   1700,
 		Defense:  1000,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -9366,8 +9833,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_Devine, // 天使
 		Attack:   1800,
 		Defense:  2000,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -9386,8 +9854,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_Reptile, // 爬虫类
 		Attack:   1400,
 		Defense:  1100,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -9406,8 +9875,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_Fiend, // 恶魔
 		Attack:   1550,
 		Defense:  800,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -9426,8 +9896,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_Warrior, // 战士
 		Attack:   2200,
 		Defense:  1500,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -9446,8 +9917,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_Spellcaster, // 魔法师
 		Attack:   1450,
 		Defense:  1200,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -9466,8 +9938,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_Fiend, // 恶魔
 		Attack:   1600,
 		Defense:  1000,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -9486,8 +9959,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_Warrior, // 战士
 		Attack:   2000,
 		Defense:  1600,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -9506,8 +9980,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_Machine, // 机械
 		Attack:   1600,
 		Defense:  1800,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -9526,8 +10001,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_Reptile, // 爬虫类
 		Attack:   1900,
 		Defense:  800,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -9546,8 +10022,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_Pyro, // 炎
 		Attack:   500,
 		Defense:  500,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -9566,16 +10043,17 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_Fiend, // 恶魔
 		Attack:   100,
 		Defense:  2100,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
-		        [14/04/27]
-		此卡是通常怪物。
-		        无限制
-		        银字R，平卡N
-		        TAEV(505)，DE02，ST14
+			        [14/04/27]
+			此卡是通常怪物。
+			        无限制
+			        银字R，平卡N
+			        TAEV(505)，DE02，ST14
 		*/
 		Id:       2660,
 		Password: "96005454",
@@ -9587,8 +10065,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_Dragon, // 龙
 		Attack:   1700,
 		Defense:  100,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -9607,8 +10086,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_Reptile, // 爬虫类
 		Attack:   100,
 		Defense:  2000,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -9627,8 +10107,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_None,  // 水
 		Attack:   1500,
 		Defense:  900,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -9647,8 +10128,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_WindBeast, // 鸟兽
 		Attack:   1200,
 		Defense:  2000,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -9667,8 +10149,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_WindBeast, // 鸟兽
 		Attack:   1700,
 		Defense:  1500,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -9687,8 +10170,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_None, // 水
 		Attack:   1600,
 		Defense:  1500,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -9707,8 +10191,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_Dragon, // 龙
 		Attack:   1700,
 		Defense:  1900,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -9727,8 +10212,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_Beast, // 兽
 		Attack:   1800,
 		Defense:  1900,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -9747,8 +10233,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_Devine, // 天使
 		Attack:   1800,
 		Defense:  1700,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -9767,8 +10254,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_Machine, // 机械
 		Attack:   800,
 		Defense:  1000,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -9787,8 +10275,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_None,  // 水
 		Attack:   1400,
 		Defense:  1800,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -9807,8 +10296,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_None,  // 水
 		Attack:   950,
 		Defense:  800,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -9827,8 +10317,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_Fiend, // 恶魔
 		Attack:   1650,
 		Defense:  1600,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -9847,8 +10338,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_None,  // 水
 		Attack:   1600,
 		Defense:  1400,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -9867,8 +10359,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_None,  // 水
 		Attack:   400,
 		Defense:  1000,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -9887,8 +10380,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_None,  // 水
 		Attack:   850,
 		Defense:  700,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -9907,8 +10401,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_Rock,  // 岩石
 		Attack:   1600,
 		Defense:  1500,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -9927,8 +10422,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_Pyro, // 炎
 		Attack:   1900,
 		Defense:  1300,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -9947,8 +10443,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_Pyro, // 炎
 		Attack:   2200,
 		Defense:  1700,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -9967,8 +10464,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_Pyro, // 炎
 		Attack:   1700,
 		Defense:  1150,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -9987,8 +10485,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_Pyro, // 炎
 		Attack:   2100,
 		Defense:  1300,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -10007,8 +10506,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_WindBeast, // 鸟兽
 		Attack:   1000,
 		Defense:  1000,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -10027,8 +10527,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_Machine, // 机械
 		Attack:   1400,
 		Defense:  1700,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -10047,8 +10548,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_Machine, // 机械
 		Attack:   1600,
 		Defense:  1500,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -10067,8 +10569,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_Machine, // 机械
 		Attack:   1800,
 		Defense:  1700,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -10087,8 +10590,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_Insect, // 昆虫
 		Attack:   1700,
 		Defense:  1000,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -10107,8 +10611,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_Warrior, // 战士
 		Attack:   1600,
 		Defense:  900,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -10127,8 +10632,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_Beast, // 兽
 		Attack:   1300,
 		Defense:  500,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -10147,8 +10653,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_None,  // 水
 		Attack:   1100,
 		Defense:  2000,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -10167,8 +10674,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_Devine, // 天使
 		Attack:   2750,
 		Defense:  2400,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -10187,8 +10695,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_Warrior, // 战士
 		Attack:   800,
 		Defense:  800,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -10207,8 +10716,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_Fiend, // 恶魔
 		Attack:   900,
 		Defense:  200,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -10227,8 +10737,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_Fiend, // 恶魔
 		Attack:   1000,
 		Defense:  400,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -10247,8 +10758,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_Fish,  // 鱼
 		Attack:   800,
 		Defense:  500,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -10267,8 +10779,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_Machine, // 机械
 		Attack:   1800,
 		Defense:  2000,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -10287,8 +10800,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_Insect, // 昆虫
 		Attack:   2200,
 		Defense:  1400,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -10307,8 +10821,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_Devine, // 天使
 		Attack:   1150,
 		Defense:  1000,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -10327,8 +10842,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_None,  // 水
 		Attack:   850,
 		Defense:  400,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -10347,8 +10863,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_Pyro, // 炎
 		Attack:   550,
 		Defense:  450,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -10367,8 +10884,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_Rock,  // 岩石
 		Attack:   400,
 		Defense:  1400,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -10387,8 +10905,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_Thunder, // 雷
 		Attack:   350,
 		Defense:  750,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -10407,8 +10926,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_Dragon, // 龙
 		Attack:   1300,
 		Defense:  2000,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -10427,8 +10947,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_Dragon, // 龙
 		Attack:   1100,
 		Defense:  800,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -10447,8 +10968,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_BeastWarror, // 兽战士
 		Attack:   1650,
 		Defense:  1000,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -10467,8 +10989,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_Spellcaster, // 魔法师
 		Attack:   1500,
 		Defense:  1600,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -10487,8 +11010,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_Machine, // 机械
 		Attack:   450,
 		Defense:  900,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -10507,8 +11031,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_Machine, // 机械
 		Attack:   900,
 		Defense:  450,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -10527,8 +11052,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_Pyro, // 炎
 		Attack:   1000,
 		Defense:  2200,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -10547,8 +11073,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_Machine, // 机械
 		Attack:   1200,
 		Defense:  1700,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -10567,8 +11094,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_Fish,  // 鱼
 		Attack:   1200,
 		Defense:  0,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -10587,16 +11115,17 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_Warrior, // 战士
 		Attack:   1400,
 		Defense:  1400,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
-		        [14/04/27]
-		此卡是通常怪物。
-		        无限制
-		        平卡N
-		        GLAS(506)，LCGX，DE02，SDWA，ST13，ST14
+			        [14/04/27]
+			此卡是通常怪物。
+			        无限制
+			        平卡N
+			        GLAS(506)，LCGX，DE02，SDWA，ST13，ST14
 		*/
 		Id:       2830,
 		Password: "44430454",
@@ -10608,8 +11137,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_Warrior, // 战士
 		Attack:   200,
 		Defense:  2000,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -10628,8 +11158,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_Devine, // 天使
 		Attack:   200,
 		Defense:  600,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -10648,8 +11179,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_BeastWarror, // 兽战士
 		Attack:   1900,
 		Defense:  1500,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -10668,8 +11200,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_Seaserpent, // 海龙
 		Attack:   1400,
 		Defense:  0,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -10688,8 +11221,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_Spellcaster, // 魔法师
 		Attack:   0,
 		Defense:  0,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -10708,8 +11242,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_Machine, // 机械
 		Attack:   1200,
 		Defense:  800,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -10728,8 +11263,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_Warrior, // 战士
 		Attack:   500,
 		Defense:  1200,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -10748,8 +11284,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_None,  // 水
 		Attack:   800,
 		Defense:  2000,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -10768,8 +11305,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_Reptile, // 爬虫类
 		Attack:   1400,
 		Defense:  1500,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -10788,8 +11326,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_Warrior, // 战士
 		Attack:   1600,
 		Defense:  200,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -10808,8 +11347,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_None,  // 水
 		Attack:   400,
 		Defense:  1200,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -10828,8 +11368,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_Fish,  // 鱼
 		Attack:   2400,
 		Defense:  2000,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -10848,8 +11389,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_Dragon, // 龙
 		Attack:   100,
 		Defense:  2000,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -10868,8 +11410,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_Devine, // 天使
 		Attack:   1600,
 		Defense:  1800,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -10888,8 +11431,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_Machine, // 机械
 		Attack:   2300,
 		Defense:  1200,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -10908,8 +11452,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_Fiend, // 恶魔
 		Attack:   1500,
 		Defense:  800,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -10928,8 +11473,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_Fiend, // 恶魔
 		Attack:   1500,
 		Defense:  1200,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -10948,8 +11494,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_Machine, // 机械
 		Attack:   1400,
 		Defense:  1200,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -10968,8 +11515,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_Spellcaster, // 魔法师
 		Attack:   1500,
 		Defense:  1900,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -10988,8 +11536,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_Warrior, // 战士
 		Attack:   1800,
 		Defense:  1100,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -11008,8 +11557,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_Machine, // 机械
 		Attack:   1800,
 		Defense:  1400,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -11028,8 +11578,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_Fiend, // 恶魔
 		Attack:   1200,
 		Defense:  1500,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -11048,8 +11599,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_Fiend, // 恶魔
 		Attack:   1300,
 		Defense:  1800,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -11068,8 +11620,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_Fiend, // 恶魔
 		Attack:   1450,
 		Defense:  1700,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -11088,8 +11641,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_Fiend, // 恶魔
 		Attack:   500,
 		Defense:  2000,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -11108,8 +11662,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_Fiend, // 恶魔
 		Attack:   2000,
 		Defense:  700,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -11128,8 +11683,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_Machine, // 机械
 		Attack:   100,
 		Defense:  100,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -11148,8 +11704,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_Dragon, // 龙
 		Attack:   1200,
 		Defense:  700,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -11168,8 +11725,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_Dragon, // 龙
 		Attack:   1500,
 		Defense:  800,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -11188,8 +11746,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_BeastWarror, // 兽战士
 		Attack:   1800,
 		Defense:  1300,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -11208,8 +11767,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_Spellcaster, // 魔法师
 		Attack:   600,
 		Defense:  1500,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -11228,8 +11788,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_Spellcaster, // 魔法师
 		Attack:   1200,
 		Defense:  2200,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -11248,8 +11809,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_Rock,  // 岩石
 		Attack:   0,
 		Defense:  3000,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -11268,8 +11830,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_None,  // 水
 		Attack:   1200,
 		Defense:  1500,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -11288,8 +11851,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_Fiend, // 恶魔
 		Attack:   2000,
 		Defense:  1530,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -11308,8 +11872,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_Beast, // 兽
 		Attack:   1300,
 		Defense:  1550,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -11328,8 +11893,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_Fiend, // 恶魔
 		Attack:   1600,
 		Defense:  1200,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -11348,8 +11914,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_Machine, // 机械
 		Attack:   2200,
 		Defense:  2500,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -11368,8 +11935,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_Pyro,  // 炎
 		Attack:   1900,
 		Defense:  0,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -11388,8 +11956,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_None,  // 水
 		Attack:   0,
 		Defense:  2100,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -11408,8 +11977,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_Machine, // 机械
 		Attack:   1200,
 		Defense:  1400,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -11428,8 +11998,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_Thunder, // 雷
 		Attack:   1600,
 		Defense:  1800,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -11448,8 +12019,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_Fish,  // 鱼
 		Attack:   1800,
 		Defense:  800,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -11468,8 +12040,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_Spellcaster, // 魔法师
 		Attack:   1100,
 		Defense:  800,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -11488,8 +12061,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_Beast, // 兽
 		Attack:   1500,
 		Defense:  1200,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -11508,8 +12082,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_BeastWarror, // 兽战士
 		Attack:   2400,
 		Defense:  2000,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -11528,8 +12103,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_Rock,  // 岩石
 		Attack:   2450,
 		Defense:  1950,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -11548,8 +12124,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_Thunder, // 雷
 		Attack:   1000,
 		Defense:  500,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -11568,8 +12145,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_Insect, // 昆虫
 		Attack:   1500,
 		Defense:  1200,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -11588,8 +12166,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_Rock,  // 岩石
 		Attack:   1100,
 		Defense:  1400,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -11608,8 +12187,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_Devine, // 天使
 		Attack:   1300,
 		Defense:  1100,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -11628,8 +12208,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_BeastWarror, // 兽战士
 		Attack:   1300,
 		Defense:  1100,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -11648,8 +12229,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_Warrior, // 战士
 		Attack:   1700,
 		Defense:  1150,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -11668,8 +12250,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_Machine, // 机械
 		Attack:   1850,
 		Defense:  800,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -11688,8 +12271,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_None,  // 水
 		Attack:   1800,
 		Defense:  800,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -11708,8 +12292,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_Spellcaster, // 魔法师
 		Attack:   1900,
 		Defense:  900,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -11728,8 +12313,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_Beast, // 兽
 		Attack:   150,
 		Defense:  2050,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -11748,8 +12334,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_Dragon, // 龙
 		Attack:   2950,
 		Defense:  2900,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -11768,8 +12355,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_WindBeast, // 鸟兽
 		Attack:   1450,
 		Defense:  1000,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -11788,8 +12376,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_None,  // 水
 		Attack:   1600,
 		Defense:  1100,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -11808,8 +12397,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_Spellcaster, // 魔法师
 		Attack:   1500,
 		Defense:  1300,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -11828,8 +12418,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_Dinosaur, // 恐龙
 		Attack:   1600,
 		Defense:  1200,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -11848,8 +12439,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_Seaserpent, // 海龙
 		Attack:   1800,
 		Defense:  1500,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -11868,8 +12460,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_Zombie, // 不死
 		Attack:   1600,
 		Defense:  0,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -11888,8 +12481,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_Fiend, // 恶魔
 		Attack:   1400,
 		Defense:  1200,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -11908,8 +12502,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_Rock,  // 岩石
 		Attack:   1950,
 		Defense:  650,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -11928,16 +12523,17 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_Dragon, // 龙
 		Attack:   2000,
 		Defense:  100,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
-		        [14/04/27]
-		此卡是通常怪物。
-		        无限制
-		        平卡N
-		        GAOV(708)，ST14
+			        [14/04/27]
+			此卡是通常怪物。
+			        无限制
+			        平卡N
+			        GAOV(708)，ST14
 		*/
 		Id:       5300,
 		Password: "87151205",
@@ -11949,8 +12545,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_Dragon, // 龙
 		Attack:   2500,
 		Defense:  1000,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -11969,8 +12566,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_Dragon, // 龙
 		Attack:   0,
 		Defense:  0,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -11989,8 +12587,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_Spellcaster, // 魔法师
 		Attack:   2600,
 		Defense:  200,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -12009,8 +12608,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_Warrior, // 战士
 		Attack:   1800,
 		Defense:  1800,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -12029,8 +12629,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_Dragon, // 龙
 		Attack:   2200,
 		Defense:  2600,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -12049,16 +12650,17 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_Fiend, // 恶魔
 		Attack:   1800,
 		Defense:  1700,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
-		        [14/04/27]
-		此卡是通常怪物。
-		        无限制
-		        平卡N
-		        BE02，SC，YSD01，DL05，ST14
+			        [14/04/27]
+			此卡是通常怪物。
+			        无限制
+			        平卡N
+			        BE02，SC，YSD01，DL05，ST14
 		*/
 		Id:       562,
 		Password: "75953262",
@@ -12070,8 +12672,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_Warrior, // 战士
 		Attack:   1700,
 		Defense:  1600,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -12090,19 +12693,20 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_Dragon, // 龙
 		Attack:   2400,
 		Defense:  1400,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
-		        [拉长石龙]
-		<ラブラドライドラゴン>
-		[14/07/19]
+			        [拉长石龙]
+			<ラブラドライドラゴン>
+			[14/07/19]
 
-		◇此卡是通常怪兽，是调整，不是效果怪兽
-		        无限制
-		        平卡N，面闪SR
-		        SHSP(806)
+			◇此卡是通常怪兽，是调整，不是效果怪兽
+			        无限制
+			        平卡N，面闪SR
+			        SHSP(806)
 		*/
 		Id:       5994,
 		Password: "62514770",
@@ -12114,8 +12718,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_Dragon, // 龙
 		Attack:   0,
 		Defense:  2400,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -12134,20 +12739,21 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_Dragon, // 龙
 		Attack:   2100,
 		Defense:  2800,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
-		        [银河星蛇]
-		<Galaxy Serpent>
-		[14/05/21]
+			        [银河星蛇]
+			<Galaxy Serpent>
+			[14/05/21]
 
-		◇此卡是通常怪兽、是调整
-		◇此卡视为「银河/ギャラクシー」怪兽
-		        无限制
-		        面闪SR，金字UR，平卡N
-		        JOTL(805)，EP14
+			◇此卡是通常怪兽、是调整
+			◇此卡视为「银河/ギャラクシー」怪兽
+			        无限制
+			        面闪SR，金字UR，平卡N
+			        JOTL(805)，EP14
 		*/
 		Id:       6079,
 		Password: "11066358",
@@ -12159,8 +12765,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_Dragon, // 龙
 		Attack:   1000,
 		Defense:  0,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -12179,20 +12786,21 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_Fiend, // 恶魔
 		Attack:   0,
 		Defense:  1000,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
-		        [闪光之骑士]
-		<閃光の騎士>
-		[14/07/21]
+			        [闪光之骑士]
+			<閃光の騎士>
+			[14/07/21]
 
-		◇此卡是没有怪兽效果的灵摆怪兽，是通常怪兽
-		◇此卡没有灵摆效果，灵摆刻度不是效果
-		        无限制
-		        银字R
-		        DUEA(901)
+			◇此卡是没有怪兽效果的灵摆怪兽，是通常怪兽
+			◇此卡没有灵摆效果，灵摆刻度不是效果
+			        无限制
+			        银字R
+			        DUEA(901)
 		*/
 		Id:       6376,
 		Password: "17390179",
@@ -12204,22 +12812,23 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_Warrior, // 战士
 		Attack:   1800,
 		Defense:  600,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
-		        [傅科魔炮石]
-		<フーコーの魔砲石>
-		[14/04/24]
+			        [傅科魔炮石]
+			<フーコーの魔砲石>
+			[14/04/24]
 
-		◇此卡是没有怪物效果的灵摆怪兽，是通常怪兽
-		●①：这张卡发动的回合的结束阶段，以场上1张表侧表示的魔法·陷阱卡为对象才能发动。那张卡破坏。
-		◇魔法卡的效果，任意发动，开连锁，以场上表侧表示的1张魔法·陷阱卡为对象
-		◇可以取灵摆区域内的卡为对象，可以取此卡自身为对象
-		        无限制
-		        银字R
-		        DUEA(901)
+			◇此卡是没有怪物效果的灵摆怪兽，是通常怪兽
+			●①：这张卡发动的回合的结束阶段，以场上1张表侧表示的魔法·陷阱卡为对象才能发动。那张卡破坏。
+			◇魔法卡的效果，任意发动，开连锁，以场上表侧表示的1张魔法·陷阱卡为对象
+			◇可以取灵摆区域内的卡为对象，可以取此卡自身为对象
+			        无限制
+			        银字R
+			        DUEA(901)
 		*/
 		Id:       6377,
 		Password: "43785278",
@@ -12231,19 +12840,20 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_Spellcaster, // 魔法师
 		Attack:   2200,
 		Defense:  1200,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
-		        [玄化武装龙]
-		<メタファイズ·アームド·ドラゴン>
-		[14/04/24]
+			        [玄化武装龙]
+			<メタファイズ·アームド·ドラゴン>
+			[14/04/24]
 
-		◇此卡是通常怪兽
-		        无限制
-		        平卡N
-		        DUEA(901)
+			◇此卡是通常怪兽
+			        无限制
+			        平卡N
+			        DUEA(901)
 		*/
 		Id:       6378,
 		Password: "89189982",
@@ -12255,25 +12865,26 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_MagicDragon, // 幻龙
 		Attack:   2800,
 		Defense:  1000,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
-		        [机壳工具 丑恶]
-		<クリフォート·ツール>
-		[14/07/19]
+			        [机壳工具 丑恶]
+			<クリフォート·ツール>
+			[14/07/19]
 
-		◎此卡是没有怪兽效果的灵摆怪兽，是通常怪兽
-		●①：自己不是「机壳/クリフォート」怪兽不能特殊召唤。这个效果不会被无效化。
-		◇魔法卡的效果，不开连锁，不取对象，这个效果无法无效，此卡的其他效果可以被无效
-		●②：1回合1次，支付800基本分才能发动。从卡组把「机壳工具 丑恶/クリフォート·ツール」以外的1张「机壳/クリフォート」卡加入手卡。
-		◇魔法卡的效果，开连锁，不取对象
-		◇在自己的主要阶段才能发动这个效果
-		◇支付800基本分（LP）是效果发动COST
-		        无限制
-		        银字R
-		        NECH(902)
+			◎此卡是没有怪兽效果的灵摆怪兽，是通常怪兽
+			●①：自己不是「机壳/クリフォート」怪兽不能特殊召唤。这个效果不会被无效化。
+			◇魔法卡的效果，不开连锁，不取对象，这个效果无法无效，此卡的其他效果可以被无效
+			●②：1回合1次，支付800基本分才能发动。从卡组把「机壳工具 丑恶/クリフォート·ツール」以外的1张「机壳/クリフォート」卡加入手卡。
+			◇魔法卡的效果，开连锁，不取对象
+			◇在自己的主要阶段才能发动这个效果
+			◇支付800基本分（LP）是效果发动COST
+			        无限制
+			        银字R
+			        NECH(902)
 		*/
 		Id:       6597,
 		Password: "65518099",
@@ -12285,8 +12896,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_Machine, // 机械
 		Attack:   1000,
 		Defense:  2800,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -12305,8 +12917,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_Machine, // 机械
 		Attack:   0,
 		Defense:  3000,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -12325,8 +12938,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_Warrior, // 战士
 		Attack:   2300,
 		Defense:  1000,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -12345,33 +12959,34 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_Rock,  // 岩石
 		Attack:   1200,
 		Defense:  100,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
-		        [机壳汇编器 不安定]
-		<クリフォート・アセンブラ>
-		[14/11/16]
+			        [机壳汇编器 不安定]
+			<クリフォート・アセンブラ>
+			[14/11/16]
 
-		◇不持有怪兽效果的灵摆怪兽，即通常怪兽
-		====
-		●①：自己不是「机壳」怪兽不能特殊召唤。这个效果不会被无效化。
-		◇不进入连锁
-		●②：自己上级召唤成功的回合的结束阶段才能发动。自己从卡组抽出这个回合自己为上级召唤而解放的「机壳」怪兽的数量。
-		◇进入连锁
-		◇回合结束时发动一次
-		◇解放后才发动这张卡也可以发动这个效果，会计算这张卡发动前解放的数目
-		◇解放装备有「機殻の生贄/机壳的牲祭」的1体怪兽上级召唤7星以上怪兽，只抽1张
-		◇上级召唤被无效不能发动
-		◇灵摆区有2张同名卡的场合，各自开连锁发动
-		◇里侧表示上级召唤也发动
-		◇解放得到「机壳」怪兽名字的「ファントムオブカオス/混沌幻影」也发动
-		◇解放里侧表示「机壳」怪兽也发动
-		◇解放原卡名是「机壳」，现卡名变成不带「机壳」的怪兽不能发动
-		        无限制
-		        银字R
-		        SECE(903)
+			◇不持有怪兽效果的灵摆怪兽，即通常怪兽
+			====
+			●①：自己不是「机壳」怪兽不能特殊召唤。这个效果不会被无效化。
+			◇不进入连锁
+			●②：自己上级召唤成功的回合的结束阶段才能发动。自己从卡组抽出这个回合自己为上级召唤而解放的「机壳」怪兽的数量。
+			◇进入连锁
+			◇回合结束时发动一次
+			◇解放后才发动这张卡也可以发动这个效果，会计算这张卡发动前解放的数目
+			◇解放装备有「機殻の生贄/机壳的牲祭」的1体怪兽上级召唤7星以上怪兽，只抽1张
+			◇上级召唤被无效不能发动
+			◇灵摆区有2张同名卡的场合，各自开连锁发动
+			◇里侧表示上级召唤也发动
+			◇解放得到「机壳」怪兽名字的「ファントムオブカオス/混沌幻影」也发动
+			◇解放里侧表示「机壳」怪兽也发动
+			◇解放原卡名是「机壳」，现卡名变成不带「机壳」的怪兽不能发动
+			        无限制
+			        银字R
+			        SECE(903)
 		*/
 		Id:       6768,
 		Password: "51194046",
@@ -12383,8 +12998,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_Machine, // 机械
 		Attack:   2400,
 		Defense:  1000,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -12403,8 +13019,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_Zombie, // 不死
 		Attack:   1750,
 		Defense:  1000,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -12423,8 +13040,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_Dinosaur, // 恐龙
 		Attack:   1700,
 		Defense:  1500,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -12443,8 +13061,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_Machine, // 机械
 		Attack:   1600,
 		Defense:  1900,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -12463,8 +13082,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_Machine, // 机械
 		Attack:   500,
 		Defense:  2100,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -12483,8 +13103,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_Plant, // 植物
 		Attack:   2500,
 		Defense:  1000,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -12503,46 +13124,47 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_WindBeast, // 鸟兽
 		Attack:   2000,
 		Defense:  0,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
-		        [索菲娅之影灵衣]
-		<ｓｏｐｈｉａの影霊衣>
-		[2015/02/22]
+			        [索菲娅之影灵衣]
+			<ｓｏｐｈｉａの影霊衣>
+			[2015/02/22]
 
-		●「影灵衣」仪式魔法卡降临。不是使用各自种族不同的自己场上3只怪兽作从手卡的仪式召唤不能特殊召唤。
-		◇只能从手牌进行仪式召唤
-		◇只能使用各自种族不同的自己场上3只怪兽
-		不能
-		·适用《影霊衣の術士 シュリット/影灵衣术士 施里特》
-		·使用仪式魔人的效果
-		·因《影霊衣の降魔鏡/影灵衣的降魔镜》将手牌解放或除外墓地
-		·因《クロス・ソウル/灵魂交错》使用对方怪兽
-		·因《影霊衣の反魂術/影灵衣的返魂术》使用墓地的这张卡仪式召唤
-		·因《高等儀式術/高等仪式术》使用卡组的通常怪兽
-		·因《影霊衣の万華鏡/影灵衣的万华镜》将额外卡组怪兽送去墓地
-		●自己·对方的主要阶段1从手卡把这张卡和1张「影灵衣」魔法卡丢弃才能发动。那次阶段内，对方不能从额外卡组把怪兽特殊召唤。
-		◇诱发即时效果
-		◇不取对象
-		◇丢弃是COST
-		◇连锁《融合/融合》发动的场合，其效果不适用
-		◇适用后不进入连锁的特殊召唤也不能进行
-		◇《マクロコスモス/大宇宙》适用中可以发动并正常适用
-		◇效果适用后这张卡不在墓地效果仍适用
-		●这张卡仪式召唤成功时才能发动。这张卡以外的双方的场上·墓地的卡全部除外。这个效果发动的回合，自己不能把其他怪兽通常召唤·特殊召唤。
-		◇诱发效果
-		◇不取对象
-		◇已经召唤·特殊召唤其他怪兽的回合不能发动
-		◇双方的场上·墓地有一个区域没有卡也可以发动
-		◇连锁《王宮の鉄壁/王宫的铁壁》的场合，除外不处理，不能召唤仍适用
-		◇发动被无效的场合，这回合可以召唤
-		◇仅仅效果被无效的场合，这回合不能召唤
-		◇《王家の眠る谷－ネクロバレー/王家长眠之谷》适用中，若双方墓地没有卡可以发动，不然不能发动
-		        无限制
-		        金闪UR，银碎SER，立体UTR
-		        CROS(904)
+			●「影灵衣」仪式魔法卡降临。不是使用各自种族不同的自己场上3只怪兽作从手卡的仪式召唤不能特殊召唤。
+			◇只能从手牌进行仪式召唤
+			◇只能使用各自种族不同的自己场上3只怪兽
+			不能
+			·适用《影霊衣の術士 シュリット/影灵衣术士 施里特》
+			·使用仪式魔人的效果
+			·因《影霊衣の降魔鏡/影灵衣的降魔镜》将手牌解放或除外墓地
+			·因《クロス・ソウル/灵魂交错》使用对方怪兽
+			·因《影霊衣の反魂術/影灵衣的返魂术》使用墓地的这张卡仪式召唤
+			·因《高等儀式術/高等仪式术》使用卡组的通常怪兽
+			·因《影霊衣の万華鏡/影灵衣的万华镜》将额外卡组怪兽送去墓地
+			●自己·对方的主要阶段1从手卡把这张卡和1张「影灵衣」魔法卡丢弃才能发动。那次阶段内，对方不能从额外卡组把怪兽特殊召唤。
+			◇诱发即时效果
+			◇不取对象
+			◇丢弃是COST
+			◇连锁《融合/融合》发动的场合，其效果不适用
+			◇适用后不进入连锁的特殊召唤也不能进行
+			◇《マクロコスモス/大宇宙》适用中可以发动并正常适用
+			◇效果适用后这张卡不在墓地效果仍适用
+			●这张卡仪式召唤成功时才能发动。这张卡以外的双方的场上·墓地的卡全部除外。这个效果发动的回合，自己不能把其他怪兽通常召唤·特殊召唤。
+			◇诱发效果
+			◇不取对象
+			◇已经召唤·特殊召唤其他怪兽的回合不能发动
+			◇双方的场上·墓地有一个区域没有卡也可以发动
+			◇连锁《王宮の鉄壁/王宫的铁壁》的场合，除外不处理，不能召唤仍适用
+			◇发动被无效的场合，这回合可以召唤
+			◇仅仅效果被无效的场合，这回合不能召唤
+			◇《王家の眠る谷－ネクロバレー/王家长眠之谷》适用中，若双方墓地没有卡可以发动，不然不能发动
+			        无限制
+			        金闪UR，银碎SER，立体UTR
+			        CROS(904)
 		*/
 		Id:       6928,
 		Password: "21105106",
@@ -12554,8 +13176,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_Spellcaster, // 魔法师
 		Attack:   3600,
 		Defense:  3400,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -12574,8 +13197,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_Dragon, // 龙
 		Attack:   2400,
 		Defense:  2000,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -12594,8 +13218,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_Pyro, // 炎
 		Attack:   600,
 		Defense:  600,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -12614,8 +13239,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_None,  // 水
 		Attack:   400,
 		Defense:  2000,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -12634,8 +13260,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_Thunder, // 雷
 		Attack:   1000,
 		Defense:  400,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -12654,16 +13281,17 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_Machine, // 机械
 		Attack:   1800,
 		Defense:  1500,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
-		        [14/04/27]
-		此卡是通常怪物。
-		        无限制
-		        面闪SR，平卡N
-		        YSD01，EE01，302，SD05，YSD03，SY2，YSD06，ST14
+			        [14/04/27]
+			此卡是通常怪物。
+			        无限制
+			        面闪SR，平卡N
+			        YSD01，EE01，302，SD05，YSD03，SY2，YSD06，ST14
 		*/
 		Id:       742,
 		Password: "11321183",
@@ -12675,8 +13303,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_Warrior, // 战士
 		Attack:   1800,
 		Defense:  1500,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -12695,8 +13324,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_Beast, // 兽
 		Attack:   1800,
 		Defense:  600,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -12715,8 +13345,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_Devine, // 天使
 		Attack:   100,
 		Defense:  100,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -12735,16 +13366,17 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_WindBeast, // 鸟兽
 		Attack:   1700,
 		Defense:  700,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
-		        [14/04/27]
-		此卡是通常怪物。
-		        无限制
-		        平卡N
-		        YSD01，EE01，303，SD01，SK2，ST14
+			        [14/04/27]
+			此卡是通常怪物。
+			        无限制
+			        平卡N
+			        YSD01，EE01，303，SD01，SK2，ST14
 		*/
 		Id:       793,
 		Password: "11091375",
@@ -12756,8 +13388,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_Dragon, // 龙
 		Attack:   1900,
 		Defense:  1600,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -12776,8 +13409,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_Machine, // 机械
 		Attack:   1000,
 		Defense:  2100,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -12796,8 +13430,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_BeastWarror, // 兽战士
 		Attack:   1800,
 		Defense:  1000,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -12816,8 +13451,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_Machine, // 机械
 		Attack:   1000,
 		Defense:  1800,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -12836,8 +13472,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_Machine, // 机械
 		Attack:   1900,
 		Defense:  2200,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -12856,8 +13493,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_Reptile, // 爬虫类
 		Attack:   1850,
 		Defense:  1000,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -12876,8 +13514,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_Fiend, // 恶魔
 		Attack:   100,
 		Defense:  2000,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -12896,8 +13535,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_Beast, // 兽
 		Attack:   0,
 		Defense:  1000,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -12916,8 +13556,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_Fiend, // 恶魔
 		Attack:   1900,
 		Defense:  1500,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -12936,8 +13577,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_Fiend, // 恶魔
 		Attack:   1200,
 		Defense:  1400,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -12956,8 +13598,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_Beast, // 兽
 		Attack:   0,
 		Defense:  1000,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -12976,8 +13619,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_Beast, // 兽
 		Attack:   0,
 		Defense:  1000,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -12996,8 +13640,9 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_Beast, // 兽
 		Attack:   0,
 		Defense:  2100,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*
@@ -13016,7 +13661,8 @@ func original(CardBag *ygo.CardVersion) {
 		Lr:       ygo.LR_Beast, // 兽
 		Attack:   2700,
 		Defense:  2000,
+		IsValid:  true,
 	}
-	CardBag.Register(co)
+	cardBag.Register(co)
 
 }

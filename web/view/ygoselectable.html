@@ -8,6 +8,7 @@
 
     }
     Selectable.prototype.submit = function(uniq,name,index){
+        console.dir(name)
         if(name instanceof Array){
             for(var i =0;i!=name.length;i++){
                 this.submit(uniq,name[i],i)
@@ -24,6 +25,7 @@
                     Translate(this.subm[i].object,{x:0,y:0,z:4000},1000);
                 }
             }
+            return
         }else if(this.subm[name] == null){
             this.subm[name] =  new Element();
 
@@ -31,7 +33,7 @@
         if(index == null){
             index = 0
         }
-        this.subm[name].element.innerHTML='<button type="submit" class="btn btn-primary btn-block" onclick="WsSelectable(' + uniq + ',1)"><h2>'+name+'</h2></button>';
+        this.subm[name].element.innerHTML='<button type="submit" class="btn btn-primary btn-block" onclick="WsSelectable(' + uniq + ',' + name + ')"><h2>'+name+'</h2></button>';
 
         var tmp = allCard[uniq].object.position
         Translate(this.subm[name].object,{x:tmp.x - 60 + (index % 2) * 100,y:tmp.y+220 + Math.floor(index/2)*100,z:tmp.z},1000)

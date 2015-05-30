@@ -33,22 +33,6 @@ const (
 	LC_MagicAndTrap = LC_Magic | LC_Trap
 )
 
-// 表示形式 Expression
-type LE_TYPE uint32
-
-const (
-	LE_None     = LE_TYPE(1 << (32 - 1 - iota))
-	LE_FaceUp   // 正面朝上
-	LE_FaceDown // 正面朝下
-	LE_Attack   // 攻击状态
-	LE_Defense  // 守备状态
-
-	LE_FaceUpAttack    = LE_FaceUp | LE_Attack    // 表侧
-	LE_FaceDownAttack  = LE_FaceUp | LE_Defense   //
-	LE_FaceUpDefense   = LE_FaceDown | LE_Attack  // 侧面
-	LE_FaceDownDefense = LE_FaceDown | LE_Defense // 里侧
-)
-
 // 怪兽属性 Attributes
 type LA_TYPE uint32
 
@@ -93,4 +77,37 @@ const (
 	LR_Devine      //神族
 	LR_CreatorGod  //创造神族
 	LR_MagicDragon //幻龙族
+)
+
+// 表示形式 Expression
+type LE_TYPE uint32
+
+const (
+	LE_None     = LE_TYPE(1 << (32 - 1 - iota))
+	LE_FaceUp   // 正面朝上
+	LE_FaceDown // 正面朝下
+	LE_Attack   // 攻击状态
+	LE_Defense  // 守备状态
+
+	LE_FaceUpAttack    = LE_FaceUp | LE_Attack    // 表侧
+	LE_FaceDownAttack  = LE_FaceDown | LE_Attack  //
+	LE_FaceUpDefense   = LE_FaceUp | LE_Defense   // 侧面
+	LE_FaceDownDefense = LE_FaceDown | LE_Defense // 里侧
+)
+
+// 手牌主动方法 Initiative
+type LI_TYPE uint32
+
+const (
+	LI_None    = LI_TYPE(1 << (1 + iota))
+	LI_Call    // 召唤
+	LI_Cover   // 覆盖
+	LI_Use     // 使用
+	LI_Respond // 回应
+
+	LI_OrdinaryMonsterCall  = LI_TYPE(LC_OrdinaryMonster) | LI_Call  // 普通怪兽召唤
+	LI_OrdinaryMonsterCover = LI_TYPE(LC_OrdinaryMonster) | LI_Cover // 普通怪兽覆盖
+	LI_MagicUse             = LI_TYPE(LC_Magic) | LI_Use             // 魔法卡使用
+	LI_MagicAndTrapCover    = LI_TYPE(LC_MagicAndTrap) | LI_Cover    // 魔陷覆盖
+	LI_TrapRespond          = LI_TYPE(LC_Trap) | LI_Respond          // 陷阱回应
 )

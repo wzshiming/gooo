@@ -60,7 +60,7 @@ end
 $lcs = {
     "通常怪兽"=>"OrdinaryMonster",
     "效果怪兽"=>"EffectMonster",
-    "效果怪兽"=>"FusionMonster",
+    "融合怪兽"=>"FusionMonster",
     "XYZ怪兽"=>"ExcessMonster",
     "同调怪兽"=>"HomologyMonster",
     "仪式怪兽"=>"RiteMonster",
@@ -124,7 +124,7 @@ import (
 )
 
 
-func original(CardBag *ygo.CardVersion) {
+func original(cardBag *ygo.CardVersion) {
     var co *ygo.CardOriginal
     '
     allcard.each do|k,v|
@@ -147,22 +147,90 @@ func original(CardBag *ygo.CardVersion) {
         Lr:       #{lr(v["种族"])}, // #{v["种族"]}
         Attack:   #{v["攻击力"]},
         Defense:  #{v["防御力"]},
+        IsValid:  true,
     }
-    CardBag.Register(co)
+    cardBag.Register(co)
 
 "
         end
     end
     print '}'
 end
+
+
+def elses allcard
+    i = 0
+    j = 0
+    print '
+package cards
+
+import (
+    "ygo"
+)
+'
+    allcard.keys().each do|k|
+        v = allcard[k]
+        if v["卡片种类"] != "通常怪兽"
+    
+        if i == 0 
+            j = j +1
+            print "
+
+func elses#{j}(cardBag *ygo.CardVersion) {
+    var co *ygo.CardOriginal
+    "
+        end
+
+        
+            print "
+    co = &ygo.CardOriginal{
+        /*  
+        #{v["调整"]}
+        #{v["使用限制"]}
+        #{v["罕见度"]}
+        #{v["卡包"]}
+        */
+        Id:       #{v["id"]},
+        Password: \"#{v["卡片密码"]}\",
+        Name:     \"#{v["中文名"]}\", // \"#{v["英文名"]}\"  \"#{v["日文名"]}\"
+        Describe: \"#{v["效果"].gsub!("$\n","")}\",
+        Lc:       #{lc(v["卡片种类"])}, // #{v["卡片种类"]}
+        Star:     #{ if v["星级"] != nil then v["星级"] else 0 end},
+        La:       #{la(v["属性"])}, // #{v["属性"]}
+        Lr:       #{lr(v["种族"])}, // #{v["种族"]}
+        Attack:   #{ if v["攻击力"] != nil && v["攻击力"] != "？" && v["攻击力"] != "?" then v["攻击力"] else 0 end},
+        Defense:  #{ if v["防御力"] != nil && v["防御力"] != "？" && v["防御力"] != "?" then v["防御力"] else 0 end},
+        //Initiative:    func(pl *ygo.Player) {}, // 主动发动
+        //Declaration:   func(pl *ygo.Player) {}, // 攻击宣言
+        //Damage:        func(pl *ygo.Player) {}, // 伤害计算
+        //Freedom:       func(pl *ygo.Player) {}, // 解放    送去墓地
+        //Destroy:       func(pl *ygo.Player) {}, // 战斗破坏 送去墓地
+        //Flip:          func(pl *ygo.Player) {}, // 反转
+        //Summon:        func(pl *ygo.Player) {}, // 召唤
+        //SummonCover:   func(pl *ygo.Player) {}, // 覆盖召唤
+        //SummonFlip:    func(pl *ygo.Player) {}, // 反转召唤
+        //SummonSpecial: func(pl *ygo.Player) {}, // 特殊召唤
+        IsValid:       false,
+}
+    cardBag.Register(co)
+
+"
+
+        i = i + 1
+        if i == 1000
+            i = 0
+            print '}'
+        end
+    end
+end
+print '}'
+end
 if $0 == __FILE__
 
-
-  t = File.read("CardBag.go").to_utf8!
 
   allcard = JSON.parse File.read("card.json").to_utf8!
   types={}
   #卡片种类
-  OrdinaryMonster allcard
+  elses allcard
 
 end

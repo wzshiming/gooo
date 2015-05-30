@@ -105,14 +105,14 @@ YGO.prototype.optionCard = function(args){
 
 YGO.prototype.exprCard = function(args){
     var t = allCard[args.uniq];
-    if(args.expr == (1 << 30)){
+    if((args.expr & (1 << 30))!=0){
         t.FaceUp()
-    }else if(args.expr == (1 << 29)){
+    }else if((args.expr & (1 << 29))!=0){
         t.FaceDown()
     }
-    if(args.expr == (1 << 28)){
+    if((args.expr & (1 << 28))!=0){
         t.Attack()
-    }else if(args.expr == (1 << 27)){
+    }else if((args.expr & (1 << 27))!=0){
         t.Defense()
     }
 }

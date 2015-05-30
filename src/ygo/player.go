@@ -89,15 +89,19 @@ func NewPlayer() *Player {
 	}
 
 	player.Deck.SetJoin(func(c *Card) {
-		player.CallAll(ExprCard(c, LE_FaceDown))
+		c.SetLE(LE_FaceDown)
+	})
+	player.Extra.SetJoin(func(c *Card) {
+		c.SetLE(LE_FaceDown)
+		player.Call(SetFront(c))
 	})
 	player.Hand.SetJoin(func(c *Card) {
 		player.Call(SetFront(c))
-		player.Call(ExprCard(c, LE_FaceUp))
+		player.Call(ExprCard(c, LE_FaceUpAttack))
 	})
 	player.Grave.SetJoin(func(c *Card) {
 		player.CallAll(SetFront(c))
-		c.SetLE(LE_FaceUp)
+		c.SetLE(LE_FaceUpAttack)
 	})
 	return player
 }
@@ -209,10 +213,12 @@ loop:
 				if p.Method == 0 {
 					pl.Call("optionCard", map[string]interface{}{
 						"uniq": p.Uniq,
-						"list": []string{"Call", "Place", "Use", "Discard"},
+						"list": t.HandMethods(),
 					})
-				} else {
-					pl.Mzone.EndPush(t)
+				} else if p.Method == uint(LI_Call) {
+					t.Call()
+				} else if p.Method == uint(LI_Cover) {
+					t.Cover()
 				}
 			}
 		}
