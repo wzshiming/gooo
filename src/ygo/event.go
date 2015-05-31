@@ -1,6 +1,13 @@
 package ygo
 
-type Action func(pl *Player)
+type Action func(ca *Card) bool
+
+func (ac Action) Call(ca *Card) (ok bool) {
+	if ac != nil {
+		return ac(ca)
+	}
+	return false
+}
 
 type Event struct {
 	Owner *Card

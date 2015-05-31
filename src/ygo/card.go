@@ -40,7 +40,6 @@ func (co *CardOriginal) Make(ow *Player) *Card {
 		CardOriginal: *co,
 		Owner:        ow,
 		Le:           LE_None,
-		AttackRound:  0,
 	}
 	c.InitUint()
 	return c
@@ -75,33 +74,70 @@ type Card struct {
 	Owner *Player   // 所有者
 	Le    LE_TYPE   // 表示形式
 	//怪兽卡 属性
-	AttackRound int // 最后攻击的回合 判断该回合是否攻击
+	UseRound int // 最后攻击的回合 判断该回合是否攻击
 }
 
 func (ca *Card) HandMethods() []LI_TYPE {
 	return handMethods[ca.CardOriginal.Lc]
 }
 
+func (ca *Card) Battle(tar *Card) {
+	ca.UseRound = ca.Owner.RoundSize
+	if (tar.Le & LE_Attack) != 0 {
+		t := ca.Attack - tar.Attack
+		if t > 0 {
+			tar.Owner.ChangeHp(-t)
+			tar.Owner.Grave.EndPush(tar)
+		} else if t < 0 {
+			ca.Owner.ChangeHp(t)
+			ca.Owner.Grave.EndPush(ca)
+		} else {
+			tar.Owner.Grave.EndPush(tar)
+			ca.Owner.Grave.EndPush(ca)
+		}
+	} else {
+		t := ca.Attack - tar.Defense
+		if t > 0 {
+			tar.Owner.Grave.EndPush(tar)
+		} else if t < 0 {
+			ca.Owner.ChangeHp(t)
+		}
+	}
+}
+
 func (ca *Card) Call() {
-	ca.Owner.Mzone.EndPush(ca)
-	ca.Owner.CallAll(SetFront(ca))
-	ca.SetLE(LE_FaceUpAttack)
+	if (ca.Lc & LC_Monster) != 0 {
+		if ca.Summon.Call(ca) {
+			if ca.Owner.Mzone.Len() < 5 {
+				ca.SetLE(LE_FaceUpAttack)
+				ca.Owner.CallAll(SetFront(ca))
+				ca.Owner.Mzone.EndPush(ca)
+			}
+		}
+	}
 }
 
 func (ca *Card) Cover() {
 	if (ca.Lc & LC_MagicAndTrap) != 0 {
-		ca.Owner.Szone.EndPush(ca)
-		ca.SetLE(LE_FaceDownAttack)
+		if ca.Owner.Szone.Len() < 5 {
+			ca.UseRound = ca.Owner.RoundSize
+			ca.Owner.Szone.EndPush(ca)
+			ca.SetLE(LE_FaceDownAttack)
+		}
 	} else if (ca.Lc & LC_Monster) != 0 {
-		ca.Owner.Mzone.EndPush(ca)
-		ca.SetLE(LE_FaceDownDefense)
+		if ca.Summon.Call(ca) {
+			if ca.Owner.Mzone.Len() < 5 {
+				ca.SetLE(LE_FaceDownDefense)
+				ca.Owner.Mzone.EndPush(ca)
+			}
+		}
 	}
 }
 
 func (ca *Card) Use() {
-	ca.Owner.Szone.EndPush(ca)
-	ca.Owner.CallAll(SetFront(ca))
-	ca.SetLE(LE_FaceDownDefense)
+	if (ca.Lc & LC_Magic) != 0 {
+		ca.Owner.Grave.EndPush(ca)
+	}
 }
 
 func (ca *Card) SetLE(l LE_TYPE) {
@@ -113,4 +149,22 @@ func (ca *Card) Placed() {
 	if ca.Place != nil {
 		ca.Place.PickedFor(ca)
 	}
+}
+
+func SuperiorCall(ca *Card) (ok bool) {
+	own := ca.Owner
+	if ca.Star > 6 {
+		if own.Mzone.Len() < 2 {
+			own.Call(Message("无法满足召唤条件"))
+			return false
+		}
+		own.SelectTo(2, own.Mzone, own.Grave, "选择献祭的怪兽")
+	} else if ca.Star > 4 && ca.Owner.Mzone.Len() < 1 {
+		if own.Mzone.Len() < 1 {
+			own.Call(Message("无法满足召唤条件"))
+			return false
+		}
+		own.SelectTo(1, own.Mzone, own.Grave, "选择献祭的怪兽")
+	}
+	return true
 }

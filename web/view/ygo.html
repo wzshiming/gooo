@@ -68,33 +68,10 @@ YGO.prototype.message = function(args) {
     this.msg.element.innerHTML = "<h1>"+args.message+"</h1>"
 }
 
-YGO.prototype.selectCard = function(args){
-    selectable.removeall()
-    var t = this
-    selectable.register(function(obj){
-        if(obj.master == t.players[args.master] && obj.master[args.pos] == obj.hold){
-            WsSelectable(obj.uniq,0)
-        }
-        selectable.removeall()
-    })
-}
-
-
-YGO.prototype.useCard = function(args){
-    selectable.removeall()
-    var t = this
-    selectable.register(function(obj){
-        if(obj.master == t.players[args.master] && obj.master[args.pos] == obj.hold){
-            WsSelectable(obj.uniq,0)
-        }
-        selectable.removeall()
-    })
-}
 
 
 YGO.prototype.finishSelect = function(args){
     selectable.removeall()
-    selectable.unregister()
     selectable.unsubmit()
 }
 

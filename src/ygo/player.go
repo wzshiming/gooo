@@ -25,7 +25,7 @@ type Player struct {
 	// 基础属性
 	Hp        int  // 生命值
 	Camp      int  // 阵营
-	RoundSize uint // 回合数
+	RoundSize int  // 回合数
 	DrawSize  uint // 抽卡数
 	MaxHp     uint // 最大生命值
 	MaxSdi    int  // 最大手牌
@@ -138,8 +138,8 @@ func (pl *Player) ForEachPlayer(fun func(p *Player)) {
 
 func (pl *Player) round() (err error) {
 	defer func() {
-		if x := recover(); err != nil {
-			rego.ERR(x)
+		if x := recover(); x != nil {
+			rego.DebugStack()
 			err = errors.New(fmt.Sprintln(x))
 		}
 	}()
@@ -174,7 +174,7 @@ func (pl *Player) draw() {
 	}
 	pl.ActionDraw(1)
 	select {
-	case <-time.After(time.Second):
+	case <-time.After(time.Second / 10):
 		return
 	}
 }
@@ -185,41 +185,41 @@ func (pl *Player) standby() {
 	})
 	pl.Call(Message("准备阶段"))
 	select {
-	case <-time.After(time.Second):
+	case <-time.After(time.Second / 10):
 		return
 	}
 }
 
 func (pl *Player) main() {
 
-	pl.Call(Message("主要阶段1"))
-	pl.Call("useCard", map[string]interface{}{
-		"master": pl.Index,
-		"pos":    "hand",
-	})
-loop:
+	pl.Call(Message("主要阶段"))
+	pl.SelecClear()
 	for {
-		pl.SelecClear()
-		pl.CallAll("flagStep", map[string]interface{}{
-			"step": pl.Phases,
-			"wait": pl.WaitTime * 3,
-		})
-		var t *Card
-		select {
-		case <-time.After(pl.WaitTime * 3):
-			break loop
-		case p := <-pl.Selec:
-			if t = pl.Hand.ExistForUniq(p.Uniq); t != nil {
-				if p.Method == 0 {
-					pl.Call("optionCard", map[string]interface{}{
-						"uniq": p.Uniq,
-						"list": t.HandMethods(),
-					})
-				} else if p.Method == uint(LI_Call) {
-					t.Call()
-				} else if p.Method == uint(LI_Cover) {
-					t.Cover()
-				}
+		p := pl.SelectWill()
+		if p.Uniq == 0 {
+			break
+		}
+		if t := pl.Hand.ExistForUniq(p.Uniq); t != nil {
+			if p.Method == 0 {
+				pl.Call("optionCard", map[string]interface{}{
+					"uniq": p.Uniq,
+					"list": t.HandMethods(),
+				})
+			} else if p.Method == uint(LI_Call) {
+				t.Call()
+			} else if p.Method == uint(LI_Cover) {
+				t.Cover()
+			} else if p.Method == uint(LI_Use) {
+				t.Use()
+			}
+		} else if t := pl.Mzone.ExistForUniq(p.Uniq); t != nil {
+			if t.Le == LE_FaceDownDefense {
+				t.SetLE(LE_FaceUpDefense)
+				pl.CallAll(SetFront(t))
+			} else if t.Le == LE_FaceUpDefense {
+				t.SetLE(LE_FaceUpAttack)
+			} else if t.Le == LE_FaceUpAttack {
+				t.SetLE(LE_FaceUpDefense)
 			}
 		}
 	}
@@ -231,58 +231,45 @@ loop:
 }
 
 func (pl *Player) battle() {
-	pl.CallAll("flagStep", map[string]interface{}{
-		"step": pl.Phases,
-		"wait": pl.WaitTime,
-	})
 	pl.Call(Message("战斗阶段"))
+	pl.SelecClear()
+	for {
+		i := pl.SelectWill()
+		if i.Uniq != 0 {
+			t1 := pl.Mzone.ExistForUniq(i.Uniq)
+			if t1 == nil {
+				continue
+			}
+			if t1.Le != LE_FaceUpAttack {
+				continue
+			}
+			pl.Call(Message("选择要攻击的目标"))
+			j := pl.SelectWill()
+			if j.Uniq != 0 {
+				t2 := pl.Game.GetCard(j.Uniq)
+				if t2 != t2.Owner.Mzone.ExistForUniq(j.Uniq) {
+					continue
+				}
+				if t1.Owner != t2.Owner {
+					t1.Battle(t2)
+				}
+			}
+		} else {
+			break
+		}
+	}
 	select {
-	case <-time.After(pl.WaitTime):
+	case <-time.After(time.Second / 10):
 		return
 	}
 }
 
 func (pl *Player) end() {
 	if i := pl.Hand.Len() - pl.MaxSdi; i > 0 {
-		pl.SelecClear()
-		pl.Call(Message("选择丢弃的手牌"))
-		pl.Call("selectCard", map[string]interface{}{
-			"master": pl.Index,
-			"pos":    "hand",
-		})
-	loop:
-		for {
-			pl.CallAll("flagStep", map[string]interface{}{
-				"step": pl.Phases,
-				"wait": pl.WaitTime,
-			})
-			var t *Card
-			select {
-			case <-time.After(pl.WaitTime):
-				t = pl.Hand.EndPop()
-			case p := <-pl.Selec:
-				if t = pl.Hand.ExistForUniq(p.Uniq); t == nil {
-					t = pl.Hand.EndPop()
-				}
-			}
-			pl.Grave.EndPush(t)
-
-			if i--; i == 0 {
-				break loop
-			}
-		}
-		pl.CallAll("flashCards", map[string]interface{}{
-			"master": pl.Index,
-			"pos":    "hand",
-		})
-		//pl.Call("finishSelect", map[string]interface{}{})
+		pl.SelectTo(i, pl.Hand, pl.Grave, "选择丢弃的手牌")
 	}
-
-	pl.CallAll("flagStep", map[string]interface{}{
-		"step": pl.Phases,
-	})
 	select {
-	case <-time.After(time.Second):
+	case <-time.After(time.Second / 10):
 	}
 	pl.Call(Message("对方回合"))
 }
@@ -302,7 +289,9 @@ func (pl *Player) InitDeck(a []uint) {
 	}
 	pl.Game.CardVer.Deck(pl.Deck, pl, a)
 }
-
+func (pl *Player) ChangeHp(i int) {
+	pl.Hp += i
+}
 func (pl *Player) ActionShuffle() {
 	pl.Deck.Shuffle()
 }
@@ -364,4 +353,49 @@ func MoveCard(t *Card, pos string) (string, interface{}) {
 		"master": t.Owner.Index,
 		"pos":    pos,
 	}
+}
+
+func (pl *Player) SelectWill() (p proto.SelectableRequest) {
+	pl.SelecClear()
+	pl.CallAll("flagStep", map[string]interface{}{
+		"step": pl.Phases,
+		"wait": pl.WaitTime,
+	})
+	select {
+	case <-time.After(pl.WaitTime):
+
+	case p = <-pl.Selec:
+
+	}
+	return
+}
+
+func (pl *Player) SelectMust(cp *CardPile) (t *Card) {
+	pl.SelecClear()
+	pl.CallAll("flagStep", map[string]interface{}{
+		"step": pl.Phases,
+		"wait": pl.WaitTime,
+	})
+	select {
+	case <-time.After(pl.WaitTime):
+		t = cp.EndPop()
+	case p := <-pl.Selec:
+		if t = cp.ExistForUniq(p.Uniq); t == nil {
+			t = cp.EndPop()
+		}
+	}
+	return
+}
+
+func (pl *Player) SelectTo(size int, cp *CardPile, te *CardPile, info string) {
+	pl.Call(Message(info))
+	for i := 0; i != size; i++ {
+		t := pl.SelectMust(cp)
+		te.EndPush(t)
+	}
+	pl.CallAll("flashCards", map[string]interface{}{
+		"master": pl.Index,
+		"pos":    cp.GetName(),
+	})
+	return
 }

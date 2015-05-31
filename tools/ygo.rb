@@ -70,7 +70,7 @@ $lcs = {
     "装备魔法"=>"EquipMagic",
     "场地魔法"=>"PlaceMagic",
     "速攻魔法"=>"RushMagic",
-    "普通陷阱"=>"OrdinaryTrap",
+    "通常陷阱"=>"OrdinaryTrap",
     "永续陷阱"=>"SustainsTrap",
     "反击陷阱"=>"ReactionTrap"
 }
@@ -147,6 +147,7 @@ func original(cardBag *ygo.CardVersion) {
         Lr:       #{lr(v["种族"])}, // #{v["种族"]}
         Attack:   #{v["攻击力"]},
         Defense:  #{v["防御力"]},
+        Summon:   ygo.SuperiorCall, // 召唤
         IsValid:  true,
     }
     cardBag.Register(co)
@@ -200,16 +201,16 @@ func elses#{j}(cardBag *ygo.CardVersion) {
         Lr:       #{lr(v["种族"])}, // #{v["种族"]}
         Attack:   #{ if v["攻击力"] != nil && v["攻击力"] != "？" && v["攻击力"] != "?" then v["攻击力"] else 0 end},
         Defense:  #{ if v["防御力"] != nil && v["防御力"] != "？" && v["防御力"] != "?" then v["防御力"] else 0 end},
-        //Initiative:    func(pl *ygo.Player) {}, // 主动发动
-        //Declaration:   func(pl *ygo.Player) {}, // 攻击宣言
-        //Damage:        func(pl *ygo.Player) {}, // 伤害计算
-        //Freedom:       func(pl *ygo.Player) {}, // 解放    送去墓地
-        //Destroy:       func(pl *ygo.Player) {}, // 战斗破坏 送去墓地
-        //Flip:          func(pl *ygo.Player) {}, // 反转
-        //Summon:        func(pl *ygo.Player) {}, // 召唤
-        //SummonCover:   func(pl *ygo.Player) {}, // 覆盖召唤
-        //SummonFlip:    func(pl *ygo.Player) {}, // 反转召唤
-        //SummonSpecial: func(pl *ygo.Player) {}, // 特殊召唤
+        //Initiative:    func(ca *Card)) {}, // 主动发动
+        //Declaration:   func(ca *Card)) {}, // 攻击宣言
+        //Damage:        func(ca *Card)) {}, // 伤害计算
+        //Freedom:       func(ca *Card)) {}, // 解放    送去墓地
+        //Destroy:       func(ca *Card)) {}, // 战斗破坏 送去墓地
+        //Flip:          func(ca *Card)) {}, // 反转
+        Summon:          ygo.SuperiorCall, // 召唤
+        //SummonCover:   func(ca *Card)) {}, // 覆盖召唤
+        //SummonFlip:    func(ca *Card)) {}, // 反转召唤
+        //SummonSpecial: func(ca *Card)) {}, // 特殊召唤
         IsValid:       false,
 }
     cardBag.Register(co)
@@ -231,6 +232,6 @@ if $0 == __FILE__
   allcard = JSON.parse File.read("card.json").to_utf8!
   types={}
   #卡片种类
-  elses allcard
+  OrdinaryMonster allcard
 
 end

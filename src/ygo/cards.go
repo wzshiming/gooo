@@ -11,11 +11,18 @@ type CardPile struct {
 }
 
 func NewCardPile(name string) *CardPile {
-	return &CardPile{name: name}
+	return &CardPile{
+		name: name,
+		list: []*Card{},
+	}
 }
 
 func (cp *CardPile) SetJoin(fun func(*Card)) {
 	cp.join = fun
+}
+
+func (cp *CardPile) Clear() {
+	cp.list = []*Card{}
 }
 
 func (cp *CardPile) SetName(name string) {
@@ -52,6 +59,7 @@ func (cp *CardPile) EndPush(c *Card) {
 }
 
 func (cp *CardPile) Insert(c *Card, index int) {
+
 	if c.Place != nil {
 		c.Place.PickedFor(c)
 	}
@@ -61,6 +69,7 @@ func (cp *CardPile) Insert(c *Card, index int) {
 	}
 	c.Place = cp
 	cp.list = append(cp.list[:index], append([]*Card{c}, cp.list[index:]...)...)
+
 }
 
 func (cp *CardPile) BeginPop() (c *Card) {
