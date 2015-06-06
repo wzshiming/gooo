@@ -33,6 +33,10 @@
         "Users": {
             "dialect": "sqlite3",
             "source": "../db/user.db"
+        },
+        "Decks": {
+            "dialect": "sqlite3",
+            "source": "../db/deck.db"
         }
     }
 }

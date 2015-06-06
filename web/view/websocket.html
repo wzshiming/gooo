@@ -5,7 +5,8 @@
 	//var ws = new WebSocket("ws://127.0.0.1:3006/");
 	var ws = new WebSocket("ws://" +window.location.host + "/conn");
 	ws.onopen = function(e){
-		MsgInfo("Welcome back");
+		//MsgInfo("Welcome back");
+		MsgInfo("服务器连接成功");
 	};
 	ws.onmessage = function(e){
 		d = e.data.fromBase64();
@@ -14,7 +15,8 @@
 	};
 	
 	ws.onclose = function(e){
-		MsgErr("Connect close")
+		//MsgErr("Connect close")
+		MsgInfo("服务器连接断开");
 	};
 	
 	ws.onerror = function(e){
@@ -76,4 +78,8 @@
 	ws.Register = function(c,func){
 		this.Callback[c] = func;
 	};
+
+	ws.Register("255,255,255",function(msg){
+        MsgInfo(JSON.stringify(msg))
+    })
 </script>

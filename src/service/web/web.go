@@ -62,6 +62,10 @@ func run(ag *agent.Agent) {
 		r.HTML(200, "index", map[string]interface{}{}, render.HTMLOptions{Layout: "layout"})
 	})
 
+	m.Get("/ygo", func(params martini.Params, r render.Render) {
+		r.HTML(200, "ygo/init", map[string]interface{}{})
+	})
+
 	m.Post("/:name", func(params martini.Params, r render.Render) {
 		if params["name"] == "layout" || params["name"] == "" {
 			params["name"] = "index"

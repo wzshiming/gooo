@@ -1,0 +1,19 @@
+<script>
+
+function WsSelectable(uniq,method) {
+    ws.SendMsg({{ key "Chan.Room.GameCardActionSelectable" }},{uniq:uniq,method:method} ,null);
+}
+
+function WsGameRegister(i) {
+    ws.SendMsg({{ key "Chan.Room.GameRegister" }},{} ,i);
+}
+
+function WsGameGetDeck(i) {
+    ws.SendMsg({{ key "Chan.Room.GameGetDeck" }},{} ,i);
+}
+
+function WsGameSetDeck(args) {
+    ws.SendMsg({{ key "Chan.Room.GameSetDeck" }},args ,null);
+}
+
+</script>

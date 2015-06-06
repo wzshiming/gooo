@@ -1,69 +1,93 @@
 <!--登陆框-->
-
 <div id="box-login" class="row clearfix">
-	<div class="col-md-6 column">
-		<div class="jumbotron well">
-			<form name="login" action="javascript:login();" class="form-horizontal" role="form">
-				<div class="form-group">
-					<label for="inputUsername" class="control-label">What is your username?</label>
-					<p></p>
-					<input type="text" class="form-control" id="inputUsername" name="username" data-new-placeholder="Username" placeholder="Username"/>
-				</div>
-				<div class="form-group">
-					<label for="inputEmail" class="control-label">Do you have password?</label>
-					<div class="radio">
-						<input type="radio" name="user"  id="inputRadioNo" value="true"/><label for="inputRadioNo">No, I am a new customer.</label>
-					</div>
-					<div class="radio">
-						<input type="radio" name="user" id="inputRadioYes" value="false"/><label for="inputRadioYes">Yes, I have a password:</label>
-					</div>
-					<p></p>
-					<input type="password" class="form-control" id="inputPassword" name="password" data-new-placeholder="Password" placeholder="Password"/>
-				</div>
-				<div class="form-group">
-					<button type="submit" class="btn btn-default btn-block">Log in</button>
-					<div class="checkbox checkbox-inline">
-						 <input type="checkbox" id="inputCheck" name="remember" value="true"/><label for="inputCheck">Remember me</label>
-					</div>
-				</div>
-				<label> <a class="btn" href="#">Forgot your password?</a></label>
-			</form>
-		</div>
-	</div>
+    <div class="col-md-6 column">
+        <div class="jumbotron well">
+            <form name="login" action="javascript:login();" class="form-horizontal" role="form">
+                <div class="form-group">
+                    <label for="inputUsername" class="control-label">
+                        <!--What is your username?-->
+                        请输入用户名
+                    </label>
+                    <p></p>
+                    <input type="text" class="form-control" id="inputUsername" name="username" data-new-placeholder="Username" placeholder="Username" />
+                </div>
+                <div class="form-group">
+                    <label for="inputEmail" class="control-label">
+                        <!-- Do you have password? -->
+                        请输入密码
+                    </label>
+                    <div class="radio">
+                        <input type="radio" name="user" id="inputRadioNo" value="true" />
+                        <label for="inputRadioNo">
+                            <!-- No, I am a new customer. -->
+                            没有密码注册新用户
+                        </label>
+                    </div>
+                    <div class="radio">
+                        <input type="radio" name="user" id="inputRadioYes" value="false" checked/>
+                        <label for="inputRadioYes">
+                            <!-- Yes, I have a password: -->
+                            我是老用户直接进入
+                        </label>
+                    </div>
+                    <p></p>
+                    <input type="password" class="form-control" id="inputPassword" name="password" data-new-placeholder="Password" placeholder="Password" />
+                </div>
+                <div class="form-group">
+                    <button type="submit" class="btn btn-default btn-block">
+                        <!-- Log in -->
+                        确定
+                    </button>
+                    <div class="checkbox checkbox-inline">
+                        <input type="checkbox" id="inputCheck" name="remember" value="true" />
+                        <label for="inputCheck">
+                            <!-- Remember me -->
+                            记住我
+                        </label>
+                    </div>
+                </div>
+                <label>
+                    <a class="btn" href="#">
+                        <!-- Forgot your password? -->
+                        忘记密码
+                    </a>
+                </label>
+            </form>
+        </div>
+    </div>
 </div>
-
 <script>
-	var login = function(){
-		obj = document.login
-		sub = {
-			u: obj.username.value,
-			p: obj.password.value
-		}
-		if(obj.user.value == "true"){
-			ws.SendMsg({{ key "Auth.Users.Register" }},sub,function(r){
-				if(r && r.error == ""){
-					MsgInfo("Register finish")
-					return true
-				}
-				MsgErr(r.error)
-				return true
-			})
-		} else {
-			ws.SendMsg( {{ key "Auth.Users.LogIn" }} ,sub,function(r){
-				if(r && r.error == ""){
-					cartoonSingle('#box-login','slideOutLeft',function(f){
-						console.log(f)
-						$('#box-login').hide();
-					});
-					ws.Register( {{ key "Auth.Users.LogIn" }},function(r){
-						console.log(r)
-					});
-				} else {
-                    MsgErr(r.error)
-                }
-				return true
-			})
+var login = function() {
+    obj = document.login
+    sub = {
+        u: obj.username.value,
+        p: obj.password.value
+    }
+    if (obj.user.value == "true") {
+        WsRegister(sub, function(r) {
+            if (r && r.error == "") {
+                MsgInfo("Register finish")
+                return true
+            }
+            MsgErr(r.error)
+            return true
+        })
+    } else {
+        WsLogIn(sub, function(r) {
+            if (r && r.error == "") {
+                cartoonSingle('#box-login', 'slideOutLeft', function(f) {
+                    console.log(f)
+                    $('#box-login').hide();
+                });
+                WsRegister(function(r) {
+                    console.log(r)
+                });
+            } else {
+                MsgErr(r.error)
+            }
+            return true
+        })
 
-		}
-	}
+    }
+}
 </script>

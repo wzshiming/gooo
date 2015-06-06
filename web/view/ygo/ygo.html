@@ -1,0 +1,142 @@
+<script>
+var YGO = function(scene) {
+    this.scene = scene
+    var fl = new Desk(this.scene,0)
+    this.scene.AllCard = {};
+    this.scene.Selectable = new Selectable(scene);
+    this.scene.Selectable.register(function(uniq){
+        WsSelectable(uniq, 0);
+    })
+    this.players = []
+    var t = this
+    var flag = fl.flag()
+    this.msg = new Element(this.scene);
+    this.msg.element.innerHTML = "<h1>游戏开始</h1>";
+    this.msg.element.className = "flag0";
+    Move(this.msg.object, fl.flagup(), 1000)
+        //var flags=["Draw","Standby","Main1","Battle","Main2","End"]
+    this.flags = ["INIT", "DP", "SP", "MP1", "BP", "MP2", "EP"]
+    for (var i = 0; i != 7; i++) {
+        var e = new Element(this.scene);
+        e.element.innerHTML = "<h1>" + this.flags[i] + "</h1>";
+        e.element.className = "flag0";
+        e.element.id = this.flags[i];
+        this["flag" + i] = e;
+        Move(e.object, flag(i), 1000)
+    }
+
+    WsGameRegister(function(e) {
+        if (typeof e.method == "string") {
+            if (typeof t[e.method] == "function") {
+                t[e.method](e.args);
+            } else MsgErr(e.method)
+        }
+    });
+}
+
+
+
+YGO.prototype.flagName = function(args) {
+    var t = this.users[args.player]
+    this["flag0"].element.innerHTML = "<h1>回合" + args.round + "</h1>";
+}
+
+YGO.prototype.message = function(args) {
+    MsgInfo(args.message)
+    this.msg.element.innerHTML = "<h1>" + args.message + "</h1>"
+}
+
+
+
+YGO.prototype.finishSelect = function(args) {
+    this.scene.Selectable.removeall()
+    this.scene.Selectable.unsubmit()
+}
+
+YGO.prototype.optionCard = function(args) {
+    //this.submit(args.uniq,["Call","Place","Use","Discard"])
+    this.scene.Selectable.submit(args.uniq, args.list)
+}
+
+YGO.prototype.exprCard = function(args) {
+    var t = this.scene.AllCard[args.uniq];
+    if ((args.expr & (1 << 30)) != 0) {
+        t.FaceUp()
+    } else if ((args.expr & (1 << 29)) != 0) {
+        t.FaceDown()
+    }
+    if ((args.expr & (1 << 28)) != 0) {
+        t.Attack()
+    } else if ((args.expr & (1 << 27)) != 0) {
+        t.Defense()
+    }
+}
+
+YGO.prototype.flagStep = function(args) {
+    var t = this
+    window.clearInterval(t.stepInterval)
+    for (var i = 1; i != 7; i++) {
+        var e = t["flag" + i].element
+        e.innerHTML = "<h1>" + t.flags[i] + "</h1>";
+        if (args.step == i) {
+            e.className = "flag1";
+            if (typeof args.wait == "number") {
+                var ti = args.wait / 1000000000;
+                var tf = t.flags[i]
+                var e1 = t["flag" + i].element
+                e1.innerHTML = "<h1>" + tf + "(" + ti + "s)</h1>";
+                t.stepInterval = window.setInterval(function() {
+                    ti--
+                    e1.innerHTML = "<h1>" + tf + "(" + ti + "s)</h1>";
+                    if (ti == 0) {
+                        window.clearInterval(t.stepInterval)
+                    }
+                }, 1000)
+            }
+        } else {
+            e.className = "flag0";
+        }
+    }
+}
+
+YGO.prototype.flashCards = function(args) {
+    this.players[args.master][args.pos].flash()
+}
+
+YGO.prototype.moveCard = function(args) {
+    if (this.scene.AllCard[args.uniq] == null) {
+        new Card(this.scene, args.uniq, this.players[args.master]);
+    }
+    this.scene.AllCard[args.uniq].master.moveCard(args.uniq, args.pos)
+
+}
+
+YGO.prototype.setFront = function(args) {
+    this.scene.AllCard[args.uniq].SetFront(args.desk)
+}
+
+
+YGO.prototype.init = function(args) {
+    var t = this
+    t.users = args.users;
+    t.index = args.index;
+    if (t.users instanceof Array) {
+        for (var i = 0; i != t.users.length; i++) {
+            var k = i + t.index;
+            if (k >= t.users.length) {
+                k = k - t.users.length;
+            }
+            t.players[i] = new Player(this.scene, k, i, t.users[i]);
+        }
+        MsgInfo("游戏开始")
+    } else {
+        MsgErr("初始化游戏错误");
+    }
+    return true;
+
+}
+
+YGO.prototype.over = function() {
+
+}
+</script>

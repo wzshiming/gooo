@@ -1,0 +1,196 @@
+<script>
+function CardFront(i) {
+    return '<img class="card" src="/cards/img/' + i + '.jpg"  alt="" />';
+}
+
+function CardBack(i) {
+    return '<img class="card" src="/cards/cover/' + i + '.jpg"  alt="" />';
+}
+
+
+var Shade = function(scene, t) {
+    this.element = document.createElement('div');
+    this.element.className = "shade"
+    this.element.innerHTML = t
+    this.object = new THREE.CSS3DObject(this.element);
+    this.object.position.x = 0;
+    this.object.position.y = 0;
+    this.object.position.z = 2000;
+    scene.add(this.object);
+}
+
+var Element = function(scene) {
+    this.element = document.createElement('div');
+    this.object = new THREE.CSS3DSprite(this.element);
+    this.object.position.x = 0;
+    this.object.position.y = 0;
+    this.object.position.z = 2000;
+    scene.add(this.object);
+}
+
+var Card = function(scene, uniq, master, f, b) {
+    f = f || 0;
+    b = b || 0;
+    this.id = f;
+    this.scene = scene;
+    var element = document.createElement('div');
+    element.innerHTML = CardFront(f);
+    var element2 = document.createElement('div');
+    element2.innerHTML = CardBack(b);
+    this.object = new THREE.CSS3DDoubleObject(element, element2);
+    //this.object.position = RandomPos().position;
+    this.object.position.x = Math.random() * 4000 - 2000;
+    this.object.position.y = Math.random() * 4000 - 2000;
+    this.object.position.z = 4000;
+
+    this.hold = null;
+    this.master = master;
+    scene.add(this.object);
+    element.hold = this;
+
+    if (uniq && uniq != 0) {
+        element.id = "Card" + uniq;
+        element.className = "iscard";
+        this.uniq = uniq;
+        this.scene.AllCard[uniq] = this
+        element.onclick = function() {
+            scene.Selectable.click(this.hold.uniq);
+            console.dir(this.hold.uniq);
+
+            //ws.SendMsg({{ key "Chan.Room.GameCardActionSelectable" }},{uniq:this.hold.uniq} ,function(e){
+            //    console.dir(e)
+            //});
+        }
+        
+    }
+
+    element2.hold = element.hold;
+    element2.onclick = element.onclick;
+}
+
+Card.prototype.remove = function() {
+    this.placed();
+    this.scene.remove(this.object);
+}
+
+Card.prototype.placed = function() {
+    if (this.hold != null) {
+        return this.hold.placed(this.uniq)
+    }
+    return this
+}
+
+Card.prototype.SetFront = function(i) {
+    this.object.element.innerHTML = CardFront(i);
+}
+
+Card.prototype.SetBack = function(i) {
+    this.object.elementB.innerHTML = CardBack(i);
+}
+
+Card.prototype.Selectable = function() {
+    this.object.element.className = "selectable"
+    this.object.elementB.className = "selectable"
+}
+
+Card.prototype.Unselectable = function() {
+    this.object.element.className = ""
+    this.object.elementB.className = ""
+}
+
+Card.prototype.Move = function(pos) {
+    Translate(this.object, pos.position, 1000)
+}
+
+Card.prototype.FaceUp = function() {
+    Rotate(this.object, {
+        y: 0
+    }, 1000)
+}
+
+Card.prototype.FaceDown = function() {
+    Rotate(this.object, {
+        y: PI
+    }, 1000)
+}
+
+Card.prototype.Attack = function() {
+    Rotate(this.object, {
+        z: 0
+    }, 1000)
+}
+
+Card.prototype.Defense = function() {
+    Rotate(this.object, {
+        z: PI / 2
+    }, 1000)
+}
+
+Card.prototype.Stop = function() {
+    TWEEN.remove(this.object);
+}
+
+var Cards = function(place) {
+    this.place = place;
+    this.deck = [];
+}
+
+
+Cards.prototype.placed = function(u) {
+    var i = this.index(u);
+    var c = this.deck.splice(i, 1)[0];
+    c.hold = null;
+    return c;
+}
+
+Cards.prototype.index = function(u) {
+    for (var i = 0; i != this.length(); i++) {
+        if (this.deck[i].uniq == u) {
+            return i;
+        }
+    }
+    return -1;
+}
+
+Cards.prototype.push = function(obj) {
+    var i = obj.placed();
+    i.Stop();
+    i.Move(this.place(this.length(), this.length()));
+    i.hold = this;
+    this.deck.push(i);
+}
+
+Cards.prototype.pop = function() {
+    var c = this.deck.pop();
+    if (c) {
+        c.hold = null;
+    }
+    return c;
+}
+
+Cards.prototype.length = function() {
+    return this.deck.length;
+}
+
+Cards.prototype.flash = function() {
+    for (var i = 0; i != this.length(); i++) {
+        this.deck[i].Move(this.place(i, this.length()));
+    }
+}
+Cards.prototype.clear = function() {
+    for (var i = 0; i != this.length(); i++) {
+        this.deck[i].remove();
+    }
+    this.deck = [];
+}
+Cards.prototype.moveto = function(to) {
+    for (;;) {
+        var tt = this.pop()
+        if (tt) {
+            to.push(tt)
+        } else {
+            return
+        }
+    }
+}
+</script>

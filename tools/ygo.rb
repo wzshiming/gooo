@@ -226,12 +226,49 @@ func elses#{j}(cardBag *ygo.CardVersion) {
 end
 print '}'
 end
+
+def changename allcard 
+    sor = {
+        "通常怪兽"=> 11,
+        "效果怪兽"=> 12,
+        "融合怪兽"=> 13,
+        "仪式怪兽"=> 14,
+        "同调怪兽"=> 15,
+        "XYZ怪兽"=> 16,
+        "通常魔法"=> 21,
+        "速攻魔法"=> 22,
+        "永续魔法"=> 23,
+        "场地魔法"=> 24,
+        "装备魔法"=> 25,
+        "仪式魔法"=> 26,
+        "通常陷阱"=> 31,
+        "永续陷阱"=> 32,
+        "反击陷阱"=> 33
+    }
+    types={}
+    newcard = {}
+    allcard.each do|k,v|
+        types[v["卡片种类"]] = 0 if types[v["卡片种类"]] == nil
+        types[v["卡片种类"]] += 1
+        id = types[v["卡片种类"]] + sor[v["卡片种类"]]*10000
+        v["id"]=id
+        newcard[id]=v
+        #{}`cp ./img/#{k}.jpg ./tmp/#{id}.jpg`
+        #print v.to_json
+        #{}`echo '#{v.to_json.to_utf8!}' > ./tmp/#{id}.json`
+        b = File.new("./tmp/#{id}.json","w")
+        b.puts v.to_json
+        b.close
+    end
+    print newcard.to_json
+end
+
 if $0 == __FILE__
 
 
   allcard = JSON.parse File.read("card.json").to_utf8!
   types={}
   #卡片种类
-  OrdinaryMonster allcard
+  changename allcard
 
 end

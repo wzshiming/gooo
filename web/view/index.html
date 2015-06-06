@@ -1,12 +1,14 @@
-{{ template "websocket" . }}
+
 {{ template "pushmsg" . }}
+{{ template "websocket" . }}
+{{ template "roomsocket" . }}
 
 <div id="main">
 {{ template "top" . }}
 {{ template "home" . }}
-{{ template "ygo" . }}
+    <div id="page"></div>
 </div>
 
 {{ template "better" . }}
-{{ template "else" . }}
+
 

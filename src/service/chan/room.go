@@ -55,9 +55,6 @@ func (r *Room) YGOGame(sesss ...*agent.Session) {
 	game.CardVer = cards.CardBag_test
 
 	game.Loop()
-	//	room.BroadcastPush(map[string]string{
-	//		"status": "init",
-	//	}, nil)
 }
 
 func (r *Room) Games() {
@@ -80,7 +77,7 @@ func (r *Room) MatchCompetitors(args agent.Request, reply *agent.Response) error
 	args.Session.Data.DeJson(&d)
 	Trans := i18n.TranslationsForLocale(d.Language)
 
-	//	// 判断是否登入
+	// 判断是否登入
 	//	if id := misc.GetFromRoom(args.Session, "Users"); id == 0 {
 	//		return errors.New(Trans.Value("chan.nologin"))
 	//	}
@@ -105,7 +102,7 @@ func (r *Room) MatchCompetitors(args agent.Request, reply *agent.Response) error
 }
 
 // 退出匹配队列
-func (r *Room) StopSearching(args agent.Request, reply *agent.Response) error {
+func (r *Room) StopMatch(args agent.Request, reply *agent.Response) error {
 	var d struct {
 		Language string
 	}
@@ -164,17 +161,79 @@ func (r *Room) GameRegister(args agent.Request, reply *agent.Response) error {
 	})
 }
 
+func (r *Room) GameGetDeck(args agent.Request, reply *agent.Response) error {
+	var d struct {
+		Language string
+	}
+	args.Session.Data.DeJson(&d)
+	Trans := i18n.TranslationsForLocale(d.Language)
+
+	// 判断是否登入
+	id := uint64(misc.GetFromRoom(args.Session, "Users"))
+	//if id := misc.GetFromRoom(args.Session, "Users"); id == 0 {
+	//return errors.New(Trans.Value("chan.nologin"))
+	//}
+	// 获取卡组
+	var odecks []proto.Deck
+	if err := db.Where(&proto.Deck{UserId: id}).Find(&odecks).Error; err != nil {
+		return errors.New(Trans.Value("chan.decksnotexists"))
+	}
+	for k, _ := range odecks {
+		if err := db.Where(&proto.CardInMain{DeckId: odecks[k].Id}).Find(&odecks[k].Main).Error; err != nil {
+			return errors.New(Trans.Value("chan.decksnotexists"))
+		}
+	}
+
+	rego.INFO(odecks)
+	reply.Response = rego.EnJson(odecks)
+	return nil
+
+}
+
+func (r *Room) GameSetDeck(args agent.Request, reply *agent.Response) error {
+	var d struct {
+		Language string
+	}
+	args.Session.Data.DeJson(&d)
+	Trans := i18n.TranslationsForLocale(d.Language)
+
+	gr := proto.Deck{}
+	args.Request.DeJson(&gr)
+	// 判断是否登入
+	id := uint64(misc.GetFromRoom(args.Session, "Users"))
+	//if id := misc.GetFromRoom(args.Session, "Users"); id == 0 {
+	//return errors.New(Trans.Value("chan.nologin"))
+	//}
+	//gr.UserId = id
+	gr.UpdatedAt = time.Now()
+
+	var odeck proto.Deck
+	if err := db.Where(&proto.Deck{UserId: id, Name: gr.Name}).First(&odeck).Error; err != nil {
+		gr.CreatedAt = time.Now()
+		db.Model(&odeck).Save(&gr)
+	} else {
+		if err := db.Where(&proto.CardInMain{DeckId: odeck.Id}).Delete(&proto.CardInMain{}).Error; err != nil {
+			return errors.New(Trans.Value("chan.decksnotexists"))
+		}
+		db.Model(&odeck).Update(&gr)
+	}
+
+	rego.INFO(gr)
+
+	return nil
+}
+
+func (r *Room) GameDelDeck(args agent.Request, reply *agent.Response) error {
+	return r.GameBC(args, func(game *ygo.YGO, sess *agent.Session) error {
+		return nil
+	})
+}
+
 func (r *Room) GameCardActionSelectable(args agent.Request, reply *agent.Response) error {
 	return r.GameBC(args, func(game *ygo.YGO, sess *agent.Session) error {
 		ar := proto.SelectableRequest{}
 		args.Request.DeJson(&ar)
 		game.GetPlayer(sess).SelecAdd(ar)
-		//game.SelecAdd(ar.Uniq)
-		//c := game.GetCard(ar.Uniq)
-		//if c.Owner.Session == sess {
-		//	rego.INFO(c)
-		//}
-
 		return nil
 	})
 }

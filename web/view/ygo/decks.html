@@ -1,0 +1,113 @@
+<script>
+var Decks = function(scene) {
+    var t = this;
+    this.cards = {}
+    this.cardslist = []
+    $.getJSON('/json/cards.json', {}, function(json, textStatus) {
+        t.cards = json
+        for (var i in json) {
+            t.cardslist.push(json[i])
+        }
+        console.dir(t.cardslist)
+        t.desktop(0, 50)
+
+    });
+    this.ii = 0;
+    this.scene = scene;
+    this.scene.AllCard = {};
+    this.scene.Selectable = new Selectable(scene);
+    this.scene.Selectable.register(function(uniq) {
+        t.ii += 1
+        var i = t.scene.AllCard[uniq];
+        if (i.hold == t.deck) {
+            t.waste.push(i);
+            t.deck.flash();
+        } else if (i.hold == t.heap) {
+            t.deck.push(new Card(t.scene, "s" + t.ii, null, i.id, 0));
+        }
+        //WsSelectable(uniq, 0);
+    })
+    var c = new Desk(this.scene, 0)
+
+    this.heap = new Cards(c.neaten(0.5, -4))
+    this.deck = new Cards(c.neaten(0.5, 2))
+
+    this.waste = new Cards(c.deck(0, 0))
+
+
+    var i = 0
+        //清空else 里的元素 添加 左右按钮
+    $('#else').empty()
+    $('#else').append('<div id="decks_l" style="position:absolute;left:100px;top:100px;"><button type="submit" class="btn btn-default btn-block"><</button></div>');
+    $('#else').append('<div id="decks_r" style="position:absolute;right:100px;top:100px;"><button type="submit" class="btn btn-default btn-block">></button></div>');
+    $('#else').append('<div id="decks_s" style="position:absolute;right:100px;top:500px;"><button type="submit" class="btn btn-default btn-block">保存</button></div>');
+    $('#else').append('<div id="decks_g" style="position:absolute;right:100px;top:700px;"><button type="submit" class="btn btn-default btn-block">获得</button></div>');
+    $('#else').show();
+    // 左右按钮事件
+    $('#decks_l').click(function(event) {
+        i -= 1
+        t.desktop(i, 50)
+    });
+    $('#decks_r').click(function(event) {
+        i += 1
+        t.desktop(i, 50)
+    });
+    $('#decks_s').click(function(event) {
+        var main = {}
+
+        for (var i in t.deck.deck) {
+            var id = t.deck.deck[i].id
+            main[id] = main[id] || 0
+            main[id] += 1
+        }
+
+        var mainr = []
+        for (var i in main) {
+            mainr.push({
+                id: parseInt(i),
+                size: main[i]
+            })
+        }
+
+        WsGameSetDeck({
+            main: mainr,
+            name: "none"
+        })
+    });
+    $('#decks_g').click(function(event) {
+        WsGameGetDeck(function(i) {
+            console.dir(i)
+            t.deck.moveto(t.waste)
+            var c = i[0].main
+            console.dir(c)
+            for (var z = 0; z != c.length; z++) {
+                var ob = c[z]
+                for (var x = 0; x != ob.size; x++) {
+                    var d = new Card(t.scene, "s" + t.ii, null, ob.id, 0);
+                    t.deck.push(d)
+                }
+            }
+
+        })
+    });
+}
+
+Decks.prototype.desktop = function(beginBlock, size) {
+    this.waste.clear()
+    this.heap.moveto(this.waste)
+
+
+    for (var i = 0; i != size; i++) {
+        var k = parseInt(this.cardslist[i + beginBlock * size].id)
+        var c = new Card(this.scene, k, null, k, 0);
+        this.heap.push(c)
+    }
+}
+</script>
+<!-- YGO.prototype.moveCard = function(args) {
+    if (this.scene.AllCard[args.uniq] == null) {
+        this.scene.AllCard[args.uniq] = new Card(this.scene, args.uniq, this.players[args.master]);
+    }
+    this.scene.AllCard[args.uniq].master.moveCard(args.uniq, args.pos)
+
+} -->

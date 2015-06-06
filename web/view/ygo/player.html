@@ -1,0 +1,55 @@
+<script>
+var Player = function(scene, k, i, user) {
+    this.scene = scene
+    var c = new Desk(scene, k)
+    if (k == 0) {
+        this.self = true;
+    }
+    this.index = i
+    this.datum = (c.datum())(0) //玩家资料显示位置
+    var e = new Element(this.scene);
+    e.element.innerHTML = "<h1>名字：" + user.name + "</h1>" + "<h1>HP：" + user.hp + "</h1>";
+    e.element.className = "flag0";
+    Move(e.object, this.datum, 1000)
+
+    this.hand = new Cards(c.hand()) //手牌
+
+    this.deck = new Cards(c.deck(16, 5)) //卡组 40 ~ 60
+    Move((new Shade(this.scene, "<h1>卡组图片</h1>")).object, this.deck.place(0), 0)
+    this.extra = new Cards(c.deck(4, 5)) //额外卡组 <= 15 融合怪物 同调怪物 超量怪物
+    Move((new Shade(this.scene, "<h1>融合图</h1>")).object, this.extra.place(0), 0)
+        //    this.side= new Cards()    //副卡组 <= 15
+    this.removed = new Cards(c.deck(16, 1)) //排除卡
+    Move((new Shade(this.scene, "<h1>除外图</h1>")).object, this.removed.place(0), 0)
+    this.grave = new Cards(c.deck(16, 3)) //墓地
+    Move((new Shade(this.scene, "<h1>墓地图</h1>")).object, this.grave.place(0), 0)
+    this.mzone = new Cards(c.mzone()) //怪物卡区 5
+    for (var i = 0; i != 5; i++) {
+        Move((new Shade(this.scene, "<h1>怪兽区" + i + "</h1>")).object, this.mzone.place(i), 0)
+    }
+
+    this.szone = new Cards(c.szone()) //魔法卡陷阱卡区 5
+    for (var i = 0; i != 5; i++) {
+        Move((new Shade(this.scene, "<h1>魔陷区" + i + "</h1>")).object, this.szone.place(i), 0)
+    }
+    this.field = new Cards(c.deck(4, 3)) //场地卡 5
+    Move((new Shade(this.scene, "<h1>场地图</h1>")).object, this.field.place(0), 0)
+
+
+}
+
+
+Player.prototype.moveCard = function(u, cards) {
+    if (typeof cards != "string") {
+        return
+    }
+    if (!(this[cards] instanceof Cards)) {
+        return
+    }
+    var c = this.scene.AllCard[u]
+    if (c == null) {
+        return
+    }
+    this[cards].push(c)
+}
+</script>

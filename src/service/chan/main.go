@@ -9,6 +9,7 @@ var ser *server.Server
 
 func init() {
 	cfg.TakeConf()
+	dbconn(cfg.Whole.Dbs["Decks"])
 	ser = cfg.Self.Server()
 }
 

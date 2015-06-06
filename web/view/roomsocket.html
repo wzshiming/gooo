@@ -1,0 +1,17 @@
+<script>
+function WsRegister(args,i) {
+    ws.SendMsg({{key "Auth.Users.Register"}},args,i);
+}
+
+function WsLogIn(args,i) {
+    ws.SendMsg({{key "Auth.Users.LogIn"}},args,i);
+}
+
+
+function WsMatchCompetitors(i) {
+    ws.SendMsg({{ key "Chan.Room.MatchCompetitors" }},{} ,i);
+}
+
+
+
+</script>

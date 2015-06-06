@@ -58,7 +58,7 @@ THREE.CSS3DDoubleObject = function ( element, elementB ) {
 
 		}
 
-		if(typeof(object.elementB) != "undefined") {
+		if(typeof(this.elementB) != "undefined") {
 			
 	        if ( this.elementB.parentNode !== null ) {
 	

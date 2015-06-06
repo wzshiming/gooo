@@ -1,0 +1,23 @@
+<script>
+function WsRegister(args,i) {
+    ws.SendMsg({{key "Auth.Users.Register"}},args,i);
+}
+
+function WsLogIn(args,i) {
+    ws.SendMsg({{key "Auth.Users.LogIn"}},args,i);
+}
+
+function WsSelectable(uniq,method) {
+    ws.SendMsg({{ key "Chan.Room.GameCardActionSelectable" }},{uniq:uniq,method:method} ,null);
+}
+
+function WsGameRegister(i) {
+    ws.SendMsg({{ key "Chan.Room.GameRegister" }},{} ,i);
+}
+
+function WsMatchCompetitors(i) {
+    ws.SendMsg({{ key "Chan.Room.MatchCompetitors" }},{} ,i);
+}
+
+
+</script>

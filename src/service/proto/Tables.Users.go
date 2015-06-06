@@ -7,7 +7,7 @@ import (
 
 type User struct {
 	Id        uint64
-	Username  string `sql:"type:varchar(64);not null;"`
+	Username  string `sql:"type:varchar(64);not null;unique_index"`
 	Password  string `sql:"type:varchar(64);not null;"`
 	Email     Email
 	CreatedAt time.Time
@@ -16,7 +16,7 @@ type User struct {
 
 func (s *User) CreateTable(db *dbs.DB) {
 	db.CreateTable(s)
-	db.Model(s).AddUniqueIndex("idx_user_username", "username")
+	//db.Model(s).AddUniqueIndex("idx_user_username", "username")
 }
 
 func (s *User) DropTable(db *dbs.DB) {
@@ -25,7 +25,7 @@ func (s *User) DropTable(db *dbs.DB) {
 
 type Email struct {
 	Id         uint64
-	UserId     uint64
-	Email      string `sql:"type:varchar(64);"` // Set field's type
+	UserId     uint64 `sql:"index"`
+	Email      string `sql:"type:varchar(100);unique_index"` // Set field's type
 	Subscribed bool
 }

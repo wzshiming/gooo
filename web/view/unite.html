@@ -1,0 +1,54 @@
+<link rel="stylesheet" type="text/css" href="/css/container.css" />
+<script src="/js/libs/tween.min.js"></script>
+<script src="/js/controls/TrackballControls.js"></script>
+<script src="/js/renderers/CSS3DDoubleRenderer.js"></script>
+<script>
+var PI = 3.1415926539;
+
+function Tween(object, target, duration) {
+    new TWEEN.Tween(object)
+        .to(target, duration)
+        .easing(TWEEN.Easing.Exponential.InOut)
+        .start();
+}
+
+function Translate(object, target, duration) {
+    //TWEEN.remove(object)
+    Tween(object.position, target, (Math.random() / 10 + 1) * duration)
+        //Tween(object.position,target,duration)
+}
+
+function Rotate(object, target, duration) {
+    //TWEEN.remove(object)
+    Tween(object.rotation, target, (Math.random() / 10 + 1) * duration)
+        //Tween(object.rotation,target,duration)
+}
+
+function Move(object, target, duration) {
+    //TWEEN.remove(object)
+    Translate(object, {
+        x: target.position.x,
+        y: target.position.y,
+        z: target.position.z
+    }, duration)
+    Rotate(object, {
+        x: target.rotation.x,
+        y: target.rotation.y,
+        z: target.rotation.z
+    }, duration)
+}
+
+function Moves(objects, targets, duration) {
+    //TWEEN.removeAll();
+    for (var i = 0; i < objects.length; i++) {
+        Move(objects[i], targets[i], duration)
+    }
+}
+
+function RandomPos() {
+    var object = new THREE.Object3D();
+    object.position.x = Math.random() * 4000 - 2000;
+    object.position.y = Math.random() * 4000 - 2000;
+    object.position.z = 4000;
+}
+</script>

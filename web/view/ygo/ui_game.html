@@ -1,0 +1,69 @@
+<div id="containerGame"></div>
+<script>
+var StartGame = (function() {
+    var camera, scene, renderer;
+    var controls;
+    var objects = [];
+    var selectable;
+
+    var Step = function(func) {
+        window.setTimeout(func, 1000);
+    }
+
+    function init() {
+        var ygo = new YGO(scene)
+    }
+
+
+
+    function onWindowResize() {
+        camera.aspect = window.innerWidth / window.innerHeight;
+        camera.updateProjectionMatrix();
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        render();
+    }
+
+    function animate() {
+        requestAnimationFrame(animate);
+        TWEEN.update();
+        controls.update();
+        render()
+    }
+
+    function render() {
+        renderer.render(scene, camera);
+    }
+
+    return function() {
+        camera = new THREE.PerspectiveCamera(40, window.innerWidth / window.innerHeight, 1, 10000);
+        camera.position.z = 2500;
+        camera.position.y = -2500;
+
+
+        scene = new THREE.Scene();
+        renderer = new THREE.CSS3DRenderer();
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        renderer.domElement.style.position = 'absolute';
+        document.getElementById('containerGame').appendChild(renderer.domElement);
+        controls = new THREE.TrackballControls(camera, renderer.domElement);
+        //    controls.rotateSpeed = 0.5;
+        //    controls.minDistance = 500;
+        //    controls.maxDistance = 6000;
+        controls.addEventListener('change', render);
+
+
+        controls.noRotate = true;
+        //controls.noZoom = true;
+        controls.noPan = true;
+        controls.noRoll = true;
+
+        window.addEventListener('resize', onWindowResize, false);
+
+        init();
+        animate();
+    }
+
+})()
+
+//$('#ygo').hide();
+</script>

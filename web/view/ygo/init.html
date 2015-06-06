@@ -1,0 +1,19 @@
+<!-- 卡牌队列显示 -->
+{{ template "ygo/desk" . }} 
+<!-- 点击选择 -->
+{{ template "ygo/selectable" . }} 
+<!-- 卡牌 -->
+{{ template "ygo/card" . }} 
+<!-- 玩家 -->
+{{ template "ygo/player" . }} 
+<!-- 游戏主题 -->
+{{ template "ygo/ygo" . }}
+<!-- 通讯格式 -->
+{{ template "ygo/socket" . }}
+<!-- 卡组整理界面 -->
+{{ template "ygo/decks" . }}
+<div id="ygo">
+    {{ template "ygo/ui_game" . }}
+    {{ template "ygo/ui_neaten" . }}
+    <div id="else"></div>
+</div>
