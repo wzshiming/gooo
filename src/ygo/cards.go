@@ -4,41 +4,41 @@ import (
 	"rego"
 )
 
-type CardPile struct {
+type Cards struct {
 	name string
 	list []*Card
 	join func(*Card)
 }
 
-func NewCardPile(name string) *CardPile {
-	return &CardPile{
+func NewCards(name string) *Cards {
+	return &Cards{
 		name: name,
 		list: []*Card{},
 	}
 }
 
-func (cp *CardPile) SetJoin(fun func(*Card)) {
+func (cp *Cards) SetJoin(fun func(*Card)) {
 	cp.join = fun
 }
 
-func (cp *CardPile) Clear() {
+func (cp *Cards) Clear() {
 	cp.list = []*Card{}
 }
 
-func (cp *CardPile) SetName(name string) {
+func (cp *Cards) SetName(name string) {
 	cp.name = name
 }
-func (cp *CardPile) GetName() string {
+func (cp *Cards) GetName() string {
 	return cp.name
 }
 
-func (cp *CardPile) Len() int {
+func (cp *Cards) Len() int {
 	return len(cp.list)
 }
 
-func (cp *CardPile) Shuffle() {
+func (cp *Cards) Shuffle() {
 	array := cp.list
-	for i := 0; i < len(array); i++ {
+	for i := 0; i < len(array)*10; i++ {
 		for j := 0; j < len(array)-1; j++ {
 			if ((<-rego.LCG) % 4) != 0 {
 				array[j], array[j+1] = array[j+1], array[j]
@@ -50,15 +50,15 @@ func (cp *CardPile) Shuffle() {
 	//	}
 }
 
-func (cp *CardPile) BeginPush(c *Card) {
+func (cp *Cards) BeginPush(c *Card) {
 	cp.Insert(c, len(cp.list))
 }
 
-func (cp *CardPile) EndPush(c *Card) {
+func (cp *Cards) EndPush(c *Card) {
 	cp.Insert(c, 0)
 }
 
-func (cp *CardPile) Insert(c *Card, index int) {
+func (cp *Cards) Insert(c *Card, index int) {
 
 	if c.Place != nil {
 		c.Place.PickedFor(c)
@@ -72,15 +72,15 @@ func (cp *CardPile) Insert(c *Card, index int) {
 
 }
 
-func (cp *CardPile) BeginPop() (c *Card) {
+func (cp *Cards) BeginPop() (c *Card) {
 	return cp.Remove(len(cp.list) - 1)
 }
 
-func (cp *CardPile) EndPop() (c *Card) {
+func (cp *Cards) EndPop() (c *Card) {
 	return cp.Remove(0)
 }
 
-func (cp *CardPile) Remove(index int) (c *Card) {
+func (cp *Cards) Remove(index int) (c *Card) {
 	if len(cp.list) == 0 {
 		return
 	}
@@ -90,7 +90,7 @@ func (cp *CardPile) Remove(index int) (c *Card) {
 	return
 }
 
-func (cp *CardPile) PickedForUniq(uniq uint) (c *Card) {
+func (cp *Cards) PickedForUniq(uniq uint) (c *Card) {
 	for k, v := range cp.list {
 		if v.ToUint() == uniq {
 			v.Place = nil
@@ -100,7 +100,7 @@ func (cp *CardPile) PickedForUniq(uniq uint) (c *Card) {
 	return
 }
 
-func (cp *CardPile) ExistForUniq(uniq uint) (c *Card) {
+func (cp *Cards) ExistForUniq(uniq uint) (c *Card) {
 	for _, v := range cp.list {
 		if v.ToUint() == uniq {
 			c = v
@@ -109,24 +109,24 @@ func (cp *CardPile) ExistForUniq(uniq uint) (c *Card) {
 	return
 }
 
-func (cp *CardPile) PickedFor(c *Card) {
+func (cp *Cards) PickedFor(c *Card) {
 	cp.PickedForUniq(c.ToUint())
 }
 
-func (cp *CardPile) Uniqs() (us []uint) {
+func (cp *Cards) Uniqs() (us []uint) {
 	cp.ForEach(func(c *Card) {
 		us = append(us, c.ToUint())
 	})
 	return
 }
 
-func (cp *CardPile) ForEach(fun func(*Card)) {
+func (cp *Cards) ForEach(fun func(*Card)) {
 	for _, v := range cp.list {
 		fun(v)
 	}
 }
 
-func (cp *CardPile) Find(fun func(*Card) bool) (indexs []int) {
+func (cp *Cards) Find(fun func(*Card) bool) (indexs []int) {
 	for k, v := range cp.list {
 		if fun(v) {
 			indexs = append(indexs, k)

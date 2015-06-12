@@ -51,32 +51,32 @@ const (
 type LR_TYPE uint32
 
 const (
-	LR_None        = LR_TYPE(1 << (32 - 1 - iota))
-	LR_Warrior     //战士族
-	LR_Spellcaster //魔法使用族
-	LR_Fairy       //精灵族
-	LR_Fiend       //恶魔族
-	LR_Zombie      //不死族
-	LR_Machine     //机械族
-	LR_Aqua        //水族
-	LR_Pyro        //炎族
-	LR_Rock        //岩石族
-	LR_WindBeast   //鸟兽族
-	LR_Plant       //植物族
-	LR_Insect      //昆虫族
-	LR_Thunder     //雷族
-	LR_Dragon      //龙族
-	LR_Beast       //兽族
-	LR_BeastWarror //兽战士族
-	LR_Dinosaur    //恐龙族
-	LR_Fish        //鱼族
-	LR_Seaserpent  //海龙族
-	LR_Reptile     //爬虫族
-	LR_Psycho      //念动力族
-	LR_DivineBeast //幻神兽族
-	LR_Devine      //神族
-	LR_CreatorGod  //创造神族
-	LR_MagicDragon //幻龙族
+	LR_None          = LR_TYPE(1 << (32 - 1 - iota))
+	LR_Warrior       //战士族
+	LR_SpellCaster   //魔法使用族
+	LR_Fairy         //精灵族
+	LR_Fiend         //恶魔族
+	LR_Zombie        //不死族
+	LR_Machine       //机械族
+	LR_Aqua          //水族
+	LR_Pyro          //炎族
+	LR_Rock          //岩石族
+	LR_WindBeast     //鸟兽族
+	LR_Plant         //植物族
+	LR_Insect        //昆虫族
+	LR_Thunder       //雷族
+	LR_Dragon        //龙族
+	LR_Beast         //兽族
+	LR_BeastWarror   //兽战士族
+	LR_Dinosaur      //恐龙族
+	LR_Fish          //鱼族
+	LR_Seaserpent    //海龙族
+	LR_Reptile       //爬虫族
+	LR_Psycho        //念动力族
+	LR_DivineBeast   //幻神兽族
+	LR_Devine        //神族
+	LR_CreatorGod    //创造神族
+	LR_PhantomDragon //幻龙族
 )
 
 // 表示形式 Expression
@@ -110,4 +110,54 @@ const (
 	LI_MagicUse             = LI_TYPE(LC_Magic) | LI_Use             // 魔法卡使用
 	LI_MagicAndTrapCover    = LI_TYPE(LC_MagicAndTrap) | LI_Cover    // 魔陷覆盖
 	LI_TrapRespond          = LI_TYPE(LC_Trap) | LI_Respond          // 陷阱回应
+)
+
+// 卡牌放置位置 Locations
+type LL_TYPE uint32
+
+const (
+	LL_None    = LL_TYPE(1 << (32 - 1 - iota))
+	LL_Deck    // 卡组
+	LL_Hand    // 手牌
+	LL_Mzone   // 怪兽区
+	LL_Szone   // 魔陷区
+	LL_Grave   // 墓地
+	LL_Removed // 移除
+	LL_Extra   // 额外
+	LL_OnField // 场地
+	LL_OverLay //
+	LL_Fzone   //
+	LL_Pzone   //
+)
+
+// 召唤方式 Summon
+type LS_TYPE uint32
+
+const (
+	LS_None    = LS_TYPE(1 << (32 - 1 - iota))
+	LS_Normal  //通常
+	LS_Advance //上级
+	LS_Dual
+	LS_Flip     // 翻转
+	LS_Special  // 特殊
+	LS_Fusion   // 融合
+	LS_Ritual   // 仪式
+	LS_Synchro  // 同调
+	LS_XYZ      // 超量
+	LS_Pendulum // 摇摆
+)
+
+// 游戏阶段 Phase
+type LP_TYPE uint32
+
+const (
+	LP_None = LP_TYPE(iota)
+	LP_Draw
+	LP_Standby
+	LP_Main1
+	LP_Battle
+	LP_Main2
+	LP_End
+	LP_Damage
+	LP_DamageCal
 )

@@ -82,7 +82,7 @@ def lc n
     end
 end
 $lrs = {
-    "魔法师"=>"Spellcaster",
+    "魔法师"=>"SpellCaster",
     "龙"=>"Dragon",
     "爬虫类"=>"Reptile",
     "兽"=>"Beast",
@@ -104,7 +104,7 @@ $lrs = {
     "幻神兽"=>"DivineBeast",
     "念动力"=>"Psycho",
     "创造神"=>"CreatorGod",
-    "幻龙"=>"MagicDragon"
+    "幻龙"=>"PhantomDragon"
 }
 
 def lr n
@@ -142,7 +142,7 @@ func original(cardBag *ygo.CardVersion) {
         Name:     \"#{v["中文名"]}\", // \"#{v["英文名"]}\"  \"#{v["日文名"]}\"
         Describe: \"#{v["效果"].gsub!("$\n","")}\",
         Lc:       #{lc(v["卡片种类"])}, // #{v["卡片种类"]}
-        Star:     #{v["星级"]},
+        Level:    #{v["星级"]},
         La:       #{la(v["属性"])}, // #{v["属性"]}
         Lr:       #{lr(v["种族"])}, // #{v["种族"]}
         Attack:   #{v["攻击力"]},
@@ -196,7 +196,7 @@ func elses#{j}(cardBag *ygo.CardVersion) {
         Name:     \"#{v["中文名"]}\", // \"#{v["英文名"]}\"  \"#{v["日文名"]}\"
         Describe: \"#{v["效果"].gsub!("$\n","")}\",
         Lc:       #{lc(v["卡片种类"])}, // #{v["卡片种类"]}
-        Star:     #{ if v["星级"] != nil then v["星级"] else 0 end},
+        Level:     #{ if v["星级"] != nil then v["星级"] else 0 end},
         La:       #{la(v["属性"])}, // #{v["属性"]}
         Lr:       #{lr(v["种族"])}, // #{v["种族"]}
         Attack:   #{ if v["攻击力"] != nil && v["攻击力"] != "？" && v["攻击力"] != "?" then v["攻击力"] else 0 end},
@@ -267,8 +267,8 @@ if $0 == __FILE__
 
 
   allcard = JSON.parse File.read("card.json").to_utf8!
-  types={}
+  #types={}
   #卡片种类
-  changename allcard
+  OrdinaryMonster allcard
 
 end

@@ -5,6 +5,7 @@ var Decks = function(scene) {
     this.cardslist = []
     $.getJSON('/json/cards.json', {}, function(json, textStatus) {
         t.cards = json
+        console.dir(json)
         for (var i in json) {
             t.cardslist.push(json[i])
         }
@@ -20,7 +21,7 @@ var Decks = function(scene) {
         t.ii += 1
         var i = t.scene.AllCard[uniq];
         if (i.hold == t.deck) {
-            t.waste.push(i);
+            i.remove()
             t.deck.flash();
         } else if (i.hold == t.heap) {
             t.deck.push(new Card(t.scene, "s" + t.ii, null, i.id, 0));
@@ -32,10 +33,8 @@ var Decks = function(scene) {
     this.heap = new Cards(c.neaten(0.5, -4))
     this.deck = new Cards(c.neaten(0.5, 2))
 
-    this.waste = new Cards(c.deck(0, 0))
-
-
     var i = 0
+
         //清空else 里的元素 添加 左右按钮
     $('#else').empty()
     $('#else').append('<div id="decks_l" style="position:absolute;left:100px;top:100px;"><button type="submit" class="btn btn-default btn-block"><</button></div>');
@@ -77,12 +76,13 @@ var Decks = function(scene) {
     $('#decks_g').click(function(event) {
         WsGameGetDeck(function(i) {
             console.dir(i)
-            t.deck.moveto(t.waste)
+            t.deck.clear()
             var c = i[0].main
             console.dir(c)
             for (var z = 0; z != c.length; z++) {
                 var ob = c[z]
                 for (var x = 0; x != ob.size; x++) {
+                    t.ii += 1
                     var d = new Card(t.scene, "s" + t.ii, null, ob.id, 0);
                     t.deck.push(d)
                 }
@@ -93,9 +93,7 @@ var Decks = function(scene) {
 }
 
 Decks.prototype.desktop = function(beginBlock, size) {
-    this.waste.clear()
-    this.heap.moveto(this.waste)
-
+    this.heap.clear()
 
     for (var i = 0; i != size; i++) {
         var k = parseInt(this.cardslist[i + beginBlock * size].id)

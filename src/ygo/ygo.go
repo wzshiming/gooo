@@ -1,8 +1,8 @@
 package ygo
 
 import (
-	//"rego"
 	"fmt"
+	//"rego"
 	"rego/agent"
 	"rego/misc"
 	"service/proto"
@@ -29,7 +29,7 @@ func NewYGO(r *misc.Rooms) *YGO {
 	}
 	yg.Room.ForEach(func(sess *agent.Session) {
 		p := NewPlayer()
-		p.Game = yg
+		p.game = yg
 		p.Session = sess
 		yg.Players[sess.ToUint()] = p
 	})
@@ -72,7 +72,7 @@ func (yg *YGO) Loop() {
 		ca := v.Camp
 		yg.Survival[ca] = yg.Survival[ca] + 1
 		v.Index = len(round)
-		v.Game = yg
+		v.game = yg
 		v.Name = fmt.Sprintf("player %d", len(round))
 		round = append(round, k)
 	}
@@ -93,7 +93,12 @@ func (yg *YGO) Loop() {
 
 	time.Sleep(time.Second) // 牌组初始化
 	for _, v := range round {
-		yg.Players[v].initCards()
+		var s struct {
+			Deck proto.Deck `json:"deck"`
+		}
+		yg.Players[v].Session.Data.DeJson(&s)
+		//rego.INFO(string(yg.Players[v].Session.Data.Bytes()))
+		yg.Players[v].initDeck(s.Deck.GetMain(), s.Deck.GetExtra())
 	}
 
 	time.Sleep(time.Second) // 手牌初始化

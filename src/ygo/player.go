@@ -5,63 +5,61 @@ import (
 	"fmt"
 	"rego"
 	"rego/agent"
-	"service/proto"
 	"time"
-	"ygo/defaul"
 )
 
 type Player struct {
 	//
+	MsgChan
 	Name    string         //用户名
 	Session *agent.Session //会话
-	Selec   chan proto.SelectableRequest
-
+	//Selec   chan proto.SelectableRequest
 	// 规则属性
 	Index    int           // 玩家索引
-	Game     *YGO          // 属于游戏
+	game     *YGO          // 属于游戏
 	OverTime time.Duration // 允许超出的时间
 	WaitTime time.Duration // 每次动作等待的时间
 
 	// 基础属性
-	Hp        int  // 生命值
-	Camp      int  // 阵营
-	RoundSize int  // 回合数
-	DrawSize  uint // 抽卡数
-	MaxHp     uint // 最大生命值
-	MaxSdi    int  // 最大手牌
-	Phases    int  //阶段
+	Hp        int     // 生命值
+	Camp      int     // 阵营
+	RoundSize int     // 回合数
+	DrawSize  uint    // 抽卡数
+	MaxHp     uint    // 最大生命值
+	MaxSdi    int     // 最大手牌
+	Phases    LP_TYPE //阶段
 
 	// 卡牌区
-	Deck    *CardPile //卡组 40 ~ 60
-	Hand    *CardPile //手牌
-	Extra   *CardPile //额外卡组 <= 15 融合怪物 同调怪物 超量怪物
-	Side    *CardPile //副卡组 <= 15
-	Removed *CardPile //排除卡
-	Grave   *CardPile //墓地
-	Mzone   *CardPile //怪物卡区 5
-	Szone   *CardPile //魔法卡陷阱卡区 5
-	Field   *CardPile //场地卡 5
+	Deck    *Cards //卡组 40 ~ 60
+	Hand    *Cards //手牌
+	Extra   *Cards //额外卡组 <= 15 融合怪物 同调怪物 超量怪物
+	Side    *Cards //副卡组 <= 15
+	Removed *Cards //排除卡
+	Grave   *Cards //墓地
+	Mzone   *Cards //怪物卡区 5
+	Szone   *Cards //魔法卡陷阱卡区 5
+	Field   *Cards //场地卡 5
 
 	// 卡牌事件
-	ToExclude  *Events // 排除场外
-	ToCemetery *Events // 移动到墓地
-	ToSdi      *Events // 返回手牌
-	ToDeck     *Events // 返回卡组
-	Sustains   *Events // 永续效果
+	ToExclude  *Effects // 排除场外
+	ToCemetery *Effects // 移动到墓地
+	ToSdi      *Effects // 返回手牌
+	ToDeck     *Effects // 返回卡组
+	Sustains   *Effects // 永续效果
 
 	// 怪兽卡事件
-	MonsterInitiative    *Events // 怪兽卡发动效果
-	MonsterFreedom       *Events // 解放 送去墓地
-	MonsterDestroy       *Events // 破坏 送去墓地
-	MonsterFlip          *Events // 反转
-	MonsterSummon        *Events // 召唤
-	MonsterSummonCover   *Events // 覆盖召唤
-	MonsterSummonFlip    *Events // 反转召唤
-	MonsterSummonSpecial *Events // 特殊召唤
+	MonsterInitiative    *Effects // 怪兽卡发动效果
+	MonsterFreedom       *Effects // 解放 送去墓地
+	MonsterDestroy       *Effects // 破坏 送去墓地
+	MonsterFlip          *Effects // 反转
+	MonsterSummon        *Effects // 召唤
+	MonsterSummonCover   *Effects // 覆盖召唤
+	MonsterSummonFlip    *Effects // 反转召唤
+	MonsterSummonSpecial *Effects // 特殊召唤
 
 	// 魔法卡陷阱卡 事件
-	MagicAndTrapInitiative *Events // 魔法卡陷阱卡发动效果
-	MagicAndTrapCover      *Events // 魔法卡陷阱卡覆盖
+	MagicAndTrapInitiative *Effects // 魔法卡陷阱卡发动效果
+	MagicAndTrapCover      *Effects // 魔法卡陷阱卡覆盖
 
 	// 是否失败
 	fail bool
@@ -76,52 +74,32 @@ func NewPlayer() *Player {
 		MaxSdi:   6,
 		OverTime: time.Second * 120,
 		WaitTime: time.Second * 3,
-		Deck:     NewCardPile("deck"),
-		Hand:     NewCardPile("hand"),
-		Extra:    NewCardPile("extra"),
-		Side:     NewCardPile("side"),
-		Removed:  NewCardPile("remove"),
-		Grave:    NewCardPile("grave"),
-		Mzone:    NewCardPile("mzone"),
-		Szone:    NewCardPile("szone"),
-		Field:    NewCardPile("field"),
-		Selec:    make(chan proto.SelectableRequest, 128),
+		//Side:     NewCardPile("side"),
+		Deck:    NewCards("deck"),
+		Hand:    NewCards("hand"),
+		Extra:   NewCards("extra"),
+		Removed: NewCards("remove"),
+		Grave:   NewCards("grave"),
+		Mzone:   NewCards("mzone"),
+		Szone:   NewCards("szone"),
+		Field:   NewCards("field"),
+		MsgChan: NewMsgChan(),
 	}
 
 	player.Deck.SetJoin(func(c *Card) {
 		c.SetLE(LE_FaceDown)
 	})
 	player.Extra.SetJoin(func(c *Card) {
-		c.SetLE(LE_FaceDown)
-		player.Call(SetFront(c))
+		c.SetLE(LE_FaceUpAttack)
 	})
 	player.Hand.SetJoin(func(c *Card) {
 		player.Call(SetFront(c))
 		player.Call(ExprCard(c, LE_FaceUpAttack))
 	})
 	player.Grave.SetJoin(func(c *Card) {
-		player.CallAll(SetFront(c))
 		c.SetLE(LE_FaceUpAttack)
 	})
 	return player
-}
-
-func (pl *Player) SelecAdd(u proto.SelectableRequest) {
-	select {
-	case pl.Selec <- u:
-	default:
-		return
-	}
-}
-
-func (pl *Player) SelecClear() {
-	for {
-		select {
-		case <-pl.Selec:
-		default:
-			return
-		}
-	}
 }
 
 func (pl *Player) Fail() {
@@ -133,7 +111,7 @@ func (pl *Player) IsFail() bool {
 }
 
 func (pl *Player) ForEachPlayer(fun func(p *Player)) {
-	pl.Game.ForEachPlayer(fun)
+	pl.game.ForEachPlayer(fun)
 }
 
 func (pl *Player) round() (err error) {
@@ -148,25 +126,29 @@ func (pl *Player) round() (err error) {
 		"round":  pl.RoundSize,
 		"player": pl.Index,
 	})
-	pl.Phases = 1
+
+	pl.Phases = LP_Draw
 	pl.draw()
-	pl.Phases = 2
+
+	pl.Phases = LP_Standby
 	pl.standby()
-	pl.Phases = 3
+
+	pl.Phases = LP_Main1
 	pl.main()
-	pl.Phases = 4
+
+	pl.Phases = LP_Battle
 	pl.battle()
-	pl.Phases = 5
+
+	pl.Phases = LP_Main2
 	pl.main()
-	pl.Phases = 6
+
+	pl.Phases = LP_End
 	pl.end()
 	return
 }
 
 func (pl *Player) draw() {
-	pl.CallAll("flagStep", map[string]interface{}{
-		"step": pl.Phases,
-	})
+	pl.CallAll(flashPhases(pl))
 	pl.Call(Message("抽牌阶段"))
 	if pl.Deck.Len() == 0 {
 		pl.Fail()
@@ -180,9 +162,7 @@ func (pl *Player) draw() {
 }
 
 func (pl *Player) standby() {
-	pl.CallAll("flagStep", map[string]interface{}{
-		"step": pl.Phases,
-	})
+	pl.CallAll(flashPhases(pl))
 	pl.Call(Message("准备阶段"))
 	select {
 	case <-time.After(time.Second / 10):
@@ -193,7 +173,8 @@ func (pl *Player) standby() {
 func (pl *Player) main() {
 
 	pl.Call(Message("主要阶段"))
-	pl.SelecClear()
+	pl.ClearCode()
+
 	for {
 		p := pl.SelectWill()
 		if p.Uniq == 0 {
@@ -207,10 +188,13 @@ func (pl *Player) main() {
 				})
 			} else if p.Method == uint(LI_Call) {
 				t.Call()
+				pl.Call("finishSelect", map[string]interface{}{})
 			} else if p.Method == uint(LI_Cover) {
 				t.Cover()
+				pl.Call("finishSelect", map[string]interface{}{})
 			} else if p.Method == uint(LI_Use) {
 				t.Use()
+				pl.Call("finishSelect", map[string]interface{}{})
 			}
 		} else if t := pl.Mzone.ExistForUniq(p.Uniq); t != nil {
 			if t.Le == LE_FaceDownDefense {
@@ -227,12 +211,11 @@ func (pl *Player) main() {
 		"master": pl.Index,
 		"pos":    "hand",
 	})
-	pl.Call("finishSelect", map[string]interface{}{})
 }
 
 func (pl *Player) battle() {
 	pl.Call(Message("战斗阶段"))
-	pl.SelecClear()
+	pl.ClearCode()
 	for {
 		i := pl.SelectWill()
 		if i.Uniq != 0 {
@@ -246,7 +229,7 @@ func (pl *Player) battle() {
 			pl.Call(Message("选择要攻击的目标"))
 			j := pl.SelectWill()
 			if j.Uniq != 0 {
-				t2 := pl.Game.GetCard(j.Uniq)
+				t2 := pl.game.GetCard(j.Uniq)
 				if t2 != t2.Owner.Mzone.ExistForUniq(j.Uniq) {
 					continue
 				}
@@ -254,6 +237,7 @@ func (pl *Player) battle() {
 					t1.Battle(t2)
 				}
 			}
+			pl.Call(Message("战斗阶段"))
 		} else {
 			break
 		}
@@ -278,20 +262,26 @@ func (pl *Player) init() {
 	pl.ActionDraw(5)
 }
 
-func (pl *Player) initCards() {
-	pl.InitDeck(defaul.DefaultDeck)
-	pl.ActionShuffle()
-}
-
-func (pl *Player) InitDeck(a []uint) {
+func (pl *Player) initDeck(a []uint, b []uint) {
 	if pl.Deck.Len() > 0 {
 		return
 	}
-	pl.Game.CardVer.Deck(pl.Deck, pl, a)
+	pl.game.CardVer.Deck(pl.Deck, pl, a)
+	pl.game.CardVer.Deck(pl.Extra, pl, b)
+	pl.ActionShuffle()
 }
+
 func (pl *Player) ChangeHp(i int) {
 	pl.Hp += i
 }
+
+func (pl *Player) GetTarget() *Player {
+	if pl.Index == 0 {
+		return pl.game.Players[1]
+	}
+	return pl.game.Players[0]
+}
+
 func (pl *Player) ActionShuffle() {
 	pl.Deck.Shuffle()
 }
@@ -309,77 +299,34 @@ func (pl *Player) ActionDraw(s int) {
 	}
 }
 
-type Call struct {
-	Method string      `json:"method"`
-	Args   interface{} `json:"args"`
-}
-
 func (pl *Player) Call(method string, reply interface{}) error {
-	//time.Sleep(time.Millisecond * 10)
-	return pl.Game.Room.Push(Call{
+	return pl.game.Room.Push(Call{
 		Method: method,
 		Args:   reply,
 	}, pl.Session)
 }
 
 func (pl *Player) CallAll(method string, reply interface{}) error {
-	//time.Sleep(time.Millisecond * 10)
-	return pl.Game.CallAll(method, reply)
+	return pl.game.CallAll(method, reply)
 }
 
-func ExprCard(t *Card, le LE_TYPE) (string, interface{}) {
-	return "exprCard", map[string]interface{}{
-		"uniq": t.ToUint(),
-		"expr": le,
-	}
-}
-
-func SetFront(t *Card) (string, interface{}) {
-	return "setFront", map[string]interface{}{
-		"desk": t.Id,
-		"uniq": t.ToUint(),
-	}
-}
-
-func Message(msg string) (string, interface{}) {
-	return "message", map[string]interface{}{
-		"message": msg,
-	}
-}
-
-func MoveCard(t *Card, pos string) (string, interface{}) {
-	return "moveCard", map[string]interface{}{
-		"uniq":   t.ToUint(),
-		"master": t.Owner.Index,
-		"pos":    pos,
-	}
-}
-
-func (pl *Player) SelectWill() (p proto.SelectableRequest) {
-	pl.SelecClear()
-	pl.CallAll("flagStep", map[string]interface{}{
-		"step": pl.Phases,
-		"wait": pl.WaitTime,
-	})
+func (pl *Player) SelectWill() (p MsgCode) {
+	pl.ClearCode()
+	pl.CallAll(flashPhases(pl))
 	select {
 	case <-time.After(pl.WaitTime):
-
-	case p = <-pl.Selec:
-
+	case p = <-pl.GetCode():
 	}
 	return
 }
 
-func (pl *Player) SelectMust(cp *CardPile) (t *Card) {
-	pl.SelecClear()
-	pl.CallAll("flagStep", map[string]interface{}{
-		"step": pl.Phases,
-		"wait": pl.WaitTime,
-	})
+func (pl *Player) SelectMust(cp *Cards) (t *Card) {
+	pl.ClearCode()
+	pl.CallAll(flashPhases(pl))
 	select {
 	case <-time.After(pl.WaitTime):
 		t = cp.EndPop()
-	case p := <-pl.Selec:
+	case p := <-pl.GetCode():
 		if t = cp.ExistForUniq(p.Uniq); t == nil {
 			t = cp.EndPop()
 		}
@@ -387,7 +334,7 @@ func (pl *Player) SelectMust(cp *CardPile) (t *Card) {
 	return
 }
 
-func (pl *Player) SelectTo(size int, cp *CardPile, te *CardPile, info string) {
+func (pl *Player) SelectTo(size int, cp *Cards, te *Cards, info string) {
 	pl.Call(Message(info))
 	for i := 0; i != size; i++ {
 		t := pl.SelectMust(cp)

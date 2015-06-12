@@ -178,8 +178,13 @@ Cards.prototype.flash = function() {
     }
 }
 Cards.prototype.clear = function() {
-    for (var i = 0; i != this.length(); i++) {
-        this.deck[i].remove();
+    for (;;) {
+        var tt = this.pop()
+        if (tt) {
+            tt.remove();
+        } else {
+            return
+        }
     }
     this.deck = [];
 }
