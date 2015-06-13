@@ -59,15 +59,14 @@ func (cp *Cards) EndPush(c *Card) {
 }
 
 func (cp *Cards) Insert(c *Card, index int) {
-
-	if c.Place != nil {
-		c.Place.PickedFor(c)
+	if c.place != nil {
+		c.place.PickedFor(c)
 	}
-	c.Owner.CallAll(MoveCard(c, cp.GetName()))
+	c.GetSummoner().CallAll(MoveCard(c, cp.GetName()))
 	if cp.join != nil {
 		cp.join(c)
 	}
-	c.Place = cp
+	c.place = cp
 	cp.list = append(cp.list[:index], append([]*Card{c}, cp.list[index:]...)...)
 
 }
@@ -85,7 +84,7 @@ func (cp *Cards) Remove(index int) (c *Card) {
 		return
 	}
 	c = cp.list[index]
-	c.Place = nil
+	c.place = nil
 	cp.list = append(cp.list[:index], cp.list[index+1:]...)
 	return
 }
@@ -93,7 +92,7 @@ func (cp *Cards) Remove(index int) (c *Card) {
 func (cp *Cards) PickedForUniq(uniq uint) (c *Card) {
 	for k, v := range cp.list {
 		if v.ToUint() == uniq {
-			v.Place = nil
+			v.place = nil
 			return cp.Remove(k)
 		}
 	}
@@ -109,20 +108,27 @@ func (cp *Cards) ExistForUniq(uniq uint) (c *Card) {
 	return
 }
 
+func (cp *Cards) IsExistCard(c *Card) bool {
+	return cp.ExistForUniq(c.ToUint()) == c
+}
+
 func (cp *Cards) PickedFor(c *Card) {
 	cp.PickedForUniq(c.ToUint())
 }
 
 func (cp *Cards) Uniqs() (us []uint) {
-	cp.ForEach(func(c *Card) {
+	cp.ForEach(func(c *Card) bool {
 		us = append(us, c.ToUint())
+		return true
 	})
 	return
 }
 
-func (cp *Cards) ForEach(fun func(*Card)) {
+func (cp *Cards) ForEach(fun func(*Card) bool) {
 	for _, v := range cp.list {
-		fun(v)
+		if !fun(v) {
+			return
+		}
 	}
 }
 

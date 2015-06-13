@@ -62,6 +62,7 @@ number_build_record: number_build.txt
 
 get: get_github.com_go-sql-driver_mysql\
 	 get_github.com_mattn_go-sqlite3\
+	 get_github.com_lib_pq\
 	 get_github.com_jinzhu_gorm\
 	 get_github.com_kortem_lingo\
 	 get_github.com_go-martini_martini\

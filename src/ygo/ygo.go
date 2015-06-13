@@ -2,7 +2,6 @@ package ygo
 
 import (
 	"fmt"
-	//"rego"
 	"rego/agent"
 	"rego/misc"
 	"service/proto"
@@ -17,6 +16,7 @@ type YGO struct {
 	Players  map[uint]*Player
 	Survival map[int]int
 	Over     bool
+	round    []uint
 }
 
 func NewYGO(r *misc.Rooms) *YGO {
@@ -29,7 +29,6 @@ func NewYGO(r *misc.Rooms) *YGO {
 	}
 	yg.Room.ForEach(func(sess *agent.Session) {
 		p := NewPlayer()
-		p.game = yg
 		p.Session = sess
 		yg.Players[sess.ToUint()] = p
 	})
@@ -40,8 +39,9 @@ func (yg *YGO) GetPlayer(sess *agent.Session) *Player {
 	return yg.Players[sess.ToUint()]
 }
 
-func (yg *YGO) GetCard(u uint) *Card {
-	return yg.Cards[u]
+func (yg *YGO) GetCard(u uint) (c *Card) {
+	c = yg.Cards[u]
+	return
 }
 
 func (yg *YGO) RegisterCards(c *Card) {
@@ -64,35 +64,42 @@ func (yg *YGO) CallAll(method string, reply interface{}) error {
 	return nil
 }
 
+func (yg *YGO) GetPlayerForIndex(i int) *Player {
+	return yg.Players[yg.round[i]]
+}
+
 func (yg *YGO) Loop() {
 
 	time.Sleep(time.Second) // 初始化
-	round := []uint{}
-	for k, v := range yg.Players {
-		ca := v.Camp
+
+	for k, _ := range yg.Players {
+		yg.round = append(yg.round, k)
+	}
+
+	for k, v := range yg.round {
+		ca := yg.Players[v].Camp
 		yg.Survival[ca] = yg.Survival[ca] + 1
-		v.Index = len(round)
-		v.game = yg
-		v.Name = fmt.Sprintf("player %d", len(round))
-		round = append(round, k)
+		yg.Players[v].Index = k
+		yg.Players[v].game = yg
+		yg.Players[v].Name = fmt.Sprintf("player %d", k)
 	}
 
 	time.Sleep(time.Second) // 客户端初始化
 	gi := proto.GameInitResponse{}
-	for _, v := range round {
+	for _, v := range yg.round {
 		pi := proto.PlayerInit{
 			Hp:   yg.Players[v].Hp,
 			Name: yg.Players[v].Name,
 		}
 		gi.Users = append(gi.Users, pi)
 	}
-	for _, v := range round {
+	for _, v := range yg.round {
 		gi.Index = yg.Players[v].Index
 		yg.Players[v].Call("init", gi)
 	}
 
 	time.Sleep(time.Second) // 牌组初始化
-	for _, v := range round {
+	for _, v := range yg.round {
 		var s struct {
 			Deck proto.Deck `json:"deck"`
 		}
@@ -102,13 +109,13 @@ func (yg *YGO) Loop() {
 	}
 
 	time.Sleep(time.Second) // 手牌初始化
-	for _, v := range round {
+	for _, v := range yg.round {
 		yg.Players[v].init()
 	}
 
 	time.Sleep(time.Second) // 循环
 	for {
-		for _, v := range round {
+		for _, v := range yg.round {
 			time.Sleep(time.Second)
 			if !yg.Players[v].IsFail() {
 				yg.Players[v].round()

@@ -4,7 +4,7 @@ import (
 	"errors"
 	"fmt"
 	"regexp"
-	"rego"
+	//"rego"
 )
 
 type CardVersion struct {
@@ -32,7 +32,10 @@ func (cv *CardVersion) Get(id uint) *CardOriginal {
 }
 
 func (cv *CardVersion) Find(name string) (c []uint) {
-	reg := regexp.MustCompile(fmt.Sprintf("~([^(~~)]*%s+[^(~~)]*)~", name))
+	if name == "" {
+		return
+	}
+	reg := regexp.MustCompile(fmt.Sprintf("~([^(~~)]*%s[^(~~)]*)~", name))
 	al := reg.FindAllStringSubmatch(cv.nameReg, -1)
 	for _, v := range al {
 		if len(v) == 2 {

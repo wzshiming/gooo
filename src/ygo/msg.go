@@ -60,7 +60,7 @@ func Message(msg string) (string, interface{}) {
 func MoveCard(t *Card, pos string) (string, interface{}) {
 	return "moveCard", map[string]interface{}{
 		"uniq":   t.ToUint(),
-		"master": t.Owner.Index,
+		"master": t.GetSummoner().Index,
 		"pos":    pos,
 	}
 }

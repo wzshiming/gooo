@@ -13,9 +13,12 @@ import (
 	//"ygo/defaul"
 )
 
+var cardBag = cards.CardBag_test
+
 type Room struct {
-	room     *misc.Rooms
-	gameList map[uint]*ygo.YGO
+	room      *misc.Rooms
+	gameList  map[uint]*ygo.YGO
+	saveQuery map[string]*rego.EncodeBytes
 }
 type dataUniq struct {
 	Uniq uint `json:"__YGOGame__,string"`
@@ -23,8 +26,9 @@ type dataUniq struct {
 
 func NewRoom() *Room {
 	r := Room{
-		room:     misc.NewRooms("YGORooms"),
-		gameList: make(map[uint]*ygo.YGO),
+		room:      misc.NewRooms("YGORooms"),
+		gameList:  make(map[uint]*ygo.YGO),
+		saveQuery: make(map[string]*rego.EncodeBytes),
 	}
 	go r.Games()
 	return &r
@@ -52,8 +56,7 @@ func (r *Room) YGOGame(sesss ...*agent.Session) {
 	}
 	game := ygo.NewYGO(room)
 	r.gameList[uniq] = game
-	game.CardVer = cards.CardBag_test
-	cards.CardBag_test.Find("龙")
+	game.CardVer = cardBag
 	game.Loop()
 }
 
@@ -65,6 +68,28 @@ func (r *Room) Games() {
 			go r.YGOGame(r.room.GroupFromSize(2)...)
 		}
 	}
+}
+
+// 匹配游戏
+func (r *Room) CardFind(args agent.Request, reply *agent.Response) error {
+	//var d struct {
+	//	Language string
+	//}
+
+	var gr struct {
+		Query string `json:"query"`
+	}
+	args.Request.DeJson(&gr)
+	b := r.saveQuery[gr.Query]
+	if b == nil {
+		b = rego.EnJson(cardBag.Find(gr.Query))
+		r.saveQuery[gr.Query] = b
+	}
+
+	//args.Session.Data.DeJson(&d)
+	//Trans := i18n.TranslationsForLocale(d.Language)
+	reply.Response = b
+	return nil
 }
 
 // 匹配游戏
@@ -189,7 +214,7 @@ func (r *Room) GameSetDeck(args agent.Request, reply *agent.Response) error {
 		Language string
 	}
 	args.Session.Data.DeJson(&d)
-	Trans := i18n.TranslationsForLocale(d.Language)
+	//Trans := i18n.TranslationsForLocale(d.Language)
 
 	gr := proto.Deck{}
 	args.Request.DeJson(&gr)
@@ -199,20 +224,9 @@ func (r *Room) GameSetDeck(args agent.Request, reply *agent.Response) error {
 	//return errors.New(Trans.Value("chan.nologin"))
 	//}
 	//gr.UserId = id
+
+	SetDeck(id, gr.Name, gr)
 	gr.UpdatedAt = time.Now()
-
-	var odeck proto.Deck
-	if err := db.Where(&proto.Deck{UserId: id, Name: gr.Name}).First(&odeck).Error; err != nil {
-		gr.CreatedAt = time.Now()
-		db.Model(&odeck).Save(&gr)
-	} else {
-		if err := db.Where(&proto.CardInMain{DeckId: odeck.Id}).Delete(&proto.CardInMain{}).Error; err != nil {
-			return errors.New(Trans.Value("chan.decksnotexists"))
-		}
-		db.Model(&odeck).Update(&gr)
-	}
-
-	rego.INFO(gr)
 
 	return nil
 }

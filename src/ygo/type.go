@@ -134,10 +134,10 @@ const (
 type LS_TYPE uint32
 
 const (
-	LS_None    = LS_TYPE(1 << (32 - 1 - iota))
-	LS_Normal  //通常
-	LS_Advance //上级
-	LS_Dual
+	LS_None     = LS_TYPE(1 << (32 - 1 - iota))
+	LS_Normal   // 通常
+	LS_Advance  // 上级
+	LS_Dual     // 二重
 	LS_Flip     // 翻转
 	LS_Special  // 特殊
 	LS_Fusion   // 融合
@@ -151,13 +151,13 @@ const (
 type LP_TYPE uint32
 
 const (
-	LP_None = LP_TYPE(iota)
-	LP_Draw
-	LP_Standby
-	LP_Main1
-	LP_Battle
-	LP_Main2
-	LP_End
-	LP_Damage
-	LP_DamageCal
+	LP_None      = LP_TYPE(iota)
+	LP_Draw      // 抽牌
+	LP_Standby   // 预备
+	LP_Main1     // 主阶段1
+	LP_Battle    // 战斗
+	LP_Main2     // 主阶段1
+	LP_End       // 结束
+	LP_Damage    // 战斗
+	LP_DamageCal // 战斗计算
 )

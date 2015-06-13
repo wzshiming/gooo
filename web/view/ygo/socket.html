@@ -4,16 +4,20 @@ function WsSelectable(uniq,method) {
     ws.SendMsg({{ key "Chan.Room.GameCardActionSelectable" }},{uniq:uniq,method:method} ,null);
 }
 
-function WsGameRegister(i) {
-    ws.SendMsg({{ key "Chan.Room.GameRegister" }},{} ,i);
+function WsGameRegister(f) {
+    ws.SendMsg({{ key "Chan.Room.GameRegister" }},{} ,f);
 }
 
-function WsGameGetDeck(i) {
-    ws.SendMsg({{ key "Chan.Room.GameGetDeck" }},{} ,i);
+function WsGameGetDeck(f) {
+    ws.SendMsg({{ key "Chan.Room.GameGetDeck" }},{} ,f);
 }
 
 function WsGameSetDeck(args) {
     ws.SendMsg({{ key "Chan.Room.GameSetDeck" }},args ,null);
+}
+
+function WsCardFind(args,f) {
+    ws.SendMsg({{ key "Chan.Room.CardFind" }},args ,f);
 }
 
 </script>

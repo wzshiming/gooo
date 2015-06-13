@@ -41,11 +41,11 @@ type Player struct {
 	Field   *Cards //场地卡 5
 
 	// 卡牌事件
-	ToExclude  *Effects // 排除场外
-	ToCemetery *Effects // 移动到墓地
-	ToSdi      *Effects // 返回手牌
-	ToDeck     *Effects // 返回卡组
-	Sustains   *Effects // 永续效果
+	ToRemoved *Effects // 排除场外
+	ToGrave   *Effects // 移动到墓地
+	ToHand    *Effects // 返回手牌
+	ToDeck    *Effects // 返回卡组
+	Sustains  *Effects // 永续效果
 
 	// 怪兽卡事件
 	MonsterInitiative    *Effects // 怪兽卡发动效果
@@ -56,6 +56,10 @@ type Player struct {
 	MonsterSummonCover   *Effects // 覆盖召唤
 	MonsterSummonFlip    *Effects // 反转召唤
 	MonsterSummonSpecial *Effects // 特殊召唤
+
+	EventStandbyPre *Effects // 准备阶段之前
+	EventStandbySuf *Effects // 准备阶段之后
+	EventDrawSuf    *Effects // 抽牌之后
 
 	// 魔法卡陷阱卡 事件
 	MagicAndTrapInitiative *Effects // 魔法卡陷阱卡发动效果
@@ -87,17 +91,17 @@ func NewPlayer() *Player {
 	}
 
 	player.Deck.SetJoin(func(c *Card) {
-		c.SetLE(LE_FaceDown)
+		c.FaceDownAttack()
 	})
 	player.Extra.SetJoin(func(c *Card) {
-		c.SetLE(LE_FaceUpAttack)
+		c.FaceUpAttack()
 	})
 	player.Hand.SetJoin(func(c *Card) {
 		player.Call(SetFront(c))
 		player.Call(ExprCard(c, LE_FaceUpAttack))
 	})
 	player.Grave.SetJoin(func(c *Card) {
-		c.SetLE(LE_FaceUpAttack)
+		c.FaceUpAttack()
 	})
 	return player
 }
@@ -114,6 +118,10 @@ func (pl *Player) ForEachPlayer(fun func(p *Player)) {
 	pl.game.ForEachPlayer(fun)
 }
 
+func (pl *Player) GetRound() int {
+	return pl.RoundSize
+}
+
 func (pl *Player) round() (err error) {
 	defer func() {
 		if x := recover(); x != nil {
@@ -123,7 +131,7 @@ func (pl *Player) round() (err error) {
 	}()
 	pl.RoundSize++
 	pl.CallAll("flagName", map[string]interface{}{
-		"round":  pl.RoundSize,
+		"round":  pl.GetRound(),
 		"player": pl.Index,
 	})
 
@@ -197,14 +205,7 @@ func (pl *Player) main() {
 				pl.Call("finishSelect", map[string]interface{}{})
 			}
 		} else if t := pl.Mzone.ExistForUniq(p.Uniq); t != nil {
-			if t.Le == LE_FaceDownDefense {
-				t.SetLE(LE_FaceUpDefense)
-				pl.CallAll(SetFront(t))
-			} else if t.Le == LE_FaceUpDefense {
-				t.SetLE(LE_FaceUpAttack)
-			} else if t.Le == LE_FaceUpAttack {
-				t.SetLE(LE_FaceUpDefense)
-			}
+			t.ChangeExpression()
 		}
 	}
 	pl.CallAll("flashCards", map[string]interface{}{
@@ -220,24 +221,27 @@ func (pl *Player) battle() {
 		i := pl.SelectWill()
 		if i.Uniq != 0 {
 			t1 := pl.Mzone.ExistForUniq(i.Uniq)
-			if t1 == nil {
+			if t1 == nil || !t1.IsFaceUpAttack() {
+				pl.Call(Message("请选择怪兽区正面攻击表示的怪兽"))
 				continue
 			}
-			if t1.Le != LE_FaceUpAttack {
+
+			if !t1.IsCanAttack() {
+				pl.Call(Message("当前怪兽不能攻击"))
 				continue
 			}
+
 			pl.Call(Message("选择要攻击的目标"))
 			j := pl.SelectWill()
 			if j.Uniq != 0 {
 				t2 := pl.game.GetCard(j.Uniq)
-				if t2 != t2.Owner.Mzone.ExistForUniq(j.Uniq) {
-					continue
-				}
-				if t1.Owner != t2.Owner {
+				if pl.GetTarget().Mzone.IsExistCard(t2) {
 					t1.Battle(t2)
+				} else {
+					pl.Call(Message("请选择对方怪兽区的怪兽"))
 				}
 			}
-			pl.Call(Message("战斗阶段"))
+			//pl.Call(Message("战斗阶段"))
 		} else {
 			break
 		}
@@ -250,7 +254,8 @@ func (pl *Player) battle() {
 
 func (pl *Player) end() {
 	if i := pl.Hand.Len() - pl.MaxSdi; i > 0 {
-		pl.SelectTo(i, pl.Hand, pl.Grave, "选择丢弃的手牌")
+		pl.Call(Message("选择丢弃的手牌"))
+		pl.SelectFunc(i, pl.Hand, ToGrave)
 	}
 	select {
 	case <-time.After(time.Second / 10):
@@ -277,9 +282,9 @@ func (pl *Player) ChangeHp(i int) {
 
 func (pl *Player) GetTarget() *Player {
 	if pl.Index == 0 {
-		return pl.game.Players[1]
+		return pl.game.GetPlayerForIndex(1)
 	}
-	return pl.game.Players[0]
+	return pl.game.GetPlayerForIndex(0)
 }
 
 func (pl *Player) ActionShuffle() {
@@ -334,11 +339,10 @@ func (pl *Player) SelectMust(cp *Cards) (t *Card) {
 	return
 }
 
-func (pl *Player) SelectTo(size int, cp *Cards, te *Cards, info string) {
-	pl.Call(Message(info))
+func (pl *Player) SelectFunc(size int, cp *Cards, fun func(c *Card) bool) {
 	for i := 0; i != size; i++ {
 		t := pl.SelectMust(cp)
-		te.EndPush(t)
+		fun(t)
 	}
 	pl.CallAll("flashCards", map[string]interface{}{
 		"master": pl.Index,

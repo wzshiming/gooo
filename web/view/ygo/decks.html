@@ -20,19 +20,26 @@ var Decks = function(scene) {
     this.scene.Selectable.register(function(uniq) {
         t.ii += 1
         var i = t.scene.AllCard[uniq];
-        if (i.hold == t.deck) {
-            i.remove()
-            t.deck.flash();
-        } else if (i.hold == t.heap) {
-            t.deck.push(new Card(t.scene, "s" + t.ii, null, i.id, 0));
-        }
+        if (i.hold == t.heap) {
+            var c = parseInt(i.id/10000);
+            var ca = new Card(t.scene, "s" + t.ii, null, i.id, 0);
+            if(c >= 20 || c <= 12) {
+                t.deck.push(ca);
+            } else {
+                t.extra.push(ca);
+            }
+        }else if (i.hold == t.deck || i.hold == t.extra) {
+            var c = i.hold;
+            i.remove();
+            c.flash();
+        } 
         //WsSelectable(uniq, 0);
     })
     var c = new Desk(this.scene, 0)
 
     this.heap = new Cards(c.neaten(0.5, -4))
     this.deck = new Cards(c.neaten(0.5, 2))
-
+    this.extra = new Cards(c.neaten(0.5, 8))
     var i = 0
 
         //清空else 里的元素 添加 左右按钮
@@ -41,8 +48,22 @@ var Decks = function(scene) {
     $('#else').append('<div id="decks_r" style="position:absolute;right:100px;top:100px;"><button type="submit" class="btn btn-default btn-block">></button></div>');
     $('#else').append('<div id="decks_s" style="position:absolute;right:100px;top:500px;"><button type="submit" class="btn btn-default btn-block">保存</button></div>');
     $('#else').append('<div id="decks_g" style="position:absolute;right:100px;top:700px;"><button type="submit" class="btn btn-default btn-block">获得</button></div>');
+    $('#else').append('<div id="search"><input id="query" type="text" value="龙"><button id="button">搜索</button></div>')
     $('#else').show();
-    // 左右按钮事件
+    // 按钮事件
+    // 
+    $('#search').click(function(event) {
+        WsCardFind({query:$('#query')[0].value},function(data) {
+            //console.dir(data)
+            t.heap.clear()
+
+            for (var i = 0; i != data.length; i++) {
+                var k = data[i]
+                var c = new Card(t.scene, k, null, k, 0);
+                t.heap.push(c)
+            }
+        })
+    });
     $('#decks_l').click(function(event) {
         i -= 1
         t.desktop(i, 50)
@@ -53,13 +74,11 @@ var Decks = function(scene) {
     });
     $('#decks_s').click(function(event) {
         var main = {}
-
         for (var i in t.deck.deck) {
             var id = t.deck.deck[i].id
             main[id] = main[id] || 0
             main[id] += 1
         }
-
         var mainr = []
         for (var i in main) {
             mainr.push({
@@ -68,8 +87,23 @@ var Decks = function(scene) {
             })
         }
 
+        var extra = {}
+        for (var i in t.extra.deck) {
+            var id = t.extra.deck[i].id
+            extra[id] = extra[id] || 0
+            extra[id] += 1
+        }
+        var extrar = []
+        for (var i in extra) {
+            extrar.push({
+                id: parseInt(i),
+                size: extra[i]
+            })
+        }
+
         WsGameSetDeck({
             main: mainr,
+            extra: extrar,
             name: "none"
         })
     });
@@ -77,14 +111,24 @@ var Decks = function(scene) {
         WsGameGetDeck(function(i) {
             console.dir(i)
             t.deck.clear()
+            t.extra.clear()
             var c = i[0].main
-            console.dir(c)
             for (var z = 0; z != c.length; z++) {
                 var ob = c[z]
                 for (var x = 0; x != ob.size; x++) {
                     t.ii += 1
                     var d = new Card(t.scene, "s" + t.ii, null, ob.id, 0);
                     t.deck.push(d)
+                }
+            }
+
+            c = i[0].extra
+            for (var z = 0; z != c.length; z++) {
+                var ob = c[z]
+                for (var x = 0; x != ob.size; x++) {
+                    t.ii += 1
+                    var d = new Card(t.scene, "s" + t.ii, null, ob.id, 0);
+                    t.extra.push(d)
                 }
             }
 

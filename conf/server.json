@@ -36,7 +36,7 @@
         },
         "Decks": {
             "dialect": "sqlite3",
-            "source": "../db/deck.db"
+            "source": "../db/user.db"
         }
     }
 }

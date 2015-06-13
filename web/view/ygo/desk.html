@@ -53,7 +53,8 @@ Desk.prototype.flag = function() {
         var object = new THREE.Object3D();
         var rotation = new THREE.Matrix4().makeRotationZ(a);
         object.matrix.makeTranslation(
-            ((x + i) * 200) - 1000, -(y * 150),
+            ((x + i) * 200) - 1000, 
+            -(y * 150),
             0);
         object.applyMatrix(rotation);
         return object;
@@ -108,11 +109,13 @@ Desk.prototype.Mid = function(x, y, a) {
         var object = new THREE.Object3D();
         if (i % 2 == 0) {
             object.matrix.makeTranslation(
-                ((x + i) * 130) - 1300, -(y * 130),
+                ((x + i) * 130) - 1300, 
+                -(y * 130),
                 1);
         } else {
             object.matrix.makeTranslation(
-                ((x - i - 1) * 130) - 1300, -(y * 130),
+                ((x - i - 1) * 130) - 1300, 
+                -(y * 130),
                 1);
         }
         object.applyMatrix(rotation)
@@ -125,7 +128,8 @@ Desk.prototype.Pile = function(x, y, a) {
     return function(i, l) {
         var object = new THREE.Object3D();
         object.matrix.makeTranslation(
-            (x * 130) - 1300, -(y * 130),
+            (x * 130) - 1300, 
+            -(y * 130),
             i + 1);
         object.applyMatrix(rotation)
         return object
@@ -137,7 +141,8 @@ Desk.prototype.Tile = function(x, y, a) {
     return function(i, l) {
         var object = new THREE.Object3D();
         object.matrix.makeTranslation(
-            ((x + i) * 130) - 1300, -(y * 130),
+            ((x + i) * 130) - 1300, 
+            -(y * 130),
             1);
         object.applyMatrix(rotation)
         return object
@@ -148,7 +153,8 @@ Desk.prototype.Matr = function(x, y, a) {
     return function(i, l) {
         var object = new THREE.Object3D();
         object.matrix.makeTranslation(
-            ((x + i % 10) * 200) - 1000, -((y + parseInt(i / 10)) * 250),
+            ((x + parseInt(i / 5)) * 200) - 1000, 
+            -((y + i % 5) * 250),
             1);
         object.applyMatrix(rotation)
         return object

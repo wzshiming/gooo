@@ -48,7 +48,7 @@
 	ws.event = function(i, c1, c2, c3, msg){
 		var n = c1 + "," + c2 + "," +c3;
 		var n2 = i+","+n;
-		if((typeof msg.error == "string") && msg.error != ""){
+		if(msg != null && (typeof msg.error == "string") && msg.error != ""){
 			MsgErr(msg.error);
 		}else if(typeof this.Callback[n2] == "function"){
 			var t = this.Callback[n2](msg);
