@@ -1,8 +1,6 @@
 package ygo
 
 import (
-	"errors"
-	"fmt"
 	"rego"
 	"rego/agent"
 	"time"
@@ -11,9 +9,9 @@ import (
 type Player struct {
 	//
 	MsgChan
-	Name    string         //用户名
-	Session *agent.Session //会话
-	//Selec   chan proto.SelectableRequest
+	Name    string         // 用户名
+	Session *agent.Session // 会话
+
 	// 规则属性
 	Index    int           // 玩家索引
 	game     *YGO          // 属于游戏
@@ -21,24 +19,25 @@ type Player struct {
 	WaitTime time.Duration // 每次动作等待的时间
 
 	// 基础属性
-	Hp        int     // 生命值
-	Camp      int     // 阵营
-	RoundSize int     // 回合数
-	DrawSize  uint    // 抽卡数
-	MaxHp     uint    // 最大生命值
-	MaxSdi    int     // 最大手牌
-	Phases    LP_TYPE //阶段
+	Hp         int     // 生命值
+	Camp       int     // 阵营
+	RoundSize  int     // 回合数
+	DrawSize   uint    // 抽卡数
+	MaxHp      uint    // 最大生命值
+	MaxSdi     int     // 最大手牌
+	Phases     LP_TYPE // 阶段
+	PhasesNext LP_TYPE // 下一阶段
 
 	// 卡牌区
-	Deck    *Cards //卡组 40 ~ 60
-	Hand    *Cards //手牌
-	Extra   *Cards //额外卡组 <= 15 融合怪物 同调怪物 超量怪物
-	Side    *Cards //副卡组 <= 15
-	Removed *Cards //排除卡
-	Grave   *Cards //墓地
-	Mzone   *Cards //怪物卡区 5
-	Szone   *Cards //魔法卡陷阱卡区 5
-	Field   *Cards //场地卡 5
+	Deck    *Cards // 卡组 40 ~ 60
+	Hand    *Cards // 手牌
+	Extra   *Cards // 额外卡组 <= 15 融合怪物 同调怪物 超量怪物
+	Side    *Cards // 副卡组 <= 15
+	Removed *Cards // 排除卡
+	Grave   *Cards // 墓地
+	Mzone   *Cards // 怪物卡区 5
+	Szone   *Cards // 魔法卡陷阱卡区 5
+	Field   *Cards // 场地卡
 
 	// 卡牌事件
 	ToRemoved *Effects // 排除场外
@@ -57,9 +56,11 @@ type Player struct {
 	MonsterSummonFlip    *Effects // 反转召唤
 	MonsterSummonSpecial *Effects // 特殊召唤
 
+	EventDrawSuf    *Effects // 抽牌之后
 	EventStandbyPre *Effects // 准备阶段之前
 	EventStandbySuf *Effects // 准备阶段之后
-	EventDrawSuf    *Effects // 抽牌之后
+	EventMainPre    *Effects // 准备阶段之前
+	EventMainSuf    *Effects // 准备阶段之后
 
 	// 魔法卡陷阱卡 事件
 	MagicAndTrapInitiative *Effects // 魔法卡陷阱卡发动效果
@@ -123,63 +124,85 @@ func (pl *Player) GetRound() int {
 }
 
 func (pl *Player) round() (err error) {
-	defer func() {
-		if x := recover(); x != nil {
-			rego.DebugStack()
-			err = errors.New(fmt.Sprintln(x))
-		}
-	}()
-	pl.RoundSize++
 	pl.CallAll("flagName", map[string]interface{}{
 		"round":  pl.GetRound(),
 		"player": pl.Index,
 	})
 
-	pl.Phases = LP_Draw
-	pl.draw()
+	pl.draw(LP_Draw)
 
-	pl.Phases = LP_Standby
-	pl.standby()
+	pl.standby(LP_Standby)
 
-	pl.Phases = LP_Main1
-	pl.main()
+	if pl.main(LP_Main1) {
+		pl.ToBattle()
+	}
 
-	pl.Phases = LP_Battle
-	pl.battle()
+	if pl.PhasesNext == LP_Battle {
+		if pl.battle(LP_Battle) {
+			pl.ToMain()
+		}
+	}
 
-	pl.Phases = LP_Main2
-	pl.main()
+	if pl.PhasesNext == LP_Main2 {
+		pl.main(LP_Main2)
+		pl.ToEnd()
+	}
 
-	pl.Phases = LP_End
-	pl.end()
+	pl.end(LP_End)
+	pl.RoundSize++
 	return
 }
 
-func (pl *Player) draw() {
+func (pl *Player) ToBattle() {
+	pl.PhasesNext = LP_Battle
+}
+
+func (pl *Player) ToMain() {
+	pl.PhasesNext = LP_Main2
+}
+
+func (pl *Player) ToEnd() {
+	pl.PhasesNext = LP_End
+}
+
+func (pl *Player) draw(lp LP_TYPE) bool {
+	defer func() {
+		if x := recover(); x != nil {
+			rego.DebugStack()
+		}
+	}()
+	pl.Phases = lp
 	pl.CallAll(flashPhases(pl))
 	pl.Call(Message("抽牌阶段"))
 	if pl.Deck.Len() == 0 {
 		pl.Fail()
-		return
+		return false
 	}
 	pl.ActionDraw(1)
-	select {
-	case <-time.After(time.Second / 10):
-		return
-	}
+
+	return true
 }
 
-func (pl *Player) standby() {
+func (pl *Player) standby(lp LP_TYPE) bool {
+	defer func() {
+		if x := recover(); x != nil {
+			rego.DebugStack()
+		}
+	}()
+	pl.Phases = lp
 	pl.CallAll(flashPhases(pl))
 	pl.Call(Message("准备阶段"))
-	select {
-	case <-time.After(time.Second / 10):
-		return
-	}
+
+	return true
 }
 
-func (pl *Player) main() {
-
+func (pl *Player) main(lp LP_TYPE) bool {
+	defer func() {
+		if x := recover(); x != nil {
+			rego.DebugStack()
+		}
+	}()
+	pl.Phases = lp
 	pl.Call(Message("主要阶段"))
 	pl.ClearCode()
 
@@ -206,20 +229,30 @@ func (pl *Player) main() {
 			}
 		} else if t := pl.Mzone.ExistForUniq(p.Uniq); t != nil {
 			t.ChangeExpression()
+		} else if t := pl.Szone.ExistForUniq(p.Uniq); t != nil {
+			t.EffectInitiative()
+		} else {
+			pl.Call(Message("非法目标"))
 		}
 	}
 	pl.CallAll("flashCards", map[string]interface{}{
 		"master": pl.Index,
 		"pos":    "hand",
 	})
+	return true
 }
 
-func (pl *Player) battle() {
+func (pl *Player) battle(lp LP_TYPE) bool {
+	defer func() {
+		if x := recover(); x != nil {
+			rego.DebugStack()
+		}
+	}()
+	pl.Phases = lp
 	pl.Call(Message("战斗阶段"))
 	pl.ClearCode()
 	for {
-		i := pl.SelectWill()
-		if i.Uniq != 0 {
+		if i := pl.SelectWill(); i.Uniq != 0 {
 			t1 := pl.Mzone.ExistForUniq(i.Uniq)
 			if t1 == nil || !t1.IsFaceUpAttack() {
 				pl.Call(Message("请选择怪兽区正面攻击表示的怪兽"))
@@ -246,21 +279,25 @@ func (pl *Player) battle() {
 			break
 		}
 	}
-	select {
-	case <-time.After(time.Second / 10):
-		return
-	}
+	//	select {
+	//	case <-time.After(time.Second / 10):
+	//	}
+	return true
 }
 
-func (pl *Player) end() {
+func (pl *Player) end(lp LP_TYPE) bool {
+	defer func() {
+		if x := recover(); x != nil {
+			rego.DebugStack()
+		}
+	}()
+	pl.Phases = lp
 	if i := pl.Hand.Len() - pl.MaxSdi; i > 0 {
 		pl.Call(Message("选择丢弃的手牌"))
 		pl.SelectFunc(i, pl.Hand, ToGrave)
 	}
-	select {
-	case <-time.After(time.Second / 10):
-	}
 	pl.Call(Message("对方回合"))
+	return true
 }
 
 func (pl *Player) init() {

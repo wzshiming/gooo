@@ -2,6 +2,13 @@ package ygo
 
 type Action func(ca *Card) bool
 
+func (ac Action) IsExits() bool {
+	if ac != nil {
+		return true
+	}
+	return false
+}
+
 func (ac Action) Call(ca *Card) bool {
 	if ac != nil {
 		return ac(ca)
@@ -24,25 +31,35 @@ func (ac *Effect) Call(ca *Card) bool {
 }
 
 type Effects struct {
-	Events map[*Card]Effect
-	Name   string
+	events map[*Card]Effect
+	name   string
 }
 
 func NewEffects(name string) *Effects {
 	r := Effects{
-		Events: make(map[*Card]Effect),
-		Name:   name,
+		events: make(map[*Card]Effect),
+		name:   name,
 	}
 	return &r
 }
 
+func (ev *Effects) GetNmae() string {
+	return ev.name
+}
+
+func (ev *Effects) Call() {
+	for k, v := range ev.events {
+		v.Call(k)
+	}
+}
+
 func (ev *Effects) Register(card *Card, fun Action) {
-	ev.Events[card] = Effect{
+	ev.events[card] = Effect{
 		Owner: card,
 		Place: ev,
 		Event: fun,
 	}
 }
 func (ev *Effects) Unregister(card *Card) {
-	delete(ev.Events, card)
+	delete(ev.events, card)
 }

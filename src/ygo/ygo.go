@@ -81,6 +81,7 @@ func (yg *YGO) Loop() {
 		yg.Survival[ca] = yg.Survival[ca] + 1
 		yg.Players[v].Index = k
 		yg.Players[v].game = yg
+		yg.Players[v].RoundSize = 1
 		yg.Players[v].Name = fmt.Sprintf("player %d", k)
 	}
 

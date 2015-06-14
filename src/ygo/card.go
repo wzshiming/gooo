@@ -8,14 +8,8 @@ type CardOriginal struct {
 	IsValid  bool    // 是否有效
 	Id       uint    // 卡牌id
 	Name     string  // 名字
-	NameCn   string  // 中文名字
-	NameEn   string  // 英文名字
-	NameJp   string  // 日文名字
-	Describe string  // 描述
 	Password string  // 卡牌密码
 	Lc       LC_TYPE // 卡牌类型
-	// 主动效果
-	Initiative Action // 发动效果
 
 	// 怪兽卡 属性
 	La      LA_TYPE // 怪兽属性
@@ -24,6 +18,7 @@ type CardOriginal struct {
 	Attack  int     // 攻击力
 	Defense int     // 防御力
 
+	Initialize Action // 初始化
 	// 战斗 事件
 	// 攻击方
 	DeclarationPre Action // 攻击宣言之前
@@ -41,7 +36,8 @@ type CardOriginal struct {
 	BearResultPre      Action // 被结果执行之前
 	BearResultSuf      Action // 被结果执行之后
 
-	//移动位置 事件
+	// 主动效果
+	Initiative    Action // 我方主阶段发动
 	Removed       Action // 移除
 	Freedom       Action // 解放 送去墓地
 	Destroy       Action // 战斗破坏 送去墓地
@@ -108,11 +104,14 @@ func (ca *Card) Battle(tar *Card) bool {
 	plt := tar.GetSummoner()
 
 	f := tar.IsFaceDown()
+	b := tar.IsAttack()
 
 	//战斗宣言
 	ca.original.DeclarationPre.Call(ca)
 	tar.original.BearDeclarationPre.Call(tar)
-	tar.FaceUp()
+	if f {
+		tar.FaceUp()
+	}
 	ca.original.DeclarationSuf.Call(ca)
 	tar.original.BearDeclarationSuf.Call(tar)
 
@@ -120,28 +119,27 @@ func (ca *Card) Battle(tar *Card) bool {
 	ca.original.DamageCalPre.Call(ca)
 	tar.original.BearDamageCalPre.Call(tar)
 	var t int
-	if tar.IsAttack() {
+	if b {
 		t = ca.GetAttack() - tar.GetAttack()
 	} else {
 		t = ca.GetAttack() - tar.GetDefense()
 	}
+	ca.SetNotCanAttack()
+	ca.SetNotCanChange()
 	ca.original.DamageCalPre.Call(ca)
 	tar.original.BearDamageCalPre.Call(tar)
 
 	//结果执行
 	ca.original.ResultPre.Call(ca)
 	tar.original.BearResultPre.Call(tar)
-	if tar.IsAttack() {
+	if b {
 		if t > 0 {
-			pl.Call(Message("攻击力高于对方"))
 			plt.ChangeHp(-t)
 			tar.ToGrave()
 		} else if t < 0 {
-			pl.Call(Message("攻击力低于对方"))
 			pl.ChangeHp(t)
-			ca.ToGrave() // ？？？？？？？？？？？攻击方 不会送往墓地
+			ca.ToGrave()
 		} else {
-			pl.Call(Message("攻击力与对方相同"))
 			tar.ToGrave()
 			ca.ToGrave()
 		}
@@ -158,23 +156,30 @@ func (ca *Card) Battle(tar *Card) bool {
 	ca.original.ResultSuf.Call(ca)
 	tar.original.BearResultSuf.Call(tar)
 
-	ca.SetNotCanAttack()
-	ca.SetNotCanChange()
 	return true
 }
 
 // 执行翻转效果
 func (ca *Card) EffectFlip() bool {
-	pl := ca.GetSummoner()
-	pl.Call(Message("发动翻转效果"))
-	return ca.original.Flip.Call(ca)
+	if ca.original.Flip.Call(ca) {
+		pl := ca.GetSummoner()
+		pl.Call(Message("发动翻转效果"))
+		return true
+	}
+	return false
 }
 
 // 发动主动效果
 func (ca *Card) EffectInitiative() bool {
-	pl := ca.GetSummoner()
-	pl.Call(Message("发动主动效果"))
-	return ca.original.Initiative.Call(ca)
+	if ca.original.Initiative.IsExits() {
+		ca.FaceUp()
+		if ca.original.Initiative.Call(ca) {
+			pl := ca.GetSummoner()
+			pl.Call(Message("发动主动效果"))
+			return true
+		}
+	}
+	return false
 }
 
 // 获得召唤者
@@ -370,12 +375,18 @@ func (ca *Card) Call() {
 
 // 放置
 func (ca *Card) Cover() {
-	if (ca.GetType() & LC_MagicAndTrap) != 0 {
+	if (ca.GetType() & LC_PlaceMagic) != 0 { // 场地卡
+		if ca.GetSummoner().Field.Len() != 0 {
+			ca.GetSummoner().Field.ForEach(ToGrave)
+			ca.ToField()
+			ca.FaceDownAttack()
+		}
+	} else if (ca.GetType() & LC_MagicAndTrap) != 0 { // 魔陷
 		if ca.GetSummoner().Szone.Len() < 5 {
 			ca.ToSzone()
 			ca.FaceDownAttack()
 		}
-	} else if (ca.GetType() & LC_Monster) != 0 {
+	} else if (ca.GetType() & LC_Monster) != 0 { // 怪兽
 		if ca.Summon() {
 			if ca.GetSummoner().Mzone.Len() < 5 {
 				ca.FaceDownDefense()
@@ -388,9 +399,19 @@ func (ca *Card) Cover() {
 
 // 手牌发动
 func (ca *Card) Use() {
-	if (ca.GetType() & LC_Magic) != 0 {
-		ca.original.Initiative.Call(ca)
-		ca.ToGrave()
+	if (ca.GetType() & LC_PlaceMagic) != 0 { // 场地卡
+		if ca.GetSummoner().Field.Len() != 0 {
+			ca.GetSummoner().Field.ForEach(ToGrave)
+			ca.ToField()
+			ca.FaceUpAttack()
+			ca.EffectInitiative()
+		}
+	} else if (ca.GetType() & LC_Magic) != 0 { // 魔陷
+		if ca.GetSummoner().Szone.Len() < 5 {
+			ca.ToSzone()
+			ca.FaceUpAttack()
+			ca.EffectInitiative()
+		}
 	}
 }
 
@@ -591,6 +612,7 @@ func (ca *Card) ToGrave() bool {
 	ca.GetOwner().Grave.EndPush(ca)
 	return true
 }
+
 func ToGrave(ca *Card) bool {
 	return ca.ToGrave()
 }

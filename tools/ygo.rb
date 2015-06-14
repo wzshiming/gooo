@@ -131,16 +131,10 @@ func original(cardBag *ygo.CardVersion) {
         if v["卡片种类"] == "通常怪兽"
             print "
     co = &ygo.CardOriginal{
-        /*  
-        #{v["调整"]}
-        #{v["使用限制"]}
-        #{v["罕见度"]}
-        #{v["卡包"]}
-        */
+        /*#{_puts v}*/
         Id:       #{v["id"]},
         Password: \"#{v["卡片密码"]}\",
         Name:     \"#{v["中文名"]}\", // \"#{v["英文名"]}\"  \"#{v["日文名"]}\"
-        Describe: \"#{v["效果"].gsub!("$\n","")}\",
         Lc:       #{lc(v["卡片种类"])}, // #{v["卡片种类"]}
         Level:    #{v["星级"]},
         La:       #{la(v["属性"])}, // #{v["属性"]}
@@ -185,16 +179,10 @@ func elses#{j}(cardBag *ygo.CardVersion) {
         
             print "
     co = &ygo.CardOriginal{
-        /*  
-        #{v["调整"]}
-        #{v["使用限制"]}
-        #{v["罕见度"]}
-        #{v["卡包"]}
-        */
+        /*#{_puts v}*/
         Id:       #{v["id"]},
         Password: \"#{v["卡片密码"]}\",
         Name:     \"#{v["中文名"]}\", // \"#{v["英文名"]}\"  \"#{v["日文名"]}\"
-        Describe: \"#{v["效果"].gsub!("$\n","")}\",
         Lc:       #{lc(v["卡片种类"])}, // #{v["卡片种类"]}
         Level:     #{ if v["星级"] != nil then v["星级"] else 0 end},
         La:       #{la(v["属性"])}, // #{v["属性"]}
@@ -208,9 +196,6 @@ func elses#{j}(cardBag *ygo.CardVersion) {
         //Destroy:       func(ca *Card)) {}, // 战斗破坏 送去墓地
         //Flip:          func(ca *Card)) {}, // 反转
         Summon:          ygo.SuperiorCall, // 召唤
-        //SummonCover:   func(ca *Card)) {}, // 覆盖召唤
-        //SummonFlip:    func(ca *Card)) {}, // 反转召唤
-        //SummonSpecial: func(ca *Card)) {}, // 特殊召唤
         IsValid:       false,
 }
     cardBag.Register(co)
@@ -269,6 +254,6 @@ if $0 == __FILE__
   allcard = JSON.parse File.read("card.json").to_utf8!
   #types={}
   #卡片种类
-  OrdinaryMonster allcard
+  elses allcard
 
 end

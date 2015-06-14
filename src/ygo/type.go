@@ -156,7 +156,7 @@ const (
 	LP_Standby   // 预备
 	LP_Main1     // 主阶段1
 	LP_Battle    // 战斗
-	LP_Main2     // 主阶段1
+	LP_Main2     // 主阶段2
 	LP_End       // 结束
 	LP_Damage    // 战斗
 	LP_DamageCal // 战斗计算
