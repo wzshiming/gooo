@@ -3,8 +3,8 @@ package main
 import (
 	//"encoding/base64"
 	"errors"
+	"github.com/wzshiming/rego"
 	"net/http"
-	"rego"
 	"time"
 )
 

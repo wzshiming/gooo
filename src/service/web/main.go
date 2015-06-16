@@ -1,10 +1,10 @@
 package main
 
 import (
-	"rego/agent"
-	"rego/agent/defaul"
-	"rego/cfg"
-	"rego/server"
+	"github.com/wzshiming/rego/agent"
+	"github.com/wzshiming/rego/agent/defaul"
+	"github.com/wzshiming/rego/cfg"
+	"github.com/wzshiming/rego/server"
 )
 
 var ser *server.Server

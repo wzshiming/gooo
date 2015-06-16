@@ -1,7 +1,7 @@
 package proto
 
 import (
-	"rego/dbs"
+	"github.com/wzshiming/rego/dbs"
 	"time"
 )
 

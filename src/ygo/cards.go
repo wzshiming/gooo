@@ -1,7 +1,7 @@
 package ygo
 
 import (
-	"rego"
+	"github.com/wzshiming/rego"
 )
 
 type Cards struct {

@@ -24,15 +24,15 @@ all: clean info test build clean_pkg run
 build: number_build build_ number_build_record 
 
 build_: shutdown
-	@$(GO) install -v rego/...
+	@$(GO) install -v github.com/wzshiming/rego/...
 	@$(GO) install -v service/...
 
 test:
-	@$(GO) test rego/...
+	@$(GO) test github.com/wzshiming/rego/...
 	@$(GO) test service/...
 
 test_v:
-	@$(GO) test -v rego/...
+	@$(GO) test -v github.com/wzshiming/rego/...
 	@$(GO) test -v service/...
 
 run: shutdown
@@ -70,6 +70,7 @@ get: get_github.com_go-sql-driver_mysql\
 	 get_github.com_martini-contrib_sessions\
 	 get_github.com_gorilla_websocket\
 	 get_github.com_wzshiming_ffmt\
+	 get_github.com_wzshiming_rego\
 	 get_github.com_mitchellh_colorstring
 	
 get_%:
@@ -82,4 +83,4 @@ get_else:
 	@$(GIT) clone https://github.com/mrdoob/three.js temp/three.js
 
 info:
-	@wc ./src/rego/*.go ./src/rego/*/*.go ./src/rego/*/*/*.go
+	@wc ./src/service/*.go ./src/service/*/*.go ./src/service/*/*/*.go

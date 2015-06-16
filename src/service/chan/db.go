@@ -1,8 +1,8 @@
 package main
 
 import (
-	"rego/cfg"
-	"rego/dbs"
+	"github.com/wzshiming/rego/cfg"
+	"github.com/wzshiming/rego/dbs"
 	"service/proto"
 	"time"
 )

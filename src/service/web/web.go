@@ -6,13 +6,13 @@ import (
 	"github.com/gorilla/websocket"
 	"github.com/martini-contrib/render"
 	"github.com/martini-contrib/sessions"
+	"github.com/wzshiming/rego"
+	"github.com/wzshiming/rego/agent"
+	"github.com/wzshiming/rego/agent/defaul"
+	"github.com/wzshiming/rego/cfg"
+	"github.com/wzshiming/rego/route"
 	ht "html/template"
 	"net/http"
-	"rego"
-	"rego/agent"
-	"rego/agent/defaul"
-	"rego/cfg"
-	"rego/route"
 )
 
 var upgrader = websocket.Upgrader{

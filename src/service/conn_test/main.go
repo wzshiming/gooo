@@ -1,9 +1,9 @@
 package main
 
 import (
-	"rego"
-	"rego/agent/defaul"
-	"rego/cfg"
+	"github.com/wzshiming/rego"
+	"github.com/wzshiming/rego/agent/defaul"
+	"github.com/wzshiming/rego/cfg"
 	"service/proto"
 )
 

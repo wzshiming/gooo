@@ -1,8 +1,8 @@
 package ygo
 
 import (
-	"rego"
-	"rego/agent"
+	"github.com/wzshiming/rego"
+	"github.com/wzshiming/rego/agent"
 	"time"
 )
 

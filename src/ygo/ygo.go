@@ -2,8 +2,8 @@ package ygo
 
 import (
 	"fmt"
-	"rego/agent"
-	"rego/misc"
+	"github.com/wzshiming/rego/agent"
+	"github.com/wzshiming/rego/misc"
 	"service/proto"
 	"time"
 )

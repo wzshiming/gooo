@@ -2,10 +2,10 @@ package main
 
 import (
 	"errors"
-	"rego"
+	"github.com/wzshiming/rego"
 	//"fmt"
-	"rego/agent"
-	"rego/misc"
+	"github.com/wzshiming/rego/agent"
+	"github.com/wzshiming/rego/misc"
 	"service/proto"
 	"time"
 	"ygo"
