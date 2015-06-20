@@ -2,6 +2,7 @@ package ygo
 
 import (
 	"fmt"
+	"github.com/wzshiming/dispatcher"
 	"github.com/wzshiming/rego/agent"
 	"github.com/wzshiming/rego/misc"
 	"service/proto"
@@ -9,6 +10,7 @@ import (
 )
 
 type YGO struct {
+	dispatcher.Events
 	CardVer  *CardVersion
 	Room     *misc.Rooms
 	StartAt  time.Time
@@ -21,6 +23,7 @@ type YGO struct {
 
 func NewYGO(r *misc.Rooms) *YGO {
 	yg := &YGO{
+		Events:   dispatcher.NewLineEvent(),
 		Room:     r,
 		Cards:    make(map[uint]*Card),
 		Survival: make(map[int]int),

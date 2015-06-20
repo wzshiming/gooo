@@ -32,9 +32,6 @@ func (cv *CardVersion) Get(id uint) *CardOriginal {
 }
 
 func (cv *CardVersion) Find(name string) (c []uint) {
-	if name == "" {
-		return
-	}
 	reg := regexp.MustCompile(fmt.Sprintf("~([^(~~)]*%s[^(~~)]*)~", name))
 	al := reg.FindAllStringSubmatch(cv.nameReg, -1)
 	for _, v := range al {

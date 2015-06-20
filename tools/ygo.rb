@@ -34,7 +34,6 @@ def files_list path, &block
   end
 end
 
-allcard = {}
 
 
 
@@ -152,7 +151,23 @@ func original(cardBag *ygo.CardVersion) {
     print '}'
 end
 
-
+$sor = {
+    "通常怪兽"=> 11,
+    "效果怪兽"=> 12,
+    "融合怪兽"=> 13,
+    "仪式怪兽"=> 14,
+    "同调怪兽"=> 15,
+    "XYZ怪兽"=> 16,
+    "通常魔法"=> 21,
+    "速攻魔法"=> 22,
+    "永续魔法"=> 23,
+    "场地魔法"=> 24,
+    "装备魔法"=> 25,
+    "仪式魔法"=> 26,
+    "通常陷阱"=> 31,
+    "永续陷阱"=> 32,
+    "反击陷阱"=> 33
+}
 def elses allcard
     i = 0
     j = 0
@@ -165,7 +180,7 @@ import (
 '
     allcard.keys().each do|k|
         v = allcard[k]
-        if v["卡片种类"] != "通常怪兽"
+        #if v["卡片种类"] != "通常怪兽"
     
         if i == 0 
             j = j +1
@@ -184,18 +199,15 @@ func elses#{j}(cardBag *ygo.CardVersion) {
         Password: \"#{v["卡片密码"]}\",
         Name:     \"#{v["中文名"]}\", // \"#{v["英文名"]}\"  \"#{v["日文名"]}\"
         Lc:       #{lc(v["卡片种类"])}, // #{v["卡片种类"]}
-        Level:     #{ if v["星级"] != nil then v["星级"] else 0 end},
-        La:       #{la(v["属性"])}, // #{v["属性"]}
-        Lr:       #{lr(v["种族"])}, // #{v["种族"]}
-        Attack:   #{ if v["攻击力"] != nil && v["攻击力"] != "？" && v["攻击力"] != "?" then v["攻击力"] else 0 end},
-        Defense:  #{ if v["防御力"] != nil && v["防御力"] != "？" && v["防御力"] != "?" then v["防御力"] else 0 end},
-        //Initiative:    func(ca *Card)) {}, // 主动发动
-        //Declaration:   func(ca *Card)) {}, // 攻击宣言
-        //Damage:        func(ca *Card)) {}, // 伤害计算
-        //Freedom:       func(ca *Card)) {}, // 解放    送去墓地
-        //Destroy:       func(ca *Card)) {}, // 战斗破坏 送去墓地
-        //Flip:          func(ca *Card)) {}, // 反转
-        Summon:          ygo.SuperiorCall, // 召唤
+        //Initialize:    func(ca *ygo.Card) {}, // 初始
+#{if /怪兽/.match v["卡片种类"] 
+    "Level:     #{ if v["星级"] != nil then v["星级"] else 0 end},
+    La:       #{la(v["属性"])}, // #{v["属性"]}
+    Lr:       #{lr(v["种族"])}, // #{v["种族"]}
+    Attack:   #{ if v["攻击力"] != nil && v["攻击力"] != "？" && v["攻击力"] != "?" then v["攻击力"] else 0 end},
+    Defense:  #{ if v["防御力"] != nil && v["防御力"] != "？" && v["防御力"] != "?" then v["防御力"] else 0 end},
+    Summon:          ygo.SuperiorCall, // 召唤"
+end}
         IsValid:       false,
 }
     cardBag.Register(co)
@@ -208,7 +220,7 @@ func elses#{j}(cardBag *ygo.CardVersion) {
             print '}'
         end
     end
-end
+
 print '}'
 end
 
@@ -251,9 +263,15 @@ end
 if $0 == __FILE__
 
 
-  allcard = JSON.parse File.read("card.json").to_utf8!
+  #allcard = JSON.parse File.read("card.json").to_utf8!
   #types={}
   #卡片种类
+  #elses allcard
+  #
+  allcard = {}
+  files_list "./s/vol" do |path|
+    i = JSON.parse(File.read(path).to_utf8!).to_h
+    allcard[i["id"]] = i
+  end
   elses allcard
-
 end

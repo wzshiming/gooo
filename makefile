@@ -71,6 +71,7 @@ get: get_github.com_go-sql-driver_mysql\
 	 get_github.com_gorilla_websocket\
 	 get_github.com_wzshiming_ffmt\
 	 get_github.com_wzshiming_rego\
+	 get_github.com_wzshiming_dispatcher\
 	 get_github.com_mitchellh_colorstring
 	
 get_%:

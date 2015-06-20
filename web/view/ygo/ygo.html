@@ -97,11 +97,17 @@ YGO.prototype.flagStep = function(args) {
             e.className = "flag0";
         }
     }
+    for(var i = 0;i!= this.players.length;i++){
+        this.players[i]["szone"].flash()
+        this.players[i]["mzone"].flash()
+        this.players[i]["hand"].flash()
+    }
+
 }
 
-YGO.prototype.flashCards = function(args) {
-    this.players[args.master][args.pos].flash()
-}
+// YGO.prototype.flashCards = function(args) {
+//     this.players[args.master][args.pos].flash()
+// }
 
 YGO.prototype.moveCard = function(args) {
     if (this.scene.AllCard[args.uniq] == null) {

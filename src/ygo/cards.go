@@ -5,16 +5,22 @@ import (
 )
 
 type Cards struct {
-	name string
-	list []*Card
-	join func(*Card)
+	name  string
+	list  []*Card
+	join  func(*Card)
+	owner *Player // 所有者
 }
 
-func NewCards(name string) *Cards {
+func NewCards(pl *Player, name string) *Cards {
 	return &Cards{
-		name: name,
-		list: []*Card{},
+		owner: pl,
+		name:  name,
+		list:  []*Card{},
 	}
+}
+
+func (cp *Cards) GetOwner() *Player {
+	return cp.owner
 }
 
 func (cp *Cards) SetJoin(fun func(*Card)) {
@@ -139,4 +145,8 @@ func (cp *Cards) Find(fun func(*Card) bool) (indexs []int) {
 		}
 	}
 	return
+}
+
+func (cp *Cards) Random() *Card {
+	return cp.Remove(int(<-rego.LCG) % cp.Len())
 }

@@ -3,7 +3,7 @@ var Decks = function(scene) {
     var t = this;
     this.cards = {}
     this.cardslist = []
-    $.getJSON('/json/cards.json', {}, function(json, textStatus) {
+    $.getJSON('/json/cards.json?a=a', {}, function(json, textStatus) {
         t.cards = json
         console.dir(json)
         for (var i in json) {
@@ -23,10 +23,12 @@ var Decks = function(scene) {
         if (i.hold == t.heap) {
             var c = parseInt(i.id/10000);
             var ca = new Card(t.scene, "s" + t.ii, null, i.id, 0);
-            if(c >= 20 || c <= 12) {
-                t.deck.push(ca);
-            } else {
+            console.dir(t.cards)
+            var ty = t.cards[i.id]["卡片种类"]
+            if(ty == "融合怪兽" || ty == "仪式怪兽" || ty == "同调怪兽" || ty == "XYZ怪兽"){
                 t.extra.push(ca);
+            }else {
+                t.deck.push(ca);
             }
         }else if (i.hold == t.deck || i.hold == t.extra) {
             var c = i.hold;
@@ -48,7 +50,7 @@ var Decks = function(scene) {
     $('#else').append('<div id="decks_r" style="position:absolute;right:100px;top:100px;"><button type="submit" class="btn btn-default btn-block">></button></div>');
     $('#else').append('<div id="decks_s" style="position:absolute;right:100px;top:500px;"><button type="submit" class="btn btn-default btn-block">保存</button></div>');
     $('#else').append('<div id="decks_g" style="position:absolute;right:100px;top:700px;"><button type="submit" class="btn btn-default btn-block">获得</button></div>');
-    $('#else').append('<div id="search"><input id="query" type="text" value="龙"><button id="button">搜索</button></div>')
+    $('#else').append('<div id="search"><input id="query" type="text" value=""><button id="button">搜索</button></div>')
     $('#else').show();
     // 按钮事件
     // 

@@ -124,7 +124,7 @@ const (
 	LL_Grave   // 墓地
 	LL_Removed // 移除
 	LL_Extra   // 额外
-	LL_OnField // 场地
+	LL_Field   // 场地
 	LL_OverLay //
 	LL_Fzone   //
 	LL_Pzone   //

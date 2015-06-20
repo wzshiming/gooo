@@ -1,6 +1,7 @@
 package ygo
 
 import (
+	"github.com/wzshiming/dispatcher"
 	"github.com/wzshiming/rego"
 )
 
@@ -19,42 +20,18 @@ type CardOriginal struct {
 	Defense int     // 防御力
 
 	Initialize Action // 初始化
-	// 战斗 事件
-	// 攻击方
-	DeclarationPre Action // 攻击宣言之前
-	DeclarationSuf Action // 攻击宣言之后
-	DamageCalPre   Action // 伤害计算之前
-	DamageCalSuf   Action // 伤害计算之后
-	ResultPre      Action // 结果执行之前
-	ResultSuf      Action // 结果执行之后
 
-	// 承受方
-	BearDeclarationPre Action // 被攻击宣言之前
-	BearDeclarationSuf Action // 被攻击宣言之后
-	BearDamageCalPre   Action // 被伤害计算之前
-	BearDamageCalSuf   Action // 被伤害计算之后
-	BearResultPre      Action // 被结果执行之前
-	BearResultSuf      Action // 被结果执行之后
-
-	// 主动效果
-	Initiative    Action // 我方主阶段发动
-	Removed       Action // 移除
-	Freedom       Action // 解放 送去墓地
-	Destroy       Action // 战斗破坏 送去墓地
-	Flip          Action // 反转
-	Summon        Action // 召唤
-	SummonSpecial Action // 特殊召唤
 }
 
 func (co *CardOriginal) Make(ow *Player) *Card {
 	c := &Card{
+		Events:       dispatcher.NewLineEvent(),
 		baseOriginal: co,
-		original:     *co,
 		owner:        ow,
-		summoner:     ow,
-		le:           LE_None,
 	}
 	c.InitUint()
+
+	c.Init()
 	return c
 }
 
@@ -81,10 +58,13 @@ var handMethods = map[LC_TYPE][]LI_TYPE{
 }
 
 type Card struct {
+	dispatcher.Events
 	rego.Unique
 	baseOriginal *CardOriginal
 	original     CardOriginal
 	place        *Cards  // 所在位置
+	target       *Card   // 目标卡牌
+	effects      []*Card // 对此卡牌影响的卡牌
 	summoner     *Player // 召唤者
 	owner        *Player // 所有者
 	le           LE_TYPE // 表示形式
@@ -94,12 +74,39 @@ type Card struct {
 	lastChangeRound int // 最后改变表示形式回合
 }
 
+func (ca *Card) Init() {
+	ca.Empty()
+	switch ca.baseOriginal.Lc {
+	case LC_OrdinaryMonster:
+		ca.RegisterNormalMonster()
+	case LC_EffectMonster:
+		ca.RegisterNormalMonster()
+	}
+	ca.original = *ca.baseOriginal
+	ca.effects = []*Card{}
+	ca.summoner = ca.owner
+	ca.le = LE_None
+	ca.baseOriginal.Initialize.Call(ca)
+
+}
+
+func (ca *Card) GetPlace() *Cards {
+	return ca.place
+}
+
 func (ca *Card) HandMethods() []LI_TYPE {
 	return handMethods[ca.original.Lc]
 }
 
-// 战斗
-func (ca *Card) Battle(tar *Card) bool {
+func (ca *Card) GetTarget() *Card {
+	return ca.target
+}
+
+func (ca *Card) SetTarget(c *Card) {
+	ca.target = c
+}
+
+func (ca *Card) NormalBattle(tar *Card) {
 	pl := ca.GetSummoner()
 	plt := tar.GetSummoner()
 
@@ -107,17 +114,24 @@ func (ca *Card) Battle(tar *Card) bool {
 	b := tar.IsAttack()
 
 	//战斗宣言
-	ca.original.DeclarationPre.Call(ca)
-	tar.original.BearDeclarationPre.Call(tar)
+
+	ca.Dispatch(DeclarationPre, tar)
+	tar.Dispatch(BearDeclarationPre, ca)
+	//ca.original.DeclarationPre.Call(ca)
+	//tar.original.BearDeclarationPre.Call(tar)
 	if f {
 		tar.FaceUp()
 	}
-	ca.original.DeclarationSuf.Call(ca)
-	tar.original.BearDeclarationSuf.Call(tar)
+	ca.Dispatch(DeclarationSuf, tar)
+	tar.Dispatch(BearDeclarationSuf, ca)
+	//ca.original.DeclarationSuf.Call(ca)
+	//tar.original.BearDeclarationSuf.Call(tar)
 
 	//伤害判定
-	ca.original.DamageCalPre.Call(ca)
-	tar.original.BearDamageCalPre.Call(tar)
+	ca.Dispatch(DamageCalPre, tar)
+	tar.Dispatch(BearDamageCalPre, ca)
+	//ca.original.DamageCalPre.Call(ca)
+	//tar.original.BearDamageCalPre.Call(tar)
 	var t int
 	if b {
 		t = ca.GetAttack() - tar.GetAttack()
@@ -126,18 +140,22 @@ func (ca *Card) Battle(tar *Card) bool {
 	}
 	ca.SetNotCanAttack()
 	ca.SetNotCanChange()
-	ca.original.DamageCalPre.Call(ca)
-	tar.original.BearDamageCalPre.Call(tar)
+	ca.Dispatch(DamageCalSuf, tar)
+	tar.Dispatch(BearDamageCalSuf, ca)
+	//ca.original.DamageCalSuf.Call(ca)
+	//tar.original.BearDamageCalSuf.Call(tar)
 
 	//结果执行
-	ca.original.ResultPre.Call(ca)
-	tar.original.BearResultPre.Call(tar)
+	ca.Dispatch(ResultPre, tar)
+	tar.Dispatch(BearResultPre, ca)
+	//ca.original.ResultPre.Call(ca)
+	//tar.original.BearResultPre.Call(tar)
 	if b {
 		if t > 0 {
-			plt.ChangeHp(-t)
+			plt.ChangeHp(-t, ca)
 			tar.ToGrave()
 		} else if t < 0 {
-			pl.ChangeHp(t)
+			pl.ChangeHp(t, tar)
 			ca.ToGrave()
 		} else {
 			tar.ToGrave()
@@ -147,39 +165,35 @@ func (ca *Card) Battle(tar *Card) bool {
 		if t > 0 {
 			tar.ToGrave()
 		} else if t < 0 {
-			pl.ChangeHp(t)
+			pl.ChangeHp(t, tar)
 		}
 	}
 	if f {
 		tar.EffectFlip()
 	}
-	ca.original.ResultSuf.Call(ca)
-	tar.original.BearResultSuf.Call(tar)
+	ca.Dispatch(ResultSuf, tar)
+	tar.Dispatch(BearResultSuf, ca)
+}
+
+// 战斗
+func (ca *Card) Battle(tar *Card) bool {
+	//ca.target = tar
+	//tar.target = ca
+	ca.Dispatch(Battle, tar)
 
 	return true
 }
 
 // 执行翻转效果
 func (ca *Card) EffectFlip() bool {
-	if ca.original.Flip.Call(ca) {
-		pl := ca.GetSummoner()
-		pl.Call(Message("发动翻转效果"))
-		return true
-	}
-	return false
+	ca.Dispatch(Flip)
+	return true
 }
 
 // 发动主动效果
-func (ca *Card) EffectInitiative() bool {
-	if ca.original.Initiative.IsExits() {
-		ca.FaceUp()
-		if ca.original.Initiative.Call(ca) {
-			pl := ca.GetSummoner()
-			pl.Call(Message("发动主动效果"))
-			return true
-		}
-	}
-	return false
+func (ca *Card) EffectOnset() bool {
+	ca.Dispatch(Onset)
+	return true
 }
 
 // 获得召唤者
@@ -202,11 +216,6 @@ func (ca *Card) GetId() uint {
 	return ca.original.Id
 }
 
-// 召唤
-func (ca *Card) Summon() bool {
-	return ca.original.Summon.Call(ca)
-}
-
 // 获得基础类型
 func (ca *Card) GetBaseType() LC_TYPE {
 	return ca.baseOriginal.Lc
@@ -215,6 +224,26 @@ func (ca *Card) GetBaseType() LC_TYPE {
 // 获得类型
 func (ca *Card) GetType() LC_TYPE {
 	return ca.original.Lc
+}
+
+// 是魔法卡
+func (ca *Card) IsMagicAndTrap() bool {
+	return (ca.GetType() & LC_MagicAndTrap) != 0
+}
+
+// 是魔法卡
+func (ca *Card) IsMagic() bool {
+	return (ca.GetType() & LC_Magic) != 0
+}
+
+// 是陷阱卡
+func (ca *Card) IsTrap() bool {
+	return (ca.GetType() & LC_Trap) != 0
+}
+
+// 是怪兽卡
+func (ca *Card) IsMonster() bool {
+	return (ca.GetType() & LC_Monster) != 0
 }
 
 // 设置类型
@@ -363,64 +392,69 @@ func SetNotCanAttack(ca *Card) bool {
 
 // 召唤
 func (ca *Card) Call() {
-	if (ca.GetType() & LC_Monster) != 0 {
-		if ca.Summon() {
-			if ca.GetSummoner().Mzone.Len() < 5 {
-				ca.FaceUpAttack()
-				ca.ToMzone()
-			}
-		}
-	}
+	ca.Dispatch(Summon, ca)
+	//	if (ca.GetType() & LC_Monster) != 0 {
+	//		if ca.Summon() {
+	//			if ca.GetSummoner().Mzone.Len() < 5 {
+	//				ca.FaceUpAttack()
+	//				ca.ToMzone()
+	//			}
+	//		}
+	//	}
 }
 
 // 放置
 func (ca *Card) Cover() {
-	if (ca.GetType() & LC_PlaceMagic) != 0 { // 场地卡
-		if ca.GetSummoner().Field.Len() != 0 {
-			ca.GetSummoner().Field.ForEach(ToGrave)
-			ca.ToField()
-			ca.FaceDownAttack()
-		}
-	} else if (ca.GetType() & LC_MagicAndTrap) != 0 { // 魔陷
-		if ca.GetSummoner().Szone.Len() < 5 {
-			ca.ToSzone()
-			ca.FaceDownAttack()
-		}
-	} else if (ca.GetType() & LC_Monster) != 0 { // 怪兽
-		if ca.Summon() {
-			if ca.GetSummoner().Mzone.Len() < 5 {
-				ca.FaceDownDefense()
-				ca.ToMzone()
-				ca.SetNotCanChange()
-			}
-		}
-	}
+	ca.Dispatch(Cover, ca)
+	//	if (ca.GetType() & LC_PlaceMagic) != 0 { // 场地卡
+	//		if ca.GetSummoner().Field.Len() != 0 {
+	//			ca.GetSummoner().Field.ForEach(ToGrave)
+	//			ca.ToField()
+	//			ca.FaceDownAttack()
+	//		}
+	//	} else if (ca.GetType() & LC_MagicAndTrap) != 0 { // 魔陷
+	//		if ca.GetSummoner().Szone.Len() < 5 {
+	//			ca.ToSzone()
+	//			ca.FaceDownAttack()
+	//		}
+	//	} else if (ca.GetType() & LC_Monster) != 0 { // 怪兽
+	//		if ca.Summon() {
+	//			if ca.GetSummoner().Mzone.Len() < 5 {
+	//				ca.FaceDownDefense()
+	//				ca.ToMzone()
+	//				ca.SetNotCanChange()
+	//			}
+	//		}
+	//	}
 }
 
 // 手牌发动
 func (ca *Card) Use() {
+	pl := ca.GetSummoner()
 	if (ca.GetType() & LC_PlaceMagic) != 0 { // 场地卡
-		if ca.GetSummoner().Field.Len() != 0 {
-			ca.GetSummoner().Field.ForEach(ToGrave)
+		if pl.Field.Len() != 0 {
+			pl.Field.ForEach(ToGrave)
 			ca.ToField()
 			ca.FaceUpAttack()
-			ca.EffectInitiative()
+			ca.EffectOnset()
 		}
 	} else if (ca.GetType() & LC_Magic) != 0 { // 魔陷
-		if ca.GetSummoner().Szone.Len() < 5 {
+		if pl.Szone.Len() < 5 {
 			ca.ToSzone()
 			ca.FaceUpAttack()
-			ca.EffectInitiative()
+			ca.EffectOnset()
 		}
 	}
 }
 
 // 设置表示形式
 func (ca *Card) setLE(l LE_TYPE) {
-	ca.GetSummoner().CallAll(ExprCard(ca, l))
+	pl := ca.GetSummoner()
+	pl.Dispatch(Expres, ca)
+	pl.CallAll(ExprCard(ca, l))
 	ca.le = l
 	if ca.IsFaceUp() {
-		ca.GetSummoner().CallAll(SetFront(ca))
+		pl.CallAll(SetFront(ca))
 	}
 }
 
@@ -569,37 +603,60 @@ func ChangeExpression(ca *Card) {
 	ca.ChangeExpression()
 }
 
-// 普通召唤 和 上级召唤
-func (ca *Card) SuperiorCall() bool {
+func (ca *Card) RegisterNormalMonster() {
+	ca.AddEventListener(Freedom, ca.ToGrave)
+	ca.AddEventListener(Destroy, ca.ToGrave)
+	ca.AddEventListener(Removed, ca.ToRemoved)
+	ca.AddEventListener(Summon, ca.NormalSummon)
+	ca.AddEventListener(Cover, ca.NormalCover)
+	ca.AddEventListener(Battle, ca.NormalBattle)
+}
+
+func (ca *Card) NormalSummon() {
+	ca.PayBySuperior(func() {
+		ca.FaceUpAttack()
+		ca.ToMzone()
+	})
+}
+
+func (ca *Card) NormalCover() {
+	ca.PayBySuperior(func() {
+		ca.FaceDownDefense()
+		ca.ToMzone()
+	})
+}
+
+func (ca *Card) PayBySuperior(fun func()) {
+	ca.SetSummoner(ca.GetOwner())
 	pl := ca.GetSummoner()
+	e := func(c *Card) bool {
+		c.Dispatch(Freedom, ca)
+		return true
+	}
 	if ca.GetLevel() > 6 {
 		if pl.Mzone.Len() < 2 {
 			pl.Call(Message("需要2只献祭的怪兽，无法满足召唤条件"))
-			return false
+			return
 		} else if pl.Mzone.Len() == 2 {
-			pl.Mzone.ForEach(ToGrave)
+			pl.Mzone.ForEach(e)
 		} else {
 			pl.Call(Message("选择2只献祭的怪兽"))
-			pl.SelectFunc(2, pl.Mzone, ToGrave)
+			pl.SelectFunc(2, pl.Mzone, e)
 		}
 	} else if ca.GetLevel() > 4 {
 		if pl.Mzone.Len() < 1 {
 			pl.Call(Message("需要1只献祭的怪兽，无法满足召唤条件"))
-			return false
+			return
 		} else if pl.Mzone.Len() == 1 {
-			pl.Mzone.ForEach(ToGrave)
+			pl.Mzone.ForEach(e)
 		} else {
 			pl.Call(Message("选择1只献祭的怪兽"))
-			pl.SelectFunc(1, pl.Mzone, ToGrave)
+			pl.SelectFunc(1, pl.Mzone, e)
 		}
 	}
 	pl.Call(Message("召唤成功"))
 	ca.SetNotCanChange()
-	return true
-}
-
-func SuperiorCall(ca *Card) bool {
-	return ca.SuperiorCall()
+	fun()
 }
 
 // 链接
