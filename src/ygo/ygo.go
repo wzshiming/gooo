@@ -21,6 +21,10 @@ type YGO struct {
 	round    []uint
 }
 
+func nap(i int) {
+	time.Sleep(time.Second * time.Duration(i) / 10)
+}
+
 func NewYGO(r *misc.Rooms) *YGO {
 	yg := &YGO{
 		Events:   dispatcher.NewLineEvent(),
@@ -73,7 +77,7 @@ func (yg *YGO) GetPlayerForIndex(i int) *Player {
 
 func (yg *YGO) Loop() {
 
-	time.Sleep(time.Second) // 初始化
+	nap(1) // 初始化
 
 	for k, _ := range yg.Players {
 		yg.round = append(yg.round, k)
@@ -88,7 +92,7 @@ func (yg *YGO) Loop() {
 		yg.Players[v].Name = fmt.Sprintf("player %d", k)
 	}
 
-	time.Sleep(time.Second) // 客户端初始化
+	nap(1) // 客户端初始化
 	gi := proto.GameInitResponse{}
 	for _, v := range yg.round {
 		pi := proto.PlayerInit{
@@ -102,7 +106,7 @@ func (yg *YGO) Loop() {
 		yg.Players[v].Call("init", gi)
 	}
 
-	time.Sleep(time.Second) // 牌组初始化
+	nap(10) // 牌组初始化
 	for _, v := range yg.round {
 		var s struct {
 			Deck proto.Deck `json:"deck"`
@@ -112,15 +116,15 @@ func (yg *YGO) Loop() {
 		yg.Players[v].initDeck(s.Deck.GetMain(), s.Deck.GetExtra())
 	}
 
-	time.Sleep(time.Second) // 手牌初始化
+	nap(20) // 手牌初始化
 	for _, v := range yg.round {
 		yg.Players[v].init()
 	}
 
-	time.Sleep(time.Second) // 循环
+	nap(5)
 	for {
 		for _, v := range yg.round {
-			time.Sleep(time.Second)
+			nap(5)
 			if !yg.Players[v].IsFail() {
 				yg.Players[v].round()
 				//				if yg.CheckWinner(); yg.Over {

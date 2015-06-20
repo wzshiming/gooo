@@ -77,10 +77,26 @@ type Card struct {
 func (ca *Card) Init() {
 	ca.Empty()
 	switch ca.baseOriginal.Lc {
-	case LC_OrdinaryMonster:
+	case LC_OrdinaryMonster: //普通怪兽 通常 黄色
 		ca.RegisterNormalMonster()
-	case LC_EffectMonster:
+	case LC_EffectMonster: //效果怪兽 橙色
 		ca.RegisterNormalMonster()
+	case LC_OrdinaryMagic: //普通魔法 通常
+		ca.RegisterNormalMagic()
+	case LC_SustainsMagic: //永续魔法 速度2
+		ca.RegisterNormalMagic()
+	case LC_EquipMagic: //装备魔法
+		ca.RegisterNormalMagic()
+	case LC_PlaceMagic: //场地魔法
+		ca.RegisterNormalMagic()
+	case LC_RushMagic: //速攻魔法
+		ca.RegisterNormalMagic()
+	case LC_OrdinaryTrap: //普通陷阱 速度2
+		ca.RegisterNormalTrap()
+	case LC_SustainsTrap: //永续陷阱 速度2
+		ca.RegisterNormalTrap()
+	case LC_ReactionTrap: //反击陷阱 速度3
+		ca.RegisterNormalTrap()
 	}
 	ca.original = *ca.baseOriginal
 	ca.effects = []*Card{}
@@ -169,31 +185,10 @@ func (ca *Card) NormalBattle(tar *Card) {
 		}
 	}
 	if f {
-		tar.EffectFlip()
+		ca.Dispatch(Flip)
 	}
 	ca.Dispatch(ResultSuf, tar)
 	tar.Dispatch(BearResultSuf, ca)
-}
-
-// 战斗
-func (ca *Card) Battle(tar *Card) bool {
-	//ca.target = tar
-	//tar.target = ca
-	ca.Dispatch(Battle, tar)
-
-	return true
-}
-
-// 执行翻转效果
-func (ca *Card) EffectFlip() bool {
-	ca.Dispatch(Flip)
-	return true
-}
-
-// 发动主动效果
-func (ca *Card) EffectOnset() bool {
-	ca.Dispatch(Onset)
-	return true
 }
 
 // 获得召唤者
@@ -390,63 +385,6 @@ func SetNotCanAttack(ca *Card) bool {
 	return ca.SetNotCanAttack()
 }
 
-// 召唤
-func (ca *Card) Call() {
-	ca.Dispatch(Summon, ca)
-	//	if (ca.GetType() & LC_Monster) != 0 {
-	//		if ca.Summon() {
-	//			if ca.GetSummoner().Mzone.Len() < 5 {
-	//				ca.FaceUpAttack()
-	//				ca.ToMzone()
-	//			}
-	//		}
-	//	}
-}
-
-// 放置
-func (ca *Card) Cover() {
-	ca.Dispatch(Cover, ca)
-	//	if (ca.GetType() & LC_PlaceMagic) != 0 { // 场地卡
-	//		if ca.GetSummoner().Field.Len() != 0 {
-	//			ca.GetSummoner().Field.ForEach(ToGrave)
-	//			ca.ToField()
-	//			ca.FaceDownAttack()
-	//		}
-	//	} else if (ca.GetType() & LC_MagicAndTrap) != 0 { // 魔陷
-	//		if ca.GetSummoner().Szone.Len() < 5 {
-	//			ca.ToSzone()
-	//			ca.FaceDownAttack()
-	//		}
-	//	} else if (ca.GetType() & LC_Monster) != 0 { // 怪兽
-	//		if ca.Summon() {
-	//			if ca.GetSummoner().Mzone.Len() < 5 {
-	//				ca.FaceDownDefense()
-	//				ca.ToMzone()
-	//				ca.SetNotCanChange()
-	//			}
-	//		}
-	//	}
-}
-
-// 手牌发动
-func (ca *Card) Use() {
-	pl := ca.GetSummoner()
-	if (ca.GetType() & LC_PlaceMagic) != 0 { // 场地卡
-		if pl.Field.Len() != 0 {
-			pl.Field.ForEach(ToGrave)
-			ca.ToField()
-			ca.FaceUpAttack()
-			ca.EffectOnset()
-		}
-	} else if (ca.GetType() & LC_Magic) != 0 { // 魔陷
-		if pl.Szone.Len() < 5 {
-			ca.ToSzone()
-			ca.FaceUpAttack()
-			ca.EffectOnset()
-		}
-	}
-}
-
 // 设置表示形式
 func (ca *Card) setLE(l LE_TYPE) {
 	pl := ca.GetSummoner()
@@ -583,7 +521,7 @@ func (ca *Card) ChangeExpression() {
 	if ca.IsCanChange() {
 		if ca.IsFaceDown() {
 			ca.FaceUpAttack()
-			ca.EffectFlip()
+			ca.Dispatch(Flip)
 		} else if ca.IsFaceUpDefense() {
 			ca.FaceUpAttack()
 		} else if ca.IsFaceUpAttack() {
@@ -603,13 +541,42 @@ func ChangeExpression(ca *Card) {
 	ca.ChangeExpression()
 }
 
-func (ca *Card) RegisterNormalMonster() {
-	ca.AddEventListener(Freedom, ca.ToGrave)
+func (ca *Card) RegisterNormal() {
 	ca.AddEventListener(Destroy, ca.ToGrave)
 	ca.AddEventListener(Removed, ca.ToRemoved)
-	ca.AddEventListener(Summon, ca.NormalSummon)
 	ca.AddEventListener(Cover, ca.NormalCover)
+}
+
+func (ca *Card) RegisterNormalMagic() {
+	ca.RegisterNormal()
+	ca.AddEventListener(Use, ca.NormalUse)
+}
+
+func (ca *Card) RegisterNormalTrap() {
+	ca.RegisterNormal()
+	ca.AddEventListener(Cover, func() {
+		var e func()
+		e = func() {
+			ca.AddEventListener(Use, ca.NormalUse)
+			ca.GetSummoner().RemoveEventListener(EPSuf, e)
+		}
+		ca.GetSummoner().AddEventListener(EPSuf, e)
+	})
+}
+
+func (ca *Card) RegisterNormalMonster() {
+	ca.RegisterNormal()
+	ca.AddEventListener(Freedom, ca.ToGrave)
+	ca.AddEventListener(Summon, ca.NormalSummon)
 	ca.AddEventListener(Battle, ca.NormalBattle)
+}
+
+func (ca *Card) NormalUse() {
+	if ca.GetPlace().GetName() != Szone {
+		ca.Dispatch(Cover)
+	}
+	ca.FaceUpAttack()
+	ca.Dispatch(Onset)
 }
 
 func (ca *Card) NormalSummon() {
@@ -620,10 +587,25 @@ func (ca *Card) NormalSummon() {
 }
 
 func (ca *Card) NormalCover() {
-	ca.PayBySuperior(func() {
-		ca.FaceDownDefense()
-		ca.ToMzone()
-	})
+	if (ca.GetType() & LC_PlaceMagic) != 0 { // 场地卡
+		if ca.GetSummoner().Field.Len() != 0 {
+			ca.GetSummoner().Field.ForEach(ToGrave)
+			ca.ToField()
+			ca.FaceDownAttack()
+		}
+	} else if (ca.GetType() & LC_MagicAndTrap) != 0 { // 魔陷
+		if ca.GetSummoner().Szone.Len() < 5 {
+			ca.ToSzone()
+			ca.FaceDownAttack()
+		}
+	} else if (ca.GetType() & LC_Monster) != 0 { // 怪兽
+		if ca.GetSummoner().Mzone.Len() < 5 {
+			ca.PayBySuperior(func() {
+				ca.FaceDownDefense()
+				ca.ToMzone()
+			})
+		}
+	}
 }
 
 func (ca *Card) PayBySuperior(fun func()) {

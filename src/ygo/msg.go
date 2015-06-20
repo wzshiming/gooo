@@ -5,27 +5,43 @@ type MsgCode struct {
 	Method uint
 }
 
-type MsgChan chan MsgCode
+type MsgChan struct {
+	primary   chan MsgCode
+	secondary chan MsgCode
+}
 
-func NewMsgChan() MsgChan {
-	return make(MsgChan, 128)
+func NewMsgChan(m func(MsgCode) bool) MsgChan {
+	mc := MsgChan{
+		primary:   make(chan MsgCode, 128),
+		secondary: make(chan MsgCode, 2048),
+	}
+	go func() {
+		for v := range mc.primary {
+			if m(v) {
+				mc.secondary <- v
+			}
+		}
+	}()
+	return mc
 }
 
 func (mc *MsgChan) AddCode(uniq, method uint) {
-	*mc <- MsgCode{
+	c := MsgCode{
 		Uniq:   uniq,
 		Method: method,
 	}
+	mc.primary <- c
 }
 
 func (mc *MsgChan) GetCode() <-chan MsgCode {
-	return *mc
+	mc.ClearCode()
+	return mc.secondary
 }
 
 func (mc *MsgChan) ClearCode() {
 	for {
 		select {
-		case <-mc.GetCode():
+		case <-mc.secondary:
 		default:
 			return
 		}
@@ -35,6 +51,15 @@ func (mc *MsgChan) ClearCode() {
 type Call struct {
 	Method string      `json:"method"`
 	Args   interface{} `json:"args"`
+}
+
+func Touch(t *Card, x, y, z int) (string, interface{}) {
+	return "touch", map[string]interface{}{
+		"uniq": t.ToUint(),
+		"x":    x,
+		"y":    y,
+		"z":    z,
+	}
 }
 
 func ExprCard(t *Card, le LE_TYPE) (string, interface{}) {

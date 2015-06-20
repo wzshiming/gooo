@@ -41,39 +41,12 @@ type Player struct {
 	Szone   *Cards // 魔法卡陷阱卡区 5
 	Field   *Cards // 场地卡
 
-	// 卡牌事件
-	ToRemoved *Effects // 排除场外
-	ToGrave   *Effects // 移动到墓地
-	ToHand    *Effects // 返回手牌
-	ToDeck    *Effects // 返回卡组
-	Sustains  *Effects // 永续效果
-
-	// 怪兽卡事件
-	MonsterInitiative    *Effects // 怪兽卡发动效果
-	MonsterFreedom       *Effects // 解放 送去墓地
-	MonsterDestroy       *Effects // 破坏 送去墓地
-	MonsterFlip          *Effects // 反转
-	MonsterSummon        *Effects // 召唤
-	MonsterSummonCover   *Effects // 覆盖召唤
-	MonsterSummonFlip    *Effects // 反转召唤
-	MonsterSummonSpecial *Effects // 特殊召唤
-
-	EventDrawSuf    *Effects // 抽牌之后
-	EventStandbyPre *Effects // 准备阶段之前
-	EventStandbySuf *Effects // 准备阶段之后
-	EventMainPre    *Effects // 准备阶段之前
-	EventMainSuf    *Effects // 准备阶段之后
-
-	// 魔法卡陷阱卡 事件
-	MagicAndTrapInitiative *Effects // 魔法卡陷阱卡发动效果
-	MagicAndTrapCover      *Effects // 魔法卡陷阱卡覆盖
-
 	// 是否失败
 	fail bool
 }
 
 func NewPlayer() *Player {
-	player := &Player{
+	pl := &Player{
 		Events:   dispatcher.NewLineEvent(),
 		Camp:     1,
 		Hp:       4000,
@@ -82,32 +55,44 @@ func NewPlayer() *Player {
 		MaxSdi:   6,
 		OverTime: time.Second * 120,
 		WaitTime: time.Second * 10,
-
-		MsgChan: NewMsgChan(),
 	}
-	player.Deck = NewCards(player, Deck)
-	player.Hand = NewCards(player, Hand)
-	player.Extra = NewCards(player, Extra)
-	player.Removed = NewCards(player, Removed)
-	player.Grave = NewCards(player, Grave)
-	player.Mzone = NewCards(player, Mzone)
-	player.Szone = NewCards(player, Szone)
-	player.Field = NewCards(player, Field)
+	pl.MsgChan = NewMsgChan(func(m MsgCode) bool {
+		if m.Uniq != 0 {
+			ca := pl.game.GetCard(m.Uniq)
+			if m.Method == 222 {
+				pl.CallAll(Touch(ca, 0, 0, 50))
+			} else if m.Method == 223 {
+				pl.CallAll(Touch(ca, 0, 0, 0))
+			} else {
+				return true
+			}
 
-	player.Deck.SetJoin(func(c *Card) {
+		}
+		return false
+	})
+	pl.Deck = NewCards(pl, Deck)
+	pl.Hand = NewCards(pl, Hand)
+	pl.Extra = NewCards(pl, Extra)
+	pl.Removed = NewCards(pl, Removed)
+	pl.Grave = NewCards(pl, Grave)
+	pl.Mzone = NewCards(pl, Mzone)
+	pl.Szone = NewCards(pl, Szone)
+	pl.Field = NewCards(pl, Field)
+
+	pl.Deck.SetJoin(func(c *Card) {
 		c.FaceDownAttack()
 	})
-	player.Extra.SetJoin(func(c *Card) {
+	pl.Extra.SetJoin(func(c *Card) {
 		c.FaceUpAttack()
 	})
-	player.Hand.SetJoin(func(c *Card) {
-		player.Call(SetFront(c))
-		player.Call(ExprCard(c, LE_FaceUpAttack))
+	pl.Hand.SetJoin(func(c *Card) {
+		pl.Call(SetFront(c))
+		pl.Call(ExprCard(c, LE_FaceUpAttack))
 	})
-	player.Grave.SetJoin(func(c *Card) {
+	pl.Grave.SetJoin(func(c *Card) {
 		c.FaceUpAttack()
 	})
-	return player
+	return pl
 }
 
 func (pl *Player) Fail() {
@@ -131,6 +116,7 @@ func (pl *Player) round() (err error) {
 		"round":  pl.GetRound(),
 		"player": pl.Index,
 	})
+
 	pl.Dispatch(DPPre, pl)
 	pl.draw(LP_Draw)
 	pl.Dispatch(DPSuf, pl)
@@ -219,7 +205,7 @@ func (pl *Player) main(lp LP_TYPE) bool {
 	}()
 	pl.Phases = lp
 	pl.Call(Message("主要阶段"))
-	pl.ClearCode()
+	//pl.ClearCode()
 
 	for {
 		p := pl.SelectWill()
@@ -233,19 +219,16 @@ func (pl *Player) main(lp LP_TYPE) bool {
 					"list": t.HandMethods(),
 				})
 			} else if p.Method == uint(LI_Call) {
-				t.Call()
-				pl.Call("finishSelect", map[string]interface{}{})
+				t.Dispatch(Summon, t)
 			} else if p.Method == uint(LI_Cover) {
-				t.Cover()
-				pl.Call("finishSelect", map[string]interface{}{})
+				t.Dispatch(Cover, t)
 			} else if p.Method == uint(LI_Use) {
-				t.Use()
-				pl.Call("finishSelect", map[string]interface{}{})
+				t.Dispatch(Use, t)
 			}
 		} else if t := pl.Mzone.ExistForUniq(p.Uniq); t != nil {
 			t.ChangeExpression()
 		} else if t := pl.Szone.ExistForUniq(p.Uniq); t != nil {
-			t.EffectOnset()
+			t.Dispatch(Onset)
 		} else {
 			pl.Call(Message("非法目标"))
 		}
@@ -261,7 +244,7 @@ func (pl *Player) battle(lp LP_TYPE) bool {
 	}()
 	pl.Phases = lp
 	pl.Call(Message("战斗阶段"))
-	pl.ClearCode()
+	//pl.ClearCode()
 	for {
 		if i := pl.SelectWill(); i.Uniq != 0 {
 			t1 := pl.Mzone.ExistForUniq(i.Uniq)
@@ -280,7 +263,7 @@ func (pl *Player) battle(lp LP_TYPE) bool {
 			if j.Uniq != 0 {
 				t2 := pl.game.GetCard(j.Uniq)
 				if pl.GetTarget().Mzone.IsExistCard(t2) {
-					t1.Battle(t2)
+					t1.Dispatch(Battle, t2)
 				} else {
 					pl.Call(Message("请选择对方怪兽区的怪兽"))
 				}
@@ -370,7 +353,7 @@ func (pl *Player) CallAll(method string, reply interface{}) error {
 }
 
 func (pl *Player) SelectWill() (p MsgCode) {
-	pl.ClearCode()
+	//pl.ClearCode()
 	pl.CallAll(flashPhases(pl))
 	select {
 	case <-time.After(pl.WaitTime):
@@ -380,7 +363,7 @@ func (pl *Player) SelectWill() (p MsgCode) {
 }
 
 func (pl *Player) Select() (t *Card) {
-	pl.ClearCode()
+	//pl.ClearCode()
 	pl.CallAll(flashPhases(pl))
 	select {
 	case <-time.After(pl.WaitTime):
@@ -511,7 +494,7 @@ func (pl *Player) SelectHandSelf() (t *Card) {
 }
 
 func (pl *Player) SelectMust(cp *Cards) (t *Card) {
-	pl.ClearCode()
+	//pl.ClearCode()
 	pl.CallAll(flashPhases(pl))
 	select {
 	case <-time.After(pl.WaitTime):

@@ -61,7 +61,13 @@ var Card = function(scene, uniq, master, f, b) {
             //    console.dir(e)
             //});
         }
-        
+        element.onmouseenter = function() {
+            //console.dir(element)
+            WsSelectable(this.hold.uniq,222)
+        }
+        element.onmouseleave = function() {
+            WsSelectable(this.hold.uniq,223)
+        }
     }
 
     element2.hold = element.hold;
@@ -100,6 +106,10 @@ Card.prototype.Unselectable = function() {
 
 Card.prototype.Move = function(pos) {
     Translate(this.object, pos.position, 1000)
+}
+
+Card.prototype.Touch = function(x,y,z) {
+    Translate(this.object, {z:z}, 100)
 }
 
 Card.prototype.FaceUp = function() {

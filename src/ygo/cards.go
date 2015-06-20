@@ -34,6 +34,7 @@ func (cp *Cards) Clear() {
 func (cp *Cards) SetName(name string) {
 	cp.name = name
 }
+
 func (cp *Cards) GetName() string {
 	return cp.name
 }

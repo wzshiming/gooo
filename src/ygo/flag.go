@@ -48,6 +48,7 @@ const (
 	Summon  = "summon"  // 召唤
 	Cover   = "cover"   // 覆盖
 	Battle  = "battle"  // 战斗
+	Use     = "use"     // 手牌发动
 
 	Discard = "discard" // 丢弃
 	Deduct  = "deduct"  // 对玩家造成伤害

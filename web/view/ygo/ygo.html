@@ -122,6 +122,11 @@ YGO.prototype.setFront = function(args) {
 }
 
 
+YGO.prototype.touch = function(args) {
+    i = this.scene.AllCard[args.uniq]
+    i.Touch(args.x,args.y,args.z)
+}
+
 YGO.prototype.init = function(args) {
     var t = this
     t.users = args.users;
