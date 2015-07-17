@@ -44,6 +44,7 @@ func (r *Room) YGOGame(sesss ...*agent.Session) {
 		res, err := room.Join(v, head)
 		if err != nil {
 			v.UnlockSession(nil)
+			return
 		} else {
 			v.UnlockSession(&agent.Response{
 				Head: head,
@@ -65,12 +66,13 @@ func (r *Room) Games() {
 	for {
 		<-tick
 		if r.room.Len() >= 2 {
-			go r.YGOGame(r.room.GroupFromSize(2)...)
+			g := r.room.GroupFromSize(2)
+			go r.YGOGame(g...)
 		}
 	}
 }
 
-// 匹配游戏
+// 搜索卡牌
 func (r *Room) CardFind(args agent.Request, reply *agent.Response) error {
 	//var d struct {
 	//	Language string
@@ -203,7 +205,7 @@ func (r *Room) GameGetDeck(args agent.Request, reply *agent.Response) error {
 	// 获取卡组
 	odecks := GetDeck(id)
 
-	rego.INFO(odecks)
+	//rego.INFO(odecks)
 	reply.Response = rego.EnJson(odecks)
 	return nil
 

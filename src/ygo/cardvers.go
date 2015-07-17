@@ -71,7 +71,7 @@ func (cv *CardVersion) Sum(cv2 *CardVersion) *CardVersion {
 	return rcv
 }
 
-func (cv *CardVersion) Deck(cp *Cards, player *Player, deck []uint) {
+func (cv *CardVersion) Deck(cp *Group, player *Player, deck []uint) {
 	for _, v := range deck {
 		t := cv.Get(v)
 		if t != nil {

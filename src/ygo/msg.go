@@ -53,9 +53,9 @@ type Call struct {
 	Args   interface{} `json:"args"`
 }
 
-func Touch(t *Card, x, y, z int) (string, interface{}) {
+func Touch(t uint, x, y, z int) (string, interface{}) {
 	return "touch", map[string]interface{}{
-		"uniq": t.ToUint(),
+		"uniq": t,
 		"x":    x,
 		"y":    y,
 		"z":    z,
@@ -82,7 +82,7 @@ func Message(msg string) (string, interface{}) {
 	}
 }
 
-func MoveCard(t *Card, pos string) (string, interface{}) {
+func MoveCard(t *Card, pos LL_TYPE) (string, interface{}) {
 	return "moveCard", map[string]interface{}{
 		"uniq":   t.ToUint(),
 		"master": t.GetSummoner().Index,

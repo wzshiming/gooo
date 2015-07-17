@@ -48,7 +48,7 @@ type Card struct {
 	DeckId uint64 `json:"-";sql:"index:idx_deckid_index"`
 	Index  uint   `json:"id";sql:"index:idx_deckid_index"`
 	Size   uint   `json:"size"`
-	InPos  InPos  `json:"-"`
+	InPos  InPos  `json:"-";sql:"index:idx_deckid_index"`
 }
 
 type InPos uint

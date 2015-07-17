@@ -21,9 +21,13 @@ default: build run
 
 all: clean info test build clean_pkg run
 
+coffee:
+	@$(ECHO_DATE) Coffee...
+	@coffee -c -j ./web/public/c.js ./web/view/coffee/*.coffee
+
 build: number_build build_ number_build_record 
 
-build_: shutdown
+build_: shutdown coffee
 	@$(GO) install -v github.com/wzshiming/rego/...
 	@$(GO) install -v service/...
 
@@ -84,4 +88,4 @@ get_else:
 	@$(GIT) clone https://github.com/mrdoob/three.js temp/three.js
 
 info:
-	@wc ./src/service/*.go ./src/service/*/*.go ./src/service/*/*/*.go
+	@wc ./src/ygo/*.go ./src/service/*.go ./src/service/*/*.go ./src/service/*/*/*.go

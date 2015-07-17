@@ -38,7 +38,7 @@ func (co *CardOriginal) Make(ow *Player) *Card {
 var handMethods = map[LC_TYPE][]LI_TYPE{
 	LC_None:            []LI_TYPE{},
 	LC_Monster:         []LI_TYPE{LI_Call, LI_Cover}, //怪兽
-	LC_Magic:           []LI_TYPE{LI_Use, LI_Cover},  //魔法
+	LC_Magic:           []LI_TYPE{LI_Call, LI_Cover}, //魔法
 	LC_Trap:            []LI_TYPE{LI_Cover},          //陷阱
 	LC_OrdinaryMonster: []LI_TYPE{LI_Call, LI_Cover}, //普通怪兽 通常 黄色
 	LC_EffectMonster:   []LI_TYPE{LI_Call, LI_Cover}, //效果怪兽 橙色
@@ -46,12 +46,12 @@ var handMethods = map[LC_TYPE][]LI_TYPE{
 	LC_ExcessMonster:   []LI_TYPE{LI_Call, LI_Cover}, //超量怪兽 xyz 黑色
 	LC_HomologyMonster: []LI_TYPE{LI_Call, LI_Cover}, //同调怪兽 白色
 	LC_RiteMonster:     []LI_TYPE{LI_Call, LI_Cover}, //仪式怪兽 蓝色
-	LC_OrdinaryMagic:   []LI_TYPE{LI_Use, LI_Cover},  //普通魔法 通常
-	LC_RiteMagic:       []LI_TYPE{LI_Use, LI_Cover},  //仪式魔法
-	LC_SustainsMagic:   []LI_TYPE{LI_Use, LI_Cover},  //永续魔法 速度2
-	LC_EquipMagic:      []LI_TYPE{LI_Use, LI_Cover},  //装备魔法
-	LC_PlaceMagic:      []LI_TYPE{LI_Use, LI_Cover},  //场地魔法
-	LC_RushMagic:       []LI_TYPE{LI_Use, LI_Cover},  //速攻魔法
+	LC_OrdinaryMagic:   []LI_TYPE{LI_Call, LI_Cover}, //普通魔法 通常
+	LC_RiteMagic:       []LI_TYPE{LI_Call, LI_Cover}, //仪式魔法
+	LC_SustainsMagic:   []LI_TYPE{LI_Call, LI_Cover}, //永续魔法 速度2
+	LC_EquipMagic:      []LI_TYPE{LI_Call, LI_Cover}, //装备魔法
+	LC_PlaceMagic:      []LI_TYPE{LI_Call, LI_Cover}, //场地魔法
+	LC_RushMagic:       []LI_TYPE{LI_Call, LI_Cover}, //速攻魔法
 	LC_OrdinaryTrap:    []LI_TYPE{LI_Cover},          //普通陷阱 速度2
 	LC_SustainsTrap:    []LI_TYPE{LI_Cover},          //永续陷阱 速度2
 	LC_ReactionTrap:    []LI_TYPE{LI_Cover},          //反击陷阱 速度3
@@ -62,7 +62,7 @@ type Card struct {
 	rego.Unique
 	baseOriginal *CardOriginal
 	original     CardOriginal
-	place        *Cards  // 所在位置
+	place        *Group  // 所在位置
 	target       *Card   // 目标卡牌
 	effects      []*Card // 对此卡牌影响的卡牌
 	summoner     *Player // 召唤者
@@ -83,18 +83,22 @@ func (ca *Card) Init() {
 		ca.RegisterNormalMonster()
 	case LC_OrdinaryMagic: //普通魔法 通常
 		ca.RegisterNormalMagic()
-	case LC_SustainsMagic: //永续魔法 速度2
+	case LC_SustainsMagic: //永续魔法
 		ca.RegisterNormalMagic()
+		ca.RegisterNormalSustains()
 	case LC_EquipMagic: //装备魔法
 		ca.RegisterNormalMagic()
+		ca.RegisterNormalSustains()
 	case LC_PlaceMagic: //场地魔法
 		ca.RegisterNormalMagic()
+		ca.RegisterNormalSustains()
 	case LC_RushMagic: //速攻魔法
 		ca.RegisterNormalMagic()
 	case LC_OrdinaryTrap: //普通陷阱 速度2
 		ca.RegisterNormalTrap()
 	case LC_SustainsTrap: //永续陷阱 速度2
 		ca.RegisterNormalTrap()
+		ca.RegisterNormalSustains()
 	case LC_ReactionTrap: //反击陷阱 速度3
 		ca.RegisterNormalTrap()
 	}
@@ -106,7 +110,7 @@ func (ca *Card) Init() {
 
 }
 
-func (ca *Card) GetPlace() *Cards {
+func (ca *Card) GetPlace() *Group {
 	return ca.place
 }
 
@@ -547,9 +551,22 @@ func (ca *Card) RegisterNormal() {
 	ca.AddEventListener(Cover, ca.NormalCover)
 }
 
+func (ca *Card) RegisterNormalMagicAndTrap() {
+	ca.AddEventListener(Used, ca.ToGrave)
+	ca.AddEventListener(Use, ca.NormalUse)
+	ca.AddEventListener(Onset, ca.FaceUpAttack)
+	ca.AddEventListener(Onset, func() {
+		ca.Dispatch(Used)
+	})
+}
+
+func (ca *Card) RegisterNormalSustains() {
+	//ca.RemoveEventListener(Used, ca.ToGrave)
+}
+
 func (ca *Card) RegisterNormalMagic() {
 	ca.RegisterNormal()
-	ca.AddEventListener(Use, ca.NormalUse)
+	ca.RegisterNormalMagicAndTrap()
 }
 
 func (ca *Card) RegisterNormalTrap() {
@@ -557,7 +574,7 @@ func (ca *Card) RegisterNormalTrap() {
 	ca.AddEventListener(Cover, func() {
 		var e func()
 		e = func() {
-			ca.AddEventListener(Use, ca.NormalUse)
+			ca.RegisterNormalMagicAndTrap()
 			ca.GetSummoner().RemoveEventListener(EPSuf, e)
 		}
 		ca.GetSummoner().AddEventListener(EPSuf, e)
@@ -572,18 +589,18 @@ func (ca *Card) RegisterNormalMonster() {
 }
 
 func (ca *Card) NormalUse() {
-	if ca.GetPlace().GetName() != Szone {
-		ca.Dispatch(Cover)
+	if ca.GetSummoner().Szone.Len() < 5 {
+		ca.Dispatch(Onset)
 	}
-	ca.FaceUpAttack()
-	ca.Dispatch(Onset)
 }
 
 func (ca *Card) NormalSummon() {
-	ca.PayBySuperior(func() {
-		ca.FaceUpAttack()
-		ca.ToMzone()
-	})
+	if ca.GetSummoner().Mzone.Len() < 5 {
+		ca.PayBySuperior(func() {
+			ca.FaceUpAttack()
+			ca.ToMzone()
+		})
+	}
 }
 
 func (ca *Card) NormalCover() {

@@ -289,7 +289,26 @@ func vol(cardBag *ygo.CardVersion) {
 		Password: "61854111",
 		Name:     "传说之剑",            // "Legendary Sword"  "伝説の剣"
 		Lc:       ygo.LC_EquipMagic, // 装备魔法
-		//Initialize:    func(ca *ygo.Card) {}, // 初始
+		Initialize: func(ca *ygo.Card) bool {
+			ca.AddEventListener(ygo.Onset, func() { // 注册主动发动事件
+				if t := ca.GetSummoner().SelectMzone(); t != nil { // 从怪兽区选择卡
+					if t.GetRace() == ygo.LR_Warrior { // 选择的卡死战士族的
+						t.SetAttack(t.GetAttack() + 300)          // 攻击 +300
+						t.SetDefense(t.GetDefense() + 300)        // 防御 +300
+						ca.AddEventListener(ygo.Destroy, func() { // 注册被破坏事件
+							t.SetAttack(t.GetAttack() - 300)   // 攻击 -300
+							t.SetDefense(t.GetDefense() - 300) // 防御 -300
+						})
+						t.AddEventListener(ygo.Destroy, func() { // 注册装备的怪兽被破坏
+							ca.Dispatch(ygo.Destroy) // 通知自己也被破坏了
+						})
+						return
+					}
+				}
+				ca.Dispatch(ygo.Destroy, ca) // 发动不成功被破坏
+			})
+			return true
+		}, // 初始
 		IsValid: true,
 	}
 	cardBag.Register(co)
@@ -2079,9 +2098,14 @@ func vol(cardBag *ygo.CardVersion) {
 		Password: "55144522",
 		Name:     "强欲之壶",               // "Pot of Greed"  "強欲な壺"
 		Lc:       ygo.LC_OrdinaryMagic, // 通常魔法
-		//Initialize:    func(ca *ygo.Card) {}, // 初始
+		Initialize: func(ca *ygo.Card) bool {
+			ca.AddEventListener(ygo.Onset, func() {
+				ca.GetSummoner().ActionDraw(2)
+			})
+			return true
+		}, // 初始
 
-		IsValid: false,
+		IsValid: true,
 	}
 	cardBag.Register(co)
 

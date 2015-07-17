@@ -1,22 +1,26 @@
 package ygo
 
 const (
+	FindCards = "FindCards"
+
 	DPPre = "DPPre" // 抽排阶段之前
+	DP    = "DP"
 	DPSuf = "DPSuf" // 抽排阶段之后
 
 	SPPre = "SPPre" // 准备阶段之前
+	SP    = "SP"
 	SPSuf = "SPSuf" // 准备阶段之后
 
-	MP1Pre = "MP1Pre" // 主1阶段之前
-	MP1Suf = "MP1Suf" // 主1阶段之后
+	MPPre = "MPPre" // 主阶段之前
+	MP    = "MP"
+	MPSuf = "MPSuf" // 主阶段之后
 
 	BPPre = "BPPre" // 战斗阶段之前
+	BP    = "BP"
 	BPSuf = "BPSuf" // 战斗阶段之后
 
-	MP2Pre = "MP2Pre" // 主2阶段之前
-	MP2Suf = "MP2Suf" // 主2阶段之后
-
 	EPPre = "EPPre" // 结束阶段之前
+	EP    = "EP"
 	EPSuf = "EPSuf" // 结束阶段之后
 
 	Draw    = "Draw"    // 每次抽排
@@ -43,21 +47,15 @@ const (
 	Onset   = "onset"   // 我方主阶段发动
 	Removed = "removed" // 移除
 	Freedom = "freedom" // 解放 送去墓地
-	Destroy = "Destroy" // 战斗破坏 送去墓地
+	Destroy = "Destroy" // 破坏 送去墓地
 	Flip    = "flip"    // 反转
 	Summon  = "summon"  // 召唤
 	Cover   = "cover"   // 覆盖
 	Battle  = "battle"  // 战斗
+	Used    = "used"    // 发动了的
 	Use     = "use"     // 手牌发动
 
 	Discard = "discard" // 丢弃
 	Deduct  = "deduct"  // 对玩家造成伤害
-	Deck    = "deck"    // 卡组
-	Hand    = "hand"    // 手牌
-	Mzone   = "mzone"   // 怪兽区
-	Szone   = "szone"   // 魔陷区
-	Grave   = "grave"   // 墓地
-	//Removed = "removed" // 移除
-	Extra = "extra" // 额外
-	Field = "field" // 场地
+
 )

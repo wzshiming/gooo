@@ -43,6 +43,7 @@ func run(ag *agent.Agent) {
 
 	m := martini.Classic()
 
+	m.Use(martini.Static(basepath("/public")))
 	m.Use(martini.Static(basepath("/static")))
 	store := sessions.NewCookieStore([]byte("gooo"))
 	m.Use(sessions.Sessions("session", store))

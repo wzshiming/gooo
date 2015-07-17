@@ -1,7 +1,18 @@
 <script src="/js/three.js"></script>
 <script src="/js/libs/tween.min.js"></script>
 {{ template "unite" . }}
+
 <div class="row clearfix">
+    <div class="col-md-4 column">
+        <div class="jumbotron well">
+            <!--<img alt="300x200" src="http://lorempixel.com/600/200/people" width="200"/>-->
+            <div class="caption">
+                <p>
+                    <a id="ygo_test" class="btn btn-primary" href="javascript:(function(){})()">测试功能</a>
+                </p>
+            </div>
+        </div>
+    </div>
     <div class="col-md-4 column">
         <div class="jumbotron well">
             <!--<img alt="300x200" src="http://lorempixel.com/600/200/people" width="200"/>-->
@@ -24,9 +35,17 @@
     </div>
 </div>
 
+<script src="/c.js"></script>
 <script>
 //$('#ygo').hide();
 //Start();
+
+$('#ygo_test').click(function() {
+    $('#ygo').show();
+    window.StartTest();
+    $('#home').hide();
+});
+
 $('#ygo_play').click(function() {
     WsMatchCompetitors(function(r) {
         if (!r) {
@@ -35,11 +54,8 @@ $('#ygo_play').click(function() {
 
         console.log(r)
         if (r.status == "init") {
-            $.get("/ygo", function(result) {
-                $("#page").html(result);
-                $('#ygo').show();
-                StartGame();
-            });
+            $('#ygo').show();
+            window.StartGame();
             MsgInfo("游戏开始")
             $('#home').hide();
 
@@ -55,11 +71,8 @@ $('#ygo_play').click(function() {
 
 
 $('#ygo_neaten').click(function() {
-    $.get("/ygo", function(result) {
-        $("#page").html(result);
-        $('#ygo').show();
-        StartNeaten();
-    });
+    $('#ygo').show();
+    window.StartNeaten();
     $('#home').hide();
 });
 

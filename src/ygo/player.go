@@ -13,6 +13,7 @@ type Player struct {
 	MsgChan
 	Name    string         // 用户名
 	Session *agent.Session // 会话
+	Phases  LP_TYPE
 
 	// 规则属性
 	Index    int           // 玩家索引
@@ -21,25 +22,23 @@ type Player struct {
 	WaitTime time.Duration // 每次动作等待的时间
 
 	// 基础属性
-	Hp         int     // 生命值
-	Camp       int     // 阵营
-	RoundSize  int     // 回合数
-	DrawSize   uint    // 抽卡数
-	MaxHp      uint    // 最大生命值
-	MaxSdi     int     // 最大手牌
-	Phases     LP_TYPE // 阶段
-	PhasesNext LP_TYPE // 下一阶段
+	Hp        int  // 生命值
+	Camp      int  // 阵营
+	RoundSize int  // 回合数
+	DrawSize  uint // 抽卡数
+	MaxHp     uint // 最大生命值
+	MaxSdi    int  // 最大手牌
 
 	// 卡牌区
-	Deck    *Cards // 卡组 40 ~ 60
-	Hand    *Cards // 手牌
-	Extra   *Cards // 额外卡组 <= 15 融合怪物 同调怪物 超量怪物
-	Side    *Cards // 副卡组 <= 15
-	Removed *Cards // 排除卡
-	Grave   *Cards // 墓地
-	Mzone   *Cards // 怪物卡区 5
-	Szone   *Cards // 魔法卡陷阱卡区 5
-	Field   *Cards // 场地卡
+	Deck    *Group // 卡组 40 ~ 60
+	Hand    *Group // 手牌
+	Extra   *Group // 额外卡组 <= 15 融合怪物 同调怪物 超量怪物
+	Side    *Group // 副卡组 <= 15
+	Removed *Group // 排除卡
+	Grave   *Group // 墓地
+	Mzone   *Group // 怪物卡区 5
+	Szone   *Group // 魔法卡陷阱卡区 5
+	Field   *Group // 场地卡
 
 	// 是否失败
 	fail bool
@@ -56,32 +55,43 @@ func NewPlayer() *Player {
 		OverTime: time.Second * 120,
 		WaitTime: time.Second * 10,
 	}
+	var pr uint
 	pl.MsgChan = NewMsgChan(func(m MsgCode) bool {
+		//rego.INFO(m)
 		if m.Uniq != 0 {
 			ca := pl.game.GetCard(m.Uniq)
-			if m.Method == 222 {
-				pl.CallAll(Touch(ca, 0, 0, 50))
-			} else if m.Method == 223 {
-				pl.CallAll(Touch(ca, 0, 0, 0))
-			} else {
-				return true
+			if ca != nil {
+				if m.Method == 101 {
+					if pr != 0 {
+						pl.GetTarget().CallAll(Touch(pr, 1, 1, 1))
+						pr = 0
+					}
+					//pl.Call(Touch(m.Uniq, -1, -1, 50))
+					pl.GetTarget().Call(Touch(m.Uniq, -1, -100, 100))
+				} else if m.Method == 102 {
+					if pr == m.Uniq {
+						pr = 0
+					}
+					pl.GetTarget().CallAll(Touch(m.Uniq, 1, 1, 1))
+				} else {
+					return true
+				}
 			}
-
 		}
 		return false
 	})
-	pl.Deck = NewCards(pl, Deck)
-	pl.Hand = NewCards(pl, Hand)
-	pl.Extra = NewCards(pl, Extra)
-	pl.Removed = NewCards(pl, Removed)
-	pl.Grave = NewCards(pl, Grave)
-	pl.Mzone = NewCards(pl, Mzone)
-	pl.Szone = NewCards(pl, Szone)
-	pl.Field = NewCards(pl, Field)
+	pl.Deck = NewGroup(pl, LL_Deck)
+	pl.Hand = NewGroup(pl, LL_Hand)
+	pl.Extra = NewGroup(pl, LL_Extra)
+	pl.Removed = NewGroup(pl, LL_Removed)
+	pl.Grave = NewGroup(pl, LL_Grave)
+	pl.Mzone = NewGroup(pl, LL_Mzone)
+	pl.Szone = NewGroup(pl, LL_Szone)
+	pl.Field = NewGroup(pl, LL_Field)
 
-	pl.Deck.SetJoin(func(c *Card) {
-		c.FaceDownAttack()
-	})
+	//	pl.Deck.SetJoin(func(c *Card) {
+	//		c.FaceDownAttack()
+	//	})
 	pl.Extra.SetJoin(func(c *Card) {
 		c.FaceUpAttack()
 	})
@@ -92,6 +102,12 @@ func NewPlayer() *Player {
 	pl.Grave.SetJoin(func(c *Card) {
 		c.FaceUpAttack()
 	})
+
+	pl.AddEventListener(DP, pl.draw)
+	pl.AddEventListener(SP, pl.standby)
+	pl.AddEventListener(MP, pl.main)
+	pl.AddEventListener(BP, pl.battle)
+	pl.AddEventListener(EP, pl.end)
 	return pl
 }
 
@@ -117,53 +133,15 @@ func (pl *Player) round() (err error) {
 		"player": pl.Index,
 	})
 
-	pl.Dispatch(DPPre, pl)
-	pl.draw(LP_Draw)
-	pl.Dispatch(DPSuf, pl)
-
-	pl.Dispatch(SPPre, pl)
-	pl.standby(LP_Standby)
-	pl.Dispatch(SPSuf, pl)
-
-	pl.Dispatch(MP1Pre, pl)
-	if pl.main(LP_Main1) {
-		pl.ToBattle()
-	}
-	pl.Dispatch(MP1Suf, pl)
-
-	pl.Dispatch(BPPre, pl)
-	if pl.PhasesNext == LP_Battle {
-		if pl.battle(LP_Battle) {
-			pl.ToMain()
-		}
-	}
-	pl.Dispatch(BPSuf, pl)
-
-	pl.Dispatch(MP2Pre, pl)
-	if pl.PhasesNext == LP_Main2 {
-		pl.main(LP_Main2)
-		pl.ToEnd()
-	}
-	pl.Dispatch(MP2Suf, pl)
-
-	pl.Dispatch(EPPre, pl)
-	pl.end(LP_End)
-	pl.Dispatch(EPSuf, pl)
+	pl.Dispatch(DP, LP_Draw)
+	pl.Dispatch(SP, LP_Standby)
+	pl.Dispatch(MP, LP_Main1)
+	pl.Dispatch(BP, LP_Battle)
+	pl.Dispatch(MP, LP_Main2)
+	pl.Dispatch(EP, LP_End)
 
 	pl.RoundSize++
 	return
-}
-
-func (pl *Player) ToBattle() {
-	pl.PhasesNext = LP_Battle
-}
-
-func (pl *Player) ToMain() {
-	pl.PhasesNext = LP_Main2
-}
-
-func (pl *Player) ToEnd() {
-	pl.PhasesNext = LP_End
 }
 
 func (pl *Player) draw(lp LP_TYPE) bool {
@@ -172,6 +150,7 @@ func (pl *Player) draw(lp LP_TYPE) bool {
 			rego.DebugStack()
 		}
 	}()
+	pl.Dispatch(DPPre, pl)
 	pl.Phases = lp
 	pl.CallAll(flashPhases(pl))
 	pl.Call(Message("抽牌阶段"))
@@ -180,7 +159,7 @@ func (pl *Player) draw(lp LP_TYPE) bool {
 		return false
 	}
 	pl.ActionDraw(1)
-
+	pl.Dispatch(DPSuf, pl)
 	return true
 }
 
@@ -190,10 +169,11 @@ func (pl *Player) standby(lp LP_TYPE) bool {
 			rego.DebugStack()
 		}
 	}()
+	pl.Dispatch(SPPre, pl)
 	pl.Phases = lp
 	pl.CallAll(flashPhases(pl))
 	pl.Call(Message("准备阶段"))
-
+	pl.Dispatch(SPSuf, pl)
 	return true
 }
 
@@ -203,6 +183,7 @@ func (pl *Player) main(lp LP_TYPE) bool {
 			rego.DebugStack()
 		}
 	}()
+	pl.Dispatch(MPPre, pl)
 	pl.Phases = lp
 	pl.Call(Message("主要阶段"))
 	//pl.ClearCode()
@@ -212,6 +193,7 @@ func (pl *Player) main(lp LP_TYPE) bool {
 		if p.Uniq == 0 {
 			break
 		}
+
 		if t := pl.Hand.ExistForUniq(p.Uniq); t != nil {
 			if p.Method == 0 {
 				pl.Call("optionCard", map[string]interface{}{
@@ -219,11 +201,14 @@ func (pl *Player) main(lp LP_TYPE) bool {
 					"list": t.HandMethods(),
 				})
 			} else if p.Method == uint(LI_Call) {
-				t.Dispatch(Summon, t)
+				if t.IsMonster() {
+					t.Dispatch(Summon, t)
+				} else {
+					t.Dispatch(Use, t)
+				}
+
 			} else if p.Method == uint(LI_Cover) {
 				t.Dispatch(Cover, t)
-			} else if p.Method == uint(LI_Use) {
-				t.Dispatch(Use, t)
 			}
 		} else if t := pl.Mzone.ExistForUniq(p.Uniq); t != nil {
 			t.ChangeExpression()
@@ -233,6 +218,7 @@ func (pl *Player) main(lp LP_TYPE) bool {
 			pl.Call(Message("非法目标"))
 		}
 	}
+	pl.Dispatch(MPSuf, pl)
 	return true
 }
 
@@ -242,6 +228,7 @@ func (pl *Player) battle(lp LP_TYPE) bool {
 			rego.DebugStack()
 		}
 	}()
+	pl.Dispatch(BPPre, pl)
 	pl.Phases = lp
 	pl.Call(Message("战斗阶段"))
 	//pl.ClearCode()
@@ -259,8 +246,7 @@ func (pl *Player) battle(lp LP_TYPE) bool {
 			}
 
 			pl.Call(Message("选择要攻击的目标"))
-			j := pl.SelectWill()
-			if j.Uniq != 0 {
+			if j := pl.SelectWill(); j.Uniq != 0 {
 				t2 := pl.game.GetCard(j.Uniq)
 				if pl.GetTarget().Mzone.IsExistCard(t2) {
 					t1.Dispatch(Battle, t2)
@@ -273,9 +259,7 @@ func (pl *Player) battle(lp LP_TYPE) bool {
 			break
 		}
 	}
-	//	select {
-	//	case <-time.After(time.Second / 10):
-	//	}
+	pl.Dispatch(BPSuf, pl)
 	return true
 }
 
@@ -285,12 +269,14 @@ func (pl *Player) end(lp LP_TYPE) bool {
 			rego.DebugStack()
 		}
 	}()
+	pl.Dispatch(EPPre, pl)
 	pl.Phases = lp
 	if i := pl.Hand.Len() - pl.MaxSdi; i > 0 {
 		pl.Call(Message("选择丢弃的手牌"))
 		pl.SelectFunc(i, pl.Hand, ToGrave)
 	}
 	pl.Call(Message("对方回合"))
+	pl.Dispatch(EPSuf, pl)
 	return true
 }
 
@@ -376,7 +362,7 @@ func (pl *Player) Select() (t *Card) {
 func (pl *Player) SelectSzone() (t *Card) {
 	if tar := pl.Select(); tar != nil {
 		pla := tar.GetPlace()
-		if pla.GetName() == Szone {
+		if pla.GetName() == LL_Szone {
 			return tar
 		}
 	}
@@ -386,7 +372,7 @@ func (pl *Player) SelectSzone() (t *Card) {
 func (pl *Player) SelectSzoneTarget() (t *Card) {
 	if tar := pl.Select(); tar != nil {
 		pla := tar.GetPlace()
-		if pla.GetName() == Szone && pla.GetOwner() != pl {
+		if pla.GetName() == LL_Szone && pla.GetOwner() != pl {
 			return tar
 		}
 	}
@@ -396,7 +382,7 @@ func (pl *Player) SelectSzoneTarget() (t *Card) {
 func (pl *Player) SelectSzoneSelf() (t *Card) {
 	if tar := pl.Select(); tar != nil {
 		pla := tar.GetPlace()
-		if pla.GetName() == Szone && pla.GetOwner() == pl {
+		if pla.GetName() == LL_Szone && pla.GetOwner() == pl {
 			return tar
 		}
 	}
@@ -406,7 +392,7 @@ func (pl *Player) SelectSzoneSelf() (t *Card) {
 func (pl *Player) SelectMzone() (t *Card) {
 	if tar := pl.Select(); tar != nil {
 		pla := tar.GetPlace()
-		if pla.GetName() == Mzone {
+		if pla.GetName() == LL_Mzone {
 			return tar
 		}
 	}
@@ -416,7 +402,7 @@ func (pl *Player) SelectMzone() (t *Card) {
 func (pl *Player) SelectMzoneTarget() (t *Card) {
 	if tar := pl.Select(); tar != nil {
 		pla := tar.GetPlace()
-		if pla.GetName() == Mzone && pla.GetOwner() != pl {
+		if pla.GetName() == LL_Mzone && pla.GetOwner() != pl {
 			return tar
 		}
 	}
@@ -426,7 +412,7 @@ func (pl *Player) SelectMzoneTarget() (t *Card) {
 func (pl *Player) SelectMzoneSelf() (t *Card) {
 	if tar := pl.Select(); tar != nil {
 		pla := tar.GetPlace()
-		if pla.GetName() == Mzone && pla.GetOwner() == pl {
+		if pla.GetName() == LL_Mzone && pla.GetOwner() == pl {
 			return tar
 		}
 	}
@@ -436,7 +422,7 @@ func (pl *Player) SelectMzoneSelf() (t *Card) {
 func (pl *Player) SelectGrave() (t *Card) {
 	if tar := pl.Select(); tar != nil {
 		pla := tar.GetPlace()
-		if pla.GetName() == Grave {
+		if pla.GetName() == LL_Grave {
 			return tar
 		}
 	}
@@ -446,7 +432,7 @@ func (pl *Player) SelectGrave() (t *Card) {
 func (pl *Player) SelectGraveTarget() (t *Card) {
 	if tar := pl.Select(); tar != nil {
 		pla := tar.GetPlace()
-		if pla.GetName() == Grave && pla.GetOwner() != pl {
+		if pla.GetName() == LL_Grave && pla.GetOwner() != pl {
 			return tar
 		}
 	}
@@ -456,7 +442,7 @@ func (pl *Player) SelectGraveTarget() (t *Card) {
 func (pl *Player) SelectGraveSelf() (t *Card) {
 	if tar := pl.Select(); tar != nil {
 		pla := tar.GetPlace()
-		if pla.GetName() == Grave && pla.GetOwner() == pl {
+		if pla.GetName() == LL_Grave && pla.GetOwner() == pl {
 			return tar
 		}
 	}
@@ -466,7 +452,7 @@ func (pl *Player) SelectGraveSelf() (t *Card) {
 func (pl *Player) SelectHand() (t *Card) {
 	if tar := pl.Select(); tar != nil {
 		pla := tar.GetPlace()
-		if pla.GetName() == Hand {
+		if pla.GetName() == LL_Hand {
 			return tar
 		}
 	}
@@ -476,7 +462,7 @@ func (pl *Player) SelectHand() (t *Card) {
 func (pl *Player) SelectHandTarget() (t *Card) {
 	if tar := pl.Select(); tar != nil {
 		pla := tar.GetPlace()
-		if pla.GetName() == Hand && pla.GetOwner() != pl {
+		if pla.GetName() == LL_Hand && pla.GetOwner() != pl {
 			return tar
 		}
 	}
@@ -486,14 +472,14 @@ func (pl *Player) SelectHandTarget() (t *Card) {
 func (pl *Player) SelectHandSelf() (t *Card) {
 	if tar := pl.Select(); tar != nil {
 		pla := tar.GetPlace()
-		if pla.GetName() == Hand && pla.GetOwner() == pl {
+		if pla.GetName() == LL_Hand && pla.GetOwner() == pl {
 			return tar
 		}
 	}
 	return nil
 }
 
-func (pl *Player) SelectMust(cp *Cards) (t *Card) {
+func (pl *Player) SelectMust(cp *Group) (t *Card) {
 	//pl.ClearCode()
 	pl.CallAll(flashPhases(pl))
 	select {
@@ -507,7 +493,7 @@ func (pl *Player) SelectMust(cp *Cards) (t *Card) {
 	return
 }
 
-func (pl *Player) SelectFunc(size int, cp *Cards, fun func(c *Card) bool) {
+func (pl *Player) SelectFunc(size int, cp *Group, fun func(c *Card) bool) {
 	for i := 0; i != size; i++ {
 		t := pl.SelectMust(cp)
 		fun(t)

@@ -42,8 +42,10 @@ func SetDeck(id uint64, name string, gr proto.Deck) {
 		db.Model(&odeck).Save(&gr)
 	} else {
 		gr.UpdatedAt = time.Now()
+		db.Where(&proto.Card{DeckId: odeck.Id, Index: 0}).Delete(&proto.Card{})
 		db.Where(&proto.Card{DeckId: odeck.Id}).Delete(&proto.Card{})
 		db.Model(&odeck).Update(&gr)
 	}
+
 	return
 }

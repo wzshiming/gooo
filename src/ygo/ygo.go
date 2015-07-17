@@ -39,6 +39,24 @@ func NewYGO(r *misc.Rooms) *YGO {
 		p.Session = sess
 		yg.Players[sess.ToUint()] = p
 	})
+
+	//	yg.AddEventListener(FindCards, func(cards *Cards, ld LL_TYPE, lc LC_TYPE, la LA_TYPE, lr LR_TYPE, le LE_TYPE) {
+	//		t := []*Card{}
+	//		if ld != LL_None {
+	//			for _, v := range yg.Cards {
+	//				if v.GetPlace().GetName() == ld {
+	//					t = append(t, v)
+	//				}
+	//			}
+	//		}
+	//		if lc != LC_None {
+	//			for _, v := range t {
+	//				if v.GetPlace().GetName() == ld {
+	//					t = append(t, v)
+	//				}
+	//			}
+	//		}
+	//	})
 	return yg
 }
 
@@ -116,12 +134,12 @@ func (yg *YGO) Loop() {
 		yg.Players[v].initDeck(s.Deck.GetMain(), s.Deck.GetExtra())
 	}
 
-	nap(20) // 手牌初始化
+	nap(10) // 手牌初始化
 	for _, v := range yg.round {
 		yg.Players[v].init()
 	}
 
-	nap(5)
+	nap(10)
 	for {
 		for _, v := range yg.round {
 			nap(5)

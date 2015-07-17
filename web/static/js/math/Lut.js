@@ -134,7 +134,7 @@ THREE.Lut.prototype = {
 
 		this.legend = {};
 
-		this.legend.layout = parameters.hasOwnProperty( 'layout' ) ? parameters[ 'layout' ] : 'vertical';
+		this.legend.decks = parameters.hasOwnProperty( 'layout' ) ? parameters[ 'decks' ] : 'vertical';
 
 		this.legend.position = parameters.hasOwnProperty( 'position' ) ? parameters[ 'position' ] : { 'x': 21.5, 'y': 8, 'z': 5 };
 
@@ -199,7 +199,7 @@ THREE.Lut.prototype = {
 
 		this.legend.mesh = new THREE.Mesh( this.legend.legendGeometry, this.legend.legendMaterial );
 
-		if ( this.legend.layout == 'horizontal') {
+		if ( this.legend.decks == 'horizontal') {
 
 			this.legend.mesh.rotation.z = - 90 * ( Math.PI / 180 );
 
@@ -223,19 +223,19 @@ THREE.Lut.prototype = {
 
 		if ( ! this.legend ) { return false; }
 
-		if ( this.legend.layout == layout ) { return false; }
+		if ( this.legend.decks == decks ) { return false; }
 
-		if ( layout != 'horizontal' && layout != 'vertical' ) { return false; }
+		if ( decks != 'horizontal' && decks != 'vertical' ) { return false; }
 
-		this.layout = layout;
+		this.decks = decks;
 
-		if ( layout == 'horizontal' ) {
+		if ( decks == 'horizontal' ) {
 
 			this.legend.mesh.rotation.z = 90 * ( Math.PI / 180 );
 
 		}
 
-		if ( layout == 'vertical' ) {
+		if ( decks == 'vertical' ) {
 
 			this.legend.mesh.rotation.z = -90 * ( Math.PI / 180 );
 
@@ -309,13 +309,13 @@ THREE.Lut.prototype = {
 
 		spriteTitle.scale.set( 2, 1, 1.0 );
 
-		if ( this.legend.layout == 'vertical' ) {
+		if ( this.legend.decks == 'vertical' ) {
 
 			spriteTitle.position.set( this.legend.position.x + this.legend.dimensions.width, this.legend.position.y + ( this.legend.dimensions.height * 0.45 ), this.legend.position.z );
 
 		}
 
-		if ( this.legend.layout == 'horizontal' ) {
+		if ( this.legend.decks == 'horizontal' ) {
 
 			spriteTitle.position.set( this.legend.position.x * 1.015, this.legend.position.y + ( this.legend.dimensions.height * 0.03 ), this.legend.position.z );
 
@@ -326,14 +326,14 @@ THREE.Lut.prototype = {
 			var ticks = {};
 			var lines = {};
 
-			if ( this.legend.layout == 'vertical' ) {
+			if ( this.legend.decks == 'vertical' ) {
 
 				var topPositionY = this.legend.position.y + ( this.legend.dimensions.height * 0.36 );
 				var bottomPositionY = this.legend.position.y - ( this.legend.dimensions.height * 0.61 );
 
 			}
 
-			if ( this.legend.layout == 'horizontal' ) {
+			if ( this.legend.decks == 'horizontal' ) {
 
 				var topPositionX = this.legend.position.x + ( this.legend.dimensions.height * 0.75 );
 				var bottomPositionX = this.legend.position.x - ( this.legend.dimensions.width * 1.2  ) ;
@@ -394,7 +394,7 @@ THREE.Lut.prototype = {
 
 				spriteTick.scale.set( 2, 1, 1.0 );
 
-				if ( this.legend.layout == 'vertical' ) {
+				if ( this.legend.decks == 'vertical' ) {
 
 					var position = bottomPositionY + ( topPositionY - bottomPositionY ) * ( value / ( this.maxV - this.minV ) );
 
@@ -402,7 +402,7 @@ THREE.Lut.prototype = {
 
 				}
 
-				if ( this.legend.layout == 'horizontal' ) {
+				if ( this.legend.decks == 'horizontal' ) {
 
 					var position = bottomPositionX + ( topPositionX - bottomPositionX ) * ( value / ( this.maxV - this.minV ) );
 
@@ -425,7 +425,7 @@ THREE.Lut.prototype = {
 				var geometry = new THREE.Geometry();
 
 
-				if ( this.legend.layout == 'vertical' ) {
+				if ( this.legend.decks == 'vertical' ) {
 
 					var linePosition = ( this.legend.position.y - ( this.legend.dimensions.height * 0.5 ) + 0.01 ) + ( this.legend.dimensions.height ) * ( value / ( this.maxV - this.minV ) * 0.99 );
 
@@ -435,7 +435,7 @@ THREE.Lut.prototype = {
 
 				}
 
-				if ( this.legend.layout == 'horizontal' ) {
+				if ( this.legend.decks == 'horizontal' ) {
 
 					var linePosition = ( this.legend.position.x - ( this.legend.dimensions.height * 0.5 ) + 0.01 ) + ( this.legend.dimensions.height ) * ( value / ( this.maxV - this.minV ) * 0.99 );
 

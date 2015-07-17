@@ -5,38 +5,17 @@ import (
 )
 
 type Cards struct {
-	name  string
-	list  []*Card
-	join  func(*Card)
-	owner *Player // 所有者
+	list []*Card
 }
 
-func NewCards(pl *Player, name string) *Cards {
+func NewCards() *Cards {
 	return &Cards{
-		owner: pl,
-		name:  name,
-		list:  []*Card{},
+		list: []*Card{},
 	}
-}
-
-func (cp *Cards) GetOwner() *Player {
-	return cp.owner
-}
-
-func (cp *Cards) SetJoin(fun func(*Card)) {
-	cp.join = fun
 }
 
 func (cp *Cards) Clear() {
 	cp.list = []*Card{}
-}
-
-func (cp *Cards) SetName(name string) {
-	cp.name = name
-}
-
-func (cp *Cards) GetName() string {
-	return cp.name
 }
 
 func (cp *Cards) Len() int {
@@ -52,9 +31,6 @@ func (cp *Cards) Shuffle() {
 			}
 		}
 	}
-	//	for i := 0; i < len(array); i++ {
-	//		array[i].Owner.CallAll(MoveCard(array[i], cp.GetName()))
-	//	}
 }
 
 func (cp *Cards) BeginPush(c *Card) {
@@ -66,14 +42,6 @@ func (cp *Cards) EndPush(c *Card) {
 }
 
 func (cp *Cards) Insert(c *Card, index int) {
-	if c.place != nil {
-		c.place.PickedFor(c)
-	}
-	c.GetSummoner().CallAll(MoveCard(c, cp.GetName()))
-	if cp.join != nil {
-		cp.join(c)
-	}
-	c.place = cp
 	cp.list = append(cp.list[:index], append([]*Card{c}, cp.list[index:]...)...)
 
 }
@@ -91,7 +59,6 @@ func (cp *Cards) Remove(index int) (c *Card) {
 		return
 	}
 	c = cp.list[index]
-	c.place = nil
 	cp.list = append(cp.list[:index], cp.list[index+1:]...)
 	return
 }
