@@ -76,12 +76,12 @@ func vol(cardBag *ygo.CardVersion) {
 		Name:     "异次元的战士",             // "D.D. Warrior"  "異次元の戦士"
 		Lc:       ygo.LC_EffectMonster, // 效果怪兽
 		Initialize: func(ca *ygo.Card) bool {
-			e := func(tar *ygo.Card) {
-				ca.ToRemoved()
-				tar.ToRemoved()
-			}
-			ca.AddEventListener(ygo.ResultSuf, e)
-			ca.AddEventListener(ygo.BearResultSuf, e)
+			//			e := func(tar *ygo.Card) {
+			//				ca.ToRemoved()
+			//				tar.ToRemoved()
+			//			}
+			//			ca.AddEvent(ygo.ResultSuf, e)
+			//			ca.AddEvent(ygo.BearResultSuf, e)
 			return true
 		}, // 初始
 		Level:   4,
@@ -290,16 +290,16 @@ func vol(cardBag *ygo.CardVersion) {
 		Name:     "传说之剑",            // "Legendary Sword"  "伝説の剣"
 		Lc:       ygo.LC_EquipMagic, // 装备魔法
 		Initialize: func(ca *ygo.Card) bool {
-			ca.AddEventListener(ygo.Onset, func() { // 注册主动发动事件
+			ca.AddEvent(ygo.Onset, func() { // 注册主动发动事件
 				if t := ca.GetSummoner().SelectMzone(); t != nil { // 从怪兽区选择卡
 					if t.GetRace() == ygo.LR_Warrior { // 选择的卡死战士族的
-						t.SetAttack(t.GetAttack() + 300)          // 攻击 +300
-						t.SetDefense(t.GetDefense() + 300)        // 防御 +300
-						ca.AddEventListener(ygo.Destroy, func() { // 注册被破坏事件
+						t.SetAttack(t.GetAttack() + 300)   // 攻击 +300
+						t.SetDefense(t.GetDefense() + 300) // 防御 +300
+						ca.AddEvent(ygo.Destroy, func() {  // 注册被破坏事件
 							t.SetAttack(t.GetAttack() - 300)   // 攻击 -300
 							t.SetDefense(t.GetDefense() - 300) // 防御 -300
 						})
-						t.AddEventListener(ygo.Destroy, func() { // 注册装备的怪兽被破坏
+						t.AddEvent(ygo.Destroy, func() { // 注册装备的怪兽被破坏
 							ca.Dispatch(ygo.Destroy) // 通知自己也被破坏了
 						})
 						return
@@ -908,7 +908,7 @@ func vol(cardBag *ygo.CardVersion) {
 		Name:     "猎卡死神",               // "Reaper of the Cards"  "カードを狩る死神"
 		Lc:       ygo.LC_EffectMonster, // 效果怪兽
 		Initialize: func(ca *ygo.Card) bool {
-			ca.AddEventListener(ygo.Flip, func() {
+			ca.AddEvent(ygo.Flip, func() {
 				if c := ca.GetSummoner().SelectSzone(); c != nil {
 					c.FaceUp()
 					if c.IsTrap() {
@@ -1618,7 +1618,7 @@ func vol(cardBag *ygo.CardVersion) {
 		Name:     "骸骨天使",               // "Skelengel"  "スケルエンジェル"
 		Lc:       ygo.LC_EffectMonster, // 效果怪兽
 		Initialize: func(ca *ygo.Card) bool {
-			ca.AddEventListener(ygo.Flip, func() {
+			ca.AddEvent(ygo.Flip, func() {
 				ca.GetSummoner().ActionDraw(1)
 			})
 			return true
@@ -1739,7 +1739,7 @@ func vol(cardBag *ygo.CardVersion) {
 		Name:     "青衣忍者",               // "Armed Ninja"  "青い忍者"
 		Lc:       ygo.LC_EffectMonster, // 效果怪兽
 		Initialize: func(ca *ygo.Card) bool {
-			ca.AddEventListener(ygo.Flip, func() {
+			ca.AddEvent(ygo.Flip, func() {
 				if c := ca.GetSummoner().SelectSzone(); c != nil {
 					c.FaceUp()
 					if c.IsMagic() {
@@ -1797,7 +1797,7 @@ func vol(cardBag *ygo.CardVersion) {
 		Name:     "食人虫",                // "Man-Eater Bug"  "人喰い虫"
 		Lc:       ygo.LC_EffectMonster, // 效果怪兽
 		Initialize: func(ca *ygo.Card) bool {
-			ca.AddEventListener(ygo.Flip, func() {
+			ca.AddEvent(ygo.Flip, func() {
 				if c := ca.GetSummoner().SelectMzone(); c != nil {
 					c.FaceUp()
 					c.Dispatch(ygo.Destroy, ca)
@@ -1887,7 +1887,7 @@ func vol(cardBag *ygo.CardVersion) {
 		Name:     "哈尼哈尼",               // "Hane-Hane"  "ハネハネ"
 		Lc:       ygo.LC_EffectMonster, // 效果怪兽
 		Initialize: func(ca *ygo.Card) bool {
-			ca.AddEventListener(ygo.Flip, func() {
+			ca.AddEvent(ygo.Flip, func() {
 				if c := ca.GetSummoner().SelectMzone(); c != nil {
 					c.ToHand()
 				}
@@ -2099,7 +2099,7 @@ func vol(cardBag *ygo.CardVersion) {
 		Name:     "强欲之壶",               // "Pot of Greed"  "強欲な壺"
 		Lc:       ygo.LC_OrdinaryMagic, // 通常魔法
 		Initialize: func(ca *ygo.Card) bool {
-			ca.AddEventListener(ygo.Onset, func() {
+			ca.RegisterNormalMagic(func() {
 				ca.GetSummoner().ActionDraw(2)
 			})
 			return true
@@ -4582,7 +4582,7 @@ func vol(cardBag *ygo.CardVersion) {
 		Name:     "暗之假面",               // "Mask of Darkness"  "闇の仮面"
 		Lc:       ygo.LC_EffectMonster, // 效果怪兽
 		Initialize: func(ca *ygo.Card) bool {
-			ca.AddEventListener(ygo.Flip, func() {
+			ca.AddEvent(ygo.Flip, func() {
 				if c := ca.GetSummoner().SelectGraveSelf(); c != nil {
 					c.ToHand()
 				}
@@ -4699,7 +4699,7 @@ func vol(cardBag *ygo.CardVersion) {
 		Name:     "白衣怪盗",               // "White Magical Hat"  "白い泥棒"
 		Lc:       ygo.LC_EffectMonster, // 效果怪兽
 		Initialize: func(ca *ygo.Card) bool {
-			ca.AddEventListener(ygo.Deduct, func(plt *ygo.Player) {
+			ca.AddEvent(ygo.Deduct, func(plt *ygo.Player) {
 				plt.Hand.Random().Dispatch(ygo.Discard, ca)
 			})
 			return true
@@ -4927,7 +4927,7 @@ func vol(cardBag *ygo.CardVersion) {
 		Name:     "假面魔道士",              // "Masked Sorcerer"  "仮面魔道士"
 		Lc:       ygo.LC_EffectMonster, // 效果怪兽
 		Initialize: func(ca *ygo.Card) bool {
-			ca.AddEventListener(ygo.Deduct, func() {
+			ca.AddEvent(ygo.Deduct, func() {
 				ca.GetSummoner().ActionDraw(1)
 			})
 			return true
@@ -5142,14 +5142,14 @@ func vol(cardBag *ygo.CardVersion) {
 		Lc:       ygo.LC_EffectMonster, // 效果怪兽
 		Initialize: func(ca *ygo.Card) bool {
 
-			var e func(c *ygo.Card)
-			e = func(c *ygo.Card) {
-				c.SetAttack(0)
-				if ca.IsFaceUpAttack() {
-					ca.RemoveEventListener(ygo.BearDamageCalPre, e)
-				}
-			}
-			ca.AddEventListener(ygo.BearDamageCalPre, e)
+			//			var e func(c *ygo.Card)
+			//			e = func(c *ygo.Card) {
+			//				c.SetAttack(0)
+			//				if ca.IsFaceUpAttack() {
+			//					ca.RemoveEventListener(ygo.BearDamageCalPre, e)
+			//				}
+			//			}
+			//			ca.AddEvent(ygo.BearDamageCalPre, e)
 			return true
 		}, // 初始
 		Level:   7,
@@ -5196,14 +5196,14 @@ func vol(cardBag *ygo.CardVersion) {
 		Lc:       ygo.LC_EffectMonster, // 效果怪兽
 		Initialize: func(ca *ygo.Card) bool {
 
-			var e func(c *ygo.Card)
-			e = func(c *ygo.Card) {
-				c.SetAttack(0)
-				if ca.IsFaceUpAttack() {
-					ca.RemoveEventListener(ygo.BearDamageCalPre, e)
-				}
-			}
-			ca.AddEventListener(ygo.BearDamageCalPre, e)
+			//			var e func(c *ygo.Card)
+			//			e = func(c *ygo.Card) {
+			//				c.SetAttack(0)
+			//				if ca.IsFaceUpAttack() {
+			//					ca.RemoveEventListener(ygo.BearDamageCalPre, e)
+			//				}
+			//			}
+			//			ca.AddEvent(ygo.BearDamageCalPre, e)
 			return true
 		}, // 初始
 		Level:   7,
@@ -5249,14 +5249,14 @@ func vol(cardBag *ygo.CardVersion) {
 		Name:     "水魔神-斯迦",             // "Suijin"  "水魔神－スーガ"
 		Lc:       ygo.LC_EffectMonster, // 效果怪兽
 		Initialize: func(ca *ygo.Card) bool {
-			var e func(c *ygo.Card)
-			e = func(c *ygo.Card) {
-				c.SetAttack(0)
-				if ca.IsFaceUpAttack() {
-					ca.RemoveEventListener(ygo.BearDamageCalPre, e)
-				}
-			}
-			ca.AddEventListener(ygo.BearDamageCalPre, e)
+			//			var e func(c *ygo.Card)
+			//			e = func(c *ygo.Card) {
+			//				c.SetAttack(0)
+			//				if ca.IsFaceUpAttack() {
+			//					ca.RemoveEventListener(ygo.BearDamageCalPre, e)
+			//				}
+			//			}
+			//			ca.AddEvent(ygo.BearDamageCalPre, e)
 			return true
 		}, // 初始
 		Level:   7,
@@ -7945,7 +7945,21 @@ func vol(cardBag *ygo.CardVersion) {
 		Password: "44095762",
 		Name:     "神圣防护罩-反射镜力-",       // "Mirror Force"  "聖なるバリア －ミラーフォース－"
 		Lc:       ygo.LC_OrdinaryTrap, // 通常陷阱
-		//Initialize:    func(ca *ygo.Card) {}, // 初始
+		Initialize: func(ca *ygo.Card) bool {
+
+			//			ca.AddEvent(ygo.BearDeclarationSuf, ca.Remind)
+			//			ca.AddEvent(ygo.Offset, func(u uint) {
+			//				ca.GetSummoner().GetTarget().Mzone.ForEach(func(b *ygo.Card) bool {
+			//					if b.IsAttack() {
+			//						b.Dispatch(ygo.Destroy, ca)
+			//					}
+			//					return true
+			//				})
+			//				ca.Dispatch(ygo.Disabled)
+			//			})
+
+			return true
+		}, // 初始
 
 		IsValid: false,
 	}

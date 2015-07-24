@@ -53,6 +53,12 @@ type Call struct {
 	Args   interface{} `json:"args"`
 }
 
+func Remind(t uint) (string, interface{}) {
+	return "remind", map[string]interface{}{
+		"uniq": t,
+	}
+}
+
 func Touch(t uint, x, y, z int) (string, interface{}) {
 	return "touch", map[string]interface{}{
 		"uniq": t,
@@ -76,9 +82,10 @@ func SetFront(t *Card) (string, interface{}) {
 	}
 }
 
-func Message(msg string) (string, interface{}) {
+func Message(format string, a interface{}) (string, interface{}) {
 	return "message", map[string]interface{}{
-		"message": msg,
+		"message": format,
+		"params":  a,
 	}
 }
 
@@ -93,6 +100,10 @@ func MoveCard(t *Card, pos LL_TYPE) (string, interface{}) {
 func flashPhases(pl *Player) (string, interface{}) {
 	return "flagStep", map[string]interface{}{
 		"step": pl.Phases,
-		"wait": pl.WaitTime,
+		"wait": pl.PassTime,
 	}
+}
+
+func setFace(a map[string]interface{}) (string, interface{}) {
+	return "setFace", a
 }

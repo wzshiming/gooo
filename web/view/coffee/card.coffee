@@ -243,6 +243,11 @@ Card::Defense =  (s = 200) ->
   #@Nature s
   return
 
+Card::Remind = ->
+  this.SetHTML("×´Ì¬","¿ÉÒÔÁ¬Ëø")
+  window.setTimeout (->
+    this.SetHTML("×´Ì¬")
+  ),10000
 #Í£Ö¹ÒÆ¶¯
 Card::Stop = ->
   TWEEN.remove @object

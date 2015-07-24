@@ -49,3 +49,15 @@ func SetDeck(id uint64, name string, gr proto.Deck) {
 
 	return
 }
+
+func DelDeck(id uint64, name string) {
+	var odeck proto.Deck
+	if err := db.Where(&proto.Deck{UserId: id, Name: name}).First(&odeck).Error; err != nil {
+
+	} else {
+		db.Where(&proto.Card{DeckId: odeck.Id}).Delete(&proto.Card{})
+		db.Delete(&odeck)
+	}
+
+	return
+}

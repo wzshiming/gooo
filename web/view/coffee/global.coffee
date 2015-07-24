@@ -10,6 +10,39 @@ InitGlobal = ->
 log = (x)->
   console.dir x
 
+
+String::format = (params)->
+  @replace /{([^{}]+)}/gm,(match,name) ->"#{params[name]}"
+
+
+CurentTime = ->
+  now = new Date();
+  year = now.getFullYear()       #年
+  month = now.getMonth() + 1     #月
+  day = now.getDate()            #日
+
+  hh = now.getHours()            #时
+  mm = now.getMinutes()          #分
+  ss = now.getSeconds()          #秒
+  clock = year + "-"
+  if(month < 10)
+    clock += "0"
+  clock += month + "-"
+  if(day < 10)
+    clock += "0"
+  clock += day + " "
+  if(hh < 10)
+    clock += "0"
+  clock += hh + ":"
+  if (mm < 10)
+    clock += '0'
+  clock += mm + ":"
+  if (ss < 10)
+    clock += '0'
+  clock += ss
+  clock
+
+
 gui =  (id, classs) ->
   camera = undefined
   scene = undefined

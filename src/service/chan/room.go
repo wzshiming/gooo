@@ -227,8 +227,12 @@ func (r *Room) GameSetDeck(args agent.Request, reply *agent.Response) error {
 	//}
 	//gr.UserId = id
 
-	SetDeck(id, gr.Name, gr)
-	gr.UpdatedAt = time.Now()
+	if len(gr.Main) == 0 && len(gr.Extra) == 0 && len(gr.Side) == 0 {
+		DelDeck(id, gr.Name)
+	} else {
+		SetDeck(id, gr.Name, gr)
+		gr.UpdatedAt = time.Now()
+	}
 
 	return nil
 }

@@ -1,10 +1,11 @@
 package ygo
 
 import (
+	"time"
+
 	"github.com/wzshiming/dispatcher"
 	"github.com/wzshiming/rego"
 	"github.com/wzshiming/rego/agent"
-	"time"
 )
 
 type Player struct {
@@ -16,11 +17,12 @@ type Player struct {
 	Phases  LP_TYPE
 
 	// 规则属性
-	Index    int           // 玩家索引
-	game     *YGO          // 属于游戏
-	OverTime time.Duration // 允许超出的时间
-	WaitTime time.Duration // 每次动作等待的时间
-
+	Index     int           // 玩家索引
+	game      *YGO          // 属于游戏
+	OverTime  time.Duration // 允许超出的时间
+	WaitTime  time.Duration // 每次动作等待的时间
+	ReplyTime time.Duration // 回应等待的时间
+	PassTime  time.Duration // 经过的时间
 	// 基础属性
 	Hp        int  // 生命值
 	Camp      int  // 阵营
@@ -40,35 +42,40 @@ type Player struct {
 	Szone   *Group // 魔法卡陷阱卡区 5
 	Field   *Group // 场地卡
 
+	pending map[uint]*Card
 	// 是否失败
 	fail bool
 }
 
 func NewPlayer() *Player {
 	pl := &Player{
-		Events:   dispatcher.NewLineEvent(),
-		Camp:     1,
-		Hp:       4000,
-		DrawSize: 1,
-		MaxHp:    ^uint(0),
-		MaxSdi:   6,
-		OverTime: time.Second * 120,
-		WaitTime: time.Second * 10,
+		Events:    dispatcher.NewLineEvent(),
+		Camp:      1,
+		Hp:        4000,
+		DrawSize:  1,
+		MaxHp:     ^uint(0),
+		MaxSdi:    6,
+		OverTime:  time.Second * 120,
+		WaitTime:  time.Second * 60,
+		ReplyTime: time.Second * 20,
+		pending:   make(map[uint]*Card),
 	}
 	var pr uint
 	pl.MsgChan = NewMsgChan(func(m MsgCode) bool {
 		//rego.INFO(m)
+		if m.Uniq == 1 {
+			return true
+		}
 		if m.Uniq != 0 {
 			ca := pl.game.GetCard(m.Uniq)
 			if ca != nil {
-				if m.Method == 101 {
+				if m.Method == uint(LI_Over) {
 					if pr != 0 {
 						pl.GetTarget().CallAll(Touch(pr, 1, 1, 1))
 						pr = 0
 					}
-					//pl.Call(Touch(m.Uniq, -1, -1, 50))
 					pl.GetTarget().Call(Touch(m.Uniq, -1, -100, 100))
-				} else if m.Method == 102 {
+				} else if m.Method == uint(LI_Out) {
 					if pr == m.Uniq {
 						pr = 0
 					}
@@ -77,6 +84,7 @@ func NewPlayer() *Player {
 					return true
 				}
 			}
+
 		}
 		return false
 	})
@@ -89,26 +97,80 @@ func NewPlayer() *Player {
 	pl.Szone = NewGroup(pl, LL_Szone)
 	pl.Field = NewGroup(pl, LL_Field)
 
-	//	pl.Deck.SetJoin(func(c *Card) {
-	//		c.FaceDownAttack()
-	//	})
-	pl.Extra.SetJoin(func(c *Card) {
-		c.FaceUpAttack()
-	})
-	pl.Hand.SetJoin(func(c *Card) {
-		pl.Call(SetFront(c))
-		pl.Call(ExprCard(c, LE_FaceUpAttack))
-	})
-	pl.Grave.SetJoin(func(c *Card) {
-		c.FaceUpAttack()
+	pl.AddEvent(RoundBegin, func() {
+		pl.MsgPub("{self}开始第{round}回合", Arg{"round": pl.GetRound()})
 	})
 
-	pl.AddEventListener(DP, pl.draw)
-	pl.AddEventListener(SP, pl.standby)
-	pl.AddEventListener(MP, pl.main)
-	pl.AddEventListener(BP, pl.battle)
-	pl.AddEventListener(EP, pl.end)
+	pl.AddEvent(DP, func() {
+		pl.MsgPub("{self}进入抽牌阶段", nil)
+	})
+
+	pl.AddEvent(SP, func() {
+		pl.MsgPub("{self}进入预备阶段", nil)
+	})
+
+	pl.AddEvent(MP, func() {
+		pl.MsgPub("{self}进入主阶段", nil)
+	})
+
+	pl.AddEvent(BP, func() {
+		pl.MsgPub("{self}进入战斗阶段", nil)
+	})
+
+	pl.AddEvent(EP, func() {
+		pl.MsgPub("{self}进入结束阶段", nil)
+	})
+
+	pl.AddEvent(Chain, func() {
+		pl.MsgPub("等待{self}连锁", nil)
+	})
+
+	pl.AddEvent(DP, pl.draw)
+	pl.AddEvent(SP, pl.standby)
+	pl.AddEvent(MP, pl.main)
+	pl.AddEvent(BP, pl.battle)
+	pl.AddEvent(EP, pl.end)
+
+	pl.AddEvent(DetectionChain, func() {
+		if len(pl.pending) == 0 {
+			return
+		}
+		pl.Dispatch(Chain)
+		pl.pending = map[uint]*Card{}
+	})
+	pl.AddEvent(Chain, pl.chain)
 	return pl
+}
+
+func (pl *Player) Msg(fmts string, a Arg) {
+	if a == nil {
+		a = map[string]interface{}{}
+	}
+	if a["self"] == nil {
+		a["self"] = pl.Name
+	}
+	if a["rival"] == nil {
+		a["rival"] = pl.GetTarget().Name
+	}
+
+	pl.Call(Message(fmts, a))
+}
+
+func (pl *Player) MsgPub(fmts string, a Arg) {
+	if a == nil {
+		a = map[string]interface{}{}
+	}
+	if a["self"] == nil {
+		a["self"] = pl.Name
+	}
+	if a["rival"] == nil {
+		a["rival"] = pl.GetTarget().Name
+	}
+	pl.CallAll(Message(fmts, a))
+}
+
+func (pl *Player) AddReply(ca *Card) {
+	pl.pending[ca.ToUint()] = ca
 }
 
 func (pl *Player) Fail() {
@@ -123,25 +185,50 @@ func (pl *Player) ForEachPlayer(fun func(p *Player)) {
 	pl.game.ForEachPlayer(fun)
 }
 
+func (pl *Player) Dispatch(eventName string, args ...interface{}) {
+	pl.Events.Dispatch(eventName, args...)
+	e := func(c *Card) bool {
+		c.Dispatch(eventName, args...)
+		return true
+	}
+	pl.Mzone.ForEach(e)
+	pl.Szone.ForEach(e)
+	pl.Field.ForEach(e)
+	pl.Hand.ForEach(e)
+	if eventName != DetectionChain {
+		pl.Dispatch(DetectionChain, append(args, eventName)...)
+	}
+}
+
 func (pl *Player) GetRound() int {
 	return pl.RoundSize
 }
 
 func (pl *Player) round() (err error) {
+	pl.RoundSize++
 	pl.CallAll("flagName", map[string]interface{}{
 		"round":  pl.GetRound(),
 		"player": pl.Index,
 	})
-
+	pl.Dispatch(RoundBegin, pl)
 	pl.Dispatch(DP, LP_Draw)
 	pl.Dispatch(SP, LP_Standby)
 	pl.Dispatch(MP, LP_Main1)
 	pl.Dispatch(BP, LP_Battle)
 	pl.Dispatch(MP, LP_Main2)
 	pl.Dispatch(EP, LP_End)
-
-	pl.RoundSize++
+	pl.Dispatch(RoundEnd, pl)
 	return
+}
+
+// 连锁
+func (pl *Player) chain() {
+	pl.ResetReplyTime()
+	if wi := pl.SelectWill(); wi.Method != 0 {
+		if ca := pl.pending[wi.Uniq]; ca != nil {
+			ca.Dispatch(Trigger, wi.Method)
+		}
+	}
 }
 
 func (pl *Player) draw(lp LP_TYPE) bool {
@@ -150,16 +237,13 @@ func (pl *Player) draw(lp LP_TYPE) bool {
 			rego.DebugStack()
 		}
 	}()
-	pl.Dispatch(DPPre, pl)
 	pl.Phases = lp
 	pl.CallAll(flashPhases(pl))
-	pl.Call(Message("抽牌阶段"))
 	if pl.Deck.Len() == 0 {
 		pl.Fail()
 		return false
 	}
 	pl.ActionDraw(1)
-	pl.Dispatch(DPSuf, pl)
 	return true
 }
 
@@ -169,11 +253,8 @@ func (pl *Player) standby(lp LP_TYPE) bool {
 			rego.DebugStack()
 		}
 	}()
-	pl.Dispatch(SPPre, pl)
 	pl.Phases = lp
 	pl.CallAll(flashPhases(pl))
-	pl.Call(Message("准备阶段"))
-	pl.Dispatch(SPSuf, pl)
 	return true
 }
 
@@ -183,42 +264,40 @@ func (pl *Player) main(lp LP_TYPE) bool {
 			rego.DebugStack()
 		}
 	}()
-	pl.Dispatch(MPPre, pl)
 	pl.Phases = lp
-	pl.Call(Message("主要阶段"))
 	//pl.ClearCode()
-
+	pl.ResetWaitTime()
 	for {
 		p := pl.SelectWill()
 		if p.Uniq == 0 {
 			break
 		}
+		if p.Uniq == 1 {
+			if p.Method == uint(LP_Battle) && lp == LP_Main1 {
+				break
+			} else if p.Method == uint(LP_End) {
+				if lp == LP_Main1 {
+					pl.StopOnce(MP)
+					pl.StopOnce(BP)
+				}
+				break
+			}
+		}
 
 		if t := pl.Hand.ExistForUniq(p.Uniq); t != nil {
-			if p.Method == 0 {
-				pl.Call("optionCard", map[string]interface{}{
-					"uniq": p.Uniq,
-					"list": t.HandMethods(),
-				})
-			} else if p.Method == uint(LI_Call) {
-				if t.IsMonster() {
-					t.Dispatch(Summon, t)
-				} else {
-					t.Dispatch(Use, t)
-				}
-
-			} else if p.Method == uint(LI_Cover) {
-				t.Dispatch(Cover, t)
+			if p.Method == uint(LI_Use1) {
+				t.Dispatch(Use1, t)
+			} else if p.Method == uint(LI_Use2) {
+				t.Dispatch(Use2, t)
 			}
 		} else if t := pl.Mzone.ExistForUniq(p.Uniq); t != nil {
-			t.ChangeExpression()
+			t.Dispatch(Expression)
 		} else if t := pl.Szone.ExistForUniq(p.Uniq); t != nil {
 			t.Dispatch(Onset)
 		} else {
-			pl.Call(Message("非法目标"))
+			pl.Msg("非法目标", nil)
 		}
 	}
-	pl.Dispatch(MPSuf, pl)
 	return true
 }
 
@@ -228,38 +307,48 @@ func (pl *Player) battle(lp LP_TYPE) bool {
 			rego.DebugStack()
 		}
 	}()
-	pl.Dispatch(BPPre, pl)
 	pl.Phases = lp
-	pl.Call(Message("战斗阶段"))
 	//pl.ClearCode()
+	pl.ResetWaitTime()
 	for {
-		if i := pl.SelectWill(); i.Uniq != 0 {
-			t1 := pl.Mzone.ExistForUniq(i.Uniq)
-			if t1 == nil || !t1.IsFaceUpAttack() {
-				pl.Call(Message("请选择怪兽区正面攻击表示的怪兽"))
-				continue
+		i := pl.SelectWill()
+		if i.Uniq == 0 {
+			break
+		}
+		if i.Uniq == 1 {
+			if i.Method == uint(LP_Main2) {
+				break
+			} else if i.Method == uint(LP_End) {
+				pl.StopOnce(MP)
+				break
 			}
+		}
 
-			if !t1.IsCanAttack() {
-				pl.Call(Message("当前怪兽不能攻击"))
-				continue
-			}
+		t1 := pl.Mzone.ExistForUniq(i.Uniq)
+		if t1 == nil || !t1.IsFaceUpAttack() {
+			pl.Msg("请选择怪兽区正面攻击表示的怪兽", nil)
+			continue
+		}
 
-			pl.Call(Message("选择要攻击的目标"))
+		if !t1.IsCanAttack() {
+			pl.Msg("当前怪兽不能攻击", nil)
+			continue
+		}
+		if pl.GetTarget().Mzone.Len() != 0 {
+			pl.Msg("选择要攻击的目标", nil)
 			if j := pl.SelectWill(); j.Uniq != 0 {
 				t2 := pl.game.GetCard(j.Uniq)
 				if pl.GetTarget().Mzone.IsExistCard(t2) {
-					t1.Dispatch(Battle, t2)
+					t1.Dispatch(Declaration, t2)
 				} else {
-					pl.Call(Message("请选择对方怪兽区的怪兽"))
+					pl.Msg("请选择对方怪兽区的怪兽", nil)
 				}
 			}
-			//pl.Call(Message("战斗阶段"))
 		} else {
-			break
+			t1.Dispatch(Declaration)
 		}
+
 	}
-	pl.Dispatch(BPSuf, pl)
 	return true
 }
 
@@ -269,14 +358,13 @@ func (pl *Player) end(lp LP_TYPE) bool {
 			rego.DebugStack()
 		}
 	}()
-	pl.Dispatch(EPPre, pl)
 	pl.Phases = lp
+	pl.ResetReplyTime()
 	if i := pl.Hand.Len() - pl.MaxSdi; i > 0 {
-		pl.Call(Message("选择丢弃的手牌"))
+		pl.Msg("选择丢弃的手牌", nil)
 		pl.SelectFunc(i, pl.Hand, ToGrave)
 	}
-	pl.Call(Message("对方回合"))
-	pl.Dispatch(EPSuf, pl)
+	pl.Msg("对方回合", nil)
 	return true
 }
 
@@ -293,12 +381,16 @@ func (pl *Player) initDeck(a []uint, b []uint) {
 	pl.ActionShuffle()
 }
 
-func (pl *Player) ChangeHp(i int, ca *Card) {
-	if ca != nil {
-		ca.Dispatch(Deduct, pl)
-	}
+func (pl *Player) ChangeHp(i int) {
 	pl.Dispatch(HPChange, pl, i)
+
+	if i < 0 {
+		pl.MsgPub("{self}受到{num}基本分伤害！", Arg{"num": -i})
+	} else if i > 0 {
+		pl.MsgPub("{self}受到{num}基本分回复！", Arg{"num": i})
+	}
 	pl.Hp += i
+	pl.CallAll(setFace(map[string]interface{}{pl.Name: pl.Hp}))
 }
 
 func (pl *Player) GetTarget() *Player {
@@ -338,24 +430,73 @@ func (pl *Player) CallAll(method string, reply interface{}) error {
 	return pl.game.CallAll(method, reply)
 }
 
+func (pl *Player) OutTime() {
+	pl.PassTime = 0
+}
+
+func (pl *Player) ResetReplyTime() {
+	pl.PassTime = pl.ReplyTime
+}
+
+func (pl *Player) ResetWaitTime() {
+	pl.PassTime = pl.WaitTime
+}
+
 func (pl *Player) SelectWill() (p MsgCode) {
 	//pl.ClearCode()
-	pl.CallAll(flashPhases(pl))
-	select {
-	case <-time.After(pl.WaitTime):
-	case p = <-pl.GetCode():
+
+	for {
+		pl.CallAll(flashPhases(pl))
+		select {
+		case <-time.After(time.Second):
+			pl.PassTime -= time.Second
+			if pl.PassTime <= 0 {
+				return
+			}
+		case p = <-pl.GetCode():
+			return
+		}
 	}
 	return
 }
 
 func (pl *Player) Select() (t *Card) {
 	//pl.ClearCode()
-	pl.CallAll(flashPhases(pl))
-	select {
-	case <-time.After(pl.WaitTime):
-	case p := <-pl.GetCode():
-		t = pl.game.GetCard(p.Uniq)
+	for {
+		pl.CallAll(flashPhases(pl))
+		select {
+		case <-time.After(time.Second):
+			pl.PassTime -= time.Second
+			if pl.PassTime <= 0 {
+				return
+			}
+		case p := <-pl.GetCode():
+			t = pl.game.GetCard(p.Uniq)
+			return
+		}
 	}
+	return
+}
+
+func (pl *Player) SelectMust(cp *Group) (t *Card) {
+	//pl.ClearCode()
+	for {
+		pl.CallAll(flashPhases(pl))
+		select {
+		case <-time.After(time.Second):
+			pl.PassTime -= time.Second
+			if pl.PassTime <= 0 {
+				t = cp.EndPop()
+				return
+			}
+		case p := <-pl.GetCode():
+			if t = cp.ExistForUniq(p.Uniq); t == nil {
+				t = cp.EndPop()
+			}
+			return
+		}
+	}
+
 	return
 }
 
@@ -477,20 +618,6 @@ func (pl *Player) SelectHandSelf() (t *Card) {
 		}
 	}
 	return nil
-}
-
-func (pl *Player) SelectMust(cp *Group) (t *Card) {
-	//pl.ClearCode()
-	pl.CallAll(flashPhases(pl))
-	select {
-	case <-time.After(pl.WaitTime):
-		t = cp.EndPop()
-	case p := <-pl.GetCode():
-		if t = cp.ExistForUniq(p.Uniq); t == nil {
-			t = cp.EndPop()
-		}
-	}
-	return
 }
 
 func (pl *Player) SelectFunc(size int, cp *Group, fun func(c *Card) bool) {

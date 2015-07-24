@@ -2,12 +2,15 @@ package ygo
 
 import (
 	"fmt"
+	"service/proto"
+	"time"
+
 	"github.com/wzshiming/dispatcher"
 	"github.com/wzshiming/rego/agent"
 	"github.com/wzshiming/rego/misc"
-	"service/proto"
-	"time"
 )
+
+type Arg map[string]interface{}
 
 type YGO struct {
 	dispatcher.Events
@@ -106,7 +109,7 @@ func (yg *YGO) Loop() {
 		yg.Survival[ca] = yg.Survival[ca] + 1
 		yg.Players[v].Index = k
 		yg.Players[v].game = yg
-		yg.Players[v].RoundSize = 1
+		yg.Players[v].RoundSize = 0
 		yg.Players[v].Name = fmt.Sprintf("player %d", k)
 	}
 
@@ -139,6 +142,7 @@ func (yg *YGO) Loop() {
 		yg.Players[v].init()
 	}
 
+	yg.Players[yg.round[0]].MsgPub("游戏开始，{self}先手！", nil)
 	nap(10)
 	for {
 		for _, v := range yg.round {
@@ -153,7 +157,7 @@ func (yg *YGO) Loop() {
 			}
 			if yg.Over {
 				yg.CallAll("over", nil)
-				yg.CallAll(Message("游戏结束"))
+				yg.Players[v].MsgPub("游戏结束", nil)
 				return
 			}
 		}

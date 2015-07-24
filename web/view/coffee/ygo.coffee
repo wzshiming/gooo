@@ -9,9 +9,22 @@ YGO = (@scene) ->
   return
 
 YGO::init = (args) ->
+  face.SetButton "BP", ->
+    WsSelectable 1,4
+
+  face.SetButton "MP2", ->
+    WsSelectable 1,5
+
+  face.SetButton "EP", ->
+    WsSelectable 1,6
+
+  face.SetButton "Yes", ->
+    WsSelectable 1,10
+
+  face.SetButton "No", ->
+    WsSelectable 1,11
   @users = args.users
   @index = args.index
-  console.dir args
   if @users instanceof Array
     for v,i in @users
       k = i + @index
@@ -35,10 +48,17 @@ YGO::init = (args) ->
         y = 0
       @players[i] = new Player(@scene, i, x, y, angle)
       face.SetHTML v.name, "#{v.hp}"
-    MsgInfo '游戏开始'
-    console.dir @players
+    #MsgInfo '游戏开始了'
+
   else
     MsgErr '初始化游戏错误'
+
+YGO::remind = (args) ->
+  c = Card::Find(args.uniq)
+  if c
+    c.Remind()
+  else
+    MsgErr "remind err"
 
 YGO::moveCard = (args) ->
   @players[args.master].Join args.uniq, args.pos
@@ -72,14 +92,19 @@ YGO::exprCard = (args) ->
   return
 
 YGO::flagName = (args) ->
-  face.SetHTML "回合数", "#{args.round}"
+  face.SetHTML "回合数", args.round
 #  t = @users[args.player]
 #  @['flag0'].element.innerHTML = '<h1>回合' + args.round + '</h1>'
   return
 
+YGO::setFace = (args) ->
+  log args
+  for own k,v of args
+    face.SetHTML k,v
+
 YGO::message = (args) ->
-  face.SetHTML "最新消息", args.message
-#  MsgInfo args.message
+  m = args.message.format args.params
+  face.Msg  m
 #  @msg.element.innerHTML = '<h1>' + args.message + '</h1>'
   return
 
@@ -108,7 +133,8 @@ YGO::flagStep = (args) ->
     t.stepInterval = window.setInterval((->
       ti--
       face.SetHTML "剩余时间", "#{ti}"
-      if ti == 0
+      if ti <= 0
+        ti = 0
         window.clearInterval t.stepInterval
       return
     ), 1000)

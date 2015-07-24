@@ -19,7 +19,31 @@ Face =  ->
   @info = document.createElement('div')
   @info.className = "phases"
   container.appendChild @info
+
+  @chat = document.createElement('div')
+  @chat.className = "chat"
+  container.appendChild @chat
   return
+
+Face::Msg = (msg) ->
+  b = document.createElement('p')
+  b.innerText = CurentTime() + "\n" + msg + "\n"
+  @chat.appendChild b
+  return
+
+Face::SetInput = (name = null, u = null) ->
+  if u
+    b = document.createElement('input')
+    b.id = name
+    b.type = "text"
+    b.className = "form-control"
+    b.name = name
+    b.placeholder = name
+    @SetHTML name,b
+  else
+    @SetHTML name
+  return b
+
 
 Face::SetButton = (name = null, func = null) ->
   if func
@@ -30,20 +54,22 @@ Face::SetButton = (name = null, func = null) ->
     @SetHTML name, b
   else
     @SetHTML name
-  return
+  return b
 
 
 Face::SetHTML = (name = null, value = null) ->
   unless name
-    for own k of  @infos
+    #log @infos
+    for own k,v of @infos
       @info.removeChild @infos[k]
       delete @infos[k]
     @infos = {}
     return
   if value
-    if typeof value != 'string'
+    if typeof value == 'object'
       if @infos[name]
         @info.removeChild @infos[name]
+        delete @infos[name]
       @info.appendChild value
       @infos[name] = value
     else

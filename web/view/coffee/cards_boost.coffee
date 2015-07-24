@@ -99,9 +99,9 @@ Pick::Push = (c, s = null)->
     @Update s
   return
 
-Pick::Pop = ->
+Pick::Pop = (s = null) ->
   r = @pop this
-  @Update()
+  @Update s
   r
 
 # 堆在一起的
@@ -193,6 +193,61 @@ Vast:: = new cards_boost((i)->
   else
     flex(@x,@y + l*1.5 ,@rotation,@b,m,@c)
 )
+
+
+
+Paging = (@x = 0, @y = 0, @a = 0, @b = 8 ,@c = 10, @l = 8)->
+  @queue = []
+  @event = []
+  @up = new Pile(@x,@y-2,@a)
+  @down = new Pile(@x+@b,@y-2,@a)
+  @show =  new Vast(@x,@y,@a,@b,@c)
+  @rotation = (new (THREE.Matrix4)).makeRotationZ(@a)
+  t=this
+  @up.addEventListener "click",(->
+    t.Prev()
+  ),false
+  @down.addEventListener "click",(->
+    t.Next()
+  ),false
+  return
+
+Paging::addEventListener = (s,f,b) ->
+  #@up.addEventListener s,f,b
+  #@down.addEventListener s,f,b
+  @show.addEventListener s,f,b
+  return
+
+Paging::Push = (c, s = null)->
+  if @show.Length() > @c * @l - 1
+    @down.Push c,s
+  else
+    @show.Push c,s
+  return
+
+Paging::Pop = (s = null) ->
+  if @down.Length()!=0
+    @down.Pop s
+  else if @show.Length()!=0
+    @show.Pop s
+  else if @up.Length()!=0
+    @up.Pop s
+  return
+Paging::Clear = ->
+  @down.Clear()
+  @show.Clear()
+  @up.Clear()
+  return
+
+Paging::Prev = ->
+  @show.MoveTo @down
+  for i in [0...@c * @l]
+    @show.Push @up.Pop()
+
+Paging::Next = ->
+  @show.MoveTo @up
+  for i in [0...@c * @l]
+    @show.Push @down.Pop()
 
 #横着铺开的
 Rows =  (@x = 0, @y = 0, @a = 0)->
