@@ -82,11 +82,19 @@ func SetFront(t *Card) (string, interface{}) {
 	}
 }
 
-func Message(format string, a interface{}) (string, interface{}) {
+func Message(format string, a Arg) (string, interface{}) {
 	return "message", map[string]interface{}{
 		"message": format,
 		"params":  a,
 	}
+}
+
+func SetCardFace(t *Card, a Arg) (string, interface{}) {
+	if a == nil {
+		a = Arg{}
+	}
+	a["uniq"] = t.ToUint()
+	return "setCardFace", a
 }
 
 func MoveCard(t *Card, pos LL_TYPE) (string, interface{}) {
@@ -104,6 +112,6 @@ func flashPhases(pl *Player) (string, interface{}) {
 	}
 }
 
-func setFace(a map[string]interface{}) (string, interface{}) {
+func setFace(a Arg) (string, interface{}) {
 	return "setFace", a
 }

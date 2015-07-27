@@ -6,6 +6,136 @@ import (
 
 func vol(cardBag *ygo.CardVersion) {
 	var co *ygo.CardOriginal
+	co = &ygo.CardOriginal{
+		/*{
+		 id: 220
+		 调整: [强欲之壶]
+		<強欲な壺>
+		[2010/09/08]
+
+		●从自己卡组抽2张卡。
+		◇自己卡组中的卡不足2张时不能发动
+		◇「精灵之镜/精霊の鏡」可以对应这张卡的发动而发动
+		◇效果处理时，自己卡组中的卡不足2张的场合，抽卡时决斗败北
+		 中文名: 强欲之壶
+		 日文名: 強欲な壺
+		 英文名: Pot of Greed
+		 卡片种类: 通常魔法
+		 卡片密码: 55144522
+		 使用限制: 禁止卡
+		 罕见度: 面闪SR，银字R，平卡N，立体UTR
+		 卡包: PG，BE01，VOL03，DL02，SD01，SD02，SD03，SD04，DPKB，YU，JY，SY2，15AY
+		 效果: 从自己的卡组抽2张卡。
+		}
+		*/
+		Id:       220,
+		Password: "55144522",
+		Name:     "强欲之壶",               // "Pot of Greed"  "強欲な壺"
+		Lc:       ygo.LC_OrdinaryMagic, // 通常魔法
+		Initialize: func(ca *ygo.Card) bool {
+			ca.RegisterNormalMagic(func() {
+				ca.GetSummoner().ActionDraw(2)
+			})
+			return true
+		}, // 初始
+
+		IsValid: true,
+	}
+	cardBag.Register(co)
+
+	co = &ygo.CardOriginal{
+		/*{
+		 id: 464
+		 调整: [魔法干扰阵]
+		<マジック·ジャマー>
+		[14/04/27]
+
+		●①：魔法卡发动时，丢弃1张手卡才能发动。那个发动无效并破坏。
+		◇丢弃1张手卡是发动COST
+		◇不能对应魔法卡的“效果的发动”（举例：此卡不能对应已经表侧表示存在于场上的[波动加农炮/波動キャノン]的效果的发动）
+		 中文名: 魔法干扰阵
+		 日文名: マジック·ジャマー
+		 英文名: Magic Jammer
+		 卡片种类: 反击陷阱
+		 卡片密码: 77414722
+		 使用限制: 无限制
+		 罕见度: 金字UR，面闪SR，平卡N
+		 卡包: ME，BE02，YSD02，VOL06，DL04，SD02，SD05，SD08，SD11，SD13，DT01，DTP01，YSD05，YU，SY2，SK2，ST14
+		 效果: ①：魔法卡发动时，丢弃1张手卡才能发动。那个发动无效并破坏。
+		}
+		*/
+		Id:       464,
+		Password: "77414722",
+		Name:     "魔法干扰阵",             // "Magic Jammer"  "マジック·ジャマー"
+		Lc:       ygo.LC_ReactionTrap, // 反击陷阱
+		Initialize: func(ca *ygo.Card) bool {
+			obj := ca
+			ca.RegisterNormalTrap(ygo.UseMagic, func(c *ygo.Card) bool {
+				obj = c
+				return ca.GetSummoner().Hand.Len() >= 1
+			}, func() {
+				pl := ca.GetSummoner()
+				pl.MsgPub("魔法干扰阵 发动成功", nil)
+				if c := pl.SelectMust(pl.Hand); c != nil {
+					c.Dispatch(ygo.Cost)
+				}
+				obj.Dispatch(ygo.Disabled)
+			})
+			return true
+		}, // 初始
+
+		IsValid: false,
+	}
+	cardBag.Register(co)
+
+	co = &ygo.CardOriginal{
+		/*{
+		 id: 474
+		 调整: [神圣防护罩-反射镜力-]
+		<聖なるバリア－ミラーフォース－>
+		[14/04/27]
+
+		●①：对方怪兽的攻击宣言时才能发动。对方场上的攻击表示怪兽全部破坏。
+		◇不取对象
+		◇对方场上不存在攻击表示怪兽的场合，这张卡不能发动（举例：「绝对防御将军/絶対防御将軍」以表侧守备表示攻击时）
+		◇里侧攻击表示的怪兽也破坏
+		◇效果处理时，对方场上不存在攻击表示怪兽的场合，这个效果不适用。
+		 中文名: 神圣防护罩-反射镜力-
+		 日文名: 聖なるバリア －ミラーフォース－
+		 英文名: Mirror Force
+		 卡片种类: 通常陷阱
+		 卡片密码: 44095762
+		 使用限制: 无限制
+		 罕见度: 金字UR，面闪SR，爆闪PR，黄金GR，平卡N，银碎SER
+		 卡包: ME，BE02，VOL07，DL04，GLD01，GS01，DPYG，SD19，YU，SY2，SDM，YSD06，DB12，ST13，15AY，ST14
+		 效果: ①：对方怪兽的攻击宣言时才能发动。对方场上的攻击表示怪兽全部破坏。
+		}
+		*/
+		Id:       474,
+		Password: "44095762",
+		Name:     "神圣防护罩-反射镜力-",       // "Mirror Force"  "聖なるバリア －ミラーフォース－"
+		Lc:       ygo.LC_OrdinaryTrap, // 通常陷阱
+		Initialize: func(ca *ygo.Card) bool {
+			obj := ca.GetSummoner()
+			ca.RegisterNormalTrap(ygo.Declaration, func(c *ygo.Card) bool {
+				obj = c.GetSummoner()
+				return obj != ca.GetSummoner()
+			}, func() {
+				pl := ca.GetSummoner()
+				pl.MsgPub("神圣防护罩-反射镜力-发动成功", nil)
+				obj.Mzone.ForEach(func(b *ygo.Card) bool {
+					if b.IsAttack() {
+						b.Dispatch(ygo.Destroy, ca)
+					}
+					return true
+				})
+			})
+			return true
+		}, // 初始
+
+		IsValid: false,
+	}
+	cardBag.Register(co)
 
 	co = &ygo.CardOriginal{
 		/*{
@@ -909,14 +1039,14 @@ func vol(cardBag *ygo.CardVersion) {
 		Lc:       ygo.LC_EffectMonster, // 效果怪兽
 		Initialize: func(ca *ygo.Card) bool {
 			ca.AddEvent(ygo.Flip, func() {
-				if c := ca.GetSummoner().SelectSzone(); c != nil {
-					c.FaceUp()
-					if c.IsTrap() {
-						c.Dispatch(ygo.Destroy, ca)
-					} else {
-						c.FaceDown()
-					}
-				}
+				//				if c := ca.GetSummoner().SelectSzone(); c != nil {
+				//					c.FaceUp()
+				//					if c.IsTrap() {
+				//						c.Dispatch(ygo.Destroy, ca)
+				//					} else {
+				//						c.FaceDown()
+				//					}
+				//				}
 			})
 			return true
 		}, // 初始
@@ -1740,14 +1870,14 @@ func vol(cardBag *ygo.CardVersion) {
 		Lc:       ygo.LC_EffectMonster, // 效果怪兽
 		Initialize: func(ca *ygo.Card) bool {
 			ca.AddEvent(ygo.Flip, func() {
-				if c := ca.GetSummoner().SelectSzone(); c != nil {
-					c.FaceUp()
-					if c.IsMagic() {
-						c.Dispatch(ygo.Destroy, ca)
-					} else {
-						c.FaceDown()
-					}
-				}
+				//				if c := ca.GetSummoner().SelectSzone(); c != nil {
+				//					c.FaceUp()
+				//					if c.IsMagic() {
+				//						c.Dispatch(ygo.Destroy, ca)
+				//					} else {
+				//						c.FaceDown()
+				//					}
+				//				}
 			})
 			return true
 		}, // 初始
@@ -1797,12 +1927,12 @@ func vol(cardBag *ygo.CardVersion) {
 		Name:     "食人虫",                // "Man-Eater Bug"  "人喰い虫"
 		Lc:       ygo.LC_EffectMonster, // 效果怪兽
 		Initialize: func(ca *ygo.Card) bool {
-			ca.AddEvent(ygo.Flip, func() {
-				if c := ca.GetSummoner().SelectMzone(); c != nil {
-					c.FaceUp()
-					c.Dispatch(ygo.Destroy, ca)
-				}
-			})
+			//			ca.AddEvent(ygo.Flip, func() {
+			//				if c := ca.GetSummoner().SelectMzone(); c != nil {
+			//					c.FaceUp()
+			//					c.Dispatch(ygo.Destroy, ca)
+			//				}
+			//			})
 			return true
 		}, // 初始
 		Level:   2,
@@ -2069,43 +2199,6 @@ func vol(cardBag *ygo.CardVersion) {
 		//Initialize:    func(ca *ygo.Card) {}, // 初始
 
 		IsValid: false,
-	}
-	cardBag.Register(co)
-
-	co = &ygo.CardOriginal{
-		/*{
-		 id: 220
-		 调整: [强欲之壶]
-		<強欲な壺>
-		[2010/09/08]
-
-		●从自己卡组抽2张卡。
-		◇自己卡组中的卡不足2张时不能发动
-		◇「精灵之镜/精霊の鏡」可以对应这张卡的发动而发动
-		◇效果处理时，自己卡组中的卡不足2张的场合，抽卡时决斗败北
-		 中文名: 强欲之壶
-		 日文名: 強欲な壺
-		 英文名: Pot of Greed
-		 卡片种类: 通常魔法
-		 卡片密码: 55144522
-		 使用限制: 禁止卡
-		 罕见度: 面闪SR，银字R，平卡N，立体UTR
-		 卡包: PG，BE01，VOL03，DL02，SD01，SD02，SD03，SD04，DPKB，YU，JY，SY2，15AY
-		 效果: 从自己的卡组抽2张卡。
-		}
-		*/
-		Id:       220,
-		Password: "55144522",
-		Name:     "强欲之壶",               // "Pot of Greed"  "強欲な壺"
-		Lc:       ygo.LC_OrdinaryMagic, // 通常魔法
-		Initialize: func(ca *ygo.Card) bool {
-			ca.RegisterNormalMagic(func() {
-				ca.GetSummoner().ActionDraw(2)
-			})
-			return true
-		}, // 初始
-
-		IsValid: true,
 	}
 	cardBag.Register(co)
 
@@ -7590,37 +7683,6 @@ func vol(cardBag *ygo.CardVersion) {
 
 	co = &ygo.CardOriginal{
 		/*{
-		 id: 464
-		 调整: [魔法干扰阵]
-		<マジック·ジャマー>
-		[14/04/27]
-
-		●①：魔法卡发动时，丢弃1张手卡才能发动。那个发动无效并破坏。
-		◇丢弃1张手卡是发动COST
-		◇不能对应魔法卡的“效果的发动”（举例：此卡不能对应已经表侧表示存在于场上的[波动加农炮/波動キャノン]的效果的发动）
-		 中文名: 魔法干扰阵
-		 日文名: マジック·ジャマー
-		 英文名: Magic Jammer
-		 卡片种类: 反击陷阱
-		 卡片密码: 77414722
-		 使用限制: 无限制
-		 罕见度: 金字UR，面闪SR，平卡N
-		 卡包: ME，BE02，YSD02，VOL06，DL04，SD02，SD05，SD08，SD11，SD13，DT01，DTP01，YSD05，YU，SY2，SK2，ST14
-		 效果: ①：魔法卡发动时，丢弃1张手卡才能发动。那个发动无效并破坏。
-		}
-		*/
-		Id:       464,
-		Password: "77414722",
-		Name:     "魔法干扰阵",             // "Magic Jammer"  "マジック·ジャマー"
-		Lc:       ygo.LC_ReactionTrap, // 反击陷阱
-		//Initialize:    func(ca *ygo.Card) {}, // 初始
-
-		IsValid: false,
-	}
-	cardBag.Register(co)
-
-	co = &ygo.CardOriginal{
-		/*{
 		 id: 465
 		 调整: [盗贼的七道具]
 		<盗賊の七つ道具>
@@ -7913,53 +7975,6 @@ func vol(cardBag *ygo.CardVersion) {
 		Name:     "麻药",              // "Paralyzing Potion"  "しびれ薬"
 		Lc:       ygo.LC_EquipMagic, // 装备魔法
 		//Initialize:    func(ca *ygo.Card) {}, // 初始
-
-		IsValid: false,
-	}
-	cardBag.Register(co)
-
-	co = &ygo.CardOriginal{
-		/*{
-		 id: 474
-		 调整: [神圣防护罩-反射镜力-]
-		<聖なるバリア－ミラーフォース－>
-		[14/04/27]
-
-		●①：对方怪兽的攻击宣言时才能发动。对方场上的攻击表示怪兽全部破坏。
-		◇不取对象
-		◇对方场上不存在攻击表示怪兽的场合，这张卡不能发动（举例：「绝对防御将军/絶対防御将軍」以表侧守备表示攻击时）
-		◇里侧攻击表示的怪兽也破坏
-		◇效果处理时，对方场上不存在攻击表示怪兽的场合，这个效果不适用。
-		 中文名: 神圣防护罩-反射镜力-
-		 日文名: 聖なるバリア －ミラーフォース－
-		 英文名: Mirror Force
-		 卡片种类: 通常陷阱
-		 卡片密码: 44095762
-		 使用限制: 无限制
-		 罕见度: 金字UR，面闪SR，爆闪PR，黄金GR，平卡N，银碎SER
-		 卡包: ME，BE02，VOL07，DL04，GLD01，GS01，DPYG，SD19，YU，SY2，SDM，YSD06，DB12，ST13，15AY，ST14
-		 效果: ①：对方怪兽的攻击宣言时才能发动。对方场上的攻击表示怪兽全部破坏。
-		}
-		*/
-		Id:       474,
-		Password: "44095762",
-		Name:     "神圣防护罩-反射镜力-",       // "Mirror Force"  "聖なるバリア －ミラーフォース－"
-		Lc:       ygo.LC_OrdinaryTrap, // 通常陷阱
-		Initialize: func(ca *ygo.Card) bool {
-
-			//			ca.AddEvent(ygo.BearDeclarationSuf, ca.Remind)
-			//			ca.AddEvent(ygo.Offset, func(u uint) {
-			//				ca.GetSummoner().GetTarget().Mzone.ForEach(func(b *ygo.Card) bool {
-			//					if b.IsAttack() {
-			//						b.Dispatch(ygo.Destroy, ca)
-			//					}
-			//					return true
-			//				})
-			//				ca.Dispatch(ygo.Disabled)
-			//			})
-
-			return true
-		}, // 初始
 
 		IsValid: false,
 	}

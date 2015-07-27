@@ -42,7 +42,9 @@ type Player struct {
 	Szone   *Group // 魔法卡陷阱卡区 5
 	Field   *Group // 场地卡
 
-	pending map[uint]*Card
+	isChain bool
+	//	pending   map[uint]*Card
+	//	cardevent map[string][]*Card
 	// 是否失败
 	fail bool
 }
@@ -58,7 +60,8 @@ func NewPlayer() *Player {
 		OverTime:  time.Second * 120,
 		WaitTime:  time.Second * 60,
 		ReplyTime: time.Second * 20,
-		pending:   make(map[uint]*Card),
+		//		pending:   make(map[uint]*Card),
+		//		cardevent: make(map[string][]*Card),
 	}
 	var pr uint
 	pl.MsgChan = NewMsgChan(func(m MsgCode) bool {
@@ -67,7 +70,7 @@ func NewPlayer() *Player {
 			return true
 		}
 		if m.Uniq != 0 {
-			ca := pl.game.GetCard(m.Uniq)
+			ca := pl.Game().GetCard(m.Uniq)
 			if ca != nil {
 				if m.Method == uint(LI_Over) {
 					if pr != 0 {
@@ -121,25 +124,17 @@ func NewPlayer() *Player {
 		pl.MsgPub("{self}进入结束阶段", nil)
 	})
 
-	pl.AddEvent(Chain, func() {
-		pl.MsgPub("等待{self}连锁", nil)
-	})
-
 	pl.AddEvent(DP, pl.draw)
 	pl.AddEvent(SP, pl.standby)
 	pl.AddEvent(MP, pl.main)
 	pl.AddEvent(BP, pl.battle)
 	pl.AddEvent(EP, pl.end)
 
-	pl.AddEvent(DetectionChain, func() {
-		if len(pl.pending) == 0 {
-			return
-		}
-		pl.Dispatch(Chain)
-		pl.pending = map[uint]*Card{}
-	})
-	pl.AddEvent(Chain, pl.chain)
 	return pl
+}
+
+func (pl *Player) Game() *YGO {
+	return pl.game
 }
 
 func (pl *Player) Msg(fmts string, a Arg) {
@@ -169,10 +164,6 @@ func (pl *Player) MsgPub(fmts string, a Arg) {
 	pl.CallAll(Message(fmts, a))
 }
 
-func (pl *Player) AddReply(ca *Card) {
-	pl.pending[ca.ToUint()] = ca
-}
-
 func (pl *Player) Fail() {
 	pl.fail = true
 }
@@ -182,22 +173,28 @@ func (pl *Player) IsFail() bool {
 }
 
 func (pl *Player) ForEachPlayer(fun func(p *Player)) {
-	pl.game.ForEachPlayer(fun)
+	pl.Game().ForEachPlayer(fun)
 }
 
-func (pl *Player) Dispatch(eventName string, args ...interface{}) {
-	pl.Events.Dispatch(eventName, args...)
-	e := func(c *Card) bool {
-		c.Dispatch(eventName, args...)
-		return true
+func (pl *Player) Chain(eventName string, ca *Card, cs []*Card, a []interface{}) bool {
+	pl.ResetReplyTime()
+	pl.MsgPub("等待{self}连锁", nil)
+	if wi := pl.SelectWill(); wi.Uniq != 0 {
+		//pl.MsgPub("{self}选择{method}", Arg{"method": wi.Method})
+		for _, v := range cs {
+			if v.ToUint() == wi.Uniq {
+				if v.GetSummoner() == pl {
+					pl.MsgPub("{self}连锁{event}", Arg{"self": v.GetId(), "event": eventName})
+					v.Dispatch(eventName, append(a, wi.Method)...)
+					return true
+				}
+			}
+		}
+		pl.MsgPub("{self}错误的连锁", nil)
+	} else {
+		pl.MsgPub("{self}不连锁", nil)
 	}
-	pl.Mzone.ForEach(e)
-	pl.Szone.ForEach(e)
-	pl.Field.ForEach(e)
-	pl.Hand.ForEach(e)
-	if eventName != DetectionChain {
-		pl.Dispatch(DetectionChain, append(args, eventName)...)
-	}
+	return false
 }
 
 func (pl *Player) GetRound() int {
@@ -219,16 +216,6 @@ func (pl *Player) round() (err error) {
 	pl.Dispatch(EP, LP_End)
 	pl.Dispatch(RoundEnd, pl)
 	return
-}
-
-// 连锁
-func (pl *Player) chain() {
-	pl.ResetReplyTime()
-	if wi := pl.SelectWill(); wi.Method != 0 {
-		if ca := pl.pending[wi.Uniq]; ca != nil {
-			ca.Dispatch(Trigger, wi.Method)
-		}
-	}
 }
 
 func (pl *Player) draw(lp LP_TYPE) bool {
@@ -337,15 +324,15 @@ func (pl *Player) battle(lp LP_TYPE) bool {
 		if pl.GetTarget().Mzone.Len() != 0 {
 			pl.Msg("选择要攻击的目标", nil)
 			if j := pl.SelectWill(); j.Uniq != 0 {
-				t2 := pl.game.GetCard(j.Uniq)
+				t2 := pl.Game().GetCard(j.Uniq)
 				if pl.GetTarget().Mzone.IsExistCard(t2) {
-					t1.Dispatch(Declaration, t2)
+					t1.Dispatch(Battle, t2)
 				} else {
 					pl.Msg("请选择对方怪兽区的怪兽", nil)
 				}
 			}
 		} else {
-			t1.Dispatch(Declaration)
+			t1.Dispatch(Battle)
 		}
 
 	}
@@ -360,9 +347,14 @@ func (pl *Player) end(lp LP_TYPE) bool {
 	}()
 	pl.Phases = lp
 	pl.ResetReplyTime()
+	pl.Msg("选择丢弃的手牌", nil)
 	if i := pl.Hand.Len() - pl.MaxSdi; i > 0 {
-		pl.Msg("选择丢弃的手牌", nil)
-		pl.SelectFunc(i, pl.Hand, ToGrave)
+		for k := 0; k != i; k++ {
+			ca := pl.SelectMust(pl.Hand)
+			if ca != nil {
+				ca.Dispatch(Discard)
+			}
+		}
 	}
 	pl.Msg("对方回合", nil)
 	return true
@@ -370,14 +362,15 @@ func (pl *Player) end(lp LP_TYPE) bool {
 
 func (pl *Player) init() {
 	pl.ActionDraw(5)
+	pl.isChain = true
 }
 
 func (pl *Player) initDeck(a []uint, b []uint) {
 	if pl.Deck.Len() > 0 {
 		return
 	}
-	pl.game.CardVer.Deck(pl.Deck, pl, a)
-	pl.game.CardVer.Deck(pl.Extra, pl, b)
+	pl.Game().CardVer.Deck(pl.Deck, pl, a)
+	pl.Game().CardVer.Deck(pl.Extra, pl, b)
 	pl.ActionShuffle()
 }
 
@@ -395,9 +388,9 @@ func (pl *Player) ChangeHp(i int) {
 
 func (pl *Player) GetTarget() *Player {
 	if pl.Index == 0 {
-		return pl.game.GetPlayerForIndex(1)
+		return pl.Game().GetPlayerForIndex(1)
 	}
-	return pl.game.GetPlayerForIndex(0)
+	return pl.Game().GetPlayerForIndex(0)
 }
 
 func (pl *Player) ActionShuffle() {
@@ -420,14 +413,14 @@ func (pl *Player) ActionDraw(s int) {
 }
 
 func (pl *Player) Call(method string, reply interface{}) error {
-	return pl.game.Room.Push(Call{
+	return pl.Game().Room.Push(Call{
 		Method: method,
 		Args:   reply,
 	}, pl.Session)
 }
 
 func (pl *Player) CallAll(method string, reply interface{}) error {
-	return pl.game.CallAll(method, reply)
+	return pl.Game().CallAll(method, reply)
 }
 
 func (pl *Player) OutTime() {
@@ -471,7 +464,7 @@ func (pl *Player) Select() (t *Card) {
 				return
 			}
 		case p := <-pl.GetCode():
-			t = pl.game.GetCard(p.Uniq)
+			t = pl.Game().GetCard(p.Uniq)
 			return
 		}
 	}

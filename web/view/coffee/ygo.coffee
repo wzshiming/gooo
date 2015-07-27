@@ -60,6 +60,21 @@ YGO::remind = (args) ->
   else
     MsgErr "remind err"
 
+YGO::setCardFace = (args) ->
+  c = Card::Find(args.uniq)
+  if c
+    delete args.uniq
+    for own k,v of args
+      c.SetHTML k,v
+#    m = args.message.format args.params
+#    c.Msg  m
+  else
+    MsgErr "setCardFace err"
+  #  if @scene.AllCard[args.uniq] == null
+  #    new Card(@scene, args.uniq, @players[args.master])
+  #  @scene.AllCard[args.uniq].master.moveCard args.uniq, args.pos
+  return
+
 YGO::moveCard = (args) ->
   @players[args.master].Join args.uniq, args.pos
   #  if @scene.AllCard[args.uniq] == null
@@ -98,7 +113,6 @@ YGO::flagName = (args) ->
   return
 
 YGO::setFace = (args) ->
-  log args
   for own k,v of args
     face.SetHTML k,v
 

@@ -9,17 +9,17 @@ const (
 	Out  = "Out"  // 离开
 
 	// 玩家事件
-	RoundBegin     = "roundbegin"     // 回合开始之前
-	DP             = "DP"             // 抽排阶段
-	SP             = "SP"             // 预备阶段
-	MP             = "MP"             // 主要阶段
-	BP             = "BP"             // 战斗阶段
-	EP             = "EP"             // 结束阶段
-	RoundEnd       = "roundend"       // 回合结束之后
-	Chain          = "chain"          // 连锁
-	DetectionChain = "Detectionchain" // 检查连锁
-	Draw           = "Draw"           // 每次抽排
-	DrawNum        = "DrawNum"        // 每抽一张牌
+	RoundBegin = "roundbegin" // 回合开始之前
+	DP         = "DP"         // 抽排阶段
+	SP         = "SP"         // 预备阶段
+	MP         = "MP"         // 主要阶段
+	BP         = "BP"         // 战斗阶段
+	EP         = "EP"         // 结束阶段
+	RoundEnd   = "roundend"   // 回合结束之后
+	Chain      = "chain"      // 连锁
+	//DetectionChain = "Detectionchain" // 检查连锁
+	Draw    = "Draw"    // 每次抽排
+	DrawNum = "DrawNum" // 每抽一张牌
 
 	HPChange = "HPChange" // 生命值改变
 
@@ -35,10 +35,10 @@ const (
 	Use2 = "use2" // 覆盖
 
 	// 战斗阶段事件
-	Declaration     = "Declaration"      // 攻击宣言
-	DeclarationBear = Declaration + Bear // 被攻击宣言
-	DamageStep      = "DamageStep"       // 伤害步骤
-	DamageStepBear  = DamageStep + Bear  // 被伤害步骤
+	Declaration = "Declaration" // 攻击宣言
+	//DeclarationBear = Declaration + Bear // 被攻击宣言
+	DamageStep = "DamageStep" // 伤害步骤
+	//DamageStepBear  = DamageStep + Bear  // 被伤害步骤
 	//DamageStepPre   = DamageStep + Pre   // 伤害步骤开始
 	DamagePenalty = "DamagePenalty" // 伤害判定
 	//DamageStepSuf   = DamageStep + Suf   // 伤害步骤结束
@@ -71,11 +71,15 @@ const (
 	OutField   = Out + string(LL_Field)   // 离开场地
 
 	Onset         = "onset"            // 主动发动
+	Offset        = "offset"           // 主动发动
 	Condition     = "condition"        // 触发条件
 	Trigger       = "Trigger"          // 诱发效果
 	TriggerMust   = Trigger + "Must"   // 必发
 	TriggerChoose = Trigger + "Choose" // 选发
 
+	Battle = "battle"
+
+	Cost          = "Cost"          // 花费
 	Removed       = "removed"       // 移除
 	Disabled      = "disabled"      // 失效
 	Destroy       = "Destroy"       // 破坏 送去墓地
@@ -84,4 +88,7 @@ const (
 	Realize = "Realize" // 被知道
 	Discard = "discard" // 丢弃
 
+	UseMagic = "usemagic" // 使用魔法卡
+	UseTrap  = "usetrap"
+	Effect   = "effect" // 效果
 )

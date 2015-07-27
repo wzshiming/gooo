@@ -95,6 +95,9 @@ const (
 	LE_FaceDownAttack  = LE_FaceDown | LE_Attack  //
 	LE_FaceUpDefense   = LE_FaceUp | LE_Defense   // 侧面
 	LE_FaceDownDefense = LE_FaceDown | LE_Defense // 里侧
+
+	LE_ad = LE_Attack | LE_Defense
+	LE_fd = LE_FaceUp | LE_FaceDown
 )
 
 // 手牌主动方法 Initiative

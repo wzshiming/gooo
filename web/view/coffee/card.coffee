@@ -28,10 +28,10 @@ Element = (@scene) ->
 Card = (@scene, id=0, b=0) ->
 
   @element = document.createElement('div')
-  @texts = {}
-  @text = document.createElement('div')
-  @element.appendChild @text
-  @text.className = "card_text"
+  @infos = {}
+  @info = document.createElement('div')
+  @element.appendChild @info
+  @info.className = "card_text"
   @img = document.createElement('img')
   @element.appendChild @img
   @img.className = "card"
@@ -47,7 +47,7 @@ Card = (@scene, id=0, b=0) ->
   @hold = null
   @scene.add @object
 
-  @text.hold = this
+  @info.hold = this
   @img.hold = this
   @element.hold = this
   @elementB.hold = this
@@ -57,6 +57,8 @@ Card = (@scene, id=0, b=0) ->
   @z = @object.position.z
   @ry = 0
   @rz = 0
+  #设置卡片 的属性显示
+
   return
 
 #Card::All = []
@@ -72,25 +74,6 @@ Card::SetUniq = (uniq) ->
   @Index[@uniq] = this
   return
 
-#设置卡片 的属性显示
-Card::SetHTML = (name = null, value = null) ->
-  unless name
-    for own k of  @texts
-      console.dir @texts[k]
-      @text.removeChild @texts[k]
-      delete @texts[k]
-    @texts = {}
-    return
-  unless @texts[name]
-    @texts[name] = document.createElement('p')
-    #@texts[name].className = "card_text"
-    @text.appendChild @texts[name]
-  if value
-    @texts[name].innerText = "#{name}: #{value}"
-  else
-    @text.removeChild @texts[name]
-    delete @texts[name]
-  return
 
 #设置正面
 Card::SetFront = (@id) ->

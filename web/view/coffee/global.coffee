@@ -6,6 +6,7 @@ InitGlobal = ->
   container = document.getElementById "ygo"
   face = new Face()
   mouse = new Mouse()
+  Card::SetHTML = Face::SetHTML
 
 log = (x)->
   console.dir x

@@ -19,9 +19,13 @@ type YGO struct {
 	StartAt  time.Time
 	Cards    map[uint]*Card
 	Players  map[uint]*Player
+	Current  *Player
 	Survival map[int]int
 	Over     bool
 	round    []uint
+
+	pending   map[uint]*Card
+	cardevent map[string]map[*Card]Action
 }
 
 func nap(i int) {
@@ -36,6 +40,9 @@ func NewYGO(r *misc.Rooms) *YGO {
 		Survival: make(map[int]int),
 		StartAt:  time.Now(),
 		Players:  make(map[uint]*Player),
+
+		pending:   make(map[uint]*Card),
+		cardevent: make(map[string]map[*Card]Action),
 	}
 	yg.Room.ForEach(func(sess *agent.Session) {
 		p := NewPlayer()
@@ -60,9 +67,57 @@ func NewYGO(r *misc.Rooms) *YGO {
 	//			}
 	//		}
 	//	})
+
 	return yg
 }
 
+func (yg *YGO) AddReply(ca *Card) {
+	yg.pending[ca.ToUint()] = ca
+}
+
+func (yg *YGO) Chain(eventName string, ca *Card, args []interface{}) {
+	event0 := TriggerChoose + eventName
+	//	rego.INFO(eventName)
+	//	rego.INFO(Take)
+	//rego.INFO(eventName[:len(Take)])
+	if yg.cardevent[event0] != nil {
+		pl := ca.GetSummoner()
+		pl.Msg("连锁事件 "+eventName+" {self}", nil)
+		cs := []*Card{}
+		for k, v := range yg.cardevent[event0] {
+			if k != ca && v.Call(ca) {
+				cs = append(cs, k)
+			}
+		}
+
+		if !ca.GetSummoner().Chain(event0, ca, cs, args) {
+			ca.GetSummoner().GetTarget().Chain(event0, ca, cs, args)
+		}
+
+		yg.pending = map[uint]*Card{}
+	}
+}
+
+func (yg *YGO) GetCardEvents(event string) map[*Card]Action {
+	return yg.cardevent[event]
+}
+
+func (yg *YGO) RegisterCardEvents(event string, ca *Card, condition Action) {
+	if yg.cardevent[event] == nil {
+		yg.cardevent[event] = map[*Card]Action{}
+	}
+	yg.cardevent[event][ca] = condition
+}
+
+func (yg *YGO) UnregisterCardEvents(event string, ca *Card) {
+	if yg.cardevent[event] != nil {
+		delete(yg.cardevent[event], ca)
+		if len(yg.cardevent[event]) == 0 {
+			delete(yg.cardevent, event)
+		}
+	}
+
+}
 func (yg *YGO) GetPlayer(sess *agent.Session) *Player {
 	return yg.Players[sess.ToUint()]
 }
@@ -77,8 +132,8 @@ func (yg *YGO) RegisterCards(c *Card) {
 }
 
 func (yg *YGO) ForEachPlayer(fun func(*Player)) {
-	for _, v := range yg.Players {
-		fun(v)
+	for _, v := range yg.round {
+		fun(yg.Players[v])
 	}
 }
 
@@ -147,8 +202,9 @@ func (yg *YGO) Loop() {
 	for {
 		for _, v := range yg.round {
 			nap(5)
-			if !yg.Players[v].IsFail() {
-				yg.Players[v].round()
+			yg.Current = yg.Players[v]
+			if !yg.Current.IsFail() {
+				yg.Current.round()
 				//				if yg.CheckWinner(); yg.Over {
 				//					return
 				//				}
@@ -157,7 +213,7 @@ func (yg *YGO) Loop() {
 			}
 			if yg.Over {
 				yg.CallAll("over", nil)
-				yg.Players[v].MsgPub("游戏结束", nil)
+				yg.Current.MsgPub("游戏结束", nil)
 				return
 			}
 		}

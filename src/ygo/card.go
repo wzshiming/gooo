@@ -78,8 +78,14 @@ type Card struct {
 func (ca *Card) Remind() {
 	s := ca.GetSummoner()
 	s.Call(Remind(ca.ToUint()))
-	s.AddReply(ca)
+	ca.GetSummoner().Game().AddReply(ca)
 }
+
+func (ca *Card) Dispatch(eventName string, args ...interface{}) {
+	ca.GetSummoner().Game().Chain(eventName, ca, append(args))
+	ca.Events.Dispatch(eventName, args...)
+}
+
 func (ca *Card) GetPlace() *Group {
 	return ca.place
 }
@@ -359,7 +365,18 @@ func SetNotCanAttack(ca *Card) bool {
 
 // 设置表示形式
 func (ca *Card) setLE(l LE_TYPE) {
-	ca.le |= l
+	ca.le = l
+	//	if (l & LE_Attack) != 0 {
+	//		ca.le &= ^LE_Defense
+	//	} else if (l & LE_Defense) != 0 {
+	//		ca.le &= ^LE_Attack
+	//	}
+
+	//	if (l & LE_FaceUp) != 0 {
+	//		ca.le &= ^LE_FaceDown
+	//	} else if (l & LE_FaceDown) != 0 {
+	//		ca.le &= ^LE_Attack
+	//	}
 	pl := ca.GetSummoner()
 	pl.Dispatch(Expres, ca)
 	pl.CallAll(ExprCard(ca, l))
@@ -370,12 +387,12 @@ func (ca *Card) setLE(l LE_TYPE) {
 
 // 判断是攻击表示
 func (ca *Card) IsAttack() bool {
-	return (ca.le & LE_Attack) != 0
+	return (ca.le & LE_Attack) == LE_Attack
 }
 
 // 设置攻击表示
 func (ca *Card) Attack() {
-	ca.setLE(LE_Attack)
+	ca.setLE(LE_Attack | (ca.le & LE_fd))
 }
 
 func Attack(ca *Card) {
@@ -384,12 +401,12 @@ func Attack(ca *Card) {
 
 // 判断是防御表示
 func (ca *Card) IsDefense() bool {
-	return (ca.le & LE_Defense) != 0
+	return (ca.le & LE_Defense) == LE_Defense
 }
 
 // 设置是表示
 func (ca *Card) Defense() {
-	ca.setLE(LE_Defense)
+	ca.setLE(LE_Defense | (ca.le & LE_fd))
 }
 
 func Defense(ca *Card) {
@@ -398,12 +415,12 @@ func Defense(ca *Card) {
 
 // 判断是面朝
 func (ca *Card) IsFaceUp() bool {
-	return (ca.le & LE_FaceUp) != 0
+	return (ca.le & LE_FaceUp) == LE_FaceUp
 }
 
 // 设置是面朝上
 func (ca *Card) FaceUp() {
-	ca.setLE(LE_FaceUp)
+	ca.setLE(LE_FaceUp | (ca.le & LE_ad))
 }
 
 func FaceUp(ca *Card) {
@@ -412,12 +429,12 @@ func FaceUp(ca *Card) {
 
 // 判断是面朝下
 func (ca *Card) IsFaceDown() bool {
-	return (ca.le & LE_FaceDown) != 0
+	return (ca.le & LE_FaceDown) == LE_FaceDown
 }
 
 // 设置是面朝下
 func (ca *Card) FaceDown() {
-	ca.setLE(LE_FaceDown)
+	ca.setLE(LE_FaceDown | (ca.le & LE_ad))
 }
 
 func FaceDown(ca *Card) {
@@ -426,7 +443,7 @@ func FaceDown(ca *Card) {
 
 // 判断是面朝上攻击表示
 func (ca *Card) IsFaceUpAttack() bool {
-	return ca.le == LE_FaceUpAttack
+	return (ca.le & LE_FaceUpAttack) == LE_FaceUpAttack
 }
 
 // 设置是面朝上攻击表示
@@ -440,7 +457,7 @@ func FaceUpAttack(ca *Card) {
 
 // 判断是面朝下攻击表示
 func (ca *Card) IsFaceDownAttack() bool {
-	return ca.le == LE_FaceDownAttack
+	return (ca.le & LE_FaceDownAttack) == LE_FaceDownAttack
 }
 
 // 设置是面朝下攻击表示
@@ -454,7 +471,7 @@ func FaceDownAttack(ca *Card) {
 
 // 判断是面朝上防御表示
 func (ca *Card) IsFaceUpDefense() bool {
-	return ca.le == LE_FaceUpDefense
+	return (ca.le & LE_FaceUpDefense) == LE_FaceUpDefense
 }
 
 // 设置是面朝上防御表示
@@ -468,7 +485,7 @@ func FaceUpDefense(ca *Card) {
 
 // 判断是面朝下防御表示
 func (ca *Card) IsFaceDownDefense() bool {
-	return ca.le == LE_FaceDownDefense
+	return (ca.le & LE_FaceDownDefense) == LE_FaceDownDefense
 }
 
 // 设置是面朝下防御表示
@@ -485,73 +502,6 @@ func (ca *Card) Placed() {
 	if ca.place != nil {
 		ca.place.PickedFor(ca)
 	}
-}
-
-func (ca *Card) NormalUse() {
-	if ca.IsPlaceMagic() { // 场地卡
-		if ca.GetSummoner().Field.Len() != 0 {
-			ca.GetSummoner().Field.ForEach(ToGrave)
-		}
-		ca.ToField()
-		ca.FaceUpAttack()
-	} else if ca.IsMagicAndTrap() { // 魔陷
-		if ca.GetSummoner().Szone.Len() < 5 {
-			ca.ToSzone()
-			ca.FaceUpAttack()
-			if ca.IsMagic() {
-				ca.Dispatch(Onset)
-			}
-		}
-	} else if ca.IsMonster() { // 怪兽
-		ca.Dispatch(Pay, Summon)
-	}
-
-}
-
-func (ca *Card) NormalCover() {
-	if ca.IsPlaceMagic() { // 场地卡
-		if ca.GetSummoner().Field.Len() != 0 {
-			ca.GetSummoner().Field.ForEach(ToGrave)
-		}
-		ca.ToField()
-		ca.FaceDownAttack()
-	} else if ca.IsMagicAndTrap() { // 魔陷
-		if ca.GetSummoner().Szone.Len() < 5 {
-			ca.ToSzone()
-			ca.FaceDownAttack()
-		}
-	} else if ca.IsMonster() { // 怪兽
-		ca.Dispatch(Pay, Cover)
-	}
-}
-
-func (ca *Card) PayBySuperior(fun func()) {
-	ca.SetSummoner(ca.GetOwner())
-	pl := ca.GetSummoner()
-	e := func(c *Card) bool {
-		c.Dispatch(Freedom, ca)
-		return true
-	}
-	if ca.GetLevel() > 6 {
-		if pl.Mzone.Len() < 2 {
-			pl.Msg("需要2只献祭的怪兽，无法满足召唤条件", nil)
-			return
-		} else {
-			pl.Msg("选择2只献祭的怪兽", nil)
-			pl.SelectFunc(2, pl.Mzone, e)
-		}
-	} else if ca.GetLevel() > 4 {
-		if pl.Mzone.Len() < 1 {
-			pl.Msg("需要1只献祭的怪兽，无法满足召唤条件", nil)
-			return
-		} else {
-			pl.Msg("选择1只献祭的怪兽", nil)
-			pl.SelectFunc(1, pl.Mzone, e)
-		}
-	}
-	//pl.Call(Message("召唤成功"))
-	ca.SetNotCanChange()
-	fun()
 }
 
 // 移动到墓地
