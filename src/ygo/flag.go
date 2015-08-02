@@ -70,14 +70,13 @@ const (
 	InField    = In + string(LL_Field)    // 进入场地
 	OutField   = Out + string(LL_Field)   // 离开场地
 
-	Onset         = "onset"            // 主动发动
-	Offset        = "offset"           // 主动发动
-	Condition     = "condition"        // 触发条件
-	Trigger       = "Trigger"          // 诱发效果
-	TriggerMust   = Trigger + "Must"   // 必发
-	TriggerChoose = Trigger + "Choose" // 选发
+	Change = "change" // 卡牌发生变化时
 
-	Battle = "battle"
+	Onset     = "onset"     // 主动发动
+	Offset    = "offset"    // 主动发动
+	Condition = "condition" // 触发条件
+
+	Trigger = "Trigger" // 诱发
 
 	Cost          = "Cost"          // 花费
 	Removed       = "removed"       // 移除
@@ -85,10 +84,22 @@ const (
 	Destroy       = "Destroy"       // 破坏 送去墓地
 	DestroyBeRule = "destroyberule" // 规则破坏
 
+	Fought = "fought" //战斗过
+
 	Realize = "Realize" // 被知道
 	Discard = "discard" // 丢弃
 
 	UseMagic = "usemagic" // 使用魔法卡
 	UseTrap  = "usetrap"
-	Effect   = "effect" // 效果
+
+	Effect0 = "effect0" // 效果
+	Effect1 = "effect1" // 效果
+	Effect2 = "effect2" // 效果
+	Effect3 = "effect3" // 效果
+	Effect4 = "effect4" // 效果
+	Effect5 = "effect5" // 效果
+	Effect6 = "effect6" // 效果
+	Effect7 = "effect7" // 效果
+	Effect8 = "effect8" // 效果
+	Effect9 = "effect9" // 效果
 )

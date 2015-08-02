@@ -23,12 +23,12 @@ type CardOriginal struct {
 
 }
 
-func (co *CardOriginal) Make(ow *Player) *Card {
+func (co *CardOriginal) Make(pl *Player) *Card {
 	c := &Card{
-		Events:       dispatcher.NewLineEvent(),
+		Events:       dispatcher.NewForkEvent(pl.GetFork()),
 		baseOriginal: co,
-		owner:        ow,
-		summoner:     ow,
+		owner:        pl,
+		summoner:     pl,
 		le:           LE_FaceDownAttack,
 	}
 	c.InitUint()
@@ -75,14 +75,35 @@ type Card struct {
 	lastChangeRound int // 最后改变表示形式回合
 }
 
-func (ca *Card) Remind() {
-	s := ca.GetSummoner()
-	s.Call(Remind(ca.ToUint()))
-	ca.GetSummoner().Game().AddReply(ca)
+func (ca *Card) Priority() int {
+	switch ca.baseOriginal.Lc {
+	case LC_OrdinaryMonster: //普通怪兽 黄色
+		return 1
+	case LC_EffectMonster: //效果怪兽 橙色
+		return 1
+	case LC_OrdinaryMagic: //普通魔法 通常
+		return 1
+	case LC_SustainsMagic: //永续魔法
+		return 1
+	case LC_EquipMagic: //装备魔法
+		return 1
+	case LC_PlaceMagic: //场地魔法
+		return 1
+	case LC_RushMagic: //速攻魔法 速度2
+		return 2
+	case LC_OrdinaryTrap: //普通陷阱 速度2
+		return 2
+	case LC_SustainsTrap: //永续陷阱 速度2
+		return 2
+	case LC_ReactionTrap: //反击陷阱 速度3
+		return 3
+	}
+	return 0
 }
 
 func (ca *Card) Dispatch(eventName string, args ...interface{}) {
-	ca.GetSummoner().Game().Chain(eventName, ca, append(args))
+	yg := ca.GetSummoner().Game()
+	yg.Chain(eventName, ca, ca.GetSummoner(), append(args))
 	ca.Events.Dispatch(eventName, args...)
 }
 

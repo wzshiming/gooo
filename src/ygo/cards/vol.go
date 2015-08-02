@@ -6,6 +6,51 @@ import (
 
 func vol(cardBag *ygo.CardVersion) {
 	var co *ygo.CardOriginal
+
+	co = &ygo.CardOriginal{
+		/*{
+		 id: 207
+		 调整: [光之护封剑]
+		<光の護封剣>
+		[2010/09/08]
+
+		●对方场上存在的怪兽全部变为表侧表示。这张卡发动后，计算对方的回合3回合内在场上停留。只要这张卡在场上存在，对方场上存在的怪兽不能攻击宣言。
+		◇对方场上不存在怪兽的场合这张卡也能发动
+		◇发动被无效的场合，这张卡不能在场上停留
+		◇对应这张卡的发动，发动「王宮の勅命/王宮の勅命」的场合，这张卡依然在场上正常停留（使用规则）
+		◇承上述「王宮の勅命/王宮の勅命」在这张卡离开前效果失去的场合，对方怪兽不能攻击的效果适用
+		◇「命运之火钟/運命の火時計」可以让这张卡的回合计算推进
+		◇「命运之火钟/運命の火時計」在第3回合时让这张卡的回合计算推进的场合，在「命运之火钟/運命の火時計」适用时这张卡破坏
+		◇「魔法防护器/マジック·ガードナー」的效果不能防止这张卡在3回合结束后的破坏（规则破坏不能被代替）
+		◇效果处理时，对方场上不存在里侧表示怪兽的场合，怪兽变为表侧的效果不适用
+		◇对应这张卡的发动，发动「旋风/サイクロン」并以这张卡为对象的场合，怪兽变为表侧的效果正常适用
+		 中文名: 光之护封剑
+		 日文名: 光の護封剣
+		 英文名: Swords of Revealing Light
+		 卡片种类: 通常魔法
+		 卡片密码: 72302403
+		 使用限制: 无限制
+		 罕见度: 面闪SR，黄金GR，平卡N，金字UR
+		 卡包: PG，BE01，VOL02，DL02，SD01，SD06，SD07，SD11，GLD01，GS01，DPYG，SD18，YU，YSD06，DB12，ST12，ST13，15AY
+		 效果: 对方场上的怪兽全部变成表侧表示。这张卡发动后，用对方回合计算的3回合内继续留在场上。只要这张卡在场上存在，对方场上的怪兽不能攻击宣言。
+		}
+		*/
+		Id:       207,
+		Password: "72302403",
+		Name:     "光之护封剑",              // "Swords of Revealing Light"  "光の護封剣"
+		Lc:       ygo.LC_OrdinaryMagic, // 通常魔法
+		Initialize: func(ca *ygo.Card) bool {
+			//			i := 0
+			//			ca.RegisterOrdinaryMagic(func() {
+
+			//			})
+			return true
+		}, // 初始
+
+		IsValid: false,
+	}
+	cardBag.Register(co)
+
 	co = &ygo.CardOriginal{
 		/*{
 		 id: 220
@@ -33,7 +78,7 @@ func vol(cardBag *ygo.CardVersion) {
 		Name:     "强欲之壶",               // "Pot of Greed"  "強欲な壺"
 		Lc:       ygo.LC_OrdinaryMagic, // 通常魔法
 		Initialize: func(ca *ygo.Card) bool {
-			ca.RegisterNormalMagic(func() {
+			ca.RegisterOrdinaryMagic(func() {
 				ca.GetSummoner().ActionDraw(2)
 			})
 			return true
@@ -69,10 +114,15 @@ func vol(cardBag *ygo.CardVersion) {
 		Name:     "魔法干扰阵",             // "Magic Jammer"  "マジック·ジャマー"
 		Lc:       ygo.LC_ReactionTrap, // 反击陷阱
 		Initialize: func(ca *ygo.Card) bool {
+
 			obj := ca
-			ca.RegisterNormalTrap(ygo.UseMagic, func(c *ygo.Card) bool {
-				obj = c
-				return ca.GetSummoner().Hand.Len() >= 1
+			ca.RegisterOrdinaryTrap(ygo.UseMagic, func(c *ygo.Card) {
+				pl := ca.GetSummoner()
+				yg := pl.Game()
+				if ca.GetSummoner().Hand.Len() >= 1 {
+					obj = c
+					yg.AddEvent(ygo.Chain, ca)
+				}
 			}, func() {
 				pl := ca.GetSummoner()
 				pl.MsgPub("魔法干扰阵 发动成功", nil)
@@ -117,9 +167,14 @@ func vol(cardBag *ygo.CardVersion) {
 		Lc:       ygo.LC_OrdinaryTrap, // 通常陷阱
 		Initialize: func(ca *ygo.Card) bool {
 			obj := ca.GetSummoner()
-			ca.RegisterNormalTrap(ygo.Declaration, func(c *ygo.Card) bool {
+			ca.RegisterOrdinaryTrap(ygo.Declaration, func(c *ygo.Card) {
+				pl := ca.GetSummoner()
+				yg := pl.Game()
 				obj = c.GetSummoner()
-				return obj != ca.GetSummoner()
+				if obj != ca.GetSummoner() {
+					yg.AddEvent(ygo.Chain, ca)
+				}
+
 			}, func() {
 				pl := ca.GetSummoner()
 				pl.MsgPub("神圣防护罩-反射镜力-发动成功", nil)
@@ -134,40 +189,6 @@ func vol(cardBag *ygo.CardVersion) {
 		}, // 初始
 
 		IsValid: false,
-	}
-	cardBag.Register(co)
-
-	co = &ygo.CardOriginal{
-		/*{
-		 id: 1221
-		 中文名: 单摆刃拷问机械
-		 日文名: 振り子刃の拷問機械
-		 英文名: Pendulum Machine
-		 卡片种类: 通常怪兽
-		 卡片密码: 24433920
-		 使用限制: 无限制
-		 种族: 机械
-		 属性: 暗
-		 星级: 6
-		 攻击力: 1750
-		 防御力: 2000
-		 罕见度: 金字UR，平卡N
-		 卡包: LE02，VOL07，GLD04
-		 效果: 描述：使用带有大摆子的刀刃将对方劈成两半！可怕的拷问机器呀！
-		}
-		*/
-		Id:       1221,
-		Password: "24433920",
-		Name:     "单摆刃拷问机械",              // "Pendulum Machine"  "振り子刃の拷問機械"
-		Lc:       ygo.LC_OrdinaryMonster, // 通常怪兽
-		//Initialize:    func(ca *ygo.Card) {}, // 初始
-		Level:   6,
-		La:      ygo.LA_Earth,   // 暗
-		Lr:      ygo.LR_Machine, // 机械
-		Attack:  1750,
-		Defense: 2000,
-
-		IsValid: true,
 	}
 	cardBag.Register(co)
 
@@ -206,12 +227,10 @@ func vol(cardBag *ygo.CardVersion) {
 		Name:     "异次元的战士",             // "D.D. Warrior"  "異次元の戦士"
 		Lc:       ygo.LC_EffectMonster, // 效果怪兽
 		Initialize: func(ca *ygo.Card) bool {
-			//			e := func(tar *ygo.Card) {
-			//				ca.ToRemoved()
-			//				tar.ToRemoved()
-			//			}
-			//			ca.AddEvent(ygo.ResultSuf, e)
-			//			ca.AddEvent(ygo.BearResultSuf, e)
+			ca.AddEvent(ygo.Fought, func(tar *ygo.Card) {
+				ca.Dispatch(ygo.Removed)
+				tar.Dispatch(ygo.Removed)
+			})
 			return true
 		}, // 初始
 		Level:   4,
@@ -219,6 +238,40 @@ func vol(cardBag *ygo.CardVersion) {
 		Lr:      ygo.LR_Warrior, // 战士
 		Attack:  1200,
 		Defense: 1000,
+
+		IsValid: true,
+	}
+	cardBag.Register(co)
+
+	co = &ygo.CardOriginal{
+		/*{
+		 id: 1221
+		 中文名: 单摆刃拷问机械
+		 日文名: 振り子刃の拷問機械
+		 英文名: Pendulum Machine
+		 卡片种类: 通常怪兽
+		 卡片密码: 24433920
+		 使用限制: 无限制
+		 种族: 机械
+		 属性: 暗
+		 星级: 6
+		 攻击力: 1750
+		 防御力: 2000
+		 罕见度: 金字UR，平卡N
+		 卡包: LE02，VOL07，GLD04
+		 效果: 描述：使用带有大摆子的刀刃将对方劈成两半！可怕的拷问机器呀！
+		}
+		*/
+		Id:       1221,
+		Password: "24433920",
+		Name:     "单摆刃拷问机械",              // "Pendulum Machine"  "振り子刃の拷問機械"
+		Lc:       ygo.LC_OrdinaryMonster, // 通常怪兽
+		//Initialize:    func(ca *ygo.Card) {}, // 初始
+		Level:   6,
+		La:      ygo.LA_Earth,   // 暗
+		Lr:      ygo.LR_Machine, // 机械
+		Attack:  1750,
+		Defense: 2000,
 
 		IsValid: true,
 	}
@@ -1636,44 +1689,6 @@ func vol(cardBag *ygo.CardVersion) {
 		Id:       206,
 		Password: "73134081",
 		Name:     "火刑",                 // "Final Flame"  "火あぶりの刑"
-		Lc:       ygo.LC_OrdinaryMagic, // 通常魔法
-		//Initialize:    func(ca *ygo.Card) {}, // 初始
-
-		IsValid: false,
-	}
-	cardBag.Register(co)
-
-	co = &ygo.CardOriginal{
-		/*{
-		 id: 207
-		 调整: [光之护封剑]
-		<光の護封剣>
-		[2010/09/08]
-
-		●对方场上存在的怪兽全部变为表侧表示。这张卡发动后，计算对方的回合3回合内在场上停留。只要这张卡在场上存在，对方场上存在的怪兽不能攻击宣言。
-		◇对方场上不存在怪兽的场合这张卡也能发动
-		◇发动被无效的场合，这张卡不能在场上停留
-		◇对应这张卡的发动，发动「王宮の勅命/王宮の勅命」的场合，这张卡依然在场上正常停留（使用规则）
-		◇承上述「王宮の勅命/王宮の勅命」在这张卡离开前效果失去的场合，对方怪兽不能攻击的效果适用
-		◇「命运之火钟/運命の火時計」可以让这张卡的回合计算推进
-		◇「命运之火钟/運命の火時計」在第3回合时让这张卡的回合计算推进的场合，在「命运之火钟/運命の火時計」适用时这张卡破坏
-		◇「魔法防护器/マジック·ガードナー」的效果不能防止这张卡在3回合结束后的破坏（规则破坏不能被代替）
-		◇效果处理时，对方场上不存在里侧表示怪兽的场合，怪兽变为表侧的效果不适用
-		◇对应这张卡的发动，发动「旋风/サイクロン」并以这张卡为对象的场合，怪兽变为表侧的效果正常适用
-		 中文名: 光之护封剑
-		 日文名: 光の護封剣
-		 英文名: Swords of Revealing Light
-		 卡片种类: 通常魔法
-		 卡片密码: 72302403
-		 使用限制: 无限制
-		 罕见度: 面闪SR，黄金GR，平卡N，金字UR
-		 卡包: PG，BE01，VOL02，DL02，SD01，SD06，SD07，SD11，GLD01，GS01，DPYG，SD18，YU，YSD06，DB12，ST12，ST13，15AY
-		 效果: 对方场上的怪兽全部变成表侧表示。这张卡发动后，用对方回合计算的3回合内继续留在场上。只要这张卡在场上存在，对方场上的怪兽不能攻击宣言。
-		}
-		*/
-		Id:       207,
-		Password: "72302403",
-		Name:     "光之护封剑",              // "Swords of Revealing Light"  "光の護封剣"
 		Lc:       ygo.LC_OrdinaryMagic, // 通常魔法
 		//Initialize:    func(ca *ygo.Card) {}, // 初始
 

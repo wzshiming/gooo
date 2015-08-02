@@ -14,6 +14,7 @@ type Arg map[string]interface{}
 
 type YGO struct {
 	dispatcher.Events
+	Fork     dispatcher.Fork
 	CardVer  *CardVersion
 	Room     *misc.Rooms
 	StartAt  time.Time
@@ -33,19 +34,19 @@ func nap(i int) {
 }
 
 func NewYGO(r *misc.Rooms) *YGO {
+	eve := dispatcher.NewLineEvent()
 	yg := &YGO{
-		Events:   dispatcher.NewLineEvent(),
+		Events:   eve,
+		Fork:     eve.GetFork(),
 		Room:     r,
 		Cards:    make(map[uint]*Card),
 		Survival: make(map[int]int),
 		StartAt:  time.Now(),
 		Players:  make(map[uint]*Player),
-
-		pending:   make(map[uint]*Card),
-		cardevent: make(map[string]map[*Card]Action),
 	}
+
 	yg.Room.ForEach(func(sess *agent.Session) {
-		p := NewPlayer()
+		p := NewPlayer(yg)
 		p.Session = sess
 		yg.Players[sess.ToUint()] = p
 	})
@@ -71,53 +72,45 @@ func NewYGO(r *misc.Rooms) *YGO {
 	return yg
 }
 
-func (yg *YGO) AddReply(ca *Card) {
-	yg.pending[ca.ToUint()] = ca
-}
+func (yg *YGO) Chain(eventName string, ca *Card, pl *Player, args []interface{}) {
 
-func (yg *YGO) Chain(eventName string, ca *Card, args []interface{}) {
-	event0 := TriggerChoose + eventName
-	//	rego.INFO(eventName)
-	//	rego.INFO(Take)
-	//rego.INFO(eventName[:len(Take)])
-	if yg.cardevent[event0] != nil {
-		pl := ca.GetSummoner()
-		pl.Msg("连锁事件 "+eventName+" {self}", nil)
-		cs := []*Card{}
-		for k, v := range yg.cardevent[event0] {
-			if k != ca && v.Call(ca) {
-				cs = append(cs, k)
-			}
-		}
-
-		if !ca.GetSummoner().Chain(event0, ca, cs, args) {
-			ca.GetSummoner().GetTarget().Chain(event0, ca, cs, args)
-		}
-
-		yg.pending = map[uint]*Card{}
+	if ca != nil {
+		args = append(args, ca)
 	}
-}
-
-func (yg *YGO) GetCardEvents(event string) map[*Card]Action {
-	return yg.cardevent[event]
-}
-
-func (yg *YGO) RegisterCardEvents(event string, ca *Card, condition Action) {
-	if yg.cardevent[event] == nil {
-		yg.cardevent[event] = map[*Card]Action{}
+	if pl != nil {
+		args = append(args, pl)
 	}
-	yg.cardevent[event][ca] = condition
-}
+	//event0 := Trigger + eventName
+	//pl.Msg("连锁事件 "+eventName+" {self}", nil)
 
-func (yg *YGO) UnregisterCardEvents(event string, ca *Card) {
-	if yg.cardevent[event] != nil {
-		delete(yg.cardevent[event], ca)
-		if len(yg.cardevent[event]) == 0 {
-			delete(yg.cardevent, event)
+	yg.Dispatch(eventName, args...)
+
+	//	yg.ForEventEach(eventName, func(i interface{}) {
+	//		if v, ok := i.(*Card); ok {
+	//			pl.MsgPub("诱发事件 "+eventName+" {self}", Arg{"self": v.GetId()})
+	//			v.Dispatch(eventName, args...)
+	//		}
+
+	//	})
+
+	cs := []*Card{}
+	yg.ForEventEach(Chain, func(i interface{}) {
+		if v, ok := i.(*Card); ok {
+			cs = append(cs, v)
+		}
+	})
+	if len(cs) > 0 {
+		//pl := ca.GetSummoner()
+		pl.MsgPub("连锁事件 "+eventName+" {self}", nil)
+
+		if !pl.Chain(eventName, cs, args) {
+			pl.GetTarget().Chain(eventName, cs, args)
 		}
 	}
+	yg.EmptyEvent(Chain)
 
 }
+
 func (yg *YGO) GetPlayer(sess *agent.Session) *Player {
 	return yg.Players[sess.ToUint()]
 }

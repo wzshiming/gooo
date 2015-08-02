@@ -49,9 +49,9 @@ type Player struct {
 	fail bool
 }
 
-func NewPlayer() *Player {
+func NewPlayer(yg *YGO) *Player {
 	pl := &Player{
-		Events:    dispatcher.NewLineEvent(),
+		Events:    dispatcher.NewForkEvent(yg.Fork),
 		Camp:      1,
 		Hp:        4000,
 		DrawSize:  1,
@@ -133,6 +133,12 @@ func NewPlayer() *Player {
 	return pl
 }
 
+func (pl *Player) Dispatch(eventName string, args ...interface{}) {
+	yg := pl.Game()
+	pl.Events.Dispatch(eventName, args...)
+	yg.Chain(eventName, nil, pl, append(args))
+}
+
 func (pl *Player) Game() *YGO {
 	return pl.game
 }
@@ -176,7 +182,7 @@ func (pl *Player) ForEachPlayer(fun func(p *Player)) {
 	pl.Game().ForEachPlayer(fun)
 }
 
-func (pl *Player) Chain(eventName string, ca *Card, cs []*Card, a []interface{}) bool {
+func (pl *Player) Chain(eventName string, cs []*Card, a []interface{}) bool {
 	pl.ResetReplyTime()
 	pl.MsgPub("等待{self}连锁", nil)
 	if wi := pl.SelectWill(); wi.Uniq != 0 {
@@ -185,7 +191,7 @@ func (pl *Player) Chain(eventName string, ca *Card, cs []*Card, a []interface{})
 			if v.ToUint() == wi.Uniq {
 				if v.GetSummoner() == pl {
 					pl.MsgPub("{self}连锁{event}", Arg{"self": v.GetId(), "event": eventName})
-					v.Dispatch(eventName, append(a, wi.Method)...)
+					v.Events.Dispatch(Trigger+eventName, append(a, wi.Method)...)
 					return true
 				}
 			}
@@ -326,13 +332,13 @@ func (pl *Player) battle(lp LP_TYPE) bool {
 			if j := pl.SelectWill(); j.Uniq != 0 {
 				t2 := pl.Game().GetCard(j.Uniq)
 				if pl.GetTarget().Mzone.IsExistCard(t2) {
-					t1.Dispatch(Battle, t2)
+					t1.Dispatch(Declaration, t2)
 				} else {
 					pl.Msg("请选择对方怪兽区的怪兽", nil)
 				}
 			}
 		} else {
-			t1.Dispatch(Battle)
+			t1.Dispatch(Declaration)
 		}
 
 	}
