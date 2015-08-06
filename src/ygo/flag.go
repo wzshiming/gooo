@@ -86,7 +86,7 @@ const (
 
 	Fought = "fought" //战斗过
 
-	Realize = "Realize" // 被知道
+	//Realize = "Realize" // 被知道
 	Discard = "discard" // 丢弃
 
 	UseMagic = "usemagic" // 使用魔法卡

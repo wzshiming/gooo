@@ -5,43 +5,9 @@ import (
 )
 
 func booster(cardBag *ygo.CardVersion) {
-	var co *ygo.CardOriginal
 
-	co = &ygo.CardOriginal{
-		/*{
-		 id: 1227
-		 中文名: 灯之魔精
-		 日文名: ランプの魔精·ラ·ジーン
-		 英文名: La Jinn the Mystical Genie of the Lamp
-		 卡片种类: 通常怪兽
-		 卡片密码: 97590747
-		 使用限制: 无限制
-		 种族: 恶魔
-		 属性: 暗
-		 星级: 4
-		 攻击力: 1800
-		 防御力: 1000
-		 罕见度: 平卡N，金字UR
-		 卡包: LE03，EX-R(EX)，Booster04，Booster R2，TP10，DPKB，KA，SK2
-		 效果: 描述：听从呼唤他的主人的任何要求及命令的灯之精灵。
-		}
-		*/
-		Id:       1227,
-		Password: "97590747",
-		Name:     "灯之魔精",                 // "La Jinn the Mystical Genie of the Lamp"  "ランプの魔精·ラ·ジーン"
-		Lc:       ygo.LC_OrdinaryMonster, // 通常怪兽
-		//Initialize:    func(ca *ygo.Card) {}, // 初始
-		Level:   4,
-		La:      ygo.LA_Earth, // 暗
-		Lr:      ygo.LR_Fiend, // 恶魔
-		Attack:  1800,
-		Defense: 1000,
-
-		IsValid: false,
-	}
-	cardBag.Register(co)
-
-	co = &ygo.CardOriginal{
+	/*0*/
+	cardBag.Register(&ygo.CardOriginal{
 		/*{
 		 id: 1357
 		 调整: [陷阱大师]
@@ -72,18 +38,18 @@ func booster(cardBag *ygo.CardVersion) {
 		Password: "46461247",
 		Name:     "陷阱大师",               // "Trap Master"  "トラップ·マスター"
 		Lc:       ygo.LC_EffectMonster, // 效果怪兽
-		//Initialize:    func(ca *ygo.Card) {}, // 初始
+
 		Level:   3,
 		La:      ygo.LA_Earth,   // 地
 		Lr:      ygo.LR_Warrior, // 战士
 		Attack:  500,
 		Defense: 1100,
-
+		//Initialize:    func(ca *ygo.Card) bool {}, // 初始
 		IsValid: false,
-	}
-	cardBag.Register(co)
+	})
 
-	co = &ygo.CardOriginal{
+	/*1*/
+	cardBag.Register(&ygo.CardOriginal{
 		/*{
 		 id: 1358
 		 调整: [血之代偿]
@@ -122,13 +88,13 @@ func booster(cardBag *ygo.CardVersion) {
 		Password: "80604091",
 		Name:     "血之代偿",              // "Ultimate Offering"  "血の代償"
 		Lc:       ygo.LC_SustainsTrap, // 永续陷阱
-		//Initialize:    func(ca *ygo.Card) {}, // 初始
 
+		//Initialize:    func(ca *ygo.Card) bool {}, // 初始
 		IsValid: false,
-	}
-	cardBag.Register(co)
+	})
 
-	co = &ygo.CardOriginal{
+	/*2*/
+	cardBag.Register(&ygo.CardOriginal{
 		/*{
 		 id: 1359
 		 调整: [谜之傀儡师]
@@ -162,18 +128,18 @@ func booster(cardBag *ygo.CardVersion) {
 		Password: "54098121",
 		Name:     "谜之傀儡师",              // "Mysterious Puppeteer"  "謎の傀儡師"
 		Lc:       ygo.LC_EffectMonster, // 效果怪兽
-		//Initialize:    func(ca *ygo.Card) {}, // 初始
+
 		Level:   4,
 		La:      ygo.LA_Earth,   // 地
 		Lr:      ygo.LR_Warrior, // 战士
 		Attack:  1000,
 		Defense: 1500,
-
+		//Initialize:    func(ca *ygo.Card) bool {}, // 初始
 		IsValid: false,
-	}
-	cardBag.Register(co)
+	})
 
-	co = &ygo.CardOriginal{
+	/*3*/
+	cardBag.Register(&ygo.CardOriginal{
 		/*{
 		 id: 1420
 		 调整: [自业自得]
@@ -198,183 +164,13 @@ func booster(cardBag *ygo.CardVersion) {
 		Password: "24068492",
 		Name:     "自业自得",              // "Just Desserts"  "自業自得"
 		Lc:       ygo.LC_OrdinaryTrap, // 通常陷阱
-		//Initialize:    func(ca *ygo.Card) {}, // 初始
 
+		//Initialize:    func(ca *ygo.Card) bool {}, // 初始
 		IsValid: false,
-	}
-	cardBag.Register(co)
+	})
 
-	co = &ygo.CardOriginal{
-		/*{
-		 id: 144
-		 中文名: 暗黑骑士 盖亚
-		 日文名: 暗黒騎士ガイア
-		 英文名: Gaia The Fierce Knight
-		 卡片种类: 通常怪兽
-		 卡片密码: 06368038
-		 使用限制: 无限制
-		 种族: 战士
-		 属性: 地
-		 星级: 7
-		 攻击力: 2300
-		 防御力: 2100
-		 罕见度: 金字UR，银字R，立体UTR，平卡N
-		 卡包: LB，BE01，LE02，PH，EX-R(EX)，VOL01，DL02，Booster R1，15AY
-		 效果: 描述：骑着风驰电掣般的马的骑士。当心突进攻击。
-		}
-		*/
-		Id:       144,
-		Password: "06368038",
-		Name:     "暗黑骑士 盖亚",              // "Gaia The Fierce Knight"  "暗黒騎士ガイア"
-		Lc:       ygo.LC_OrdinaryMonster, // 通常怪兽
-		//Initialize:    func(ca *ygo.Card) {}, // 初始
-		Level:   7,
-		La:      ygo.LA_Earth,   // 地
-		Lr:      ygo.LR_Warrior, // 战士
-		Attack:  2300,
-		Defense: 2100,
-
-		IsValid: false,
-	}
-	cardBag.Register(co)
-
-	co = &ygo.CardOriginal{
-		/*{
-		 id: 149
-		 中文名: 地狱的裁判
-		 日文名: 地獄の裁判
-		 英文名: Trial of Nightmare
-		 卡片种类: 通常怪兽
-		 卡片密码: 77827521
-		 使用限制: 无限制
-		 种族: 恶魔
-		 属性: 暗
-		 星级: 4
-		 攻击力: 1300
-		 防御力: 900
-		 罕见度: 平卡N，金碎USR
-		 卡包: LB，DL02，Starter Box，Booster R1
-		 效果: 描述：将敌人封入棺材里。然后由地狱使者下达判决。
-		}
-		*/
-		Id:       149,
-		Password: "77827521",
-		Name:     "地狱的裁判",                // "Trial of Nightmare"  "地獄の裁判"
-		Lc:       ygo.LC_OrdinaryMonster, // 通常怪兽
-		//Initialize:    func(ca *ygo.Card) {}, // 初始
-		Level:   4,
-		La:      ygo.LA_Earth, // 暗
-		Lr:      ygo.LR_Fiend, // 恶魔
-		Attack:  1300,
-		Defense: 900,
-
-		IsValid: false,
-	}
-	cardBag.Register(co)
-
-	co = &ygo.CardOriginal{
-		/*{
-		 id: 150
-		 中文名: 第13人的埋葬者
-		 日文名: １３人目の埋葬者
-		 英文名: The 13th Grave
-		 卡片种类: 通常怪兽
-		 卡片密码: 00032864
-		 使用限制: 无限制
-		 种族: 不死
-		 属性: 暗
-		 星级: 3
-		 攻击力: 1200
-		 防御力: 900
-		 罕见度: 平卡N，金碎USR
-		 卡包: LB，DL02，Starter Box，Booster R1
-		 效果: 描述：原本没有任何人的一零三号墓地突然出现的丧尸。
-		}
-		*/
-		Id:       150,
-		Password: "00032864",
-		Name:     "第13人的埋葬者",             // "The 13th Grave"  "１３人目の埋葬者"
-		Lc:       ygo.LC_OrdinaryMonster, // 通常怪兽
-		//Initialize:    func(ca *ygo.Card) {}, // 初始
-		Level:   3,
-		La:      ygo.LA_Earth,  // 暗
-		Lr:      ygo.LR_Zombie, // 不死
-		Attack:  1200,
-		Defense: 900,
-
-		IsValid: false,
-	}
-	cardBag.Register(co)
-
-	co = &ygo.CardOriginal{
-		/*{
-		 id: 152
-		 中文名: 深渊的冥王
-		 日文名: 深淵の冥王
-		 英文名: Dark King of the Abyss
-		 卡片种类: 通常怪兽
-		 卡片密码: 53375573
-		 使用限制: 无限制
-		 种族: 恶魔
-		 属性: 暗
-		 星级: 3
-		 攻击力: 1200
-		 防御力: 800
-		 罕见度: 平卡N，金碎USR
-		 卡包: LB，BE01，DL02，Starter Box，Booster R1
-		 效果: 描述：冥界之王，听说以前有着支配所有黑暗力量的能力。
-		}
-		*/
-		Id:       152,
-		Password: "53375573",
-		Name:     "深渊的冥王",                // "Dark King of the Abyss"  "深淵の冥王"
-		Lc:       ygo.LC_OrdinaryMonster, // 通常怪兽
-		//Initialize:    func(ca *ygo.Card) {}, // 初始
-		Level:   3,
-		La:      ygo.LA_Earth, // 暗
-		Lr:      ygo.LR_Fiend, // 恶魔
-		Attack:  1200,
-		Defense: 800,
-
-		IsValid: false,
-	}
-	cardBag.Register(co)
-
-	co = &ygo.CardOriginal{
-		/*{
-		 id: 154
-		 中文名: 水魔道士
-		 日文名: アクア·マドール
-		 英文名: Aqua Madoor
-		 卡片种类: 通常怪兽
-		 卡片密码: 85639257
-		 使用限制: 无限制
-		 种族: 魔法师
-		 属性: 水
-		 星级: 4
-		 攻击力: 1200
-		 防御力: 2000
-		 罕见度: 金碎USR，平罕NR，平卡N
-		 卡包: LB，BE01，DL02，Starter Box，Booster R1
-		 效果: 描述：操纵水的魔法师。造出厚重的水墙压垮敌人。
-		}
-		*/
-		Id:       154,
-		Password: "85639257",
-		Name:     "水魔道士",                 // "Aqua Madoor"  "アクア·マドール"
-		Lc:       ygo.LC_OrdinaryMonster, // 通常怪兽
-		//Initialize:    func(ca *ygo.Card) {}, // 初始
-		Level:   4,
-		La:      ygo.LA_Earth,       // 水
-		Lr:      ygo.LR_SpellCaster, // 魔法师
-		Attack:  1200,
-		Defense: 2000,
-
-		IsValid: false,
-	}
-	cardBag.Register(co)
-
-	co = &ygo.CardOriginal{
+	/*4*/
+	cardBag.Register(&ygo.CardOriginal{
 		/*{
 		 id: 159
 		 调整: [传说之剑]
@@ -400,13 +196,13 @@ func booster(cardBag *ygo.CardVersion) {
 		Password: "61854111",
 		Name:     "传说之剑",            // "Legendary Sword"  "伝説の剣"
 		Lc:       ygo.LC_EquipMagic, // 装备魔法
-		//Initialize:    func(ca *ygo.Card) {}, // 初始
 
+		//Initialize:    func(ca *ygo.Card) bool {}, // 初始
 		IsValid: false,
-	}
-	cardBag.Register(co)
+	})
 
-	co = &ygo.CardOriginal{
+	/*5*/
+	cardBag.Register(&ygo.CardOriginal{
 		/*{
 		 id: 160
 		 调整: [猛兽之齿]
@@ -432,13 +228,13 @@ func booster(cardBag *ygo.CardVersion) {
 		Password: "46009906",
 		Name:     "猛兽之齿",            // "Beast Fangs"  "猛獣の歯"
 		Lc:       ygo.LC_EquipMagic, // 装备魔法
-		//Initialize:    func(ca *ygo.Card) {}, // 初始
 
+		//Initialize:    func(ca *ygo.Card) bool {}, // 初始
 		IsValid: false,
-	}
-	cardBag.Register(co)
+	})
 
-	co = &ygo.CardOriginal{
+	/*6*/
+	cardBag.Register(&ygo.CardOriginal{
 		/*{
 		 id: 161
 		 调整: [紫水晶]
@@ -464,13 +260,13 @@ func booster(cardBag *ygo.CardVersion) {
 		Password: "15052462",
 		Name:     "紫水晶",             // "Violet Crystal"  "紫水晶"
 		Lc:       ygo.LC_EquipMagic, // 装备魔法
-		//Initialize:    func(ca *ygo.Card) {}, // 初始
 
+		//Initialize:    func(ca *ygo.Card) bool {}, // 初始
 		IsValid: false,
-	}
-	cardBag.Register(co)
+	})
 
-	co = &ygo.CardOriginal{
+	/*7*/
+	cardBag.Register(&ygo.CardOriginal{
 		/*{
 		 id: 162
 		 调整: [秘术之书]
@@ -496,13 +292,13 @@ func booster(cardBag *ygo.CardVersion) {
 		Password: "91595718",
 		Name:     "秘术之书",            // "Book of Secret Arts"  "秘術の書"
 		Lc:       ygo.LC_EquipMagic, // 装备魔法
-		//Initialize:    func(ca *ygo.Card) {}, // 初始
 
+		//Initialize:    func(ca *ygo.Card) bool {}, // 初始
 		IsValid: false,
-	}
-	cardBag.Register(co)
+	})
 
-	co = &ygo.CardOriginal{
+	/*8*/
+	cardBag.Register(&ygo.CardOriginal{
 		/*{
 		 id: 163
 		 调整: [波塞冬之力]
@@ -528,13 +324,13 @@ func booster(cardBag *ygo.CardVersion) {
 		Password: "77027445",
 		Name:     "波塞冬之力",           // "Power of Kaishin"  "ポセイドンの力"
 		Lc:       ygo.LC_EquipMagic, // 装备魔法
-		//Initialize:    func(ca *ygo.Card) {}, // 初始
 
+		//Initialize:    func(ca *ygo.Card) bool {}, // 初始
 		IsValid: false,
-	}
-	cardBag.Register(co)
+	})
 
-	co = &ygo.CardOriginal{
+	/*9*/
+	cardBag.Register(&ygo.CardOriginal{
 		/*{
 		 id: 184
 		 中文名: 龙骑士 盖亚
@@ -557,18 +353,18 @@ func booster(cardBag *ygo.CardVersion) {
 		Password: "66889139",
 		Name:     "龙骑士 盖亚",             // "Gaia the Dragon Champion"  "竜騎士ガイア"
 		Lc:       ygo.LC_FusionMonster, // 融合怪兽
-		//Initialize:    func(ca *ygo.Card) {}, // 初始
+
 		Level:   7,
 		La:      ygo.LA_Earth,  // 风
 		Lr:      ygo.LR_Dragon, // 龙
 		Attack:  2600,
 		Defense: 2100,
-
+		//Initialize:    func(ca *ygo.Card) bool {}, // 初始
 		IsValid: false,
-	}
-	cardBag.Register(co)
+	})
 
-	co = &ygo.CardOriginal{
+	/*10*/
+	cardBag.Register(&ygo.CardOriginal{
 		/*{
 		 id: 194
 		 调整: [暗能量]
@@ -594,13 +390,13 @@ func booster(cardBag *ygo.CardVersion) {
 		Password: "04614116",
 		Name:     "暗能量",             // "Dark Energy"  "闇·エネルギー"
 		Lc:       ygo.LC_EquipMagic, // 装备魔法
-		//Initialize:    func(ca *ygo.Card) {}, // 初始
 
+		//Initialize:    func(ca *ygo.Card) bool {}, // 初始
 		IsValid: false,
-	}
-	cardBag.Register(co)
+	})
 
-	co = &ygo.CardOriginal{
+	/*11*/
+	cardBag.Register(&ygo.CardOriginal{
 		/*{
 		 id: 198
 		 调整: [龙之秘宝]
@@ -626,13 +422,13 @@ func booster(cardBag *ygo.CardVersion) {
 		Password: "01435851",
 		Name:     "龙之秘宝",            // "Dragon Treasure"  "ドラゴンの秘宝"
 		Lc:       ygo.LC_EquipMagic, // 装备魔法
-		//Initialize:    func(ca *ygo.Card) {}, // 初始
 
+		//Initialize:    func(ca *ygo.Card) bool {}, // 初始
 		IsValid: false,
-	}
-	cardBag.Register(co)
+	})
 
-	co = &ygo.CardOriginal{
+	/*12*/
+	cardBag.Register(&ygo.CardOriginal{
 		/*{
 		 id: 201
 		 调整: [「守备」封禁]
@@ -658,13 +454,13 @@ func booster(cardBag *ygo.CardVersion) {
 		Password: "63102017",
 		Name:     "「守备」封禁",             // "Stop Defense"  "『守備』封じ"
 		Lc:       ygo.LC_OrdinaryMagic, // 通常魔法
-		//Initialize:    func(ca *ygo.Card) {}, // 初始
 
+		//Initialize:    func(ca *ygo.Card) bool {}, // 初始
 		IsValid: false,
-	}
-	cardBag.Register(co)
+	})
 
-	co = &ygo.CardOriginal{
+	/*13*/
+	cardBag.Register(&ygo.CardOriginal{
 		/*{
 		 id: 2081
 		 调整: [城壁]
@@ -689,13 +485,13 @@ func booster(cardBag *ygo.CardVersion) {
 		Password: "44209392",
 		Name:     "城壁",                // "Castle Walls"  "城壁"
 		Lc:       ygo.LC_OrdinaryTrap, // 通常陷阱
-		//Initialize:    func(ca *ygo.Card) {}, // 初始
 
+		//Initialize:    func(ca *ygo.Card) bool {}, // 初始
 		IsValid: false,
-	}
-	cardBag.Register(co)
+	})
 
-	co = &ygo.CardOriginal{
+	/*14*/
+	cardBag.Register(&ygo.CardOriginal{
 		/*{
 		 id: 2082
 		 调整: [援军]
@@ -720,13 +516,13 @@ func booster(cardBag *ygo.CardVersion) {
 		Password: "17814387",
 		Name:     "援军",                // "Reinforcements"  "援軍"
 		Lc:       ygo.LC_OrdinaryTrap, // 通常陷阱
-		//Initialize:    func(ca *ygo.Card) {}, // 初始
 
+		//Initialize:    func(ca *ygo.Card) bool {}, // 初始
 		IsValid: false,
-	}
-	cardBag.Register(co)
+	})
 
-	co = &ygo.CardOriginal{
+	/*15*/
+	cardBag.Register(&ygo.CardOriginal{
 		/*{
 		 id: 2083
 		 调整: [昼夜的大火事]
@@ -750,13 +546,13 @@ func booster(cardBag *ygo.CardVersion) {
 		Password: "19523799",
 		Name:     "昼夜的大火事",             // "Ookazi"  "昼夜の大火事"
 		Lc:       ygo.LC_OrdinaryMagic, // 通常魔法
-		//Initialize:    func(ca *ygo.Card) {}, // 初始
 
+		//Initialize:    func(ca *ygo.Card) bool {}, // 初始
 		IsValid: false,
-	}
-	cardBag.Register(co)
+	})
 
-	co = &ygo.CardOriginal{
+	/*16*/
+	cardBag.Register(&ygo.CardOriginal{
 		/*{
 		 id: 218
 		 调整: [魔法除去]
@@ -784,217 +580,13 @@ func booster(cardBag *ygo.CardVersion) {
 		Password: "19159413",
 		Name:     "魔法除去",               // "De-Spell"  "魔法除去"
 		Lc:       ygo.LC_OrdinaryMagic, // 通常魔法
-		//Initialize:    func(ca *ygo.Card) {}, // 初始
 
+		//Initialize:    func(ca *ygo.Card) bool {}, // 初始
 		IsValid: false,
-	}
-	cardBag.Register(co)
+	})
 
-	co = &ygo.CardOriginal{
-		/*{
-		 id: 229
-		 中文名: 恶魔召唤
-		 日文名: デーモンの召喚
-		 英文名: Summoned Skull
-		 卡片种类: 通常怪兽
-		 卡片密码: 70781052
-		 使用限制: 无限制
-		 种族: 恶魔
-		 属性: 暗
-		 星级: 6
-		 攻击力: 2500
-		 防御力: 1200
-		 罕见度: 平卡N，金字UR，面闪SR，银字R，立体UTR，爆闪PR
-		 卡包: RB，BE01，LE03，SC，EX-R(EX)，VOL04，DL02，Booster R3，YAP01，DPYG，DT09，15AY
-		 效果: 描述：使用黑暗力量，迷惑人心的恶魔。在恶魔族中以相当强大的力量著称。
-		}
-		*/
-		Id:       229,
-		Password: "70781052",
-		Name:     "恶魔召唤",                 // "Summoned Skull"  "デーモンの召喚"
-		Lc:       ygo.LC_OrdinaryMonster, // 通常怪兽
-		//Initialize:    func(ca *ygo.Card) {}, // 初始
-		Level:   6,
-		La:      ygo.LA_Earth, // 暗
-		Lr:      ygo.LR_Fiend, // 恶魔
-		Attack:  2500,
-		Defense: 1200,
-
-		IsValid: false,
-	}
-	cardBag.Register(co)
-
-	co = &ygo.CardOriginal{
-		/*{
-		 id: 2305
-		 中文名: 暗杀者
-		 日文名: アサシン
-		 英文名: Ansatsu
-		 卡片种类: 通常怪兽
-		 卡片密码: 48365709
-		 使用限制: 无限制
-		 种族: 战士
-		 属性: 地
-		 星级: 5
-		 攻击力: 1700
-		 防御力: 1200
-		 罕见度: 平卡N，银字R
-		 卡包: EX-R(EX)，VOL03，Booster02
-		 效果: 描述：能在黑暗中悄然无声地靠近敌人，精通暗杀的战士。
-		}
-		*/
-		Id:       2305,
-		Password: "48365709",
-		Name:     "暗杀者",                  // "Ansatsu"  "アサシン"
-		Lc:       ygo.LC_OrdinaryMonster, // 通常怪兽
-		//Initialize:    func(ca *ygo.Card) {}, // 初始
-		Level:   5,
-		La:      ygo.LA_Earth,   // 地
-		Lr:      ygo.LR_Warrior, // 战士
-		Attack:  1700,
-		Defense: 1200,
-
-		IsValid: false,
-	}
-	cardBag.Register(co)
-
-	co = &ygo.CardOriginal{
-		/*{
-		 id: 2306
-		 中文名: 卡库塔斯
-		 日文名: カクタス
-		 英文名: Akihiron
-		 卡片种类: 通常怪兽
-		 卡片密码: 36904469
-		 使用限制: 无限制
-		 种族: 水
-		 属性: 水
-		 星级: 5
-		 攻击力: 1700
-		 防御力: 1400
-		 罕见度: 银字R
-		 卡包: VOL03，Booster02
-		 效果: 描述：潜在水中形状不明的怪兽。
-		}
-		*/
-		Id:       2306,
-		Password: "36904469",
-		Name:     "卡库塔斯",                 // "Akihiron"  "カクタス"
-		Lc:       ygo.LC_OrdinaryMonster, // 通常怪兽
-		//Initialize:    func(ca *ygo.Card) {}, // 初始
-		Level:   5,
-		La:      ygo.LA_Earth, // 水
-		Lr:      ygo.LR_None,  // 水
-		Attack:  1700,
-		Defense: 1400,
-
-		IsValid: false,
-	}
-	cardBag.Register(co)
-
-	co = &ygo.CardOriginal{
-		/*{
-		 id: 2307
-		 中文名: 机械巨兵
-		 日文名: 機械の巨兵
-		 英文名: Giant Mech-soldier
-		 卡片种类: 通常怪兽
-		 卡片密码: 72299832
-		 使用限制: 无限制
-		 种族: 机械
-		 属性: 地
-		 星级: 6
-		 攻击力: 1750
-		 防御力: 1900
-		 罕见度: 银字R
-		 卡包: VOL03，Booster02
-		 效果: 描述：巨斧的一击可以割开大地。
-		}
-		*/
-		Id:       2307,
-		Password: "72299832",
-		Name:     "机械巨兵",                 // "Giant Mech-soldier"  "機械の巨兵"
-		Lc:       ygo.LC_OrdinaryMonster, // 通常怪兽
-		//Initialize:    func(ca *ygo.Card) {}, // 初始
-		Level:   6,
-		La:      ygo.LA_Earth,   // 地
-		Lr:      ygo.LR_Machine, // 机械
-		Attack:  1750,
-		Defense: 1900,
-
-		IsValid: false,
-	}
-	cardBag.Register(co)
-
-	co = &ygo.CardOriginal{
-		/*{
-		 id: 2308
-		 中文名: 神圣人偶
-		 日文名: ホーリー·ドール
-		 英文名: Rogue Doll
-		 卡片种类: 通常怪兽
-		 卡片密码: 91939608
-		 使用限制: 无限制
-		 种族: 魔法师
-		 属性: 光
-		 星级: 4
-		 攻击力: 1600
-		 防御力: 1000
-		 罕见度: 银字R
-		 卡包: EX-R(EX)，VOL03，Booster02，PE
-		 效果: 描述：操纵神圣力量的人偶。在黑暗之中攻击力很强。
-		}
-		*/
-		Id:       2308,
-		Password: "91939608",
-		Name:     "神圣人偶",                 // "Rogue Doll"  "ホーリー·ドール"
-		Lc:       ygo.LC_OrdinaryMonster, // 通常怪兽
-		//Initialize:    func(ca *ygo.Card) {}, // 初始
-		Level:   4,
-		La:      ygo.LA_Earth,       // 光
-		Lr:      ygo.LR_SpellCaster, // 魔法师
-		Attack:  1600,
-		Defense: 1000,
-
-		IsValid: false,
-	}
-	cardBag.Register(co)
-
-	co = &ygo.CardOriginal{
-		/*{
-		 id: 2309
-		 中文名: 魔加农
-		 日文名: マキャノン
-		 英文名: Mabarrel
-		 卡片种类: 通常怪兽
-		 卡片密码: 98795934
-		 使用限制: 无限制
-		 种族: 恶魔
-		 属性: 暗
-		 星级: 5
-		 攻击力: 1700
-		 防御力: 1400
-		 罕见度: 银字R，平卡N
-		 卡包: VOL03，Booster02
-		 效果: 描述：大炮状的恶魔。以飞快的速度发射眼球弹。
-		}
-		*/
-		Id:       2309,
-		Password: "98795934",
-		Name:     "魔加农",                  // "Mabarrel"  "マキャノン"
-		Lc:       ygo.LC_OrdinaryMonster, // 通常怪兽
-		//Initialize:    func(ca *ygo.Card) {}, // 初始
-		Level:   5,
-		La:      ygo.LA_Earth, // 暗
-		Lr:      ygo.LR_Fiend, // 恶魔
-		Attack:  1700,
-		Defense: 1400,
-
-		IsValid: false,
-	}
-	cardBag.Register(co)
-
-	co = &ygo.CardOriginal{
+	/*17*/
+	cardBag.Register(&ygo.CardOriginal{
 		/*{
 		 id: 2351
 		 调整: [尖刺神的杀虫剂]
@@ -1019,13 +611,13 @@ func booster(cardBag *ygo.CardVersion) {
 		Password: "94716515",
 		Name:     "尖刺神的杀虫剂",            // "Eradicating Aerosol"  "トゲトゲ神の殺虫剤"
 		Lc:       ygo.LC_OrdinaryMagic, // 通常魔法
-		//Initialize:    func(ca *ygo.Card) {}, // 初始
 
+		//Initialize:    func(ca *ygo.Card) bool {}, // 初始
 		IsValid: false,
-	}
-	cardBag.Register(co)
+	})
 
-	co = &ygo.CardOriginal{
+	/*18*/
+	cardBag.Register(&ygo.CardOriginal{
 		/*{
 		 id: 2352
 		 调整: [永远的渴水]
@@ -1050,13 +642,13 @@ func booster(cardBag *ygo.CardVersion) {
 		Password: "56606928",
 		Name:     "永远的渴水",              // "Eternal Drought"  "永遠の渇水"
 		Lc:       ygo.LC_OrdinaryMagic, // 通常魔法
-		//Initialize:    func(ca *ygo.Card) {}, // 初始
 
+		//Initialize:    func(ca *ygo.Card) bool {}, // 初始
 		IsValid: false,
-	}
-	cardBag.Register(co)
+	})
 
-	co = &ygo.CardOriginal{
+	/*19*/
+	cardBag.Register(&ygo.CardOriginal{
 		/*{
 		 id: 2353
 		 调整: [酸性风暴]
@@ -1081,13 +673,13 @@ func booster(cardBag *ygo.CardVersion) {
 		Password: "21323861",
 		Name:     "酸性风暴",               // "Acid Rain"  "酸の嵐"
 		Lc:       ygo.LC_OrdinaryMagic, // 通常魔法
-		//Initialize:    func(ca *ygo.Card) {}, // 初始
 
+		//Initialize:    func(ca *ygo.Card) bool {}, // 初始
 		IsValid: false,
-	}
-	cardBag.Register(co)
+	})
 
-	co = &ygo.CardOriginal{
+	/*20*/
+	cardBag.Register(&ygo.CardOriginal{
 		/*{
 		 id: 2354
 		 调整: [神之息吹]
@@ -1112,13 +704,13 @@ func booster(cardBag *ygo.CardVersion) {
 		Password: "20101223",
 		Name:     "神之息吹",               // "Breath of Light"  "神の息吹"
 		Lc:       ygo.LC_OrdinaryMagic, // 通常魔法
-		//Initialize:    func(ca *ygo.Card) {}, // 初始
 
+		//Initialize:    func(ca *ygo.Card) bool {}, // 初始
 		IsValid: false,
-	}
-	cardBag.Register(co)
+	})
 
-	co = &ygo.CardOriginal{
+	/*21*/
+	cardBag.Register(&ygo.CardOriginal{
 		/*{
 		 id: 2355
 		 调整: [战士抹杀]
@@ -1143,116 +735,13 @@ func booster(cardBag *ygo.CardVersion) {
 		Password: "90873992",
 		Name:     "战士抹杀",               // "Warrior Elimination"  "戦士抹殺"
 		Lc:       ygo.LC_OrdinaryMagic, // 通常魔法
-		//Initialize:    func(ca *ygo.Card) {}, // 初始
 
+		//Initialize:    func(ca *ygo.Card) bool {}, // 初始
 		IsValid: false,
-	}
-	cardBag.Register(co)
+	})
 
-	co = &ygo.CardOriginal{
-		/*{
-		 id: 2358
-		 中文名: 乌鸦天狗
-		 日文名: カラス天狗
-		 英文名: Crow Goblin
-		 卡片种类: 通常怪兽
-		 卡片密码: 77998771
-		 使用限制: 无限制
-		 种族: 鸟兽
-		 属性: 风
-		 星级: 5
-		 攻击力: 1850
-		 防御力: 1600
-		 罕见度: 银字R
-		 卡包: VOL05，Booster05
-		 效果: 描述：知道各种事的天狗。据说能使用神通之力。
-		}
-		*/
-		Id:       2358,
-		Password: "77998771",
-		Name:     "乌鸦天狗",                 // "Crow Goblin"  "カラス天狗"
-		Lc:       ygo.LC_OrdinaryMonster, // 通常怪兽
-		//Initialize:    func(ca *ygo.Card) {}, // 初始
-		Level:   5,
-		La:      ygo.LA_Earth,     // 风
-		Lr:      ygo.LR_WindBeast, // 鸟兽
-		Attack:  1850,
-		Defense: 1600,
-
-		IsValid: false,
-	}
-	cardBag.Register(co)
-
-	co = &ygo.CardOriginal{
-		/*{
-		 id: 2359
-		 调整: （这张卡在规则上也当作「异虫」卡使用）
-		 中文名: 迷宫的蠕虫
-		 日文名: ダンジョン·ワーム
-		 英文名: Dungeon Worm
-		 卡片种类: 通常怪兽
-		 卡片密码: 51228280
-		 使用限制: 无限制
-		 种族: 昆虫
-		 属性: 地
-		 星级: 5
-		 攻击力: 1800
-		 防御力: 1500
-		 罕见度: 银字R
-		 卡包: VOL05，Booster05
-		 效果: 描述：（这张卡在规则上也当作「异虫」卡使用）潜在迷路者的地下，捕食经过此处迷路的生物。
-		}
-		*/
-		Id:       2359,
-		Password: "51228280",
-		Name:     "迷宫的蠕虫",                // "Dungeon Worm"  "ダンジョン·ワーム"
-		Lc:       ygo.LC_OrdinaryMonster, // 通常怪兽
-		//Initialize:    func(ca *ygo.Card) {}, // 初始
-		Level:   5,
-		La:      ygo.LA_Earth,  // 地
-		Lr:      ygo.LR_Insect, // 昆虫
-		Attack:  1800,
-		Defense: 1500,
-
-		IsValid: false,
-	}
-	cardBag.Register(co)
-
-	co = &ygo.CardOriginal{
-		/*{
-		 id: 2360
-		 中文名: 粗暴帝王
-		 日文名: ルード·カイザー
-		 英文名: Rude Kaiser
-		 卡片种类: 通常怪兽
-		 卡片密码: 26378150
-		 使用限制: 无限制
-		 种族: 兽战士
-		 属性: 地
-		 星级: 5
-		 攻击力: 1800
-		 防御力: 1600
-		 罕见度: 银字R
-		 卡包: EX-R(EX)，VOL05，Booster05
-		 效果: 描述：双手所持的魔人斧的破坏力相当强。
-		}
-		*/
-		Id:       2360,
-		Password: "26378150",
-		Name:     "粗暴帝王",                 // "Rude Kaiser"  "ルード·カイザー"
-		Lc:       ygo.LC_OrdinaryMonster, // 通常怪兽
-		//Initialize:    func(ca *ygo.Card) {}, // 初始
-		Level:   5,
-		La:      ygo.LA_Earth,       // 地
-		Lr:      ygo.LR_BeastWarror, // 兽战士
-		Attack:  1800,
-		Defense: 1600,
-
-		IsValid: false,
-	}
-	cardBag.Register(co)
-
-	co = &ygo.CardOriginal{
+	/*22*/
+	cardBag.Register(&ygo.CardOriginal{
 		/*{
 		 id: 2377
 		 调整: [来自黑暗的呼声]
@@ -1279,13 +768,13 @@ func booster(cardBag *ygo.CardVersion) {
 		Password: "78637313",
 		Name:     "来自黑暗的呼声",           // "Call of Darkness"  "闇からの呼び声"
 		Lc:       ygo.LC_SustainsTrap, // 永续陷阱
-		//Initialize:    func(ca *ygo.Card) {}, // 初始
 
+		//Initialize:    func(ca *ygo.Card) bool {}, // 初始
 		IsValid: false,
-	}
-	cardBag.Register(co)
+	})
 
-	co = &ygo.CardOriginal{
+	/*23*/
+	cardBag.Register(&ygo.CardOriginal{
 		/*{
 		 id: 2378
 		 调整: [避雷针]
@@ -1312,13 +801,13 @@ func booster(cardBag *ygo.CardVersion) {
 		Password: "42364257",
 		Name:     "避雷针",               // "Anti Raigeki"  "避雷針"
 		Lc:       ygo.LC_OrdinaryTrap, // 通常陷阱
-		//Initialize:    func(ca *ygo.Card) {}, // 初始
 
+		//Initialize:    func(ca *ygo.Card) bool {}, // 初始
 		IsValid: false,
-	}
-	cardBag.Register(co)
+	})
 
-	co = &ygo.CardOriginal{
+	/*24*/
+	cardBag.Register(&ygo.CardOriginal{
 		/*{
 		 id: 240
 		 调整: [暗之假面]
@@ -1352,18 +841,18 @@ func booster(cardBag *ygo.CardVersion) {
 		Password: "28933734",
 		Name:     "暗之假面",               // "Mask of Darkness"  "闇の仮面"
 		Lc:       ygo.LC_EffectMonster, // 效果怪兽
-		//Initialize:    func(ca *ygo.Card) {}, // 初始
+
 		Level:   2,
 		La:      ygo.LA_Earth, // 暗
 		Lr:      ygo.LR_Fiend, // 恶魔
 		Attack:  900,
 		Defense: 400,
-
+		//Initialize:    func(ca *ygo.Card) bool {}, // 初始
 		IsValid: false,
-	}
-	cardBag.Register(co)
+	})
 
-	co = &ygo.CardOriginal{
+	/*25*/
+	cardBag.Register(&ygo.CardOriginal{
 		/*{
 		 id: 241
 		 调整: [白衣怪盗]
@@ -1394,1582 +883,18 @@ func booster(cardBag *ygo.CardVersion) {
 		Password: "15150365",
 		Name:     "白衣怪盗",               // "White Magical Hat"  "白い泥棒"
 		Lc:       ygo.LC_EffectMonster, // 效果怪兽
-		//Initialize:    func(ca *ygo.Card) {}, // 初始
+
 		Level:   3,
 		La:      ygo.LA_Earth,       // 光
 		Lr:      ygo.LR_SpellCaster, // 魔法师
 		Attack:  1000,
 		Defense: 700,
-
+		//Initialize:    func(ca *ygo.Card) bool {}, // 初始
 		IsValid: false,
-	}
-	cardBag.Register(co)
+	})
 
-	co = &ygo.CardOriginal{
-		/*{
-		 id: 2445
-		 中文名: 女夜魔战士
-		 日文名: ヴィシュワ·ランディー
-		 英文名: Vishwar Randi
-		 卡片种类: 通常怪兽
-		 卡片密码: 78556320
-		 使用限制: 无限制
-		 种族: 战士
-		 属性: 暗
-		 星级: 3
-		 攻击力: 900
-		 防御力: 700
-		 罕见度: 平卡N
-		 卡包: Booster01，Booster R1
-		 效果: 描述：侍奉黑暗的女战士。将对方进行血祭是她生存的意义。
-		}
-		*/
-		Id:       2445,
-		Password: "78556320",
-		Name:     "女夜魔战士",                // "Vishwar Randi"  "ヴィシュワ·ランディー"
-		Lc:       ygo.LC_OrdinaryMonster, // 通常怪兽
-		//Initialize:    func(ca *ygo.Card) {}, // 初始
-		Level:   3,
-		La:      ygo.LA_Earth,   // 暗
-		Lr:      ygo.LR_Warrior, // 战士
-		Attack:  900,
-		Defense: 700,
-
-		IsValid: false,
-	}
-	cardBag.Register(co)
-
-	co = &ygo.CardOriginal{
-		/*{
-		 id: 2446
-		 中文名: 气象控制员
-		 日文名: ウェザー·コントロール
-		 英文名: Weather Control
-		 卡片种类: 通常怪兽
-		 卡片密码: 37243151
-		 使用限制: 无限制
-		 种族: 天使
-		 属性: 光
-		 星级: 2
-		 攻击力: 600
-		 防御力: 400
-		 罕见度: 平卡N
-		 卡包: Booster01
-		 效果: 描述：可以自由操纵天气。山里的天气无常就是这家伙的杰作。
-		}
-		*/
-		Id:       2446,
-		Password: "37243151",
-		Name:     "气象控制员",                // "Weather Control"  "ウェザー·コントロール"
-		Lc:       ygo.LC_OrdinaryMonster, // 通常怪兽
-		//Initialize:    func(ca *ygo.Card) {}, // 初始
-		Level:   2,
-		La:      ygo.LA_Earth,  // 光
-		Lr:      ygo.LR_Devine, // 天使
-		Attack:  600,
-		Defense: 400,
-
-		IsValid: false,
-	}
-	cardBag.Register(co)
-
-	co = &ygo.CardOriginal{
-		/*{
-		 id: 2447
-		 中文名: 水元素
-		 日文名: ウォーター·エレメント
-		 英文名: Water Element
-		 卡片种类: 通常怪兽
-		 卡片密码: 03732747
-		 使用限制: 无限制
-		 种族: 水
-		 属性: 水
-		 星级: 3
-		 攻击力: 900
-		 防御力: 700
-		 罕见度: 平卡N
-		 卡包: Booster01，Booster R1
-		 效果: 描述：住在水里的精灵。将四周用雾包围妨碍敌人的视线。
-		}
-		*/
-		Id:       2447,
-		Password: "03732747",
-		Name:     "水元素",                  // "Water Element"  "ウォーター·エレメント"
-		Lc:       ygo.LC_OrdinaryMonster, // 通常怪兽
-		//Initialize:    func(ca *ygo.Card) {}, // 初始
-		Level:   3,
-		La:      ygo.LA_Earth, // 水
-		Lr:      ygo.LR_None,  // 水
-		Attack:  900,
-		Defense: 700,
-
-		IsValid: false,
-	}
-	cardBag.Register(co)
-
-	co = &ygo.CardOriginal{
-		/*{
-		 id: 2448
-		 中文名: 石像怪
-		 日文名: ガーゴイル
-		 英文名: Ryu-Kishin
-		 卡片种类: 通常怪兽
-		 卡片密码: 15303296
-		 使用限制: 无限制
-		 种族: 恶魔
-		 属性: 暗
-		 星级: 3
-		 攻击力: 1000
-		 防御力: 500
-		 罕见度: 平卡N
-		 卡包: EX-R(EX)，Booster01，Booster R1
-		 效果: 描述：使人误认为是石像，从而在黑暗之中攻击。逃跑速度也很快。
-		}
-		*/
-		Id:       2448,
-		Password: "15303296",
-		Name:     "石像怪",                  // "Ryu-Kishin"  "ガーゴイル"
-		Lc:       ygo.LC_OrdinaryMonster, // 通常怪兽
-		//Initialize:    func(ca *ygo.Card) {}, // 初始
-		Level:   3,
-		La:      ygo.LA_Earth, // 暗
-		Lr:      ygo.LR_Fiend, // 恶魔
-		Attack:  1000,
-		Defense: 500,
-
-		IsValid: false,
-	}
-	cardBag.Register(co)
-
-	co = &ygo.CardOriginal{
-		/*{
-		 id: 2449
-		 中文名: 格斗战士 阿提米特
-		 日文名: 格闘戦士アルティメーター
-		 英文名: Battle Warrior
-		 卡片种类: 通常怪兽
-		 卡片密码: 55550921
-		 使用限制: 无限制
-		 种族: 战士
-		 属性: 地
-		 星级: 3
-		 攻击力: 700
-		 防御力: 1000
-		 罕见度: 平卡N，面闪SR
-		 卡包: Booster01，Booster R1，JY，TP16，NUMH
-		 效果: 描述：不使用任何武器，空手战斗的格斗战士。
-		}
-		*/
-		Id:       2449,
-		Password: "55550921",
-		Name:     "格斗战士 阿提米特",            // "Battle Warrior"  "格闘戦士アルティメーター"
-		Lc:       ygo.LC_OrdinaryMonster, // 通常怪兽
-		//Initialize:    func(ca *ygo.Card) {}, // 初始
-		Level:   3,
-		La:      ygo.LA_Earth,   // 地
-		Lr:      ygo.LR_Warrior, // 战士
-		Attack:  700,
-		Defense: 1000,
-
-		IsValid: false,
-	}
-	cardBag.Register(co)
-
-	co = &ygo.CardOriginal{
-		/*{
-		 id: 2450
-		 中文名: 风之番人 精
-		 日文名: 風の番人 ジン
-		 英文名: Djinn the Watcher of the Wind
-		 卡片种类: 通常怪兽
-		 卡片密码: 97843505
-		 使用限制: 无限制
-		 种族: 魔法师
-		 属性: 风
-		 星级: 3
-		 攻击力: 700
-		 防御力: 900
-		 罕见度: 平卡N
-		 卡包: Booster01
-		 效果: 描述：操纵风并产生龙卷风与飓风吹飞周围的东西。
-		}
-		*/
-		Id:       2450,
-		Password: "97843505",
-		Name:     "风之番人 精",               // "Djinn the Watcher of the Wind"  "風の番人 ジン"
-		Lc:       ygo.LC_OrdinaryMonster, // 通常怪兽
-		//Initialize:    func(ca *ygo.Card) {}, // 初始
-		Level:   3,
-		La:      ygo.LA_Earth,       // 风
-		Lr:      ygo.LR_SpellCaster, // 魔法师
-		Attack:  700,
-		Defense: 900,
-
-		IsValid: false,
-	}
-	cardBag.Register(co)
-
-	co = &ygo.CardOriginal{
-		/*{
-		 id: 2451
-		 中文名: 格洛斯
-		 日文名: グロス
-		 英文名: Twin Long Rods #1
-		 卡片种类: 通常怪兽
-		 卡片密码: 60589682
-		 使用限制: 无限制
-		 种族: 水
-		 属性: 水
-		 星级: 3
-		 攻击力: 900
-		 防御力: 700
-		 罕见度: 平卡N
-		 卡包: Booster01，Booster R1
-		 效果: 描述：用像鞭子一般长的手臂进行攻击。稍远的地方也可以攻击的到。
-		}
-		*/
-		Id:       2451,
-		Password: "60589682",
-		Name:     "格洛斯",                  // "Twin Long Rods #1"  "グロス"
-		Lc:       ygo.LC_OrdinaryMonster, // 通常怪兽
-		//Initialize:    func(ca *ygo.Card) {}, // 初始
-		Level:   3,
-		La:      ygo.LA_Earth, // 水
-		Lr:      ygo.LR_None,  // 水
-		Attack:  900,
-		Defense: 700,
-
-		IsValid: false,
-	}
-	cardBag.Register(co)
-
-	co = &ygo.CardOriginal{
-		/*{
-		 id: 2452
-		 中文名: 幽灵
-		 日文名: ゴースト
-		 英文名: Phantom Ghost
-		 卡片种类: 通常怪兽
-		 卡片密码: 61201220
-		 使用限制: 无限制
-		 种族: 不死
-		 属性: 暗
-		 星级: 2
-		 攻击力: 600
-		 防御力: 800
-		 罕见度: 平卡N
-		 卡包: Booster01
-		 效果: 描述：由这个世界上不能成佛的灵魂，慢慢聚集而成的怨灵。
-		}
-		*/
-		Id:       2452,
-		Password: "61201220",
-		Name:     "幽灵",                   // "Phantom Ghost"  "ゴースト"
-		Lc:       ygo.LC_OrdinaryMonster, // 通常怪兽
-		//Initialize:    func(ca *ygo.Card) {}, // 初始
-		Level:   2,
-		La:      ygo.LA_Earth,  // 暗
-		Lr:      ygo.LR_Zombie, // 不死
-		Attack:  600,
-		Defense: 800,
-
-		IsValid: false,
-	}
-	cardBag.Register(co)
-
-	co = &ygo.CardOriginal{
-		/*{
-		 id: 2453
-		 中文名: 萨塔那
-		 日文名: サターナ
-		 英文名: Phantom Dewan
-		 卡片种类: 通常怪兽
-		 卡片密码: 77603950
-		 使用限制: 无限制
-		 种族: 魔法师
-		 属性: 暗
-		 星级: 2
-		 攻击力: 700
-		 防御力: 600
-		 罕见度: 平卡N
-		 卡包: Booster01
-		 效果: 描述：诅咒敌人。可以使人动弹不得的魔法师。
-		}
-		*/
-		Id:       2453,
-		Password: "77603950",
-		Name:     "萨塔那",                  // "Phantom Dewan"  "サターナ"
-		Lc:       ygo.LC_OrdinaryMonster, // 通常怪兽
-		//Initialize:    func(ca *ygo.Card) {}, // 初始
-		Level:   2,
-		La:      ygo.LA_Earth,       // 暗
-		Lr:      ygo.LR_SpellCaster, // 魔法师
-		Attack:  700,
-		Defense: 600,
-
-		IsValid: false,
-	}
-	cardBag.Register(co)
-
-	co = &ygo.CardOriginal{
-		/*{
-		 id: 2454
-		 中文名: 邪炎之翼
-		 日文名: 邪炎の翼
-		 英文名: Wings of Wicked Flame
-		 卡片种类: 通常怪兽
-		 卡片密码: 92944626
-		 使用限制: 无限制
-		 种族: 炎
-		 属性: 炎
-		 星级: 2
-		 攻击力: 700
-		 防御力: 600
-		 罕见度: 平卡N
-		 卡包: Booster01，TP17
-		 效果: 描述：原形是红黑色燃烧着的翅膀。从全身喷出火焰进行攻击。
-		}
-		*/
-		Id:       2454,
-		Password: "92944626",
-		Name:     "邪炎之翼",                 // "Wings of Wicked Flame"  "邪炎の翼"
-		Lc:       ygo.LC_OrdinaryMonster, // 通常怪兽
-		//Initialize:    func(ca *ygo.Card) {}, // 初始
-		Level:   2,
-		La:      ygo.LA_None, // 炎
-		Lr:      ygo.LR_Pyro, // 炎
-		Attack:  700,
-		Defense: 600,
-
-		IsValid: false,
-	}
-	cardBag.Register(co)
-
-	co = &ygo.CardOriginal{
-		/*{
-		 id: 2455
-		 中文名: 大嘴鸟
-		 日文名: スピック
-		 英文名: Droll Bird
-		 卡片种类: 通常怪兽
-		 卡片密码: 97973387
-		 使用限制: 无限制
-		 种族: 鸟兽
-		 属性: 风
-		 星级: 2
-		 攻击力: 600
-		 防御力: 500
-		 罕见度: 平卡N
-		 卡包: Booster01
-		 效果: 描述：嘴巴非常大、大声的叫吓跑胆小的对方。
-		}
-		*/
-		Id:       2455,
-		Password: "97973387",
-		Name:     "大嘴鸟",                  // "Droll Bird"  "スピック"
-		Lc:       ygo.LC_OrdinaryMonster, // 通常怪兽
-		//Initialize:    func(ca *ygo.Card) {}, // 初始
-		Level:   2,
-		La:      ygo.LA_Earth,     // 风
-		Lr:      ygo.LR_WindBeast, // 鸟兽
-		Attack:  600,
-		Defense: 500,
-
-		IsValid: false,
-	}
-	cardBag.Register(co)
-
-	co = &ygo.CardOriginal{
-		/*{
-		 id: 2456
-		 中文名: 神圣之锁
-		 日文名: 聖なる鎖
-		 英文名: Mystical Capture Chain
-		 卡片种类: 通常怪兽
-		 卡片密码: 63515678
-		 使用限制: 无限制
-		 种族: 天使
-		 属性: 光
-		 星级: 2
-		 攻击力: 700
-		 防御力: 700
-		 罕见度: 平卡N
-		 卡包: Booster01
-		 效果: 描述：据说可以用神圣的力量封锁行动的锁链。
-		}
-		*/
-		Id:       2456,
-		Password: "63515678",
-		Name:     "神圣之锁",                 // "Mystical Capture Chain"  "聖なる鎖"
-		Lc:       ygo.LC_OrdinaryMonster, // 通常怪兽
-		//Initialize:    func(ca *ygo.Card) {}, // 初始
-		Level:   2,
-		La:      ygo.LA_Earth,  // 光
-		Lr:      ygo.LR_Devine, // 天使
-		Attack:  700,
-		Defense: 700,
-
-		IsValid: false,
-	}
-	cardBag.Register(co)
-
-	co = &ygo.CardOriginal{
-		/*{
-		 id: 2457
-		 中文名: 僵尸鬼灯
-		 日文名: ゾンビランプ
-		 英文名: Mech Mole Zombie
-		 卡片种类: 通常怪兽
-		 卡片密码: 63545455
-		 使用限制: 无限制
-		 种族: 不死
-		 属性: 暗
-		 星级: 2
-		 攻击力: 500
-		 防御力: 400
-		 罕见度: 平卡N
-		 卡包: Booster01
-		 效果: 描述：把手腕像火箭一样发射攻击的不死怪兽。
-		}
-		*/
-		Id:       2457,
-		Password: "63545455",
-		Name:     "僵尸鬼灯",                 // "Mech Mole Zombie"  "ゾンビランプ"
-		Lc:       ygo.LC_OrdinaryMonster, // 通常怪兽
-		//Initialize:    func(ca *ygo.Card) {}, // 初始
-		Level:   2,
-		La:      ygo.LA_Earth,  // 暗
-		Lr:      ygo.LR_Zombie, // 不死
-		Attack:  500,
-		Defense: 400,
-
-		IsValid: false,
-	}
-	cardBag.Register(co)
-
-	co = &ygo.CardOriginal{
-		/*{
-		 id: 2458
-		 中文名: 暗黑植物
-		 日文名: ダーク·プラント
-		 英文名: Dark Plant
-		 卡片种类: 通常怪兽
-		 卡片密码: 13193642
-		 使用限制: 无限制
-		 种族: 植物
-		 属性: 暗
-		 星级: 1
-		 攻击力: 300
-		 防御力: 400
-		 罕见度: 平卡N
-		 卡包: Booster01
-		 效果: 描述：在被污染的土地以及暗之力的环境下生长的花。非常凶暴。
-		}
-		*/
-		Id:       2458,
-		Password: "13193642",
-		Name:     "暗黑植物",                 // "Dark Plant"  "ダーク·プラント"
-		Lc:       ygo.LC_OrdinaryMonster, // 通常怪兽
-		//Initialize:    func(ca *ygo.Card) {}, // 初始
-		Level:   1,
-		La:      ygo.LA_Earth, // 暗
-		Lr:      ygo.LR_Plant, // 植物
-		Attack:  300,
-		Defense: 400,
-
-		IsValid: false,
-	}
-	cardBag.Register(co)
-
-	co = &ygo.CardOriginal{
-		/*{
-		 id: 2459
-		 中文名: 太古之壶
-		 日文名: 太古の壺
-		 英文名: Ancient Jar
-		 卡片种类: 通常怪兽
-		 卡片密码: 81492226
-		 使用限制: 无限制
-		 种族: 岩石
-		 属性: 地
-		 星级: 1
-		 攻击力: 400
-		 防御力: 200
-		 罕见度: 平卡N
-		 卡包: Booster01
-		 效果: 描述：非常脆弱的太古之壶。里面好像藏着什么东西。
-		}
-		*/
-		Id:       2459,
-		Password: "81492226",
-		Name:     "太古之壶",                 // "Ancient Jar"  "太古の壺"
-		Lc:       ygo.LC_OrdinaryMonster, // 通常怪兽
-		//Initialize:    func(ca *ygo.Card) {}, // 初始
-		Level:   1,
-		La:      ygo.LA_Earth, // 地
-		Lr:      ygo.LR_Rock,  // 岩石
-		Attack:  400,
-		Defense: 200,
-
-		IsValid: false,
-	}
-	cardBag.Register(co)
-
-	co = &ygo.CardOriginal{
-		/*{
-		 id: 2477
-		 中文名: 邪恶老鼠
-		 日文名: イビル·ラット
-		 英文名: Obese Marmot of Nefariousness
-		 卡片种类: 通常怪兽
-		 卡片密码: 56713552
-		 使用限制: 无限制
-		 种族: 兽
-		 属性: 地
-		 星级: 3
-		 攻击力: 750
-		 防御力: 800
-		 罕见度: 平卡N
-		 卡包: Booster02
-		 效果: 描述：任何东西都咬的野老鼠，行仪极坏。
-		}
-		*/
-		Id:       2477,
-		Password: "56713552",
-		Name:     "邪恶老鼠",                 // "Obese Marmot of Nefariousness"  "イビル·ラット"
-		Lc:       ygo.LC_OrdinaryMonster, // 通常怪兽
-		//Initialize:    func(ca *ygo.Card) {}, // 初始
-		Level:   3,
-		La:      ygo.LA_Earth, // 地
-		Lr:      ygo.LR_Beast, // 兽
-		Attack:  750,
-		Defense: 800,
-
-		IsValid: false,
-	}
-	cardBag.Register(co)
-
-	co = &ygo.CardOriginal{
-		/*{
-		 id: 2478
-		 中文名: 锯足锹形虫
-		 日文名: インセクション
-		 英文名: Alinsection
-		 卡片种类: 通常怪兽
-		 卡片密码: 70924884
-		 使用限制: 无限制
-		 种族: 昆虫
-		 属性: 地
-		 星级: 3
-		 攻击力: 950
-		 防御力: 700
-		 罕见度: 平卡N
-		 卡包: Booster02，Booster R1
-		 效果: 描述：大甲虫。除了头上的锯子，手腕也变成了锯子。
-		}
-		*/
-		Id:       2478,
-		Password: "70924884",
-		Name:     "锯足锹形虫",                // "Alinsection"  "インセクション"
-		Lc:       ygo.LC_OrdinaryMonster, // 通常怪兽
-		//Initialize:    func(ca *ygo.Card) {}, // 初始
-		Level:   3,
-		La:      ygo.LA_Earth,  // 地
-		Lr:      ygo.LR_Insect, // 昆虫
-		Attack:  950,
-		Defense: 700,
-
-		IsValid: false,
-	}
-	cardBag.Register(co)
-
-	co = &ygo.CardOriginal{
-		/*{
-		 id: 2479
-		 中文名: 威尔米
-		 日文名: ウィルミー
-		 英文名: Wilmee
-		 卡片种类: 通常怪兽
-		 卡片密码: 92391084
-		 使用限制: 无限制
-		 种族: 兽
-		 属性: 地
-		 星级: 4
-		 攻击力: 1000
-		 防御力: 1200
-		 罕见度: 平卡N
-		 卡包: Booster02，Booster R1
-		 效果: 描述：相当凶暴的兔子。以锐利的钩爪血祭对方。
-		}
-		*/
-		Id:       2479,
-		Password: "92391084",
-		Name:     "威尔米",                  // "Wilmee"  "ウィルミー"
-		Lc:       ygo.LC_OrdinaryMonster, // 通常怪兽
-		//Initialize:    func(ca *ygo.Card) {}, // 初始
-		Level:   4,
-		La:      ygo.LA_Earth, // 地
-		Lr:      ygo.LR_Beast, // 兽
-		Attack:  1000,
-		Defense: 1200,
-
-		IsValid: false,
-	}
-	cardBag.Register(co)
-
-	co = &ygo.CardOriginal{
-		/*{
-		 id: 2480
-		 中文名: 木灵小丑
-		 日文名: ウッド·ジョーカー
-		 英文名: Wood Clown
-		 卡片种类: 通常怪兽
-		 卡片密码: 17511156
-		 使用限制: 无限制
-		 种族: 战士
-		 属性: 地
-		 星级: 3
-		 攻击力: 800
-		 防御力: 1200
-		 罕见度: 平卡N
-		 卡包: Booster02，Booster R1
-		 效果: 描述：作出令人讨厌的笑容的恶魔。以手中的镰刀熟练的回避着攻击。
-		}
-		*/
-		Id:       2480,
-		Password: "17511156",
-		Name:     "木灵小丑",                 // "Wood Clown"  "ウッド·ジョーカー"
-		Lc:       ygo.LC_OrdinaryMonster, // 通常怪兽
-		//Initialize:    func(ca *ygo.Card) {}, // 初始
-		Level:   3,
-		La:      ygo.LA_Earth,   // 地
-		Lr:      ygo.LR_Warrior, // 战士
-		Attack:  800,
-		Defense: 1200,
-
-		IsValid: false,
-	}
-	cardBag.Register(co)
-
-	co = &ygo.CardOriginal{
-		/*{
-		 id: 2481
-		 中文名: 天使魔女
-		 日文名: エンジェル·魔女
-		 英文名: Angelwitch
-		 卡片种类: 通常怪兽
-		 卡片密码: 37160778
-		 使用限制: 无限制
-		 种族: 魔法师
-		 属性: 暗
-		 星级: 3
-		 攻击力: 800
-		 防御力: 1000
-		 罕见度: 平卡N
-		 卡包: Booster02，Booster R1
-		 效果: 描述：背负着成为天使的命运，但却成为了向往中的魔女。
-		}
-		*/
-		Id:       2481,
-		Password: "37160778",
-		Name:     "天使魔女",                 // "Angelwitch"  "エンジェル·魔女"
-		Lc:       ygo.LC_OrdinaryMonster, // 通常怪兽
-		//Initialize:    func(ca *ygo.Card) {}, // 初始
-		Level:   3,
-		La:      ygo.LA_Earth,       // 暗
-		Lr:      ygo.LR_SpellCaster, // 魔法师
-		Attack:  800,
-		Defense: 1000,
-
-		IsValid: false,
-	}
-	cardBag.Register(co)
-
-	co = &ygo.CardOriginal{
-		/*{
-		 id: 2482
-		 中文名: 电波英雄
-		 日文名: オシロ·ヒーロー
-		 英文名: Oscillo Hero
-		 卡片种类: 通常怪兽
-		 卡片密码: 82065276
-		 使用限制: 无限制
-		 种族: 战士
-		 属性: 地
-		 星级: 3
-		 攻击力: 1250
-		 防御力: 700
-		 罕见度: 平卡N
-		 卡包: Booster02，Booster Chronicle，Booster R1，TU04
-		 效果: 描述：从异世界来到这里，稀里糊涂的战士。
-		}
-		*/
-		Id:       2482,
-		Password: "82065276",
-		Name:     "电波英雄",                 // "Oscillo Hero"  "オシロ·ヒーロー"
-		Lc:       ygo.LC_OrdinaryMonster, // 通常怪兽
-		//Initialize:    func(ca *ygo.Card) {}, // 初始
-		Level:   3,
-		La:      ygo.LA_Earth,   // 地
-		Lr:      ygo.LR_Warrior, // 战士
-		Attack:  1250,
-		Defense: 700,
-
-		IsValid: false,
-	}
-	cardBag.Register(co)
-
-	co = &ygo.CardOriginal{
-		/*{
-		 id: 2483
-		 中文名: 鱼战士
-		 日文名: 魚ギョ戦士
-		 英文名: Wow Warrior
-		 卡片种类: 通常怪兽
-		 卡片密码: 69750536
-		 使用限制: 无限制
-		 种族: 鱼
-		 属性: 水
-		 星级: 4
-		 攻击力: 1250
-		 防御力: 900
-		 罕见度: 平卡N
-		 卡包: Booster02，Booster Chronicle，Booster R1
-		 效果: 描述：拥有手和脚的鱼人兽，用尖锐的牙齿撕咬敌人。
-		}
-		*/
-		Id:       2483,
-		Password: "69750536",
-		Name:     "鱼战士",                  // "Wow Warrior"  "魚ギョ戦士"
-		Lc:       ygo.LC_OrdinaryMonster, // 通常怪兽
-		//Initialize:    func(ca *ygo.Card) {}, // 初始
-		Level:   4,
-		La:      ygo.LA_Earth, // 水
-		Lr:      ygo.LR_Fish,  // 鱼
-		Attack:  1250,
-		Defense: 900,
-
-		IsValid: false,
-	}
-	cardBag.Register(co)
-
-	co = &ygo.CardOriginal{
-		/*{
-		 id: 2484
-		 中文名: 龙虾怪
-		 日文名: ザリガン
-		 英文名: Zarigun
-		 卡片种类: 通常怪兽
-		 卡片密码: 10598400
-		 使用限制: 无限制
-		 种族: 水
-		 属性: 水
-		 星级: 2
-		 攻击力: 600
-		 防御力: 700
-		 罕见度: 平卡N
-		 卡包: Booster02
-		 效果: 描述：由虾进化成的怪兽。用大钳子攻击对方的颈项。
-		}
-		*/
-		Id:       2484,
-		Password: "10598400",
-		Name:     "龙虾怪",                  // "Zarigun"  "ザリガン"
-		Lc:       ygo.LC_OrdinaryMonster, // 通常怪兽
-		//Initialize:    func(ca *ygo.Card) {}, // 初始
-		Level:   2,
-		La:      ygo.LA_Earth, // 水
-		Lr:      ygo.LR_None,  // 水
-		Attack:  600,
-		Defense: 700,
-
-		IsValid: false,
-	}
-	cardBag.Register(co)
-
-	co = &ygo.CardOriginal{
-		/*{
-		 id: 2502
-		 中文名: 赤剑之莱蒙多斯
-		 日文名: 赤き剣のライムンドス
-		 英文名: Rhaimundos of the Red Sword
-		 卡片种类: 通常怪兽
-		 卡片密码: 62403074
-		 使用限制: 无限制
-		 种族: 战士
-		 属性: 地
-		 星级: 4
-		 攻击力: 1200
-		 防御力: 1300
-		 罕见度: 平卡N
-		 卡包: Booster03，TP23
-		 效果: 描述：持有赤红炎剑的战士。利用火焰束缚来封住行动。
-		}
-		*/
-		Id:       2502,
-		Password: "62403074",
-		Name:     "赤剑之莱蒙多斯",              // "Rhaimundos of the Red Sword"  "赤き剣のライムンドス"
-		Lc:       ygo.LC_OrdinaryMonster, // 通常怪兽
-		//Initialize:    func(ca *ygo.Card) {}, // 初始
-		Level:   4,
-		La:      ygo.LA_Earth,   // 地
-		Lr:      ygo.LR_Warrior, // 战士
-		Attack:  1200,
-		Defense: 1300,
-
-		IsValid: false,
-	}
-	cardBag.Register(co)
-
-	co = &ygo.CardOriginal{
-		/*{
-		 id: 2503
-		 中文名: 有生命的花瓶
-		 日文名: 命ある花瓶
-		 英文名: Living Vase
-		 卡片种类: 通常怪兽
-		 卡片密码: 34320307
-		 使用限制: 无限制
-		 种族: 植物
-		 属性: 地
-		 星级: 3
-		 攻击力: 900
-		 防御力: 1100
-		 罕见度: 平卡N
-		 卡包: Booster03
-		 效果: 描述：利用花散发花粉并咬向对方的活花瓶。
-		}
-		*/
-		Id:       2503,
-		Password: "34320307",
-		Name:     "有生命的花瓶",               // "Living Vase"  "命ある花瓶"
-		Lc:       ygo.LC_OrdinaryMonster, // 通常怪兽
-		//Initialize:    func(ca *ygo.Card) {}, // 初始
-		Level:   3,
-		La:      ygo.LA_Earth, // 地
-		Lr:      ygo.LR_Plant, // 植物
-		Attack:  900,
-		Defense: 1100,
-
-		IsValid: false,
-	}
-	cardBag.Register(co)
-
-	co = &ygo.CardOriginal{
-		/*{
-		 id: 2504
-		 中文名: 食命者
-		 日文名: 命を食する者
-		 英文名: That Which Feeds on Life
-		 卡片种类: 通常怪兽
-		 卡片密码: 52367652
-		 使用限制: 无限制
-		 种族: 恶魔
-		 属性: 暗
-		 星级: 4
-		 攻击力: 1200
-		 防御力: 1000
-		 罕见度: 平卡N
-		 卡包: Booster03
-		 效果: 描述：嗜食所有生物的灵魂，将将其作为自己的能量。
-		}
-		*/
-		Id:       2504,
-		Password: "52367652",
-		Name:     "食命者",                  // "That Which Feeds on Life"  "命を食する者"
-		Lc:       ygo.LC_OrdinaryMonster, // 通常怪兽
-		//Initialize:    func(ca *ygo.Card) {}, // 初始
-		Level:   4,
-		La:      ygo.LA_Earth, // 暗
-		Lr:      ygo.LR_Fiend, // 恶魔
-		Attack:  1200,
-		Defense: 1000,
-
-		IsValid: false,
-	}
-	cardBag.Register(co)
-
-	co = &ygo.CardOriginal{
-		/*{
-		 id: 2505
-		 中文名: 岩之战士
-		 日文名: 岩の戦士
-		 英文名: Minomushi Warrior
-		 卡片种类: 通常怪兽
-		 卡片密码: 46864967
-		 使用限制: 无限制
-		 种族: 岩石
-		 属性: 地
-		 星级: 4
-		 攻击力: 1300
-		 防御力: 1200
-		 罕见度: 平卡N
-		 卡包: Booster03，Booster R2
-		 效果: 描述：岩石战士。挥舞着非常重的石头剑。
-		}
-		*/
-		Id:       2505,
-		Password: "46864967",
-		Name:     "岩之战士",                 // "Minomushi Warrior"  "岩の戦士"
-		Lc:       ygo.LC_OrdinaryMonster, // 通常怪兽
-		//Initialize:    func(ca *ygo.Card) {}, // 初始
-		Level:   4,
-		La:      ygo.LA_Earth, // 地
-		Lr:      ygo.LR_Rock,  // 岩石
-		Attack:  1300,
-		Defense: 1200,
-
-		IsValid: false,
-	}
-	cardBag.Register(co)
-
-	co = &ygo.CardOriginal{
-		/*{
-		 id: 2506
-		 中文名: 音女
-		 日文名: 音女
-		 英文名: Sonic Maid
-		 卡片种类: 通常怪兽
-		 卡片密码: 38942059
-		 使用限制: 无限制
-		 种族: 战士
-		 属性: 地
-		 星级: 3
-		 攻击力: 1200
-		 防御力: 900
-		 罕见度: 平卡N
-		 卡包: Booster03，Booster Chronicle，Booster R2
-		 效果: 描述：擅长操纵声音的少女，能使音符变成镰刀攻击敌人。
-		}
-		*/
-		Id:       2506,
-		Password: "38942059",
-		Name:     "音女",                   // "Sonic Maid"  "音女"
-		Lc:       ygo.LC_OrdinaryMonster, // 通常怪兽
-		//Initialize:    func(ca *ygo.Card) {}, // 初始
-		Level:   3,
-		La:      ygo.LA_Earth,   // 地
-		Lr:      ygo.LR_Warrior, // 战士
-		Attack:  1200,
-		Defense: 900,
-
-		IsValid: false,
-	}
-	cardBag.Register(co)
-
-	co = &ygo.CardOriginal{
-		/*{
-		 id: 2507
-		 中文名: 大白鲨
-		 日文名: グレート·ホワイト
-		 英文名: Great White
-		 卡片种类: 通常怪兽
-		 卡片密码: 13429800
-		 使用限制: 无限制
-		 种族: 鱼
-		 属性: 水
-		 星级: 4
-		 攻击力: 1600
-		 防御力: 800
-		 罕见度: 平卡N
-		 卡包: EX-R(EX)，Booster03，Booster R2
-		 效果: 描述：巨大的白鲨，若被咬到绝对无法脱身。
-		}
-		*/
-		Id:       2507,
-		Password: "13429800",
-		Name:     "大白鲨",                  // "Great White"  "グレート·ホワイト"
-		Lc:       ygo.LC_OrdinaryMonster, // 通常怪兽
-		//Initialize:    func(ca *ygo.Card) {}, // 初始
-		Level:   4,
-		La:      ygo.LA_Earth, // 水
-		Lr:      ygo.LR_Fish,  // 鱼
-		Attack:  1600,
-		Defense: 800,
-
-		IsValid: false,
-	}
-	cardBag.Register(co)
-
-	co = &ygo.CardOriginal{
-		/*{
-		 id: 2508
-		 中文名: 锹甲阿尔法
-		 日文名: クワガタ·アルファ
-		 英文名: Kuwagata α
-		 卡片种类: 通常怪兽
-		 卡片密码: 60802233
-		 使用限制: 无限制
-		 种族: 昆虫
-		 属性: 地
-		 星级: 4
-		 攻击力: 1250
-		 防御力: 1000
-		 罕见度: 平卡N
-		 卡包: Booster03，Booster Chronicle，Booster R2，TP20
-		 效果: 描述：凶暴的甲虫。它会瞄准对方的头瞬间斩落。
-		}
-		*/
-		Id:       2508,
-		Password: "60802233",
-		Name:     "锹甲阿尔法",                // "Kuwagata α"  "クワガタ·アルファ"
-		Lc:       ygo.LC_OrdinaryMonster, // 通常怪兽
-		//Initialize:    func(ca *ygo.Card) {}, // 初始
-		Level:   4,
-		La:      ygo.LA_Earth,  // 地
-		Lr:      ygo.LR_Insect, // 昆虫
-		Attack:  1250,
-		Defense: 1000,
-
-		IsValid: false,
-	}
-	cardBag.Register(co)
-
-	co = &ygo.CardOriginal{
-		/*{
-		 id: 2509
-		 中文名: 钢铁魔人
-		 日文名: ゴルゴイル
-		 英文名: Golgoil
-		 卡片种类: 通常怪兽
-		 卡片密码: 07526150
-		 使用限制: 无限制
-		 种族: 机械
-		 属性: 地
-		 星级: 4
-		 攻击力: 900
-		 防御力: 1600
-		 罕见度: 平卡N
-		 卡包: Booster03
-		 效果: 描述：从与异次元相通的洞里出来的钢铁大魔人。
-		}
-		*/
-		Id:       2509,
-		Password: "07526150",
-		Name:     "钢铁魔人",                 // "Golgoil"  "ゴルゴイル"
-		Lc:       ygo.LC_OrdinaryMonster, // 通常怪兽
-		//Initialize:    func(ca *ygo.Card) {}, // 初始
-		Level:   4,
-		La:      ygo.LA_Earth,   // 地
-		Lr:      ygo.LR_Machine, // 机械
-		Attack:  900,
-		Defense: 1600,
-
-		IsValid: false,
-	}
-	cardBag.Register(co)
-
-	co = &ygo.CardOriginal{
-		/*{
-		 id: 2510
-		 中文名: 青玉眼怪
-		 日文名: サファイヤ·リサーク
-		 英文名: Lisark
-		 卡片种类: 通常怪兽
-		 卡片密码: 55210709
-		 使用限制: 无限制
-		 种族: 兽
-		 属性: 地
-		 星级: 4
-		 攻击力: 1300
-		 防御力: 1300
-		 罕见度: 平卡N
-		 卡包: Booster03，Booster R2
-		 效果: 描述：蓝宝石眼睛的野兽。制造幻影，趁敌人混乱的时候进行攻击。
-		}
-		*/
-		Id:       2510,
-		Password: "55210709",
-		Name:     "青玉眼怪",                 // "Lisark"  "サファイヤ·リサーク"
-		Lc:       ygo.LC_OrdinaryMonster, // 通常怪兽
-		//Initialize:    func(ca *ygo.Card) {}, // 初始
-		Level:   4,
-		La:      ygo.LA_Earth, // 地
-		Lr:      ygo.LR_Beast, // 兽
-		Attack:  1300,
-		Defense: 1300,
-
-		IsValid: false,
-	}
-	cardBag.Register(co)
-
-	co = &ygo.CardOriginal{
-		/*{
-		 id: 2511
-		 中文名: 斩首的美女
-		 日文名: 斬首の美女
-		 英文名: Beautiful Headhuntress
-		 卡片种类: 通常怪兽
-		 卡片密码: 16899564
-		 使用限制: 无限制
-		 种族: 战士
-		 属性: 地
-		 星级: 4
-		 攻击力: 1600
-		 防御力: 800
-		 罕见度: 平卡N
-		 卡包: Booster03，Booster Chronicle，Booster R2
-		 效果: 描述：在那美丽容貌的背后，却是个用刀子使许多人身首异处的女子。
-		}
-		*/
-		Id:       2511,
-		Password: "16899564",
-		Name:     "斩首的美女",                // "Beautiful Headhuntress"  "斬首の美女"
-		Lc:       ygo.LC_OrdinaryMonster, // 通常怪兽
-		//Initialize:    func(ca *ygo.Card) {}, // 初始
-		Level:   4,
-		La:      ygo.LA_Earth,   // 地
-		Lr:      ygo.LR_Warrior, // 战士
-		Attack:  1600,
-		Defense: 800,
-
-		IsValid: false,
-	}
-	cardBag.Register(co)
-
-	co = &ygo.CardOriginal{
-		/*{
-		 id: 2512
-		 中文名: 海马兽
-		 日文名: シーホース
-		 英文名: Tatsunootoshigo
-		 卡片种类: 通常怪兽
-		 卡片密码: 47922711
-		 使用限制: 无限制
-		 种族: 兽
-		 属性: 地
-		 星级: 5
-		 攻击力: 1350
-		 防御力: 1600
-		 罕见度: 平卡N
-		 卡包: Booster03，Booster R2
-		 效果: 描述：半马半鱼的怪兽。以风一般的速度在海中奔驰。
-		}
-		*/
-		Id:       2512,
-		Password: "47922711",
-		Name:     "海马兽",                  // "Tatsunootoshigo"  "シーホース"
-		Lc:       ygo.LC_OrdinaryMonster, // 通常怪兽
-		//Initialize:    func(ca *ygo.Card) {}, // 初始
-		Level:   5,
-		La:      ygo.LA_Earth, // 地
-		Lr:      ygo.LR_Beast, // 兽
-		Attack:  1350,
-		Defense: 1600,
-
-		IsValid: false,
-	}
-	cardBag.Register(co)
-
-	co = &ygo.CardOriginal{
-		/*{
-		 id: 2513
-		 中文名: 审判之手
-		 日文名: ジャジメント·ザ·ハンド
-		 英文名: The Judgement Hand
-		 卡片种类: 通常怪兽
-		 卡片密码: 28003512
-		 使用限制: 无限制
-		 种族: 战士
-		 属性: 地
-		 星级: 3
-		 攻击力: 1400
-		 防御力: 700
-		 罕见度: 平卡N
-		 卡包: Booster03，Booster Chronicle，Booster R2
-		 效果: 描述：用寄宿着神灵的手作最后的判决，给予敌人以猛烈的攻击。
-		}
-		*/
-		Id:       2513,
-		Password: "28003512",
-		Name:     "审判之手",                 // "The Judgement Hand"  "ジャジメント·ザ·ハンド"
-		Lc:       ygo.LC_OrdinaryMonster, // 通常怪兽
-		//Initialize:    func(ca *ygo.Card) {}, // 初始
-		Level:   3,
-		La:      ygo.LA_Earth,   // 地
-		Lr:      ygo.LR_Warrior, // 战士
-		Attack:  1400,
-		Defense: 700,
-
-		IsValid: false,
-	}
-	cardBag.Register(co)
-
-	co = &ygo.CardOriginal{
-		/*{
-		 id: 2514
-		 中文名: 骷髅寺院
-		 日文名: 髑髏の寺院
-		 英文名: Temple of Skulls
-		 卡片种类: 通常怪兽
-		 卡片密码: 00732302
-		 使用限制: 无限制
-		 种族: 不死
-		 属性: 暗
-		 星级: 4
-		 攻击力: 900
-		 防御力: 1300
-		 罕见度: 平卡N
-		 卡包: Booster03
-		 效果: 描述：全部由骷髅和骨头建立而成的寺院。会吸收接近的人的灵魂。
-		}
-		*/
-		Id:       2514,
-		Password: "00732302",
-		Name:     "骷髅寺院",                 // "Temple of Skulls"  "髑髏の寺院"
-		Lc:       ygo.LC_OrdinaryMonster, // 通常怪兽
-		//Initialize:    func(ca *ygo.Card) {}, // 初始
-		Level:   4,
-		La:      ygo.LA_Earth,  // 暗
-		Lr:      ygo.LR_Zombie, // 不死
-		Attack:  900,
-		Defense: 1300,
-
-		IsValid: false,
-	}
-	cardBag.Register(co)
-
-	co = &ygo.CardOriginal{
-		/*{
-		 id: 2515
-		 中文名: 树精
-		 日文名: ドリアード
-		 英文名: Dryad
-		 卡片种类: 通常怪兽
-		 卡片密码: 84916669
-		 使用限制: 无限制
-		 种族: 魔法师
-		 属性: 地
-		 星级: 4
-		 攻击力: 1200
-		 防御力: 1400
-		 罕见度: 平卡N
-		 卡包: Booster03，TP07
-		 效果: 描述：森之精灵。借助草木之力封住对方的行动。
-		}
-		*/
-		Id:       2515,
-		Password: "84916669",
-		Name:     "树精",                   // "Dryad"  "ドリアード"
-		Lc:       ygo.LC_OrdinaryMonster, // 通常怪兽
-		//Initialize:    func(ca *ygo.Card) {}, // 初始
-		Level:   4,
-		La:      ygo.LA_Earth,       // 地
-		Lr:      ygo.LR_SpellCaster, // 魔法师
-		Attack:  1200,
-		Defense: 1400,
-
-		IsValid: false,
-	}
-	cardBag.Register(co)
-
-	co = &ygo.CardOriginal{
-		/*{
-		 id: 2516
-		 中文名: 狂战士
-		 日文名: バーサーカー
-		 英文名: Mystic Clown
-		 卡片种类: 通常怪兽
-		 卡片密码: 47060154
-		 使用限制: 无限制
-		 种族: 恶魔
-		 属性: 暗
-		 星级: 4
-		 攻击力: 1500
-		 防御力: 1000
-		 罕见度: 平卡N
-		 卡包: EX-R(EX)，Booster03，Booster R2
-		 效果: 用狂暴的力量攻击，一旦暴走无人能挡。
-		}
-		*/
-		Id:       2516,
-		Password: "47060154",
-		Name:     "狂战士",                  // "Mystic Clown"  "バーサーカー"
-		Lc:       ygo.LC_OrdinaryMonster, // 通常怪兽
-		//Initialize:    func(ca *ygo.Card) {}, // 初始
-		Level:   4,
-		La:      ygo.LA_Earth, // 暗
-		Lr:      ygo.LR_Fiend, // 恶魔
-		Attack:  1500,
-		Defense: 1000,
-
-		IsValid: false,
-	}
-	cardBag.Register(co)
-
-	co = &ygo.CardOriginal{
-		/*{
-		 id: 2517
-		 中文名: 复仇的河童
-		 日文名: 復讐のカッパ
-		 英文名: Kappa Avenger
-		 卡片种类: 通常怪兽
-		 卡片密码: 48109103
-		 使用限制: 无限制
-		 种族: 水
-		 属性: 水
-		 星级: 3
-		 攻击力: 1200
-		 防御力: 900
-		 罕见度: 平卡N
-		 卡包: Booster03
-		 效果: 描述：被同伴杀害，为了复仇而将心灵卖给邪恶的河童。
-		}
-		*/
-		Id:       2517,
-		Password: "48109103",
-		Name:     "复仇的河童",                // "Kappa Avenger"  "復讐のカッパ"
-		Lc:       ygo.LC_OrdinaryMonster, // 通常怪兽
-		//Initialize:    func(ca *ygo.Card) {}, // 初始
-		Level:   3,
-		La:      ygo.LA_Earth, // 水
-		Lr:      ygo.LR_None,  // 水
-		Attack:  1200,
-		Defense: 900,
-
-		IsValid: false,
-	}
-	cardBag.Register(co)
-
-	co = &ygo.CardOriginal{
-		/*{
-		 id: 2533
-		 中文名: 龟鸟
-		 日文名: タートル·バード
-		 英文名: Turtle Bird
-		 卡片种类: 通常怪兽
-		 卡片密码: 72929454
-		 使用限制: 无限制
-		 种族: 水
-		 属性: 水
-		 星级: 6
-		 攻击力: 1900
-		 防御力: 1700
-		 罕见度: 平卡N
-		 卡包: Booster04，Booster Chronicle，Booster R2
-		 效果: 描述：主要栖息在水中，也能在空中飞翔的珍奇乌龟。
-		}
-		*/
-		Id:       2533,
-		Password: "72929454",
-		Name:     "龟鸟",                   // "Turtle Bird"  "タートル·バード"
-		Lc:       ygo.LC_OrdinaryMonster, // 通常怪兽
-		//Initialize:    func(ca *ygo.Card) {}, // 初始
-		Level:   6,
-		La:      ygo.LA_Earth, // 水
-		Lr:      ygo.LR_None,  // 水
-		Attack:  1900,
-		Defense: 1700,
-
-		IsValid: false,
-	}
-	cardBag.Register(co)
-
-	co = &ygo.CardOriginal{
-		/*{
-		 id: 2534
-		 中文名: 电子鱼
-		 日文名: サイボーグ·バス
-		 英文名: Mech Bass
-		 卡片种类: 通常怪兽
-		 卡片密码: 50176820
-		 使用限制: 无限制
-		 种族: 机械
-		 属性: 水
-		 星级: 5
-		 攻击力: 1800
-		 防御力: 1500
-		 罕见度: 平卡N
-		 卡包: Booster04，Booster R2
-		 效果: 描述：以背后附着的炮台发射闪光粒子加农炮。
-		}
-		*/
-		Id:       2534,
-		Password: "50176820",
-		Name:     "电子鱼",                  // "Mech Bass"  "サイボーグ·バス"
-		Lc:       ygo.LC_OrdinaryMonster, // 通常怪兽
-		//Initialize:    func(ca *ygo.Card) {}, // 初始
-		Level:   5,
-		La:      ygo.LA_Earth,   // 水
-		Lr:      ygo.LR_Machine, // 机械
-		Attack:  1800,
-		Defense: 1500,
-
-		IsValid: false,
-	}
-	cardBag.Register(co)
-
-	co = &ygo.CardOriginal{
-		/*{
-		 id: 2535
-		 中文名: 水陆的帝王
-		 日文名: 水陸の帝王
-		 英文名: Emperor of the Land and Sea
-		 卡片种类: 通常怪兽
-		 卡片密码: 11250655
-		 使用限制: 无限制
-		 种族: 爬虫类
-		 属性: 水
-		 星级: 5
-		 攻击力: 1800
-		 防御力: 1500
-		 罕见度: 平卡N
-		 卡包: Booster04，Booster R2
-		 效果: 描述：可以用大嘴向四方喷火的爬虫怪。
-		}
-		*/
-		Id:       2535,
-		Password: "11250655",
-		Name:     "水陆的帝王",                // "Emperor of the Land and Sea"  "水陸の帝王"
-		Lc:       ygo.LC_OrdinaryMonster, // 通常怪兽
-		//Initialize:    func(ca *ygo.Card) {}, // 初始
-		Level:   5,
-		La:      ygo.LA_Earth,   // 水
-		Lr:      ygo.LR_Reptile, // 爬虫类
-		Attack:  1800,
-		Defense: 1500,
-
-		IsValid: false,
-	}
-	cardBag.Register(co)
-
-	co = &ygo.CardOriginal{
-		/*{
-		 id: 2536
-		 中文名: 红叶之女王
-		 日文名: 紅葉の女王
-		 英文名: Queen of Autumn Leaves
-		 卡片种类: 通常怪兽
-		 卡片密码: 04179849
-		 使用限制: 无限制
-		 种族: 植物
-		 属性: 地
-		 星级: 5
-		 攻击力: 1800
-		 防御力: 1500
-		 罕见度: 平卡N
-		 卡包: Booster04，Booster06，Booster Chronicle，Booster R2
-		 效果: 描述：生活在被红叶围绕的地方，绿树灵王的妃子。
-		}
-		*/
-		Id:       2536,
-		Password: "04179849",
-		Name:     "红叶之女王",                // "Queen of Autumn Leaves"  "紅葉の女王"
-		Lc:       ygo.LC_OrdinaryMonster, // 通常怪兽
-		//Initialize:    func(ca *ygo.Card) {}, // 初始
-		Level:   5,
-		La:      ygo.LA_Earth, // 地
-		Lr:      ygo.LR_Plant, // 植物
-		Attack:  1800,
-		Defense: 1500,
-
-		IsValid: false,
-	}
-	cardBag.Register(co)
-
-	co = &ygo.CardOriginal{
-		/*{
-		 id: 2537
-		 中文名: 战神 奥利安
-		 日文名: 戦いの神 オリオン
-		 英文名: Orion the Battle Kami
-		 卡片种类: 通常怪兽
-		 卡片密码: 02971090
-		 使用限制: 无限制
-		 种族: 天使
-		 属性: 光
-		 星级: 5
-		 攻击力: 1800
-		 防御力: 1500
-		 罕见度: 平卡N
-		 卡包: Booster04，Booster R2
-		 效果: 描述：被誉为战神的天使。不过谁也没见过那场战事。
-		}
-		*/
-		Id:       2537,
-		Password: "02971090",
-		Name:     "战神 奥利安",               // "Orion the Battle Kami"  "戦いの神 オリオン"
-		Lc:       ygo.LC_OrdinaryMonster, // 通常怪兽
-		//Initialize:    func(ca *ygo.Card) {}, // 初始
-		Level:   5,
-		La:      ygo.LA_Earth,  // 光
-		Lr:      ygo.LR_Devine, // 天使
-		Attack:  1800,
-		Defense: 1500,
-
-		IsValid: false,
-	}
-	cardBag.Register(co)
-
-	co = &ygo.CardOriginal{
-		/*{
-		 id: 2538
-		 中文名: 山之精灵
-		 日文名: 山の精霊
-		 英文名: Spirit of the Mountain
-		 卡片种类: 通常怪兽
-		 卡片密码: 34690519
-		 使用限制: 无限制
-		 种族: 魔法师
-		 属性: 地
-		 星级: 5
-		 攻击力: 1300
-		 防御力: 1800
-		 罕见度: 平卡N
-		 卡包: Booster04，Booster R2
-		 效果: 描述：据说听了它的笛音的人会失去力量。
-		}
-		*/
-		Id:       2538,
-		Password: "34690519",
-		Name:     "山之精灵",                 // "Spirit of the Mountain"  "山の精霊"
-		Lc:       ygo.LC_OrdinaryMonster, // 通常怪兽
-		//Initialize:    func(ca *ygo.Card) {}, // 初始
-		Level:   5,
-		La:      ygo.LA_Earth,       // 地
-		Lr:      ygo.LR_SpellCaster, // 魔法师
-		Attack:  1300,
-		Defense: 1800,
-
-		IsValid: false,
-	}
-	cardBag.Register(co)
-
-	co = &ygo.CardOriginal{
-		/*{
-		 id: 2539
-		 中文名: 诞生的天使
-		 日文名: 誕生の天使
-		 英文名: Winged Egg of New Life
-		 卡片种类: 通常怪兽
-		 卡片密码: 42418084
-		 使用限制: 无限制
-		 种族: 天使
-		 属性: 光
-		 星级: 5
-		 攻击力: 1400
-		 防御力: 1700
-		 罕见度: 平卡N
-		 卡包: Booster04，Booster R2
-		 效果: 描述：据说它能知道女性腹部是否存在着生命。
-		}
-		*/
-		Id:       2539,
-		Password: "42418084",
-		Name:     "诞生的天使",                // "Winged Egg of New Life"  "誕生の天使"
-		Lc:       ygo.LC_OrdinaryMonster, // 通常怪兽
-		//Initialize:    func(ca *ygo.Card) {}, // 初始
-		Level:   5,
-		La:      ygo.LA_Earth,  // 光
-		Lr:      ygo.LR_Devine, // 天使
-		Attack:  1400,
-		Defense: 1700,
-
-		IsValid: false,
-	}
-	cardBag.Register(co)
-
-	co = &ygo.CardOriginal{
+	/*26*/
+	cardBag.Register(&ygo.CardOriginal{
 		/*{
 		 id: 2554
 		 中文名: 水精龙
@@ -2992,256 +917,18 @@ func booster(cardBag *ygo.CardVersion) {
 		Password: "86164529",
 		Name:     "水精龙",                // "Aqua Dragon"  "アクア·ドラゴン"
 		Lc:       ygo.LC_FusionMonster, // 融合怪兽
-		//Initialize:    func(ca *ygo.Card) {}, // 初始
+
 		Level:   6,
 		La:      ygo.LA_Earth,      // 水
 		Lr:      ygo.LR_Seaserpent, // 海龙
 		Attack:  2250,
 		Defense: 1900,
-
+		//Initialize:    func(ca *ygo.Card) bool {}, // 初始
 		IsValid: false,
-	}
-	cardBag.Register(co)
+	})
 
-	co = &ygo.CardOriginal{
-		/*{
-		 id: 2557
-		 中文名: 飞鹰
-		 日文名: ウイング·イーグル
-		 英文名: Wing Eagle
-		 卡片种类: 通常怪兽
-		 卡片密码: 47319141
-		 使用限制: 无限制
-		 种族: 鸟兽
-		 属性: 风
-		 星级: 5
-		 攻击力: 1800
-		 防御力: 1500
-		 罕见度: 平卡N
-		 卡包: Booster05，Booster Chronicle，Booster R3
-		 效果: 描述：从高空寻找猎物，一旦看上绝不让其逃走。
-		}
-		*/
-		Id:       2557,
-		Password: "47319141",
-		Name:     "飞鹰",                   // "Wing Eagle"  "ウイング·イーグル"
-		Lc:       ygo.LC_OrdinaryMonster, // 通常怪兽
-		//Initialize:    func(ca *ygo.Card) {}, // 初始
-		Level:   5,
-		La:      ygo.LA_Earth,     // 风
-		Lr:      ygo.LR_WindBeast, // 鸟兽
-		Attack:  1800,
-		Defense: 1500,
-
-		IsValid: false,
-	}
-	cardBag.Register(co)
-
-	co = &ygo.CardOriginal{
-		/*{
-		 id: 2558
-		 中文名: 机器攻击者
-		 日文名: マシン·アタッカー
-		 英文名: Machine Attacker
-		 卡片种类: 通常怪兽
-		 卡片密码: 38116136
-		 使用限制: 无限制
-		 种族: 机械
-		 属性: 地
-		 星级: 5
-		 攻击力: 1600
-		 防御力: 1300
-		 罕见度: 平卡N
-		 卡包: Booster05
-		 效果: 描述：特攻用的机械。以突击之力打倒敌人。
-		}
-		*/
-		Id:       2558,
-		Password: "38116136",
-		Name:     "机器攻击者",                // "Machine Attacker"  "マシン·アタッカー"
-		Lc:       ygo.LC_OrdinaryMonster, // 通常怪兽
-		//Initialize:    func(ca *ygo.Card) {}, // 初始
-		Level:   5,
-		La:      ygo.LA_Earth,   // 地
-		Lr:      ygo.LR_Machine, // 机械
-		Attack:  1600,
-		Defense: 1300,
-
-		IsValid: false,
-	}
-	cardBag.Register(co)
-
-	co = &ygo.CardOriginal{
-		/*{
-		 id: 2559
-		 中文名: 贪尸龙
-		 日文名: 屍を貪る竜
-		 英文名: Crawling Dragon #2
-		 卡片种类: 通常怪兽
-		 卡片密码: 38289717
-		 使用限制: 无限制
-		 种族: 恐龙
-		 属性: 地
-		 星级: 4
-		 攻击力: 1600
-		 防御力: 1200
-		 罕见度: 平卡N
-		 卡包: Booster05，Booster Chronicle，Booster R3
-		 效果: 描述：什么都能咬碎的恐龙，攻击力十分恐怖。
-		}
-		*/
-		Id:       2559,
-		Password: "38289717",
-		Name:     "贪尸龙",                  // "Crawling Dragon #2"  "屍を貪る竜"
-		Lc:       ygo.LC_OrdinaryMonster, // 通常怪兽
-		//Initialize:    func(ca *ygo.Card) {}, // 初始
-		Level:   4,
-		La:      ygo.LA_Earth,    // 地
-		Lr:      ygo.LR_Dinosaur, // 恐龙
-		Attack:  1600,
-		Defense: 1200,
-
-		IsValid: false,
-	}
-	cardBag.Register(co)
-
-	co = &ygo.CardOriginal{
-		/*{
-		 id: 2560
-		 中文名: 彩虹人鱼
-		 日文名: レインボー·マリン·マーメイド
-		 英文名: Rainbow Marine Mermaid
-		 卡片种类: 通常怪兽
-		 卡片密码: 29402771
-		 使用限制: 无限制
-		 种族: 鱼
-		 属性: 水
-		 星级: 5
-		 攻击力: 1550
-		 防御力: 1700
-		 罕见度: 平卡N
-		 卡包: Booster05
-		 效果: 描述：空中出现彩虹桥时才会出现的珍奇美丽人鱼。
-		}
-		*/
-		Id:       2560,
-		Password: "29402771",
-		Name:     "彩虹人鱼",                 // "Rainbow Marine Mermaid"  "レインボー·マリン·マーメイド"
-		Lc:       ygo.LC_OrdinaryMonster, // 通常怪兽
-		//Initialize:    func(ca *ygo.Card) {}, // 初始
-		Level:   5,
-		La:      ygo.LA_Earth, // 水
-		Lr:      ygo.LR_Fish,  // 鱼
-		Attack:  1550,
-		Defense: 1700,
-
-		IsValid: false,
-	}
-	cardBag.Register(co)
-
-	co = &ygo.CardOriginal{
-		/*{
-		 id: 2561
-		 中文名: 美杜莎的亡灵
-		 日文名: メデューサの亡霊
-		 英文名: The Snake Hair
-		 卡片种类: 通常怪兽
-		 卡片密码: 29491031
-		 使用限制: 无限制
-		 种族: 不死
-		 属性: 暗
-		 星级: 4
-		 攻击力: 1500
-		 防御力: 1200
-		 罕见度: 平卡N
-		 卡包: Booster05，Booster R3
-		 效果: 描述：头发满是毒蛇的怪兽。一旦被她的目光盯上，就会被石化。
-		}
-		*/
-		Id:       2561,
-		Password: "29491031",
-		Name:     "美杜莎的亡灵",               // "The Snake Hair"  "メデューサの亡霊"
-		Lc:       ygo.LC_OrdinaryMonster, // 通常怪兽
-		//Initialize:    func(ca *ygo.Card) {}, // 初始
-		Level:   4,
-		La:      ygo.LA_Earth,  // 暗
-		Lr:      ygo.LR_Zombie, // 不死
-		Attack:  1500,
-		Defense: 1200,
-
-		IsValid: false,
-	}
-	cardBag.Register(co)
-
-	co = &ygo.CardOriginal{
-		/*{
-		 id: 2580
-		 中文名: 牛鬼
-		 日文名: 牛鬼
-		 英文名: Ushi Oni
-		 卡片种类: 通常怪兽
-		 卡片密码: 48649353
-		 使用限制: 无限制
-		 种族: 恶魔
-		 属性: 暗
-		 星级: 6
-		 攻击力: 2150
-		 防御力: 1950
-		 罕见度: 平卡N
-		 卡包: Booster06，Booster Chronicle，Booster R3，TP11
-		 效果: 描述：通过黑魔术苏醒的牛之恶魔。从壶中现身。
-		}
-		*/
-		Id:       2580,
-		Password: "48649353",
-		Name:     "牛鬼",                   // "Ushi Oni"  "牛鬼"
-		Lc:       ygo.LC_OrdinaryMonster, // 通常怪兽
-		//Initialize:    func(ca *ygo.Card) {}, // 初始
-		Level:   6,
-		La:      ygo.LA_Earth, // 暗
-		Lr:      ygo.LR_Fiend, // 恶魔
-		Attack:  2150,
-		Defense: 1950,
-
-		IsValid: false,
-	}
-	cardBag.Register(co)
-
-	co = &ygo.CardOriginal{
-		/*{
-		 id: 2581
-		 中文名: 加尔瓦斯
-		 日文名: ガルヴァス
-		 英文名: Garvas
-		 卡片种类: 通常怪兽
-		 卡片密码: 69780745
-		 使用限制: 无限制
-		 种族: 兽
-		 属性: 地
-		 星级: 6
-		 攻击力: 2000
-		 防御力: 1700
-		 罕见度: 平卡N
-		 卡包: Booster06
-		 效果: 描述：恶之化身。样子如同长着羽毛的狮子。
-		}
-		*/
-		Id:       2581,
-		Password: "69780745",
-		Name:     "加尔瓦斯",                 // "Garvas"  "ガルヴァス"
-		Lc:       ygo.LC_OrdinaryMonster, // 通常怪兽
-		//Initialize:    func(ca *ygo.Card) {}, // 初始
-		Level:   6,
-		La:      ygo.LA_Earth, // 地
-		Lr:      ygo.LR_Beast, // 兽
-		Attack:  2000,
-		Defense: 1700,
-
-		IsValid: false,
-	}
-	cardBag.Register(co)
-
-	co = &ygo.CardOriginal{
+	/*27*/
+	cardBag.Register(&ygo.CardOriginal{
 		/*{
 		 id: 268
 		 调整: [伪陷阱]
@@ -3277,47 +964,13 @@ func booster(cardBag *ygo.CardVersion) {
 		Password: "03027001",
 		Name:     "伪陷阱",               // "Fake Trap"  "偽物のわな"
 		Lc:       ygo.LC_OrdinaryTrap, // 通常陷阱
-		//Initialize:    func(ca *ygo.Card) {}, // 初始
 
+		//Initialize:    func(ca *ygo.Card) bool {}, // 初始
 		IsValid: false,
-	}
-	cardBag.Register(co)
+	})
 
-	co = &ygo.CardOriginal{
-		/*{
-		 id: 420
-		 中文名: 水母
-		 日文名: 海月－ジェリーフィッシュ－
-		 英文名: Jellyfish
-		 卡片种类: 通常怪兽
-		 卡片密码: 14851496
-		 使用限制: 无限制
-		 种族: 水
-		 属性: 水
-		 星级: 4
-		 攻击力: 1200
-		 防御力: 1500
-		 罕见度: 平卡N
-		 卡包: ME，DL04，Booster07
-		 效果: 描述：漂浮在海面上的海蜇，半透明的身体使人难以察觉。
-		}
-		*/
-		Id:       420,
-		Password: "14851496",
-		Name:     "水母",                   // "Jellyfish"  "海月－ジェリーフィッシュ－"
-		Lc:       ygo.LC_OrdinaryMonster, // 通常怪兽
-		//Initialize:    func(ca *ygo.Card) {}, // 初始
-		Level:   4,
-		La:      ygo.LA_Earth, // 水
-		Lr:      ygo.LR_None,  // 水
-		Attack:  1200,
-		Defense: 1500,
-
-		IsValid: false,
-	}
-	cardBag.Register(co)
-
-	co = &ygo.CardOriginal{
+	/*28*/
+	cardBag.Register(&ygo.CardOriginal{
 		/*{
 		 id: 421
 		 调整: [暗晦之城]
@@ -3349,52 +1002,18 @@ func booster(cardBag *ygo.CardVersion) {
 		Password: "00062121",
 		Name:     "暗晦之城",               // "Castle of Dark Illusions"  "闇晦ましの城"
 		Lc:       ygo.LC_EffectMonster, // 效果怪兽
-		//Initialize:    func(ca *ygo.Card) {}, // 初始
+
 		Level:   4,
 		La:      ygo.LA_Earth, // 暗
 		Lr:      ygo.LR_Fiend, // 恶魔
 		Attack:  920,
 		Defense: 1930,
-
+		//Initialize:    func(ca *ygo.Card) bool {}, // 初始
 		IsValid: false,
-	}
-	cardBag.Register(co)
+	})
 
-	co = &ygo.CardOriginal{
-		/*{
-		 id: 422
-		 中文名: 暗魔界的霸王
-		 日文名: 闇魔界の覇王
-		 英文名: King of Yamimakai
-		 卡片种类: 通常怪兽
-		 卡片密码: 69455834
-		 使用限制: 无限制
-		 种族: 恶魔
-		 属性: 暗
-		 星级: 5
-		 攻击力: 2000
-		 防御力: 1530
-		 罕见度: 平卡N
-		 卡包: ME，BE02，DL04，Booster07
-		 效果: 描述：使用强大的暗之力量，破坏周围的一切。
-		}
-		*/
-		Id:       422,
-		Password: "69455834",
-		Name:     "暗魔界的霸王",               // "King of Yamimakai"  "闇魔界の覇王"
-		Lc:       ygo.LC_OrdinaryMonster, // 通常怪兽
-		//Initialize:    func(ca *ygo.Card) {}, // 初始
-		Level:   5,
-		La:      ygo.LA_Earth, // 暗
-		Lr:      ygo.LR_Fiend, // 恶魔
-		Attack:  2000,
-		Defense: 1530,
-
-		IsValid: false,
-	}
-	cardBag.Register(co)
-
-	co = &ygo.CardOriginal{
+	/*29*/
+	cardBag.Register(&ygo.CardOriginal{
 		/*{
 		 id: 426
 		 调整: [杀人小丑]
@@ -3425,18 +1044,18 @@ func booster(cardBag *ygo.CardVersion) {
 		Password: "93889755",
 		Name:     "杀人小丑",               // "Crass Clown"  "マーダーサーカス"
 		Lc:       ygo.LC_EffectMonster, // 效果怪兽
-		//Initialize:    func(ca *ygo.Card) {}, // 初始
+
 		Level:   4,
 		La:      ygo.LA_Earth, // 暗
 		Lr:      ygo.LR_Fiend, // 恶魔
 		Attack:  1350,
 		Defense: 1400,
-
+		//Initialize:    func(ca *ygo.Card) bool {}, // 初始
 		IsValid: false,
-	}
-	cardBag.Register(co)
+	})
 
-	co = &ygo.CardOriginal{
+	/*30*/
+	cardBag.Register(&ygo.CardOriginal{
 		/*{
 		 id: 427
 		 调整: [幽灵王-南瓜王-]
@@ -3468,18 +1087,18 @@ func booster(cardBag *ygo.CardVersion) {
 		Password: "29155212",
 		Name:     "幽灵王-南瓜王-",           // "Pumpking the King of Ghosts"  "ゴースト王－パンプキング－"
 		Lc:       ygo.LC_EffectMonster, // 效果怪兽
-		//Initialize:    func(ca *ygo.Card) {}, // 初始
+
 		Level:   6,
 		La:      ygo.LA_Earth,  // 暗
 		Lr:      ygo.LR_Zombie, // 不死
 		Attack:  1800,
 		Defense: 2000,
-
+		//Initialize:    func(ca *ygo.Card) bool {}, // 初始
 		IsValid: false,
-	}
-	cardBag.Register(co)
+	})
 
-	co = &ygo.CardOriginal{
+	/*31*/
+	cardBag.Register(&ygo.CardOriginal{
 		/*{
 		 id: 428
 		 调整: [梦幻小丑]
@@ -3511,18 +1130,18 @@ func booster(cardBag *ygo.CardVersion) {
 		Password: "13215230",
 		Name:     "梦幻小丑",               // "Dream Clown"  "ドリーム·ピエロ"
 		Lc:       ygo.LC_EffectMonster, // 效果怪兽
-		//Initialize:    func(ca *ygo.Card) {}, // 初始
+
 		Level:   3,
 		La:      ygo.LA_Earth,   // 地
 		Lr:      ygo.LR_Warrior, // 战士
 		Attack:  1200,
 		Defense: 900,
-
+		//Initialize:    func(ca *ygo.Card) bool {}, // 初始
 		IsValid: false,
-	}
-	cardBag.Register(co)
+	})
 
-	co = &ygo.CardOriginal{
+	/*32*/
+	cardBag.Register(&ygo.CardOriginal{
 		/*{
 		 id: 429
 		 调整: [恶魔的智慧]
@@ -3555,18 +1174,18 @@ func booster(cardBag *ygo.CardVersion) {
 		Password: "28725004",
 		Name:     "恶魔的智慧",              // "Tainted Wisdom"  "悪魔の知恵"
 		Lc:       ygo.LC_EffectMonster, // 效果怪兽
-		//Initialize:    func(ca *ygo.Card) {}, // 初始
+
 		Level:   3,
 		La:      ygo.LA_Earth, // 暗
 		Lr:      ygo.LR_Fiend, // 恶魔
 		Attack:  1250,
 		Defense: 800,
-
+		//Initialize:    func(ca *ygo.Card) bool {}, // 初始
 		IsValid: false,
-	}
-	cardBag.Register(co)
+	})
 
-	co = &ygo.CardOriginal{
+	/*33*/
+	cardBag.Register(&ygo.CardOriginal{
 		/*{
 		 id: 430
 		 调整: [艾尔的小剑士]
@@ -3598,18 +1217,18 @@ func booster(cardBag *ygo.CardVersion) {
 		Password: "25109950",
 		Name:     "艾尔的小剑士",             // "The Little Swordsman of Aile"  "アイルの小剣士"
 		Lc:       ygo.LC_EffectMonster, // 效果怪兽
-		//Initialize:    func(ca *ygo.Card) {}, // 初始
+
 		Level:   3,
 		La:      ygo.LA_Earth,   // 水
 		Lr:      ygo.LR_Warrior, // 战士
 		Attack:  800,
 		Defense: 1300,
-
+		//Initialize:    func(ca *ygo.Card) bool {}, // 初始
 		IsValid: false,
-	}
-	cardBag.Register(co)
+	})
 
-	co = &ygo.CardOriginal{
+	/*34*/
+	cardBag.Register(&ygo.CardOriginal{
 		/*{
 		 id: 431
 		 调整: [剑之女王]
@@ -3642,18 +1261,18 @@ func booster(cardBag *ygo.CardVersion) {
 		Password: "51371017",
 		Name:     "剑之女王",               // "Princess of Tsurugi"  "剣の女王"
 		Lc:       ygo.LC_EffectMonster, // 效果怪兽
-		//Initialize:    func(ca *ygo.Card) {}, // 初始
+
 		Level:   3,
 		La:      ygo.LA_Earth,   // 风
 		Lr:      ygo.LR_Warrior, // 战士
 		Attack:  900,
 		Defense: 700,
-
+		//Initialize:    func(ca *ygo.Card) bool {}, // 初始
 		IsValid: false,
-	}
-	cardBag.Register(co)
+	})
 
-	co = &ygo.CardOriginal{
+	/*35*/
+	cardBag.Register(&ygo.CardOriginal{
 		/*{
 		 id: 432
 		 调整: [火炎地狱]
@@ -3679,13 +1298,13 @@ func booster(cardBag *ygo.CardVersion) {
 		Password: "46918794",
 		Name:     "火炎地狱",               // "Tremendous Fire"  "火炎地獄"
 		Lc:       ygo.LC_OrdinaryMagic, // 通常魔法
-		//Initialize:    func(ca *ygo.Card) {}, // 初始
 
+		//Initialize:    func(ca *ygo.Card) bool {}, // 初始
 		IsValid: false,
-	}
-	cardBag.Register(co)
+	})
 
-	co = &ygo.CardOriginal{
+	/*36*/
+	cardBag.Register(&ygo.CardOriginal{
 		/*{
 		 id: 433
 		 调整: [地雷蜘蛛]
@@ -3717,52 +1336,18 @@ func booster(cardBag *ygo.CardVersion) {
 		Password: "94773007",
 		Name:     "地雷蜘蛛",               // "Jirai Gumo"  "地雷蜘蛛"
 		Lc:       ygo.LC_EffectMonster, // 效果怪兽
-		//Initialize:    func(ca *ygo.Card) {}, // 初始
+
 		Level:   4,
 		La:      ygo.LA_Earth,  // 地
 		Lr:      ygo.LR_Insect, // 昆虫
 		Attack:  2200,
 		Defense: 100,
-
+		//Initialize:    func(ca *ygo.Card) bool {}, // 初始
 		IsValid: false,
-	}
-	cardBag.Register(co)
+	})
 
-	co = &ygo.CardOriginal{
-		/*{
-		 id: 435
-		 中文名: 强化石像怪
-		 日文名: ガーゴイル·パワード
-		 英文名: Ryu-Kishin Powered
-		 卡片种类: 通常怪兽
-		 卡片密码: 24611934
-		 使用限制: 无限制
-		 种族: 恶魔
-		 属性: 暗
-		 星级: 4
-		 攻击力: 1600
-		 防御力: 1200
-		 罕见度: 平卡N
-		 卡包: ME，BE02，EX-R(EX)，DL04，Booster07，KA，SK2
-		 效果: 描述：取得暗黑之力强化而成的石像鬼，尖锐的爪子值得警惕。
-		}
-		*/
-		Id:       435,
-		Password: "24611934",
-		Name:     "强化石像怪",                // "Ryu-Kishin Powered"  "ガーゴイル·パワード"
-		Lc:       ygo.LC_OrdinaryMonster, // 通常怪兽
-		//Initialize:    func(ca *ygo.Card) {}, // 初始
-		Level:   4,
-		La:      ygo.LA_Earth, // 暗
-		Lr:      ygo.LR_Fiend, // 恶魔
-		Attack:  1600,
-		Defense: 1200,
-
-		IsValid: false,
-	}
-	cardBag.Register(co)
-
-	co = &ygo.CardOriginal{
+	/*37*/
+	cardBag.Register(&ygo.CardOriginal{
 		/*{
 		 id: 438
 		 调整: [雷龙]
@@ -3794,18 +1379,18 @@ func booster(cardBag *ygo.CardVersion) {
 		Password: "31786629",
 		Name:     "雷龙",                 // "Thunder Dragon"  "サンダー·ドラゴン"
 		Lc:       ygo.LC_EffectMonster, // 效果怪兽
-		//Initialize:    func(ca *ygo.Card) {}, // 初始
+
 		Level:   5,
 		La:      ygo.LA_Earth,   // 光
 		Lr:      ygo.LR_Thunder, // 雷
 		Attack:  1600,
 		Defense: 1500,
-
+		//Initialize:    func(ca *ygo.Card) bool {}, // 初始
 		IsValid: false,
-	}
-	cardBag.Register(co)
+	})
 
-	co = &ygo.CardOriginal{
+	/*38*/
+	cardBag.Register(&ygo.CardOriginal{
 		/*{
 		 id: 441
 		 调整: [空中的昆虫兵]
@@ -3835,18 +1420,18 @@ func booster(cardBag *ygo.CardVersion) {
 		Password: "07019529",
 		Name:     "空中的昆虫兵",             // "Insect Soldiers of the Sky"  "空の昆虫兵"
 		Lc:       ygo.LC_EffectMonster, // 效果怪兽
-		//Initialize:    func(ca *ygo.Card) {}, // 初始
+
 		Level:   3,
 		La:      ygo.LA_Earth,  // 风
 		Lr:      ygo.LR_Insect, // 昆虫
 		Attack:  1000,
 		Defense: 800,
-
+		//Initialize:    func(ca *ygo.Card) bool {}, // 初始
 		IsValid: false,
-	}
-	cardBag.Register(co)
+	})
 
-	co = &ygo.CardOriginal{
+	/*39*/
+	cardBag.Register(&ygo.CardOriginal{
 		/*{
 		 id: 442
 		 调整: [超级流星]
@@ -3875,18 +1460,18 @@ func booster(cardBag *ygo.CardVersion) {
 		Password: "67629977",
 		Name:     "超级流星",               // "Hoshiningen"  "スーパースター"
 		Lc:       ygo.LC_EffectMonster, // 效果怪兽
-		//Initialize:    func(ca *ygo.Card) {}, // 初始
+
 		Level:   2,
 		La:      ygo.LA_Earth,  // 光
 		Lr:      ygo.LR_Devine, // 天使
 		Attack:  500,
 		Defense: 700,
-
+		//Initialize:    func(ca *ygo.Card) bool {}, // 初始
 		IsValid: false,
-	}
-	cardBag.Register(co)
+	})
 
-	co = &ygo.CardOriginal{
+	/*40*/
+	cardBag.Register(&ygo.CardOriginal{
 		/*{
 		 id: 444
 		 调整: [寄居龙]
@@ -3920,18 +1505,18 @@ func booster(cardBag *ygo.CardVersion) {
 		Password: "29380133",
 		Name:     "寄居龙",                // "Yado Karu"  "ヤドカリュー"
 		Lc:       ygo.LC_EffectMonster, // 效果怪兽
-		//Initialize:    func(ca *ygo.Card) {}, // 初始
+
 		Level:   4,
 		La:      ygo.LA_Earth, // 水
 		Lr:      ygo.LR_None,  // 水
 		Attack:  900,
 		Defense: 1700,
-
+		//Initialize:    func(ca *ygo.Card) bool {}, // 初始
 		IsValid: false,
-	}
-	cardBag.Register(co)
+	})
 
-	co = &ygo.CardOriginal{
+	/*41*/
+	cardBag.Register(&ygo.CardOriginal{
 		/*{
 		 id: 448
 		 调整: [恶魔烹调师]
@@ -3962,18 +1547,18 @@ func booster(cardBag *ygo.CardVersion) {
 		Password: "71107816",
 		Name:     "恶魔烹调师",              // "The Bistro Butcher"  "悪魔の調理師"
 		Lc:       ygo.LC_EffectMonster, // 效果怪兽
-		//Initialize:    func(ca *ygo.Card) {}, // 初始
+
 		Level:   4,
 		La:      ygo.LA_Earth, // 暗
 		Lr:      ygo.LR_Fiend, // 恶魔
 		Attack:  1800,
 		Defense: 1000,
-
+		//Initialize:    func(ca *ygo.Card) bool {}, // 初始
 		IsValid: false,
-	}
-	cardBag.Register(co)
+	})
 
-	co = &ygo.CardOriginal{
+	/*42*/
+	cardBag.Register(&ygo.CardOriginal{
 		/*{
 		 id: 449
 		 调整: [海星小子]
@@ -4002,18 +1587,18 @@ func booster(cardBag *ygo.CardVersion) {
 		Password: "08201910",
 		Name:     "海星小子",               // "Star Boy"  "スター·ボーイ"
 		Lc:       ygo.LC_EffectMonster, // 效果怪兽
-		//Initialize:    func(ca *ygo.Card) {}, // 初始
+
 		Level:   2,
 		La:      ygo.LA_Earth, // 水
 		Lr:      ygo.LR_None,  // 水
 		Attack:  550,
 		Defense: 500,
-
+		//Initialize:    func(ca *ygo.Card) bool {}, // 初始
 		IsValid: false,
-	}
-	cardBag.Register(co)
+	})
 
-	co = &ygo.CardOriginal{
+	/*43*/
+	cardBag.Register(&ygo.CardOriginal{
 		/*{
 		 id: 455
 		 调整: [小奇美拉]
@@ -4042,18 +1627,18 @@ func booster(cardBag *ygo.CardVersion) {
 		Password: "68658728",
 		Name:     "小奇美拉",               // "Little Chimera"  "リトル·キメラ"
 		Lc:       ygo.LC_EffectMonster, // 效果怪兽
-		//Initialize:    func(ca *ygo.Card) {}, // 初始
+
 		Level:   2,
 		La:      ygo.LA_None,  // 炎
 		Lr:      ygo.LR_Beast, // 兽
 		Attack:  600,
 		Defense: 550,
-
+		//Initialize:    func(ca *ygo.Card) bool {}, // 初始
 		IsValid: false,
-	}
-	cardBag.Register(co)
+	})
 
-	co = &ygo.CardOriginal{
+	/*44*/
+	cardBag.Register(&ygo.CardOriginal{
 		/*{
 		 id: 456
 		 调整: [刃蝇]
@@ -4082,18 +1667,18 @@ func booster(cardBag *ygo.CardVersion) {
 		Password: "28470714",
 		Name:     "刃蝇",                 // "Bladefly"  "ブレードフライ"
 		Lc:       ygo.LC_EffectMonster, // 效果怪兽
-		//Initialize:    func(ca *ygo.Card) {}, // 初始
+
 		Level:   2,
 		La:      ygo.LA_Earth,  // 风
 		Lr:      ygo.LR_Insect, // 昆虫
 		Attack:  600,
 		Defense: 700,
-
+		//Initialize:    func(ca *ygo.Card) bool {}, // 初始
 		IsValid: false,
-	}
-	cardBag.Register(co)
+	})
 
-	co = &ygo.CardOriginal{
+	/*45*/
+	cardBag.Register(&ygo.CardOriginal{
 		/*{
 		 id: 459
 		 调整: [见习魔女]
@@ -4122,18 +1707,18 @@ func booster(cardBag *ygo.CardVersion) {
 		Password: "80741828",
 		Name:     "见习魔女",               // "Witch's Apprentice"  "見習い魔女"
 		Lc:       ygo.LC_EffectMonster, // 效果怪兽
-		//Initialize:    func(ca *ygo.Card) {}, // 初始
+
 		Level:   2,
 		La:      ygo.LA_Earth,       // 暗
 		Lr:      ygo.LR_SpellCaster, // 魔法师
 		Attack:  550,
 		Defense: 500,
-
+		//Initialize:    func(ca *ygo.Card) bool {}, // 初始
 		IsValid: false,
-	}
-	cardBag.Register(co)
+	})
 
-	co = &ygo.CardOriginal{
+	/*46*/
+	cardBag.Register(&ygo.CardOriginal{
 		/*{
 		 id: 472
 		 调整: [细菌感染]
@@ -4160,13 +1745,13 @@ func booster(cardBag *ygo.CardVersion) {
 		Password: "24668830",
 		Name:     "细菌感染",            // "Germ Infection"  "細菌感染"
 		Lc:       ygo.LC_EquipMagic, // 装备魔法
-		//Initialize:    func(ca *ygo.Card) {}, // 初始
 
+		//Initialize:    func(ca *ygo.Card) bool {}, // 初始
 		IsValid: false,
-	}
-	cardBag.Register(co)
+	})
 
-	co = &ygo.CardOriginal{
+	/*47*/
+	cardBag.Register(&ygo.CardOriginal{
 		/*{
 		 id: 473
 		 调整: [麻药]
@@ -4192,13 +1777,13 @@ func booster(cardBag *ygo.CardVersion) {
 		Password: "50152549",
 		Name:     "麻药",              // "Paralyzing Potion"  "しびれ薬"
 		Lc:       ygo.LC_EquipMagic, // 装备魔法
-		//Initialize:    func(ca *ygo.Card) {}, // 初始
 
+		//Initialize:    func(ca *ygo.Card) bool {}, // 初始
 		IsValid: false,
-	}
-	cardBag.Register(co)
+	})
 
-	co = &ygo.CardOriginal{
+	/*48*/
+	cardBag.Register(&ygo.CardOriginal{
 		/*{
 		 id: 475
 		 调整: [磁力指轮]
@@ -4223,13 +1808,13 @@ func booster(cardBag *ygo.CardVersion) {
 		Password: "20436034",
 		Name:     "磁力指轮",            // "Ring of Magnetism"  "磁力の指輪"
 		Lc:       ygo.LC_EquipMagic, // 装备魔法
-		//Initialize:    func(ca *ygo.Card) {}, // 初始
 
+		//Initialize:    func(ca *ygo.Card) bool {}, // 初始
 		IsValid: false,
-	}
-	cardBag.Register(co)
+	})
 
-	co = &ygo.CardOriginal{
+	/*49*/
+	cardBag.Register(&ygo.CardOriginal{
 		/*{
 		 id: 476
 		 调整: [分担痛苦]
@@ -4257,13 +1842,13 @@ func booster(cardBag *ygo.CardVersion) {
 		Password: "56830749",
 		Name:     "分担痛苦",               // "Share the Pain"  "痛み分け"
 		Lc:       ygo.LC_OrdinaryMagic, // 通常魔法
-		//Initialize:    func(ca *ygo.Card) {}, // 初始
 
+		//Initialize:    func(ca *ygo.Card) bool {}, // 初始
 		IsValid: false,
-	}
-	cardBag.Register(co)
+	})
 
-	co = &ygo.CardOriginal{
+	/*50*/
+	cardBag.Register(&ygo.CardOriginal{
 		/*{
 		 id: 477
 		 调整: [兴奋剂]
@@ -4288,13 +1873,13 @@ func booster(cardBag *ygo.CardVersion) {
 		Password: "83225447",
 		Name:     "兴奋剂",             // "Stim-Pack"  "ドーピング"
 		Lc:       ygo.LC_EquipMagic, // 装备魔法
-		//Initialize:    func(ca *ygo.Card) {}, // 初始
 
+		//Initialize:    func(ca *ygo.Card) bool {}, // 初始
 		IsValid: false,
-	}
-	cardBag.Register(co)
+	})
 
-	co = &ygo.CardOriginal{
+	/*51*/
+	cardBag.Register(&ygo.CardOriginal{
 		/*{
 		 id: 478
 		 调整: [大风暴]
@@ -4320,81 +1905,13 @@ func booster(cardBag *ygo.CardVersion) {
 		Password: "19613556",
 		Name:     "大风暴",                // "Heavy Storm"  "大嵐"
 		Lc:       ygo.LC_OrdinaryMagic, // 通常魔法
-		//Initialize:    func(ca *ygo.Card) {}, // 初始
 
+		//Initialize:    func(ca *ygo.Card) bool {}, // 初始
 		IsValid: false,
-	}
-	cardBag.Register(co)
+	})
 
-	co = &ygo.CardOriginal{
-		/*{
-		 id: 479
-		 中文名: 电气小子
-		 日文名: エレキッズ
-		 英文名: Wattkid
-		 卡片种类: 通常怪兽
-		 卡片密码: 27324313
-		 使用限制: 无限制
-		 种族: 雷
-		 属性: 光
-		 星级: 3
-		 攻击力: 1000
-		 防御力: 500
-		 罕见度: 平卡N
-		 卡包: BE02，DL04，Booster01，Booster Chronicle，Booster R1，TU04
-		 效果: 描述：雷属性攻击异常厉害，若轻视它则会遭到电击。
-		}
-		*/
-		Id:       479,
-		Password: "27324313",
-		Name:     "电气小子",                 // "Wattkid"  "エレキッズ"
-		Lc:       ygo.LC_OrdinaryMonster, // 通常怪兽
-		//Initialize:    func(ca *ygo.Card) {}, // 初始
-		Level:   3,
-		La:      ygo.LA_Earth,   // 光
-		Lr:      ygo.LR_Thunder, // 雷
-		Attack:  1000,
-		Defense: 500,
-
-		IsValid: false,
-	}
-	cardBag.Register(co)
-
-	co = &ygo.CardOriginal{
-		/*{
-		 id: 480
-		 中文名: 吸血跳蚤
-		 日文名: 吸血ノミ
-		 英文名: Giant Flea
-		 卡片种类: 通常怪兽
-		 卡片密码: 41762634
-		 使用限制: 无限制
-		 种族: 昆虫
-		 属性: 地
-		 星级: 4
-		 攻击力: 1500
-		 防御力: 1200
-		 罕见度: 平卡N
-		 卡包: DL04，Booster02，Booster Chronicle，Booster R1
-		 效果: 描述：攻击力高强的巨型吸血跳蚤，轻视它会非常危险。
-		}
-		*/
-		Id:       480,
-		Password: "41762634",
-		Name:     "吸血跳蚤",                 // "Giant Flea"  "吸血ノミ"
-		Lc:       ygo.LC_OrdinaryMonster, // 通常怪兽
-		//Initialize:    func(ca *ygo.Card) {}, // 初始
-		Level:   4,
-		La:      ygo.LA_Earth,  // 地
-		Lr:      ygo.LR_Insect, // 昆虫
-		Attack:  1500,
-		Defense: 1200,
-
-		IsValid: false,
-	}
-	cardBag.Register(co)
-
-	co = &ygo.CardOriginal{
+	/*52*/
+	cardBag.Register(&ygo.CardOriginal{
 		/*{
 		 id: 481
 		 调整: [精灵之光]
@@ -4420,13 +1937,13 @@ func booster(cardBag *ygo.CardVersion) {
 		Password: "39897277",
 		Name:     "精灵之光",            // "Elf's Light"  "エルフの光"
 		Lc:       ygo.LC_EquipMagic, // 装备魔法
-		//Initialize:    func(ca *ygo.Card) {}, // 初始
 
+		//Initialize:    func(ca *ygo.Card) bool {}, // 初始
 		IsValid: false,
-	}
-	cardBag.Register(co)
+	})
 
-	co = &ygo.CardOriginal{
+	/*53*/
+	cardBag.Register(&ygo.CardOriginal{
 		/*{
 		 id: 482
 		 调整: [钢甲壳]
@@ -4452,13 +1969,13 @@ func booster(cardBag *ygo.CardVersion) {
 		Password: "02370081",
 		Name:     "钢甲壳",             // "Steel Shell"  "はがねの甲羅"
 		Lc:       ygo.LC_EquipMagic, // 装备魔法
-		//Initialize:    func(ca *ygo.Card) {}, // 初始
 
+		//Initialize:    func(ca *ygo.Card) bool {}, // 初始
 		IsValid: false,
-	}
-	cardBag.Register(co)
+	})
 
-	co = &ygo.CardOriginal{
+	/*54*/
+	cardBag.Register(&ygo.CardOriginal{
 		/*{
 		 id: 483
 		 调整: [天使的鲜血]
@@ -4482,13 +1999,13 @@ func booster(cardBag *ygo.CardVersion) {
 		Password: "47852924",
 		Name:     "天使的鲜血",              // "Soul of the Pure"  "天使の生き血"
 		Lc:       ygo.LC_OrdinaryMagic, // 通常魔法
-		//Initialize:    func(ca *ygo.Card) {}, // 初始
 
+		//Initialize:    func(ca *ygo.Card) bool {}, // 初始
 		IsValid: false,
-	}
-	cardBag.Register(co)
+	})
 
-	co = &ygo.CardOriginal{
+	/*55*/
+	cardBag.Register(&ygo.CardOriginal{
 		/*{
 		 id: 484
 		 调整: [消除黑暗的光]
@@ -4512,81 +2029,13 @@ func booster(cardBag *ygo.CardVersion) {
 		Password: "45895206",
 		Name:     "消除黑暗的光",             // "Dark-Piercing Light"  "闇をかき消す光"
 		Lc:       ygo.LC_OrdinaryMagic, // 通常魔法
-		//Initialize:    func(ca *ygo.Card) {}, // 初始
 
+		//Initialize:    func(ca *ygo.Card) bool {}, // 初始
 		IsValid: false,
-	}
-	cardBag.Register(co)
+	})
 
-	co = &ygo.CardOriginal{
-		/*{
-		 id: 485
-		 中文名: 复活节岛的摩艾石像
-		 日文名: イースター島のモアイ
-		 英文名: The Statue of Easter Island
-		 卡片种类: 通常怪兽
-		 卡片密码: 10262698
-		 使用限制: 无限制
-		 种族: 岩石
-		 属性: 地
-		 星级: 4
-		 攻击力: 1100
-		 防御力: 1400
-		 罕见度: 平卡N
-		 卡包: BE02，DL04，Booster02，Booster Chronicle，Booster R1
-		 效果: 描述：存在于复活岛的石像，能够发射圆形的激光。
-		}
-		*/
-		Id:       485,
-		Password: "10262698",
-		Name:     "复活节岛的摩艾石像",            // "The Statue of Easter Island"  "イースター島のモアイ"
-		Lc:       ygo.LC_OrdinaryMonster, // 通常怪兽
-		//Initialize:    func(ca *ygo.Card) {}, // 初始
-		Level:   4,
-		La:      ygo.LA_Earth, // 地
-		Lr:      ygo.LR_Rock,  // 岩石
-		Attack:  1100,
-		Defense: 1400,
-
-		IsValid: false,
-	}
-	cardBag.Register(co)
-
-	co = &ygo.CardOriginal{
-		/*{
-		 id: 486
-		 中文名: 友谊天使
-		 日文名: フレンドシップ
-		 英文名: Shining Friendship
-		 卡片种类: 通常怪兽
-		 卡片密码: 82085619
-		 使用限制: 无限制
-		 种族: 天使
-		 属性: 光
-		 星级: 4
-		 攻击力: 1300
-		 防御力: 1100
-		 罕见度: 平卡N
-		 卡包: BE02，DL04，Booster02，Booster Chronicle，Booster R1
-		 效果: 描述：即便在决斗中吵架，显示出友情就能和好。
-		}
-		*/
-		Id:       486,
-		Password: "82085619",
-		Name:     "友谊天使",                 // "Shining Friendship"  "フレンドシップ"
-		Lc:       ygo.LC_OrdinaryMonster, // 通常怪兽
-		//Initialize:    func(ca *ygo.Card) {}, // 初始
-		Level:   4,
-		La:      ygo.LA_Earth,  // 光
-		Lr:      ygo.LR_Devine, // 天使
-		Attack:  1300,
-		Defense: 1100,
-
-		IsValid: false,
-	}
-	cardBag.Register(co)
-
-	co = &ygo.CardOriginal{
+	/*56*/
+	cardBag.Register(&ygo.CardOriginal{
 		/*{
 		 id: 487
 		 调整: [蓝色药剂]
@@ -4610,13 +2059,13 @@ func booster(cardBag *ygo.CardVersion) {
 		Password: "20871001",
 		Name:     "蓝色药剂",               // "Blue Medicine"  "ブルー·ポーション"
 		Lc:       ygo.LC_OrdinaryMagic, // 通常魔法
-		//Initialize:    func(ca *ygo.Card) {}, // 初始
 
+		//Initialize:    func(ca *ygo.Card) bool {}, // 初始
 		IsValid: false,
-	}
-	cardBag.Register(co)
+	})
 
-	co = &ygo.CardOriginal{
+	/*57*/
+	cardBag.Register(&ygo.CardOriginal{
 		/*{
 		 id: 488
 		 调整: [雷鸣]
@@ -4641,13 +2090,13 @@ func booster(cardBag *ygo.CardVersion) {
 		Password: "56260110",
 		Name:     "雷鸣",                 // "Raimei"  "雷鳴"
 		Lc:       ygo.LC_OrdinaryMagic, // 通常魔法
-		//Initialize:    func(ca *ygo.Card) {}, // 初始
 
+		//Initialize:    func(ca *ygo.Card) bool {}, // 初始
 		IsValid: false,
-	}
-	cardBag.Register(co)
+	})
 
-	co = &ygo.CardOriginal{
+	/*58*/
+	cardBag.Register(&ygo.CardOriginal{
 		/*{
 		 id: 489
 		 调整: [灼热之枪]
@@ -4673,13 +2122,13 @@ func booster(cardBag *ygo.CardVersion) {
 		Password: "18937875",
 		Name:     "灼热之枪",            // "Burning Spear"  "灼熱の槍"
 		Lc:       ygo.LC_EquipMagic, // 装备魔法
-		//Initialize:    func(ca *ygo.Card) {}, // 初始
 
+		//Initialize:    func(ca *ygo.Card) bool {}, // 初始
 		IsValid: false,
-	}
-	cardBag.Register(co)
+	})
 
-	co = &ygo.CardOriginal{
+	/*59*/
+	cardBag.Register(&ygo.CardOriginal{
 		/*{
 		 id: 490
 		 调整: [突风之扇]
@@ -4705,13 +2154,13 @@ func booster(cardBag *ygo.CardVersion) {
 		Password: "55321970",
 		Name:     "突风之扇",            // "Gust Fan"  "突風の扇"
 		Lc:       ygo.LC_EquipMagic, // 装备魔法
-		//Initialize:    func(ca *ygo.Card) {}, // 初始
 
+		//Initialize:    func(ca *ygo.Card) bool {}, // 初始
 		IsValid: false,
-	}
-	cardBag.Register(co)
+	})
 
-	co = &ygo.CardOriginal{
+	/*60*/
+	cardBag.Register(&ygo.CardOriginal{
 		/*{
 		 id: 491
 		 调整: [邪恶蠕虫兽]
@@ -4743,86 +2192,18 @@ func booster(cardBag *ygo.CardVersion) {
 		Password: "06285791",
 		Name:     "邪恶蠕虫兽",              // "The Wicked Worm Beast"  "邪悪なるワーム·ビースト"
 		Lc:       ygo.LC_EffectMonster, // 效果怪兽
-		//Initialize:    func(ca *ygo.Card) {}, // 初始
+
 		Level:   3,
 		La:      ygo.LA_Earth, // 地
 		Lr:      ygo.LR_Beast, // 兽
 		Attack:  1400,
 		Defense: 700,
-
+		//Initialize:    func(ca *ygo.Card) bool {}, // 初始
 		IsValid: false,
-	}
-	cardBag.Register(co)
+	})
 
-	co = &ygo.CardOriginal{
-		/*{
-		 id: 492
-		 中文名: 老虎斧战士
-		 日文名: タイガー·アックス
-		 英文名: Tiger Axe
-		 卡片种类: 通常怪兽
-		 卡片密码: 49791927
-		 使用限制: 无限制
-		 种族: 兽战士
-		 属性: 地
-		 星级: 4
-		 攻击力: 1300
-		 防御力: 1100
-		 罕见度: 平卡N，金字UR
-		 卡包: BE02，LE02，DL04，Booster03，Booster Chronicle，Booster R2，JY
-		 效果: 描述：手持巨斧的兽战士。能够放出行动迅速的人偶，攻击强劲。
-		}
-		*/
-		Id:       492,
-		Password: "49791927",
-		Name:     "老虎斧战士",                // "Tiger Axe"  "タイガー·アックス"
-		Lc:       ygo.LC_OrdinaryMonster, // 通常怪兽
-		//Initialize:    func(ca *ygo.Card) {}, // 初始
-		Level:   4,
-		La:      ygo.LA_Earth,       // 地
-		Lr:      ygo.LR_BeastWarror, // 兽战士
-		Attack:  1300,
-		Defense: 1100,
-
-		IsValid: false,
-	}
-	cardBag.Register(co)
-
-	co = &ygo.CardOriginal{
-		/*{
-		 id: 493
-		 中文名: 巨斧袭击者
-		 日文名: アックス·レイダー
-		 英文名: Axe Raider
-		 卡片种类: 通常怪兽
-		 卡片密码: 48305365
-		 使用限制: 无限制
-		 种族: 战士
-		 属性: 地
-		 星级: 4
-		 攻击力: 1700
-		 防御力: 1150
-		 罕见度: 平卡N
-		 卡包: BE02，DL04，Booster04，Booster Chronicle，Booster R2，YSD03，JY，SJ2
-		 效果: 描述：持斧的战士。单手挥舞斧头的攻击相当强劲。
-		}
-		*/
-		Id:       493,
-		Password: "48305365",
-		Name:     "巨斧袭击者",                // "Axe Raider"  "アックス·レイダー"
-		Lc:       ygo.LC_OrdinaryMonster, // 通常怪兽
-		//Initialize:    func(ca *ygo.Card) {}, // 初始
-		Level:   4,
-		La:      ygo.LA_Earth,   // 地
-		Lr:      ygo.LR_Warrior, // 战士
-		Attack:  1700,
-		Defense: 1150,
-
-		IsValid: false,
-	}
-	cardBag.Register(co)
-
-	co = &ygo.CardOriginal{
+	/*61*/
+	cardBag.Register(&ygo.CardOriginal{
 		/*{
 		 id: 494
 		 调整: [森之住人 乌丹]<森の住人 ウダン>
@@ -4851,86 +2232,18 @@ func booster(cardBag *ygo.CardVersion) {
 		Password: "42883273",
 		Name:     "森之住人 乌丹",            // "Wodan the Resident of the Forest"  "森の住人 ウダン"
 		Lc:       ygo.LC_EffectMonster, // 效果怪兽
-		//Initialize:    func(ca *ygo.Card) {}, // 初始
+
 		Level:   3,
 		La:      ygo.LA_Earth,   // 地
 		Lr:      ygo.LR_Warrior, // 战士
 		Attack:  900,
 		Defense: 1200,
-
+		//Initialize:    func(ca *ygo.Card) bool {}, // 初始
 		IsValid: false,
-	}
-	cardBag.Register(co)
+	})
 
-	co = &ygo.CardOriginal{
-		/*{
-		 id: 495
-		 中文名: 机械猎手
-		 日文名: メカ·ハンター
-		 英文名: Mechanicalchaser
-		 卡片种类: 通常怪兽
-		 卡片密码: 07359741
-		 使用限制: 无限制
-		 种族: 机械
-		 属性: 暗
-		 星级: 4
-		 攻击力: 1850
-		 防御力: 800
-		 罕见度: 平卡N
-		 卡包: BE02，DL04，SD10，Booster04，Booster Chronicle，Booster R2
-		 效果: 描述：听从机械王的命令，在抓住目标前都会紧追不舍的猎捕。
-		}
-		*/
-		Id:       495,
-		Password: "07359741",
-		Name:     "机械猎手",                 // "Mechanicalchaser"  "メカ·ハンター"
-		Lc:       ygo.LC_OrdinaryMonster, // 通常怪兽
-		//Initialize:    func(ca *ygo.Card) {}, // 初始
-		Level:   4,
-		La:      ygo.LA_Earth,   // 暗
-		Lr:      ygo.LR_Machine, // 机械
-		Attack:  1850,
-		Defense: 800,
-
-		IsValid: false,
-	}
-	cardBag.Register(co)
-
-	co = &ygo.CardOriginal{
-		/*{
-		 id: 496
-		 中文名: 海鳞蛇
-		 日文名: シーザリオン
-		 英文名: Giant Red Seasnake
-		 卡片种类: 通常怪兽
-		 卡片密码: 58831685
-		 使用限制: 无限制
-		 种族: 水
-		 属性: 水
-		 星级: 4
-		 攻击力: 1800
-		 防御力: 800
-		 罕见度: 平卡N
-		 卡包: DL04，Booster04，Booster Chronicle，Booster R2
-		 效果: 描述：居住在海洋里的蛇型怪兽，它会去咬任何接近的物体。
-		}
-		*/
-		Id:       496,
-		Password: "58831685",
-		Name:     "海鳞蛇",                  // "Giant Red Seasnake"  "シーザリオン"
-		Lc:       ygo.LC_OrdinaryMonster, // 通常怪兽
-		//Initialize:    func(ca *ygo.Card) {}, // 初始
-		Level:   4,
-		La:      ygo.LA_Earth, // 水
-		Lr:      ygo.LR_None,  // 水
-		Attack:  1800,
-		Defense: 800,
-
-		IsValid: false,
-	}
-	cardBag.Register(co)
-
-	co = &ygo.CardOriginal{
+	/*62*/
+	cardBag.Register(&ygo.CardOriginal{
 		/*{
 		 id: 497
 		 调整: [蟑螂骑士]
@@ -4963,52 +2276,18 @@ func booster(cardBag *ygo.CardVersion) {
 		Password: "33413638",
 		Name:     "蟑螂骑士",               // "Cockroach Knight"  "コカローチ·ナイト"
 		Lc:       ygo.LC_EffectMonster, // 效果怪兽
-		//Initialize:    func(ca *ygo.Card) {}, // 初始
+
 		Level:   3,
 		La:      ygo.LA_Earth,  // 地
 		Lr:      ygo.LR_Insect, // 昆虫
 		Attack:  800,
 		Defense: 900,
-
+		//Initialize:    func(ca *ygo.Card) bool {}, // 初始
 		IsValid: false,
-	}
-	cardBag.Register(co)
+	})
 
-	co = &ygo.CardOriginal{
-		/*{
-		 id: 498
-		 中文名: 双生精灵
-		 日文名: ヂェミナイ·エルフ
-		 英文名: Gemini Elf
-		 卡片种类: 通常怪兽
-		 卡片密码: 69140098
-		 使用限制: 无限制
-		 种族: 魔法师
-		 属性: 地
-		 星级: 4
-		 攻击力: 1900
-		 防御力: 900
-		 罕见度: 平卡N
-		 卡包: BE02，DL04，SD06，Booster04，Booster Chronicle，Booster R2
-		 效果: 描述：相互配合发动攻击的双胞胎妖精姐妹。
-		}
-		*/
-		Id:       498,
-		Password: "69140098",
-		Name:     "双生精灵",                 // "Gemini Elf"  "ヂェミナイ·エルフ"
-		Lc:       ygo.LC_OrdinaryMonster, // 通常怪兽
-		//Initialize:    func(ca *ygo.Card) {}, // 初始
-		Level:   4,
-		La:      ygo.LA_Earth,       // 地
-		Lr:      ygo.LR_SpellCaster, // 魔法师
-		Attack:  1900,
-		Defense: 900,
-
-		IsValid: false,
-	}
-	cardBag.Register(co)
-
-	co = &ygo.CardOriginal{
+	/*63*/
+	cardBag.Register(&ygo.CardOriginal{
 		/*{
 		 id: 499
 		 调整: [巡逻机器人]<パトロール·ロボ>
@@ -5039,52 +2318,18 @@ func booster(cardBag *ygo.CardVersion) {
 		Password: "76775123",
 		Name:     "巡逻机器人",              // "Patrol Robo"  "パトロール·ロボ"
 		Lc:       ygo.LC_EffectMonster, // 效果怪兽
-		//Initialize:    func(ca *ygo.Card) {}, // 初始
+
 		Level:   3,
 		La:      ygo.LA_Earth,   // 地
 		Lr:      ygo.LR_Machine, // 机械
 		Attack:  1100,
 		Defense: 900,
-
+		//Initialize:    func(ca *ygo.Card) bool {}, // 初始
 		IsValid: false,
-	}
-	cardBag.Register(co)
+	})
 
-	co = &ygo.CardOriginal{
-		/*{
-		 id: 500
-		 中文名: 橐蜚
-		 日文名: タクヒ
-		 英文名: Takuhee
-		 卡片种类: 通常怪兽
-		 卡片密码: 03170832
-		 使用限制: 无限制
-		 种族: 鸟兽
-		 属性: 风
-		 星级: 4
-		 攻击力: 1450
-		 防御力: 1000
-		 罕见度: 平卡N
-		 卡包: DL04，Booster03，Booster Chronicle，Booster R2
-		 效果: 描述：这鸟出现的时候，就是什么不幸之事发生前的征兆。
-		}
-		*/
-		Id:       500,
-		Password: "03170832",
-		Name:     "橐蜚",                   // "Takuhee"  "タクヒ"
-		Lc:       ygo.LC_OrdinaryMonster, // 通常怪兽
-		//Initialize:    func(ca *ygo.Card) {}, // 初始
-		Level:   4,
-		La:      ygo.LA_Earth,     // 风
-		Lr:      ygo.LR_WindBeast, // 鸟兽
-		Attack:  1450,
-		Defense: 1000,
-
-		IsValid: false,
-	}
-	cardBag.Register(co)
-
-	co = &ygo.CardOriginal{
+	/*64*/
+	cardBag.Register(&ygo.CardOriginal{
 		/*{
 		 id: 501
 		 调整: [勇气之沙漏]
@@ -5116,86 +2361,18 @@ func booster(cardBag *ygo.CardVersion) {
 		Password: "43530283",
 		Name:     "勇气之沙漏",              // "Hourglass of Courage"  "勇気の砂時計"
 		Lc:       ygo.LC_EffectMonster, // 效果怪兽
-		//Initialize:    func(ca *ygo.Card) {}, // 初始
+
 		Level:   4,
 		La:      ygo.LA_Earth,  // 光
 		Lr:      ygo.LR_Devine, // 天使
 		Attack:  1100,
 		Defense: 1200,
-
+		//Initialize:    func(ca *ygo.Card) bool {}, // 初始
 		IsValid: false,
-	}
-	cardBag.Register(co)
+	})
 
-	co = &ygo.CardOriginal{
-		/*{
-		 id: 502
-		 中文名: 泉之妖精
-		 日文名: 泉の妖精
-		 英文名: Fairy of the Fountain
-		 卡片种类: 通常怪兽
-		 卡片密码: 81563416
-		 使用限制: 无限制
-		 种族: 水
-		 属性: 水
-		 星级: 4
-		 攻击力: 1600
-		 防御力: 1100
-		 罕见度: 平卡N
-		 卡包: DL04，Booster04，Booster Chronicle，Booster R2
-		 效果: 描述：守护泉水的精灵。对任何污浊泉水者杀无赦。
-		}
-		*/
-		Id:       502,
-		Password: "81563416",
-		Name:     "泉之妖精",                 // "Fairy of the Fountain"  "泉の妖精"
-		Lc:       ygo.LC_OrdinaryMonster, // 通常怪兽
-		//Initialize:    func(ca *ygo.Card) {}, // 初始
-		Level:   4,
-		La:      ygo.LA_Earth, // 水
-		Lr:      ygo.LR_None,  // 水
-		Attack:  1600,
-		Defense: 1100,
-
-		IsValid: false,
-	}
-	cardBag.Register(co)
-
-	co = &ygo.CardOriginal{
-		/*{
-		 id: 503
-		 中文名: 月光少女
-		 日文名: 月明かりの乙女
-		 英文名: Maiden of the Moonlight
-		 卡片种类: 通常怪兽
-		 卡片密码: 79629370
-		 使用限制: 无限制
-		 种族: 魔法师
-		 属性: 光
-		 星级: 4
-		 攻击力: 1500
-		 防御力: 1300
-		 罕见度: 平卡N
-		 卡包: DL04，Booster04，Booster Chronicle，Booster R2
-		 效果: 描述：月亮加护的魔导士。神秘的魔法能使人看到幻觉。
-		}
-		*/
-		Id:       503,
-		Password: "79629370",
-		Name:     "月光少女",                 // "Maiden of the Moonlight"  "月明かりの乙女"
-		Lc:       ygo.LC_OrdinaryMonster, // 通常怪兽
-		//Initialize:    func(ca *ygo.Card) {}, // 初始
-		Level:   4,
-		La:      ygo.LA_Earth,       // 光
-		Lr:      ygo.LR_SpellCaster, // 魔法师
-		Attack:  1500,
-		Defense: 1300,
-
-		IsValid: false,
-	}
-	cardBag.Register(co)
-
-	co = &ygo.CardOriginal{
+	/*65*/
+	cardBag.Register(&ygo.CardOriginal{
 		/*{
 		 id: 504
 		 调整: [天使的施舍]
@@ -5222,13 +2399,13 @@ func booster(cardBag *ygo.CardVersion) {
 		Password: "79571449",
 		Name:     "天使的施舍",              // "Graceful Charity"  "天使の施し"
 		Lc:       ygo.LC_OrdinaryMagic, // 通常魔法
-		//Initialize:    func(ca *ygo.Card) {}, // 初始
 
+		//Initialize:    func(ca *ygo.Card) bool {}, // 初始
 		IsValid: false,
-	}
-	cardBag.Register(co)
+	})
 
-	co = &ygo.CardOriginal{
+	/*66*/
+	cardBag.Register(&ygo.CardOriginal{
 		/*{
 		 id: 505
 		 调整: [来自墓场的呼声]
@@ -5253,115 +2430,13 @@ func booster(cardBag *ygo.CardVersion) {
 		Password: "16970158",
 		Name:     "来自墓场的呼声",           // "Call of the Grave"  "墓場からの呼び声"
 		Lc:       ygo.LC_OrdinaryTrap, // 通常陷阱
-		//Initialize:    func(ca *ygo.Card) {}, // 初始
 
+		//Initialize:    func(ca *ygo.Card) bool {}, // 初始
 		IsValid: false,
-	}
-	cardBag.Register(co)
+	})
 
-	co = &ygo.CardOriginal{
-		/*{
-		 id: 506
-		 中文名: 双头恐龙王
-		 日文名: 二頭を持つキング·レックス
-		 英文名: Two-Headed King Rex
-		 卡片种类: 通常怪兽
-		 卡片密码: 94119974
-		 使用限制: 无限制
-		 种族: 恐龙
-		 属性: 地
-		 星级: 4
-		 攻击力: 1600
-		 防御力: 1200
-		 罕见度: 平卡N，金字UR，爆闪PR
-		 卡包: BE02，DL04，Booster05，Booster Chronicle，Booster R3，TP19
-		 效果: 描述：恐龙族中的强力怪兽，两只头同时攻击。
-		}
-		*/
-		Id:       506,
-		Password: "94119974",
-		Name:     "双头恐龙王",                // "Two-Headed King Rex"  "二頭を持つキング·レックス"
-		Lc:       ygo.LC_OrdinaryMonster, // 通常怪兽
-		//Initialize:    func(ca *ygo.Card) {}, // 初始
-		Level:   4,
-		La:      ygo.LA_Earth,    // 地
-		Lr:      ygo.LR_Dinosaur, // 恐龙
-		Attack:  1600,
-		Defense: 1200,
-
-		IsValid: false,
-	}
-	cardBag.Register(co)
-
-	co = &ygo.CardOriginal{
-		/*{
-		 id: 507
-		 中文名: 海龙神
-		 日文名: 海竜神
-		 英文名: Kairyu-Shin
-		 卡片种类: 通常怪兽
-		 卡片密码: 76634149
-		 使用限制: 无限制
-		 种族: 海龙
-		 属性: 水
-		 星级: 5
-		 攻击力: 1800
-		 防御力: 1500
-		 罕见度: 平卡N
-		 卡包: DL04，Booster06，Booster Chronicle，Booster R3
-		 效果: 描述：被称为海洋之主的海龙。掀起海啸吞噬一切。
-		}
-		*/
-		Id:       507,
-		Password: "76634149",
-		Name:     "海龙神",                  // "Kairyu-Shin"  "海竜神"
-		Lc:       ygo.LC_OrdinaryMonster, // 通常怪兽
-		//Initialize:    func(ca *ygo.Card) {}, // 初始
-		Level:   5,
-		La:      ygo.LA_Earth,      // 水
-		Lr:      ygo.LR_Seaserpent, // 海龙
-		Attack:  1800,
-		Defense: 1500,
-
-		IsValid: false,
-	}
-	cardBag.Register(co)
-
-	co = &ygo.CardOriginal{
-		/*{
-		 id: 508
-		 中文名: 龙僵尸
-		 日文名: ドラゴン·ゾンビ
-		 英文名: Dragon Zombie
-		 卡片种类: 通常怪兽
-		 卡片密码: 66672569
-		 使用限制: 无限制
-		 种族: 不死
-		 属性: 暗
-		 星级: 3
-		 攻击力: 1600
-		 防御力: 0
-		 罕见度: 平卡N
-		 卡包: EX-R(EX)，DL04，Booster05，Booster Chronicle，Booster R3
-		 效果: 描述：被魔力唤醒的龙，吐出的气息能使物体腐烂。
-		}
-		*/
-		Id:       508,
-		Password: "66672569",
-		Name:     "龙僵尸",                  // "Dragon Zombie"  "ドラゴン·ゾンビ"
-		Lc:       ygo.LC_OrdinaryMonster, // 通常怪兽
-		//Initialize:    func(ca *ygo.Card) {}, // 初始
-		Level:   3,
-		La:      ygo.LA_Earth,  // 暗
-		Lr:      ygo.LR_Zombie, // 不死
-		Attack:  1600,
-		Defense: 0,
-
-		IsValid: false,
-	}
-	cardBag.Register(co)
-
-	co = &ygo.CardOriginal{
+	/*67*/
+	cardBag.Register(&ygo.CardOriginal{
 		/*{
 		 id: 509
 		 调整: [心眼之女神]
@@ -5395,52 +2470,18 @@ func booster(cardBag *ygo.CardVersion) {
 		Password: "53493204",
 		Name:     "心眼之女神",              // "Goddess with the Third Eye"  "心眼の女神"
 		Lc:       ygo.LC_EffectMonster, // 效果怪兽
-		//Initialize:    func(ca *ygo.Card) {}, // 初始
+
 		Level:   4,
 		La:      ygo.LA_Earth,  // 光
 		Lr:      ygo.LR_Devine, // 天使
 		Attack:  1200,
 		Defense: 1000,
-
+		//Initialize:    func(ca *ygo.Card) bool {}, // 初始
 		IsValid: false,
-	}
-	cardBag.Register(co)
+	})
 
-	co = &ygo.CardOriginal{
-		/*{
-		 id: 510
-		 中文名: 神灯魔人
-		 日文名: ランプの魔人
-		 英文名: Lord of the Lamp
-		 卡片种类: 通常怪兽
-		 卡片密码: 99510761
-		 使用限制: 无限制
-		 种族: 恶魔
-		 属性: 暗
-		 星级: 4
-		 攻击力: 1400
-		 防御力: 1200
-		 罕见度: 平卡N
-		 卡包: BE02，DL04，Booster05，Booster Chronicle，Booster R3
-		 效果: 描述：从神灯里出现的魔灵，服从召唤者的意志。
-		}
-		*/
-		Id:       510,
-		Password: "99510761",
-		Name:     "神灯魔人",                 // "Lord of the Lamp"  "ランプの魔人"
-		Lc:       ygo.LC_OrdinaryMonster, // 通常怪兽
-		//Initialize:    func(ca *ygo.Card) {}, // 初始
-		Level:   4,
-		La:      ygo.LA_Earth, // 暗
-		Lr:      ygo.LR_Fiend, // 恶魔
-		Attack:  1400,
-		Defense: 1200,
-
-		IsValid: false,
-	}
-	cardBag.Register(co)
-
-	co = &ygo.CardOriginal{
+	/*68*/
+	cardBag.Register(&ygo.CardOriginal{
 		/*{
 		 id: 511
 		 调整: [沼地的魔兽王]
@@ -5474,18 +2515,18 @@ func booster(cardBag *ygo.CardVersion) {
 		Password: "99426834",
 		Name:     "沼地的魔兽王",             // "Beastking of the Swamps"  "沼地の魔獣王"
 		Lc:       ygo.LC_EffectMonster, // 效果怪兽
-		//Initialize:    func(ca *ygo.Card) {}, // 初始
+
 		Level:   4,
 		La:      ygo.LA_Earth, // 水
 		Lr:      ygo.LR_None,  // 水
 		Attack:  1000,
 		Defense: 1100,
-
+		//Initialize:    func(ca *ygo.Card) bool {}, // 初始
 		IsValid: false,
-	}
-	cardBag.Register(co)
+	})
 
-	co = &ygo.CardOriginal{
+	/*69*/
+	cardBag.Register(&ygo.CardOriginal{
 		/*{
 		 id: 512
 		 调整: [破坏神 瓦沙克]
@@ -5519,18 +2560,18 @@ func booster(cardBag *ygo.CardVersion) {
 		Password: "50259460",
 		Name:     "破坏神 瓦沙克",            // "Versago the Destroyer"  "破壊神 ヴァサーゴ"
 		Lc:       ygo.LC_EffectMonster, // 效果怪兽
-		//Initialize:    func(ca *ygo.Card) {}, // 初始
+
 		Level:   3,
 		La:      ygo.LA_Earth, // 暗
 		Lr:      ygo.LR_Fiend, // 恶魔
 		Attack:  1100,
 		Defense: 900,
-
+		//Initialize:    func(ca *ygo.Card) bool {}, // 初始
 		IsValid: false,
-	}
-	cardBag.Register(co)
+	})
 
-	co = &ygo.CardOriginal{
+	/*70*/
+	cardBag.Register(&ygo.CardOriginal{
 		/*{
 		 id: 513
 		 调整: [眼球怪]
@@ -5561,18 +2602,18 @@ func booster(cardBag *ygo.CardVersion) {
 		Password: "84133008",
 		Name:     "眼球怪",                // "Monster Eye"  "モンスター·アイ"
 		Lc:       ygo.LC_EffectMonster, // 效果怪兽
-		//Initialize:    func(ca *ygo.Card) {}, // 初始
+
 		Level:   1,
 		La:      ygo.LA_Earth, // 暗
 		Lr:      ygo.LR_Fiend, // 恶魔
 		Attack:  250,
 		Defense: 350,
-
+		//Initialize:    func(ca *ygo.Card) bool {}, // 初始
 		IsValid: false,
-	}
-	cardBag.Register(co)
+	})
 
-	co = &ygo.CardOriginal{
+	/*71*/
+	cardBag.Register(&ygo.CardOriginal{
 		/*{
 		 id: 514
 		 调整: [机械王]
@@ -5602,18 +2643,18 @@ func booster(cardBag *ygo.CardVersion) {
 		Password: "46700124",
 		Name:     "机械王",                // "Machine King"  "機械王"
 		Lc:       ygo.LC_EffectMonster, // 效果怪兽
-		//Initialize:    func(ca *ygo.Card) {}, // 初始
+
 		Level:   6,
 		La:      ygo.LA_Earth,   // 地
 		Lr:      ygo.LR_Machine, // 机械
 		Attack:  2200,
 		Defense: 2000,
-
+		//Initialize:    func(ca *ygo.Card) bool {}, // 初始
 		IsValid: false,
-	}
-	cardBag.Register(co)
+	})
 
-	co = &ygo.CardOriginal{
+	/*72*/
+	cardBag.Register(&ygo.CardOriginal{
 		/*{
 		 id: 515
 		 调整: [恶魔科学怪人]
@@ -5645,18 +2686,18 @@ func booster(cardBag *ygo.CardVersion) {
 		Password: "69015963",
 		Name:     "恶魔科学怪人",             // "Cyber-Stein"  "デビル·フランケン"
 		Lc:       ygo.LC_EffectMonster, // 效果怪兽
-		//Initialize:    func(ca *ygo.Card) {}, // 初始
+
 		Level:   2,
 		La:      ygo.LA_Earth,   // 暗
 		Lr:      ygo.LR_Machine, // 机械
 		Attack:  700,
 		Defense: 500,
-
+		//Initialize:    func(ca *ygo.Card) bool {}, // 初始
 		IsValid: false,
-	}
-	cardBag.Register(co)
+	})
 
-	co = &ygo.CardOriginal{
+	/*73*/
+	cardBag.Register(&ygo.CardOriginal{
 		/*{
 		 id: 516
 		 调整: [针球]
@@ -5686,18 +2727,18 @@ func booster(cardBag *ygo.CardVersion) {
 		Password: "94230224",
 		Name:     "针球",                 // "Needle Ball"  "ニードル·ボール"
 		Lc:       ygo.LC_EffectMonster, // 效果怪兽
-		//Initialize:    func(ca *ygo.Card) {}, // 初始
+
 		Level:   2,
 		La:      ygo.LA_Earth, // 暗
 		Lr:      ygo.LR_Fiend, // 恶魔
 		Attack:  750,
 		Defense: 700,
-
+		//Initialize:    func(ca *ygo.Card) bool {}, // 初始
 		IsValid: false,
-	}
-	cardBag.Register(co)
+	})
 
-	co = &ygo.CardOriginal{
+	/*74*/
+	cardBag.Register(&ygo.CardOriginal{
 		/*{
 		 id: 517
 		 调整: [杀龙者]
@@ -5729,18 +2770,18 @@ func booster(cardBag *ygo.CardVersion) {
 		Password: "28563545",
 		Name:     "杀龙者",                // "Dragon Seeker"  "竜殺者"
 		Lc:       ygo.LC_EffectMonster, // 效果怪兽
-		//Initialize:    func(ca *ygo.Card) {}, // 初始
+
 		Level:   6,
 		La:      ygo.LA_Earth, // 暗
 		Lr:      ygo.LR_Fiend, // 恶魔
 		Attack:  2000,
 		Defense: 2100,
-
+		//Initialize:    func(ca *ygo.Card) bool {}, // 初始
 		IsValid: false,
-	}
-	cardBag.Register(co)
+	})
 
-	co = &ygo.CardOriginal{
+	/*75*/
+	cardBag.Register(&ygo.CardOriginal{
 		/*{
 		 id: 518
 		 调整: [针虫]
@@ -5772,18 +2813,18 @@ func booster(cardBag *ygo.CardVersion) {
 		Password: "81843628",
 		Name:     "针虫",                 // "Needle Worm"  "ニードルワーム"
 		Lc:       ygo.LC_EffectMonster, // 效果怪兽
-		//Initialize:    func(ca *ygo.Card) {}, // 初始
+
 		Level:   2,
 		La:      ygo.LA_Earth,  // 地
 		Lr:      ygo.LR_Insect, // 昆虫
 		Attack:  750,
 		Defense: 600,
-
+		//Initialize:    func(ca *ygo.Card) bool {}, // 初始
 		IsValid: false,
-	}
-	cardBag.Register(co)
+	})
 
-	co = &ygo.CardOriginal{
+	/*76*/
+	cardBag.Register(&ygo.CardOriginal{
 		/*{
 		 id: 519
 		 调整: [二重身]
@@ -5815,18 +2856,18 @@ func booster(cardBag *ygo.CardVersion) {
 		Password: "61831093",
 		Name:     "二重身",                // "Greenkappa"  "ドッペルゲンガー"
 		Lc:       ygo.LC_EffectMonster, // 效果怪兽
-		//Initialize:    func(ca *ygo.Card) {}, // 初始
+
 		Level:   3,
 		La:      ygo.LA_Earth,   // 暗
 		Lr:      ygo.LR_Warrior, // 战士
 		Attack:  650,
 		Defense: 900,
-
+		//Initialize:    func(ca *ygo.Card) bool {}, // 初始
 		IsValid: false,
-	}
-	cardBag.Register(co)
+	})
 
-	co = &ygo.CardOriginal{
+	/*77*/
+	cardBag.Register(&ygo.CardOriginal{
 		/*{
 		 id: 520
 		 调整: [变形壶]
@@ -5858,18 +2899,18 @@ func booster(cardBag *ygo.CardVersion) {
 		Password: "33508719",
 		Name:     "变形壶",                // "Morphing Jar"  "メタモルポット"
 		Lc:       ygo.LC_EffectMonster, // 效果怪兽
-		//Initialize:    func(ca *ygo.Card) {}, // 初始
+
 		Level:   2,
 		La:      ygo.LA_Earth, // 地
 		Lr:      ygo.LR_Rock,  // 岩石
 		Attack:  700,
 		Defense: 600,
-
+		//Initialize:    func(ca *ygo.Card) bool {}, // 初始
 		IsValid: false,
-	}
-	cardBag.Register(co)
+	})
 
-	co = &ygo.CardOriginal{
+	/*78*/
+	cardBag.Register(&ygo.CardOriginal{
 		/*{
 		 id: 521
 		 调整: [企鹅士兵]
@@ -5900,18 +2941,18 @@ func booster(cardBag *ygo.CardVersion) {
 		Password: "93920745",
 		Name:     "企鹅士兵",               // "Penguin Soldier"  "ペンギン·ソルジャー"
 		Lc:       ygo.LC_EffectMonster, // 效果怪兽
-		//Initialize:    func(ca *ygo.Card) {}, // 初始
+
 		Level:   2,
 		La:      ygo.LA_Earth, // 水
 		Lr:      ygo.LR_None,  // 水
 		Attack:  750,
 		Defense: 500,
-
+		//Initialize:    func(ca *ygo.Card) bool {}, // 初始
 		IsValid: false,
-	}
-	cardBag.Register(co)
+	})
 
-	co = &ygo.CardOriginal{
+	/*79*/
+	cardBag.Register(&ygo.CardOriginal{
 		/*{
 		 id: 522
 		 中文名: 水陆两用战斗艇
@@ -5934,18 +2975,18 @@ func booster(cardBag *ygo.CardVersion) {
 		Password: "40173854",
 		Name:     "水陆两用战斗艇",            // "Amphibious Bugroth"  "水陸両用バグロス"
 		Lc:       ygo.LC_FusionMonster, // 融合怪兽
-		//Initialize:    func(ca *ygo.Card) {}, // 初始
+
 		Level:   5,
 		La:      ygo.LA_Earth, // 水
 		Lr:      ygo.LR_None,  // 水
 		Attack:  1850,
 		Defense: 1300,
-
+		//Initialize:    func(ca *ygo.Card) bool {}, // 初始
 		IsValid: false,
-	}
-	cardBag.Register(co)
+	})
 
-	co = &ygo.CardOriginal{
+	/*80*/
+	cardBag.Register(&ygo.CardOriginal{
 		/*{
 		 id: 523
 		 调整: [幻想绵羊]
@@ -5979,18 +3020,18 @@ func booster(cardBag *ygo.CardVersion) {
 		Password: "30451366",
 		Name:     "幻想绵羊",               // "Mystical Sheep #1"  "イリュージョン·シープ"
 		Lc:       ygo.LC_EffectMonster, // 效果怪兽
-		//Initialize:    func(ca *ygo.Card) {}, // 初始
+
 		Level:   3,
 		La:      ygo.LA_Earth, // 地
 		Lr:      ygo.LR_Beast, // 兽
 		Attack:  1150,
 		Defense: 900,
-
+		//Initialize:    func(ca *ygo.Card) bool {}, // 初始
 		IsValid: false,
-	}
-	cardBag.Register(co)
+	})
 
-	co = &ygo.CardOriginal{
+	/*81*/
+	cardBag.Register(&ygo.CardOriginal{
 		/*{
 		 id: 524
 		 调整: [王宫的通告]
@@ -6016,13 +3057,13 @@ func booster(cardBag *ygo.CardVersion) {
 		Password: "51452091",
 		Name:     "王宫的通告",             // "Royal Decree"  "王宮のお触れ"
 		Lc:       ygo.LC_SustainsTrap, // 永续陷阱
-		//Initialize:    func(ca *ygo.Card) {}, // 初始
 
+		//Initialize:    func(ca *ygo.Card) bool {}, // 初始
 		IsValid: false,
-	}
-	cardBag.Register(co)
+	})
 
-	co = &ygo.CardOriginal{
+	/*82*/
+	cardBag.Register(&ygo.CardOriginal{
 		/*{
 		 id: 525
 		 调整: [魔女狩猎]
@@ -6046,13 +3087,13 @@ func booster(cardBag *ygo.CardVersion) {
 		Password: "90330453",
 		Name:     "魔女狩猎",               // "Last Day of Witch"  "魔女狩り"
 		Lc:       ygo.LC_OrdinaryMagic, // 通常魔法
-		//Initialize:    func(ca *ygo.Card) {}, // 初始
 
+		//Initialize:    func(ca *ygo.Card) bool {}, // 初始
 		IsValid: false,
-	}
-	cardBag.Register(co)
+	})
 
-	co = &ygo.CardOriginal{
+	/*83*/
+	cardBag.Register(&ygo.CardOriginal{
 		/*{
 		 id: 526
 		 调整: [恶魔祓除]
@@ -6077,13 +3118,13 @@ func booster(cardBag *ygo.CardVersion) {
 		Password: "26725158",
 		Name:     "恶魔祓除",               // "Exile of the Wicked"  "悪魔払い"
 		Lc:       ygo.LC_OrdinaryMagic, // 通常魔法
-		//Initialize:    func(ca *ygo.Card) {}, // 初始
 
+		//Initialize:    func(ca *ygo.Card) bool {}, // 初始
 		IsValid: false,
-	}
-	cardBag.Register(co)
+	})
 
-	co = &ygo.CardOriginal{
+	/*84*/
+	cardBag.Register(&ygo.CardOriginal{
 		/*{
 		 id: 527
 		 调整: [魔力之棘]
@@ -6112,13 +3153,13 @@ func booster(cardBag *ygo.CardVersion) {
 		Password: "53119267",
 		Name:     "魔力之棘",              // "Magical Thorn"  "魔力の棘"
 		Lc:       ygo.LC_SustainsTrap, // 永续陷阱
-		//Initialize:    func(ca *ygo.Card) {}, // 初始
 
+		//Initialize:    func(ca *ygo.Card) bool {}, // 初始
 		IsValid: false,
-	}
-	cardBag.Register(co)
+	})
 
-	co = &ygo.CardOriginal{
+	/*85*/
+	cardBag.Register(&ygo.CardOriginal{
 		/*{
 		 id: 528
 		 调整: [革命]
@@ -6144,13 +3185,13 @@ func booster(cardBag *ygo.CardVersion) {
 		Password: "99518961",
 		Name:     "革命",                 // "Restructer Revolution"  "革命"
 		Lc:       ygo.LC_OrdinaryMagic, // 通常魔法
-		//Initialize:    func(ca *ygo.Card) {}, // 初始
 
+		//Initialize:    func(ca *ygo.Card) bool {}, // 初始
 		IsValid: false,
-	}
-	cardBag.Register(co)
+	})
 
-	co = &ygo.CardOriginal{
+	/*86*/
+	cardBag.Register(&ygo.CardOriginal{
 		/*{
 		 id: 529
 		 调整: [融合贤者]
@@ -6175,13 +3216,13 @@ func booster(cardBag *ygo.CardVersion) {
 		Password: "26902560",
 		Name:     "融合贤者",               // "Fusion Sage"  "融合賢者"
 		Lc:       ygo.LC_OrdinaryMagic, // 通常魔法
-		//Initialize:    func(ca *ygo.Card) {}, // 初始
 
+		//Initialize:    func(ca *ygo.Card) bool {}, // 初始
 		IsValid: false,
-	}
-	cardBag.Register(co)
+	})
 
-	co = &ygo.CardOriginal{
+	/*87*/
+	cardBag.Register(&ygo.CardOriginal{
 		/*{
 		 id: 530
 		 调整: [绝对防御将军]<絶対防御将軍>
@@ -6213,15 +3254,2799 @@ func booster(cardBag *ygo.CardVersion) {
 		Password: "75372290",
 		Name:     "绝对防御将军",             // "Total Defense Shogun"  "絶対防御将軍"
 		Lc:       ygo.LC_EffectMonster, // 效果怪兽
-		//Initialize:    func(ca *ygo.Card) {}, // 初始
+
 		Level:   6,
 		La:      ygo.LA_Earth,   // 暗
 		Lr:      ygo.LR_Warrior, // 战士
 		Attack:  1550,
 		Defense: 2500,
-
+		//Initialize:    func(ca *ygo.Card) bool {}, // 初始
 		IsValid: false,
-	}
-	cardBag.Register(co)
+	})
+
+	/*88*/
+	cardBag.Register(&ygo.CardOriginal{
+		/*{
+		 id: 1227
+		 中文名: 灯之魔精
+		 日文名: ランプの魔精·ラ·ジーン
+		 英文名: La Jinn the Mystical Genie of the Lamp
+		 卡片种类: 通常怪兽
+		 卡片密码: 97590747
+		 使用限制: 无限制
+		 种族: 恶魔
+		 属性: 暗
+		 星级: 4
+		 攻击力: 1800
+		 防御力: 1000
+		 罕见度: 平卡N，金字UR
+		 卡包: LE03，EX-R(EX)，Booster04，Booster R2，TP10，DPKB，KA，SK2
+		 效果: 描述：听从呼唤他的主人的任何要求及命令的灯之精灵。
+		}
+		*/
+		Id:       1227,
+		Password: "97590747",
+		Name:     "灯之魔精",                 // "La Jinn the Mystical Genie of the Lamp"  "ランプの魔精·ラ·ジーン"
+		Lc:       ygo.LC_OrdinaryMonster, // 通常怪兽
+		Level:    4,
+		La:       ygo.LA_Earth, // 暗
+		Lr:       ygo.LR_Fiend, // 恶魔
+		Attack:   1800,
+		Defense:  1000,
+		IsValid:  true,
+	})
+
+	/*89*/
+	cardBag.Register(&ygo.CardOriginal{
+		/*{
+		 id: 144
+		 中文名: 暗黑骑士 盖亚
+		 日文名: 暗黒騎士ガイア
+		 英文名: Gaia The Fierce Knight
+		 卡片种类: 通常怪兽
+		 卡片密码: 06368038
+		 使用限制: 无限制
+		 种族: 战士
+		 属性: 地
+		 星级: 7
+		 攻击力: 2300
+		 防御力: 2100
+		 罕见度: 金字UR，银字R，立体UTR，平卡N
+		 卡包: LB，BE01，LE02，PH，EX-R(EX)，VOL01，DL02，Booster R1，15AY
+		 效果: 描述：骑着风驰电掣般的马的骑士。当心突进攻击。
+		}
+		*/
+		Id:       144,
+		Password: "06368038",
+		Name:     "暗黑骑士 盖亚",              // "Gaia The Fierce Knight"  "暗黒騎士ガイア"
+		Lc:       ygo.LC_OrdinaryMonster, // 通常怪兽
+		Level:    7,
+		La:       ygo.LA_Earth,   // 地
+		Lr:       ygo.LR_Warrior, // 战士
+		Attack:   2300,
+		Defense:  2100,
+		IsValid:  true,
+	})
+
+	/*90*/
+	cardBag.Register(&ygo.CardOriginal{
+		/*{
+		 id: 149
+		 中文名: 地狱的裁判
+		 日文名: 地獄の裁判
+		 英文名: Trial of Nightmare
+		 卡片种类: 通常怪兽
+		 卡片密码: 77827521
+		 使用限制: 无限制
+		 种族: 恶魔
+		 属性: 暗
+		 星级: 4
+		 攻击力: 1300
+		 防御力: 900
+		 罕见度: 平卡N，金碎USR
+		 卡包: LB，DL02，Starter Box，Booster R1
+		 效果: 描述：将敌人封入棺材里。然后由地狱使者下达判决。
+		}
+		*/
+		Id:       149,
+		Password: "77827521",
+		Name:     "地狱的裁判",                // "Trial of Nightmare"  "地獄の裁判"
+		Lc:       ygo.LC_OrdinaryMonster, // 通常怪兽
+		Level:    4,
+		La:       ygo.LA_Earth, // 暗
+		Lr:       ygo.LR_Fiend, // 恶魔
+		Attack:   1300,
+		Defense:  900,
+		IsValid:  true,
+	})
+
+	/*91*/
+	cardBag.Register(&ygo.CardOriginal{
+		/*{
+		 id: 150
+		 中文名: 第13人的埋葬者
+		 日文名: １３人目の埋葬者
+		 英文名: The 13th Grave
+		 卡片种类: 通常怪兽
+		 卡片密码: 00032864
+		 使用限制: 无限制
+		 种族: 不死
+		 属性: 暗
+		 星级: 3
+		 攻击力: 1200
+		 防御力: 900
+		 罕见度: 平卡N，金碎USR
+		 卡包: LB，DL02，Starter Box，Booster R1
+		 效果: 描述：原本没有任何人的一零三号墓地突然出现的丧尸。
+		}
+		*/
+		Id:       150,
+		Password: "00032864",
+		Name:     "第13人的埋葬者",             // "The 13th Grave"  "１３人目の埋葬者"
+		Lc:       ygo.LC_OrdinaryMonster, // 通常怪兽
+		Level:    3,
+		La:       ygo.LA_Earth,  // 暗
+		Lr:       ygo.LR_Zombie, // 不死
+		Attack:   1200,
+		Defense:  900,
+		IsValid:  true,
+	})
+
+	/*92*/
+	cardBag.Register(&ygo.CardOriginal{
+		/*{
+		 id: 152
+		 中文名: 深渊的冥王
+		 日文名: 深淵の冥王
+		 英文名: Dark King of the Abyss
+		 卡片种类: 通常怪兽
+		 卡片密码: 53375573
+		 使用限制: 无限制
+		 种族: 恶魔
+		 属性: 暗
+		 星级: 3
+		 攻击力: 1200
+		 防御力: 800
+		 罕见度: 平卡N，金碎USR
+		 卡包: LB，BE01，DL02，Starter Box，Booster R1
+		 效果: 描述：冥界之王，听说以前有着支配所有黑暗力量的能力。
+		}
+		*/
+		Id:       152,
+		Password: "53375573",
+		Name:     "深渊的冥王",                // "Dark King of the Abyss"  "深淵の冥王"
+		Lc:       ygo.LC_OrdinaryMonster, // 通常怪兽
+		Level:    3,
+		La:       ygo.LA_Earth, // 暗
+		Lr:       ygo.LR_Fiend, // 恶魔
+		Attack:   1200,
+		Defense:  800,
+		IsValid:  true,
+	})
+
+	/*93*/
+	cardBag.Register(&ygo.CardOriginal{
+		/*{
+		 id: 154
+		 中文名: 水魔道士
+		 日文名: アクア·マドール
+		 英文名: Aqua Madoor
+		 卡片种类: 通常怪兽
+		 卡片密码: 85639257
+		 使用限制: 无限制
+		 种族: 魔法师
+		 属性: 水
+		 星级: 4
+		 攻击力: 1200
+		 防御力: 2000
+		 罕见度: 金碎USR，平罕NR，平卡N
+		 卡包: LB，BE01，DL02，Starter Box，Booster R1
+		 效果: 描述：操纵水的魔法师。造出厚重的水墙压垮敌人。
+		}
+		*/
+		Id:       154,
+		Password: "85639257",
+		Name:     "水魔道士",                 // "Aqua Madoor"  "アクア·マドール"
+		Lc:       ygo.LC_OrdinaryMonster, // 通常怪兽
+		Level:    4,
+		La:       ygo.LA_Earth,       // 水
+		Lr:       ygo.LR_SpellCaster, // 魔法师
+		Attack:   1200,
+		Defense:  2000,
+		IsValid:  true,
+	})
+
+	/*94*/
+	cardBag.Register(&ygo.CardOriginal{
+		/*{
+		 id: 229
+		 中文名: 恶魔召唤
+		 日文名: デーモンの召喚
+		 英文名: Summoned Skull
+		 卡片种类: 通常怪兽
+		 卡片密码: 70781052
+		 使用限制: 无限制
+		 种族: 恶魔
+		 属性: 暗
+		 星级: 6
+		 攻击力: 2500
+		 防御力: 1200
+		 罕见度: 平卡N，金字UR，面闪SR，银字R，立体UTR，爆闪PR
+		 卡包: RB，BE01，LE03，SC，EX-R(EX)，VOL04，DL02，Booster R3，YAP01，DPYG，DT09，15AY
+		 效果: 描述：使用黑暗力量，迷惑人心的恶魔。在恶魔族中以相当强大的力量著称。
+		}
+		*/
+		Id:       229,
+		Password: "70781052",
+		Name:     "恶魔召唤",                 // "Summoned Skull"  "デーモンの召喚"
+		Lc:       ygo.LC_OrdinaryMonster, // 通常怪兽
+		Level:    6,
+		La:       ygo.LA_Earth, // 暗
+		Lr:       ygo.LR_Fiend, // 恶魔
+		Attack:   2500,
+		Defense:  1200,
+		IsValid:  true,
+	})
+
+	/*95*/
+	cardBag.Register(&ygo.CardOriginal{
+		/*{
+		 id: 2305
+		 中文名: 暗杀者
+		 日文名: アサシン
+		 英文名: Ansatsu
+		 卡片种类: 通常怪兽
+		 卡片密码: 48365709
+		 使用限制: 无限制
+		 种族: 战士
+		 属性: 地
+		 星级: 5
+		 攻击力: 1700
+		 防御力: 1200
+		 罕见度: 平卡N，银字R
+		 卡包: EX-R(EX)，VOL03，Booster02
+		 效果: 描述：能在黑暗中悄然无声地靠近敌人，精通暗杀的战士。
+		}
+		*/
+		Id:       2305,
+		Password: "48365709",
+		Name:     "暗杀者",                  // "Ansatsu"  "アサシン"
+		Lc:       ygo.LC_OrdinaryMonster, // 通常怪兽
+		Level:    5,
+		La:       ygo.LA_Earth,   // 地
+		Lr:       ygo.LR_Warrior, // 战士
+		Attack:   1700,
+		Defense:  1200,
+		IsValid:  true,
+	})
+
+	/*96*/
+	cardBag.Register(&ygo.CardOriginal{
+		/*{
+		 id: 2306
+		 中文名: 卡库塔斯
+		 日文名: カクタス
+		 英文名: Akihiron
+		 卡片种类: 通常怪兽
+		 卡片密码: 36904469
+		 使用限制: 无限制
+		 种族: 水
+		 属性: 水
+		 星级: 5
+		 攻击力: 1700
+		 防御力: 1400
+		 罕见度: 银字R
+		 卡包: VOL03，Booster02
+		 效果: 描述：潜在水中形状不明的怪兽。
+		}
+		*/
+		Id:       2306,
+		Password: "36904469",
+		Name:     "卡库塔斯",                 // "Akihiron"  "カクタス"
+		Lc:       ygo.LC_OrdinaryMonster, // 通常怪兽
+		Level:    5,
+		La:       ygo.LA_Earth, // 水
+		Lr:       ygo.LR_None,  // 水
+		Attack:   1700,
+		Defense:  1400,
+		IsValid:  true,
+	})
+
+	/*97*/
+	cardBag.Register(&ygo.CardOriginal{
+		/*{
+		 id: 2307
+		 中文名: 机械巨兵
+		 日文名: 機械の巨兵
+		 英文名: Giant Mech-soldier
+		 卡片种类: 通常怪兽
+		 卡片密码: 72299832
+		 使用限制: 无限制
+		 种族: 机械
+		 属性: 地
+		 星级: 6
+		 攻击力: 1750
+		 防御力: 1900
+		 罕见度: 银字R
+		 卡包: VOL03，Booster02
+		 效果: 描述：巨斧的一击可以割开大地。
+		}
+		*/
+		Id:       2307,
+		Password: "72299832",
+		Name:     "机械巨兵",                 // "Giant Mech-soldier"  "機械の巨兵"
+		Lc:       ygo.LC_OrdinaryMonster, // 通常怪兽
+		Level:    6,
+		La:       ygo.LA_Earth,   // 地
+		Lr:       ygo.LR_Machine, // 机械
+		Attack:   1750,
+		Defense:  1900,
+		IsValid:  true,
+	})
+
+	/*98*/
+	cardBag.Register(&ygo.CardOriginal{
+		/*{
+		 id: 2308
+		 中文名: 神圣人偶
+		 日文名: ホーリー·ドール
+		 英文名: Rogue Doll
+		 卡片种类: 通常怪兽
+		 卡片密码: 91939608
+		 使用限制: 无限制
+		 种族: 魔法师
+		 属性: 光
+		 星级: 4
+		 攻击力: 1600
+		 防御力: 1000
+		 罕见度: 银字R
+		 卡包: EX-R(EX)，VOL03，Booster02，PE
+		 效果: 描述：操纵神圣力量的人偶。在黑暗之中攻击力很强。
+		}
+		*/
+		Id:       2308,
+		Password: "91939608",
+		Name:     "神圣人偶",                 // "Rogue Doll"  "ホーリー·ドール"
+		Lc:       ygo.LC_OrdinaryMonster, // 通常怪兽
+		Level:    4,
+		La:       ygo.LA_Earth,       // 光
+		Lr:       ygo.LR_SpellCaster, // 魔法师
+		Attack:   1600,
+		Defense:  1000,
+		IsValid:  true,
+	})
+
+	/*99*/
+	cardBag.Register(&ygo.CardOriginal{
+		/*{
+		 id: 2309
+		 中文名: 魔加农
+		 日文名: マキャノン
+		 英文名: Mabarrel
+		 卡片种类: 通常怪兽
+		 卡片密码: 98795934
+		 使用限制: 无限制
+		 种族: 恶魔
+		 属性: 暗
+		 星级: 5
+		 攻击力: 1700
+		 防御力: 1400
+		 罕见度: 银字R，平卡N
+		 卡包: VOL03，Booster02
+		 效果: 描述：大炮状的恶魔。以飞快的速度发射眼球弹。
+		}
+		*/
+		Id:       2309,
+		Password: "98795934",
+		Name:     "魔加农",                  // "Mabarrel"  "マキャノン"
+		Lc:       ygo.LC_OrdinaryMonster, // 通常怪兽
+		Level:    5,
+		La:       ygo.LA_Earth, // 暗
+		Lr:       ygo.LR_Fiend, // 恶魔
+		Attack:   1700,
+		Defense:  1400,
+		IsValid:  true,
+	})
+
+	/*100*/
+	cardBag.Register(&ygo.CardOriginal{
+		/*{
+		 id: 2358
+		 中文名: 乌鸦天狗
+		 日文名: カラス天狗
+		 英文名: Crow Goblin
+		 卡片种类: 通常怪兽
+		 卡片密码: 77998771
+		 使用限制: 无限制
+		 种族: 鸟兽
+		 属性: 风
+		 星级: 5
+		 攻击力: 1850
+		 防御力: 1600
+		 罕见度: 银字R
+		 卡包: VOL05，Booster05
+		 效果: 描述：知道各种事的天狗。据说能使用神通之力。
+		}
+		*/
+		Id:       2358,
+		Password: "77998771",
+		Name:     "乌鸦天狗",                 // "Crow Goblin"  "カラス天狗"
+		Lc:       ygo.LC_OrdinaryMonster, // 通常怪兽
+		Level:    5,
+		La:       ygo.LA_Earth,     // 风
+		Lr:       ygo.LR_WindBeast, // 鸟兽
+		Attack:   1850,
+		Defense:  1600,
+		IsValid:  true,
+	})
+
+	/*101*/
+	cardBag.Register(&ygo.CardOriginal{
+		/*{
+		 id: 2359
+		 调整: （这张卡在规则上也当作「异虫」卡使用）
+		 中文名: 迷宫的蠕虫
+		 日文名: ダンジョン·ワーム
+		 英文名: Dungeon Worm
+		 卡片种类: 通常怪兽
+		 卡片密码: 51228280
+		 使用限制: 无限制
+		 种族: 昆虫
+		 属性: 地
+		 星级: 5
+		 攻击力: 1800
+		 防御力: 1500
+		 罕见度: 银字R
+		 卡包: VOL05，Booster05
+		 效果: 描述：（这张卡在规则上也当作「异虫」卡使用）潜在迷路者的地下，捕食经过此处迷路的生物。
+		}
+		*/
+		Id:       2359,
+		Password: "51228280",
+		Name:     "迷宫的蠕虫",                // "Dungeon Worm"  "ダンジョン·ワーム"
+		Lc:       ygo.LC_OrdinaryMonster, // 通常怪兽
+		Level:    5,
+		La:       ygo.LA_Earth,  // 地
+		Lr:       ygo.LR_Insect, // 昆虫
+		Attack:   1800,
+		Defense:  1500,
+		IsValid:  true,
+	})
+
+	/*102*/
+	cardBag.Register(&ygo.CardOriginal{
+		/*{
+		 id: 2360
+		 中文名: 粗暴帝王
+		 日文名: ルード·カイザー
+		 英文名: Rude Kaiser
+		 卡片种类: 通常怪兽
+		 卡片密码: 26378150
+		 使用限制: 无限制
+		 种族: 兽战士
+		 属性: 地
+		 星级: 5
+		 攻击力: 1800
+		 防御力: 1600
+		 罕见度: 银字R
+		 卡包: EX-R(EX)，VOL05，Booster05
+		 效果: 描述：双手所持的魔人斧的破坏力相当强。
+		}
+		*/
+		Id:       2360,
+		Password: "26378150",
+		Name:     "粗暴帝王",                 // "Rude Kaiser"  "ルード·カイザー"
+		Lc:       ygo.LC_OrdinaryMonster, // 通常怪兽
+		Level:    5,
+		La:       ygo.LA_Earth,       // 地
+		Lr:       ygo.LR_BeastWarror, // 兽战士
+		Attack:   1800,
+		Defense:  1600,
+		IsValid:  true,
+	})
+
+	/*103*/
+	cardBag.Register(&ygo.CardOriginal{
+		/*{
+		 id: 2445
+		 中文名: 女夜魔战士
+		 日文名: ヴィシュワ·ランディー
+		 英文名: Vishwar Randi
+		 卡片种类: 通常怪兽
+		 卡片密码: 78556320
+		 使用限制: 无限制
+		 种族: 战士
+		 属性: 暗
+		 星级: 3
+		 攻击力: 900
+		 防御力: 700
+		 罕见度: 平卡N
+		 卡包: Booster01，Booster R1
+		 效果: 描述：侍奉黑暗的女战士。将对方进行血祭是她生存的意义。
+		}
+		*/
+		Id:       2445,
+		Password: "78556320",
+		Name:     "女夜魔战士",                // "Vishwar Randi"  "ヴィシュワ·ランディー"
+		Lc:       ygo.LC_OrdinaryMonster, // 通常怪兽
+		Level:    3,
+		La:       ygo.LA_Earth,   // 暗
+		Lr:       ygo.LR_Warrior, // 战士
+		Attack:   900,
+		Defense:  700,
+		IsValid:  true,
+	})
+
+	/*104*/
+	cardBag.Register(&ygo.CardOriginal{
+		/*{
+		 id: 2446
+		 中文名: 气象控制员
+		 日文名: ウェザー·コントロール
+		 英文名: Weather Control
+		 卡片种类: 通常怪兽
+		 卡片密码: 37243151
+		 使用限制: 无限制
+		 种族: 天使
+		 属性: 光
+		 星级: 2
+		 攻击力: 600
+		 防御力: 400
+		 罕见度: 平卡N
+		 卡包: Booster01
+		 效果: 描述：可以自由操纵天气。山里的天气无常就是这家伙的杰作。
+		}
+		*/
+		Id:       2446,
+		Password: "37243151",
+		Name:     "气象控制员",                // "Weather Control"  "ウェザー·コントロール"
+		Lc:       ygo.LC_OrdinaryMonster, // 通常怪兽
+		Level:    2,
+		La:       ygo.LA_Earth,  // 光
+		Lr:       ygo.LR_Devine, // 天使
+		Attack:   600,
+		Defense:  400,
+		IsValid:  true,
+	})
+
+	/*105*/
+	cardBag.Register(&ygo.CardOriginal{
+		/*{
+		 id: 2447
+		 中文名: 水元素
+		 日文名: ウォーター·エレメント
+		 英文名: Water Element
+		 卡片种类: 通常怪兽
+		 卡片密码: 03732747
+		 使用限制: 无限制
+		 种族: 水
+		 属性: 水
+		 星级: 3
+		 攻击力: 900
+		 防御力: 700
+		 罕见度: 平卡N
+		 卡包: Booster01，Booster R1
+		 效果: 描述：住在水里的精灵。将四周用雾包围妨碍敌人的视线。
+		}
+		*/
+		Id:       2447,
+		Password: "03732747",
+		Name:     "水元素",                  // "Water Element"  "ウォーター·エレメント"
+		Lc:       ygo.LC_OrdinaryMonster, // 通常怪兽
+		Level:    3,
+		La:       ygo.LA_Earth, // 水
+		Lr:       ygo.LR_None,  // 水
+		Attack:   900,
+		Defense:  700,
+		IsValid:  true,
+	})
+
+	/*106*/
+	cardBag.Register(&ygo.CardOriginal{
+		/*{
+		 id: 2448
+		 中文名: 石像怪
+		 日文名: ガーゴイル
+		 英文名: Ryu-Kishin
+		 卡片种类: 通常怪兽
+		 卡片密码: 15303296
+		 使用限制: 无限制
+		 种族: 恶魔
+		 属性: 暗
+		 星级: 3
+		 攻击力: 1000
+		 防御力: 500
+		 罕见度: 平卡N
+		 卡包: EX-R(EX)，Booster01，Booster R1
+		 效果: 描述：使人误认为是石像，从而在黑暗之中攻击。逃跑速度也很快。
+		}
+		*/
+		Id:       2448,
+		Password: "15303296",
+		Name:     "石像怪",                  // "Ryu-Kishin"  "ガーゴイル"
+		Lc:       ygo.LC_OrdinaryMonster, // 通常怪兽
+		Level:    3,
+		La:       ygo.LA_Earth, // 暗
+		Lr:       ygo.LR_Fiend, // 恶魔
+		Attack:   1000,
+		Defense:  500,
+		IsValid:  true,
+	})
+
+	/*107*/
+	cardBag.Register(&ygo.CardOriginal{
+		/*{
+		 id: 2449
+		 中文名: 格斗战士 阿提米特
+		 日文名: 格闘戦士アルティメーター
+		 英文名: Battle Warrior
+		 卡片种类: 通常怪兽
+		 卡片密码: 55550921
+		 使用限制: 无限制
+		 种族: 战士
+		 属性: 地
+		 星级: 3
+		 攻击力: 700
+		 防御力: 1000
+		 罕见度: 平卡N，面闪SR
+		 卡包: Booster01，Booster R1，JY，TP16，NUMH
+		 效果: 描述：不使用任何武器，空手战斗的格斗战士。
+		}
+		*/
+		Id:       2449,
+		Password: "55550921",
+		Name:     "格斗战士 阿提米特",            // "Battle Warrior"  "格闘戦士アルティメーター"
+		Lc:       ygo.LC_OrdinaryMonster, // 通常怪兽
+		Level:    3,
+		La:       ygo.LA_Earth,   // 地
+		Lr:       ygo.LR_Warrior, // 战士
+		Attack:   700,
+		Defense:  1000,
+		IsValid:  true,
+	})
+
+	/*108*/
+	cardBag.Register(&ygo.CardOriginal{
+		/*{
+		 id: 2450
+		 中文名: 风之番人 精
+		 日文名: 風の番人 ジン
+		 英文名: Djinn the Watcher of the Wind
+		 卡片种类: 通常怪兽
+		 卡片密码: 97843505
+		 使用限制: 无限制
+		 种族: 魔法师
+		 属性: 风
+		 星级: 3
+		 攻击力: 700
+		 防御力: 900
+		 罕见度: 平卡N
+		 卡包: Booster01
+		 效果: 描述：操纵风并产生龙卷风与飓风吹飞周围的东西。
+		}
+		*/
+		Id:       2450,
+		Password: "97843505",
+		Name:     "风之番人 精",               // "Djinn the Watcher of the Wind"  "風の番人 ジン"
+		Lc:       ygo.LC_OrdinaryMonster, // 通常怪兽
+		Level:    3,
+		La:       ygo.LA_Earth,       // 风
+		Lr:       ygo.LR_SpellCaster, // 魔法师
+		Attack:   700,
+		Defense:  900,
+		IsValid:  true,
+	})
+
+	/*109*/
+	cardBag.Register(&ygo.CardOriginal{
+		/*{
+		 id: 2451
+		 中文名: 格洛斯
+		 日文名: グロス
+		 英文名: Twin Long Rods #1
+		 卡片种类: 通常怪兽
+		 卡片密码: 60589682
+		 使用限制: 无限制
+		 种族: 水
+		 属性: 水
+		 星级: 3
+		 攻击力: 900
+		 防御力: 700
+		 罕见度: 平卡N
+		 卡包: Booster01，Booster R1
+		 效果: 描述：用像鞭子一般长的手臂进行攻击。稍远的地方也可以攻击的到。
+		}
+		*/
+		Id:       2451,
+		Password: "60589682",
+		Name:     "格洛斯",                  // "Twin Long Rods #1"  "グロス"
+		Lc:       ygo.LC_OrdinaryMonster, // 通常怪兽
+		Level:    3,
+		La:       ygo.LA_Earth, // 水
+		Lr:       ygo.LR_None,  // 水
+		Attack:   900,
+		Defense:  700,
+		IsValid:  true,
+	})
+
+	/*110*/
+	cardBag.Register(&ygo.CardOriginal{
+		/*{
+		 id: 2452
+		 中文名: 幽灵
+		 日文名: ゴースト
+		 英文名: Phantom Ghost
+		 卡片种类: 通常怪兽
+		 卡片密码: 61201220
+		 使用限制: 无限制
+		 种族: 不死
+		 属性: 暗
+		 星级: 2
+		 攻击力: 600
+		 防御力: 800
+		 罕见度: 平卡N
+		 卡包: Booster01
+		 效果: 描述：由这个世界上不能成佛的灵魂，慢慢聚集而成的怨灵。
+		}
+		*/
+		Id:       2452,
+		Password: "61201220",
+		Name:     "幽灵",                   // "Phantom Ghost"  "ゴースト"
+		Lc:       ygo.LC_OrdinaryMonster, // 通常怪兽
+		Level:    2,
+		La:       ygo.LA_Earth,  // 暗
+		Lr:       ygo.LR_Zombie, // 不死
+		Attack:   600,
+		Defense:  800,
+		IsValid:  true,
+	})
+
+	/*111*/
+	cardBag.Register(&ygo.CardOriginal{
+		/*{
+		 id: 2453
+		 中文名: 萨塔那
+		 日文名: サターナ
+		 英文名: Phantom Dewan
+		 卡片种类: 通常怪兽
+		 卡片密码: 77603950
+		 使用限制: 无限制
+		 种族: 魔法师
+		 属性: 暗
+		 星级: 2
+		 攻击力: 700
+		 防御力: 600
+		 罕见度: 平卡N
+		 卡包: Booster01
+		 效果: 描述：诅咒敌人。可以使人动弹不得的魔法师。
+		}
+		*/
+		Id:       2453,
+		Password: "77603950",
+		Name:     "萨塔那",                  // "Phantom Dewan"  "サターナ"
+		Lc:       ygo.LC_OrdinaryMonster, // 通常怪兽
+		Level:    2,
+		La:       ygo.LA_Earth,       // 暗
+		Lr:       ygo.LR_SpellCaster, // 魔法师
+		Attack:   700,
+		Defense:  600,
+		IsValid:  true,
+	})
+
+	/*112*/
+	cardBag.Register(&ygo.CardOriginal{
+		/*{
+		 id: 2454
+		 中文名: 邪炎之翼
+		 日文名: 邪炎の翼
+		 英文名: Wings of Wicked Flame
+		 卡片种类: 通常怪兽
+		 卡片密码: 92944626
+		 使用限制: 无限制
+		 种族: 炎
+		 属性: 炎
+		 星级: 2
+		 攻击力: 700
+		 防御力: 600
+		 罕见度: 平卡N
+		 卡包: Booster01，TP17
+		 效果: 描述：原形是红黑色燃烧着的翅膀。从全身喷出火焰进行攻击。
+		}
+		*/
+		Id:       2454,
+		Password: "92944626",
+		Name:     "邪炎之翼",                 // "Wings of Wicked Flame"  "邪炎の翼"
+		Lc:       ygo.LC_OrdinaryMonster, // 通常怪兽
+		Level:    2,
+		La:       ygo.LA_None, // 炎
+		Lr:       ygo.LR_Pyro, // 炎
+		Attack:   700,
+		Defense:  600,
+		IsValid:  true,
+	})
+
+	/*113*/
+	cardBag.Register(&ygo.CardOriginal{
+		/*{
+		 id: 2455
+		 中文名: 大嘴鸟
+		 日文名: スピック
+		 英文名: Droll Bird
+		 卡片种类: 通常怪兽
+		 卡片密码: 97973387
+		 使用限制: 无限制
+		 种族: 鸟兽
+		 属性: 风
+		 星级: 2
+		 攻击力: 600
+		 防御力: 500
+		 罕见度: 平卡N
+		 卡包: Booster01
+		 效果: 描述：嘴巴非常大、大声的叫吓跑胆小的对方。
+		}
+		*/
+		Id:       2455,
+		Password: "97973387",
+		Name:     "大嘴鸟",                  // "Droll Bird"  "スピック"
+		Lc:       ygo.LC_OrdinaryMonster, // 通常怪兽
+		Level:    2,
+		La:       ygo.LA_Earth,     // 风
+		Lr:       ygo.LR_WindBeast, // 鸟兽
+		Attack:   600,
+		Defense:  500,
+		IsValid:  true,
+	})
+
+	/*114*/
+	cardBag.Register(&ygo.CardOriginal{
+		/*{
+		 id: 2456
+		 中文名: 神圣之锁
+		 日文名: 聖なる鎖
+		 英文名: Mystical Capture Chain
+		 卡片种类: 通常怪兽
+		 卡片密码: 63515678
+		 使用限制: 无限制
+		 种族: 天使
+		 属性: 光
+		 星级: 2
+		 攻击力: 700
+		 防御力: 700
+		 罕见度: 平卡N
+		 卡包: Booster01
+		 效果: 描述：据说可以用神圣的力量封锁行动的锁链。
+		}
+		*/
+		Id:       2456,
+		Password: "63515678",
+		Name:     "神圣之锁",                 // "Mystical Capture Chain"  "聖なる鎖"
+		Lc:       ygo.LC_OrdinaryMonster, // 通常怪兽
+		Level:    2,
+		La:       ygo.LA_Earth,  // 光
+		Lr:       ygo.LR_Devine, // 天使
+		Attack:   700,
+		Defense:  700,
+		IsValid:  true,
+	})
+
+	/*115*/
+	cardBag.Register(&ygo.CardOriginal{
+		/*{
+		 id: 2457
+		 中文名: 僵尸鬼灯
+		 日文名: ゾンビランプ
+		 英文名: Mech Mole Zombie
+		 卡片种类: 通常怪兽
+		 卡片密码: 63545455
+		 使用限制: 无限制
+		 种族: 不死
+		 属性: 暗
+		 星级: 2
+		 攻击力: 500
+		 防御力: 400
+		 罕见度: 平卡N
+		 卡包: Booster01
+		 效果: 描述：把手腕像火箭一样发射攻击的不死怪兽。
+		}
+		*/
+		Id:       2457,
+		Password: "63545455",
+		Name:     "僵尸鬼灯",                 // "Mech Mole Zombie"  "ゾンビランプ"
+		Lc:       ygo.LC_OrdinaryMonster, // 通常怪兽
+		Level:    2,
+		La:       ygo.LA_Earth,  // 暗
+		Lr:       ygo.LR_Zombie, // 不死
+		Attack:   500,
+		Defense:  400,
+		IsValid:  true,
+	})
+
+	/*116*/
+	cardBag.Register(&ygo.CardOriginal{
+		/*{
+		 id: 2458
+		 中文名: 暗黑植物
+		 日文名: ダーク·プラント
+		 英文名: Dark Plant
+		 卡片种类: 通常怪兽
+		 卡片密码: 13193642
+		 使用限制: 无限制
+		 种族: 植物
+		 属性: 暗
+		 星级: 1
+		 攻击力: 300
+		 防御力: 400
+		 罕见度: 平卡N
+		 卡包: Booster01
+		 效果: 描述：在被污染的土地以及暗之力的环境下生长的花。非常凶暴。
+		}
+		*/
+		Id:       2458,
+		Password: "13193642",
+		Name:     "暗黑植物",                 // "Dark Plant"  "ダーク·プラント"
+		Lc:       ygo.LC_OrdinaryMonster, // 通常怪兽
+		Level:    1,
+		La:       ygo.LA_Earth, // 暗
+		Lr:       ygo.LR_Plant, // 植物
+		Attack:   300,
+		Defense:  400,
+		IsValid:  true,
+	})
+
+	/*117*/
+	cardBag.Register(&ygo.CardOriginal{
+		/*{
+		 id: 2459
+		 中文名: 太古之壶
+		 日文名: 太古の壺
+		 英文名: Ancient Jar
+		 卡片种类: 通常怪兽
+		 卡片密码: 81492226
+		 使用限制: 无限制
+		 种族: 岩石
+		 属性: 地
+		 星级: 1
+		 攻击力: 400
+		 防御力: 200
+		 罕见度: 平卡N
+		 卡包: Booster01
+		 效果: 描述：非常脆弱的太古之壶。里面好像藏着什么东西。
+		}
+		*/
+		Id:       2459,
+		Password: "81492226",
+		Name:     "太古之壶",                 // "Ancient Jar"  "太古の壺"
+		Lc:       ygo.LC_OrdinaryMonster, // 通常怪兽
+		Level:    1,
+		La:       ygo.LA_Earth, // 地
+		Lr:       ygo.LR_Rock,  // 岩石
+		Attack:   400,
+		Defense:  200,
+		IsValid:  true,
+	})
+
+	/*118*/
+	cardBag.Register(&ygo.CardOriginal{
+		/*{
+		 id: 2477
+		 中文名: 邪恶老鼠
+		 日文名: イビル·ラット
+		 英文名: Obese Marmot of Nefariousness
+		 卡片种类: 通常怪兽
+		 卡片密码: 56713552
+		 使用限制: 无限制
+		 种族: 兽
+		 属性: 地
+		 星级: 3
+		 攻击力: 750
+		 防御力: 800
+		 罕见度: 平卡N
+		 卡包: Booster02
+		 效果: 描述：任何东西都咬的野老鼠，行仪极坏。
+		}
+		*/
+		Id:       2477,
+		Password: "56713552",
+		Name:     "邪恶老鼠",                 // "Obese Marmot of Nefariousness"  "イビル·ラット"
+		Lc:       ygo.LC_OrdinaryMonster, // 通常怪兽
+		Level:    3,
+		La:       ygo.LA_Earth, // 地
+		Lr:       ygo.LR_Beast, // 兽
+		Attack:   750,
+		Defense:  800,
+		IsValid:  true,
+	})
+
+	/*119*/
+	cardBag.Register(&ygo.CardOriginal{
+		/*{
+		 id: 2478
+		 中文名: 锯足锹形虫
+		 日文名: インセクション
+		 英文名: Alinsection
+		 卡片种类: 通常怪兽
+		 卡片密码: 70924884
+		 使用限制: 无限制
+		 种族: 昆虫
+		 属性: 地
+		 星级: 3
+		 攻击力: 950
+		 防御力: 700
+		 罕见度: 平卡N
+		 卡包: Booster02，Booster R1
+		 效果: 描述：大甲虫。除了头上的锯子，手腕也变成了锯子。
+		}
+		*/
+		Id:       2478,
+		Password: "70924884",
+		Name:     "锯足锹形虫",                // "Alinsection"  "インセクション"
+		Lc:       ygo.LC_OrdinaryMonster, // 通常怪兽
+		Level:    3,
+		La:       ygo.LA_Earth,  // 地
+		Lr:       ygo.LR_Insect, // 昆虫
+		Attack:   950,
+		Defense:  700,
+		IsValid:  true,
+	})
+
+	/*120*/
+	cardBag.Register(&ygo.CardOriginal{
+		/*{
+		 id: 2479
+		 中文名: 威尔米
+		 日文名: ウィルミー
+		 英文名: Wilmee
+		 卡片种类: 通常怪兽
+		 卡片密码: 92391084
+		 使用限制: 无限制
+		 种族: 兽
+		 属性: 地
+		 星级: 4
+		 攻击力: 1000
+		 防御力: 1200
+		 罕见度: 平卡N
+		 卡包: Booster02，Booster R1
+		 效果: 描述：相当凶暴的兔子。以锐利的钩爪血祭对方。
+		}
+		*/
+		Id:       2479,
+		Password: "92391084",
+		Name:     "威尔米",                  // "Wilmee"  "ウィルミー"
+		Lc:       ygo.LC_OrdinaryMonster, // 通常怪兽
+		Level:    4,
+		La:       ygo.LA_Earth, // 地
+		Lr:       ygo.LR_Beast, // 兽
+		Attack:   1000,
+		Defense:  1200,
+		IsValid:  true,
+	})
+
+	/*121*/
+	cardBag.Register(&ygo.CardOriginal{
+		/*{
+		 id: 2480
+		 中文名: 木灵小丑
+		 日文名: ウッド·ジョーカー
+		 英文名: Wood Clown
+		 卡片种类: 通常怪兽
+		 卡片密码: 17511156
+		 使用限制: 无限制
+		 种族: 战士
+		 属性: 地
+		 星级: 3
+		 攻击力: 800
+		 防御力: 1200
+		 罕见度: 平卡N
+		 卡包: Booster02，Booster R1
+		 效果: 描述：作出令人讨厌的笑容的恶魔。以手中的镰刀熟练的回避着攻击。
+		}
+		*/
+		Id:       2480,
+		Password: "17511156",
+		Name:     "木灵小丑",                 // "Wood Clown"  "ウッド·ジョーカー"
+		Lc:       ygo.LC_OrdinaryMonster, // 通常怪兽
+		Level:    3,
+		La:       ygo.LA_Earth,   // 地
+		Lr:       ygo.LR_Warrior, // 战士
+		Attack:   800,
+		Defense:  1200,
+		IsValid:  true,
+	})
+
+	/*122*/
+	cardBag.Register(&ygo.CardOriginal{
+		/*{
+		 id: 2481
+		 中文名: 天使魔女
+		 日文名: エンジェル·魔女
+		 英文名: Angelwitch
+		 卡片种类: 通常怪兽
+		 卡片密码: 37160778
+		 使用限制: 无限制
+		 种族: 魔法师
+		 属性: 暗
+		 星级: 3
+		 攻击力: 800
+		 防御力: 1000
+		 罕见度: 平卡N
+		 卡包: Booster02，Booster R1
+		 效果: 描述：背负着成为天使的命运，但却成为了向往中的魔女。
+		}
+		*/
+		Id:       2481,
+		Password: "37160778",
+		Name:     "天使魔女",                 // "Angelwitch"  "エンジェル·魔女"
+		Lc:       ygo.LC_OrdinaryMonster, // 通常怪兽
+		Level:    3,
+		La:       ygo.LA_Earth,       // 暗
+		Lr:       ygo.LR_SpellCaster, // 魔法师
+		Attack:   800,
+		Defense:  1000,
+		IsValid:  true,
+	})
+
+	/*123*/
+	cardBag.Register(&ygo.CardOriginal{
+		/*{
+		 id: 2482
+		 中文名: 电波英雄
+		 日文名: オシロ·ヒーロー
+		 英文名: Oscillo Hero
+		 卡片种类: 通常怪兽
+		 卡片密码: 82065276
+		 使用限制: 无限制
+		 种族: 战士
+		 属性: 地
+		 星级: 3
+		 攻击力: 1250
+		 防御力: 700
+		 罕见度: 平卡N
+		 卡包: Booster02，Booster Chronicle，Booster R1，TU04
+		 效果: 描述：从异世界来到这里，稀里糊涂的战士。
+		}
+		*/
+		Id:       2482,
+		Password: "82065276",
+		Name:     "电波英雄",                 // "Oscillo Hero"  "オシロ·ヒーロー"
+		Lc:       ygo.LC_OrdinaryMonster, // 通常怪兽
+		Level:    3,
+		La:       ygo.LA_Earth,   // 地
+		Lr:       ygo.LR_Warrior, // 战士
+		Attack:   1250,
+		Defense:  700,
+		IsValid:  true,
+	})
+
+	/*124*/
+	cardBag.Register(&ygo.CardOriginal{
+		/*{
+		 id: 2483
+		 中文名: 鱼战士
+		 日文名: 魚ギョ戦士
+		 英文名: Wow Warrior
+		 卡片种类: 通常怪兽
+		 卡片密码: 69750536
+		 使用限制: 无限制
+		 种族: 鱼
+		 属性: 水
+		 星级: 4
+		 攻击力: 1250
+		 防御力: 900
+		 罕见度: 平卡N
+		 卡包: Booster02，Booster Chronicle，Booster R1
+		 效果: 描述：拥有手和脚的鱼人兽，用尖锐的牙齿撕咬敌人。
+		}
+		*/
+		Id:       2483,
+		Password: "69750536",
+		Name:     "鱼战士",                  // "Wow Warrior"  "魚ギョ戦士"
+		Lc:       ygo.LC_OrdinaryMonster, // 通常怪兽
+		Level:    4,
+		La:       ygo.LA_Earth, // 水
+		Lr:       ygo.LR_Fish,  // 鱼
+		Attack:   1250,
+		Defense:  900,
+		IsValid:  true,
+	})
+
+	/*125*/
+	cardBag.Register(&ygo.CardOriginal{
+		/*{
+		 id: 2484
+		 中文名: 龙虾怪
+		 日文名: ザリガン
+		 英文名: Zarigun
+		 卡片种类: 通常怪兽
+		 卡片密码: 10598400
+		 使用限制: 无限制
+		 种族: 水
+		 属性: 水
+		 星级: 2
+		 攻击力: 600
+		 防御力: 700
+		 罕见度: 平卡N
+		 卡包: Booster02
+		 效果: 描述：由虾进化成的怪兽。用大钳子攻击对方的颈项。
+		}
+		*/
+		Id:       2484,
+		Password: "10598400",
+		Name:     "龙虾怪",                  // "Zarigun"  "ザリガン"
+		Lc:       ygo.LC_OrdinaryMonster, // 通常怪兽
+		Level:    2,
+		La:       ygo.LA_Earth, // 水
+		Lr:       ygo.LR_None,  // 水
+		Attack:   600,
+		Defense:  700,
+		IsValid:  true,
+	})
+
+	/*126*/
+	cardBag.Register(&ygo.CardOriginal{
+		/*{
+		 id: 2502
+		 中文名: 赤剑之莱蒙多斯
+		 日文名: 赤き剣のライムンドス
+		 英文名: Rhaimundos of the Red Sword
+		 卡片种类: 通常怪兽
+		 卡片密码: 62403074
+		 使用限制: 无限制
+		 种族: 战士
+		 属性: 地
+		 星级: 4
+		 攻击力: 1200
+		 防御力: 1300
+		 罕见度: 平卡N
+		 卡包: Booster03，TP23
+		 效果: 描述：持有赤红炎剑的战士。利用火焰束缚来封住行动。
+		}
+		*/
+		Id:       2502,
+		Password: "62403074",
+		Name:     "赤剑之莱蒙多斯",              // "Rhaimundos of the Red Sword"  "赤き剣のライムンドス"
+		Lc:       ygo.LC_OrdinaryMonster, // 通常怪兽
+		Level:    4,
+		La:       ygo.LA_Earth,   // 地
+		Lr:       ygo.LR_Warrior, // 战士
+		Attack:   1200,
+		Defense:  1300,
+		IsValid:  true,
+	})
+
+	/*127*/
+	cardBag.Register(&ygo.CardOriginal{
+		/*{
+		 id: 2503
+		 中文名: 有生命的花瓶
+		 日文名: 命ある花瓶
+		 英文名: Living Vase
+		 卡片种类: 通常怪兽
+		 卡片密码: 34320307
+		 使用限制: 无限制
+		 种族: 植物
+		 属性: 地
+		 星级: 3
+		 攻击力: 900
+		 防御力: 1100
+		 罕见度: 平卡N
+		 卡包: Booster03
+		 效果: 描述：利用花散发花粉并咬向对方的活花瓶。
+		}
+		*/
+		Id:       2503,
+		Password: "34320307",
+		Name:     "有生命的花瓶",               // "Living Vase"  "命ある花瓶"
+		Lc:       ygo.LC_OrdinaryMonster, // 通常怪兽
+		Level:    3,
+		La:       ygo.LA_Earth, // 地
+		Lr:       ygo.LR_Plant, // 植物
+		Attack:   900,
+		Defense:  1100,
+		IsValid:  true,
+	})
+
+	/*128*/
+	cardBag.Register(&ygo.CardOriginal{
+		/*{
+		 id: 2504
+		 中文名: 食命者
+		 日文名: 命を食する者
+		 英文名: That Which Feeds on Life
+		 卡片种类: 通常怪兽
+		 卡片密码: 52367652
+		 使用限制: 无限制
+		 种族: 恶魔
+		 属性: 暗
+		 星级: 4
+		 攻击力: 1200
+		 防御力: 1000
+		 罕见度: 平卡N
+		 卡包: Booster03
+		 效果: 描述：嗜食所有生物的灵魂，将将其作为自己的能量。
+		}
+		*/
+		Id:       2504,
+		Password: "52367652",
+		Name:     "食命者",                  // "That Which Feeds on Life"  "命を食する者"
+		Lc:       ygo.LC_OrdinaryMonster, // 通常怪兽
+		Level:    4,
+		La:       ygo.LA_Earth, // 暗
+		Lr:       ygo.LR_Fiend, // 恶魔
+		Attack:   1200,
+		Defense:  1000,
+		IsValid:  true,
+	})
+
+	/*129*/
+	cardBag.Register(&ygo.CardOriginal{
+		/*{
+		 id: 2505
+		 中文名: 岩之战士
+		 日文名: 岩の戦士
+		 英文名: Minomushi Warrior
+		 卡片种类: 通常怪兽
+		 卡片密码: 46864967
+		 使用限制: 无限制
+		 种族: 岩石
+		 属性: 地
+		 星级: 4
+		 攻击力: 1300
+		 防御力: 1200
+		 罕见度: 平卡N
+		 卡包: Booster03，Booster R2
+		 效果: 描述：岩石战士。挥舞着非常重的石头剑。
+		}
+		*/
+		Id:       2505,
+		Password: "46864967",
+		Name:     "岩之战士",                 // "Minomushi Warrior"  "岩の戦士"
+		Lc:       ygo.LC_OrdinaryMonster, // 通常怪兽
+		Level:    4,
+		La:       ygo.LA_Earth, // 地
+		Lr:       ygo.LR_Rock,  // 岩石
+		Attack:   1300,
+		Defense:  1200,
+		IsValid:  true,
+	})
+
+	/*130*/
+	cardBag.Register(&ygo.CardOriginal{
+		/*{
+		 id: 2506
+		 中文名: 音女
+		 日文名: 音女
+		 英文名: Sonic Maid
+		 卡片种类: 通常怪兽
+		 卡片密码: 38942059
+		 使用限制: 无限制
+		 种族: 战士
+		 属性: 地
+		 星级: 3
+		 攻击力: 1200
+		 防御力: 900
+		 罕见度: 平卡N
+		 卡包: Booster03，Booster Chronicle，Booster R2
+		 效果: 描述：擅长操纵声音的少女，能使音符变成镰刀攻击敌人。
+		}
+		*/
+		Id:       2506,
+		Password: "38942059",
+		Name:     "音女",                   // "Sonic Maid"  "音女"
+		Lc:       ygo.LC_OrdinaryMonster, // 通常怪兽
+		Level:    3,
+		La:       ygo.LA_Earth,   // 地
+		Lr:       ygo.LR_Warrior, // 战士
+		Attack:   1200,
+		Defense:  900,
+		IsValid:  true,
+	})
+
+	/*131*/
+	cardBag.Register(&ygo.CardOriginal{
+		/*{
+		 id: 2507
+		 中文名: 大白鲨
+		 日文名: グレート·ホワイト
+		 英文名: Great White
+		 卡片种类: 通常怪兽
+		 卡片密码: 13429800
+		 使用限制: 无限制
+		 种族: 鱼
+		 属性: 水
+		 星级: 4
+		 攻击力: 1600
+		 防御力: 800
+		 罕见度: 平卡N
+		 卡包: EX-R(EX)，Booster03，Booster R2
+		 效果: 描述：巨大的白鲨，若被咬到绝对无法脱身。
+		}
+		*/
+		Id:       2507,
+		Password: "13429800",
+		Name:     "大白鲨",                  // "Great White"  "グレート·ホワイト"
+		Lc:       ygo.LC_OrdinaryMonster, // 通常怪兽
+		Level:    4,
+		La:       ygo.LA_Earth, // 水
+		Lr:       ygo.LR_Fish,  // 鱼
+		Attack:   1600,
+		Defense:  800,
+		IsValid:  true,
+	})
+
+	/*132*/
+	cardBag.Register(&ygo.CardOriginal{
+		/*{
+		 id: 2508
+		 中文名: 锹甲阿尔法
+		 日文名: クワガタ·アルファ
+		 英文名: Kuwagata α
+		 卡片种类: 通常怪兽
+		 卡片密码: 60802233
+		 使用限制: 无限制
+		 种族: 昆虫
+		 属性: 地
+		 星级: 4
+		 攻击力: 1250
+		 防御力: 1000
+		 罕见度: 平卡N
+		 卡包: Booster03，Booster Chronicle，Booster R2，TP20
+		 效果: 描述：凶暴的甲虫。它会瞄准对方的头瞬间斩落。
+		}
+		*/
+		Id:       2508,
+		Password: "60802233",
+		Name:     "锹甲阿尔法",                // "Kuwagata α"  "クワガタ·アルファ"
+		Lc:       ygo.LC_OrdinaryMonster, // 通常怪兽
+		Level:    4,
+		La:       ygo.LA_Earth,  // 地
+		Lr:       ygo.LR_Insect, // 昆虫
+		Attack:   1250,
+		Defense:  1000,
+		IsValid:  true,
+	})
+
+	/*133*/
+	cardBag.Register(&ygo.CardOriginal{
+		/*{
+		 id: 2509
+		 中文名: 钢铁魔人
+		 日文名: ゴルゴイル
+		 英文名: Golgoil
+		 卡片种类: 通常怪兽
+		 卡片密码: 07526150
+		 使用限制: 无限制
+		 种族: 机械
+		 属性: 地
+		 星级: 4
+		 攻击力: 900
+		 防御力: 1600
+		 罕见度: 平卡N
+		 卡包: Booster03
+		 效果: 描述：从与异次元相通的洞里出来的钢铁大魔人。
+		}
+		*/
+		Id:       2509,
+		Password: "07526150",
+		Name:     "钢铁魔人",                 // "Golgoil"  "ゴルゴイル"
+		Lc:       ygo.LC_OrdinaryMonster, // 通常怪兽
+		Level:    4,
+		La:       ygo.LA_Earth,   // 地
+		Lr:       ygo.LR_Machine, // 机械
+		Attack:   900,
+		Defense:  1600,
+		IsValid:  true,
+	})
+
+	/*134*/
+	cardBag.Register(&ygo.CardOriginal{
+		/*{
+		 id: 2510
+		 中文名: 青玉眼怪
+		 日文名: サファイヤ·リサーク
+		 英文名: Lisark
+		 卡片种类: 通常怪兽
+		 卡片密码: 55210709
+		 使用限制: 无限制
+		 种族: 兽
+		 属性: 地
+		 星级: 4
+		 攻击力: 1300
+		 防御力: 1300
+		 罕见度: 平卡N
+		 卡包: Booster03，Booster R2
+		 效果: 描述：蓝宝石眼睛的野兽。制造幻影，趁敌人混乱的时候进行攻击。
+		}
+		*/
+		Id:       2510,
+		Password: "55210709",
+		Name:     "青玉眼怪",                 // "Lisark"  "サファイヤ·リサーク"
+		Lc:       ygo.LC_OrdinaryMonster, // 通常怪兽
+		Level:    4,
+		La:       ygo.LA_Earth, // 地
+		Lr:       ygo.LR_Beast, // 兽
+		Attack:   1300,
+		Defense:  1300,
+		IsValid:  true,
+	})
+
+	/*135*/
+	cardBag.Register(&ygo.CardOriginal{
+		/*{
+		 id: 2511
+		 中文名: 斩首的美女
+		 日文名: 斬首の美女
+		 英文名: Beautiful Headhuntress
+		 卡片种类: 通常怪兽
+		 卡片密码: 16899564
+		 使用限制: 无限制
+		 种族: 战士
+		 属性: 地
+		 星级: 4
+		 攻击力: 1600
+		 防御力: 800
+		 罕见度: 平卡N
+		 卡包: Booster03，Booster Chronicle，Booster R2
+		 效果: 描述：在那美丽容貌的背后，却是个用刀子使许多人身首异处的女子。
+		}
+		*/
+		Id:       2511,
+		Password: "16899564",
+		Name:     "斩首的美女",                // "Beautiful Headhuntress"  "斬首の美女"
+		Lc:       ygo.LC_OrdinaryMonster, // 通常怪兽
+		Level:    4,
+		La:       ygo.LA_Earth,   // 地
+		Lr:       ygo.LR_Warrior, // 战士
+		Attack:   1600,
+		Defense:  800,
+		IsValid:  true,
+	})
+
+	/*136*/
+	cardBag.Register(&ygo.CardOriginal{
+		/*{
+		 id: 2512
+		 中文名: 海马兽
+		 日文名: シーホース
+		 英文名: Tatsunootoshigo
+		 卡片种类: 通常怪兽
+		 卡片密码: 47922711
+		 使用限制: 无限制
+		 种族: 兽
+		 属性: 地
+		 星级: 5
+		 攻击力: 1350
+		 防御力: 1600
+		 罕见度: 平卡N
+		 卡包: Booster03，Booster R2
+		 效果: 描述：半马半鱼的怪兽。以风一般的速度在海中奔驰。
+		}
+		*/
+		Id:       2512,
+		Password: "47922711",
+		Name:     "海马兽",                  // "Tatsunootoshigo"  "シーホース"
+		Lc:       ygo.LC_OrdinaryMonster, // 通常怪兽
+		Level:    5,
+		La:       ygo.LA_Earth, // 地
+		Lr:       ygo.LR_Beast, // 兽
+		Attack:   1350,
+		Defense:  1600,
+		IsValid:  true,
+	})
+
+	/*137*/
+	cardBag.Register(&ygo.CardOriginal{
+		/*{
+		 id: 2513
+		 中文名: 审判之手
+		 日文名: ジャジメント·ザ·ハンド
+		 英文名: The Judgement Hand
+		 卡片种类: 通常怪兽
+		 卡片密码: 28003512
+		 使用限制: 无限制
+		 种族: 战士
+		 属性: 地
+		 星级: 3
+		 攻击力: 1400
+		 防御力: 700
+		 罕见度: 平卡N
+		 卡包: Booster03，Booster Chronicle，Booster R2
+		 效果: 描述：用寄宿着神灵的手作最后的判决，给予敌人以猛烈的攻击。
+		}
+		*/
+		Id:       2513,
+		Password: "28003512",
+		Name:     "审判之手",                 // "The Judgement Hand"  "ジャジメント·ザ·ハンド"
+		Lc:       ygo.LC_OrdinaryMonster, // 通常怪兽
+		Level:    3,
+		La:       ygo.LA_Earth,   // 地
+		Lr:       ygo.LR_Warrior, // 战士
+		Attack:   1400,
+		Defense:  700,
+		IsValid:  true,
+	})
+
+	/*138*/
+	cardBag.Register(&ygo.CardOriginal{
+		/*{
+		 id: 2514
+		 中文名: 骷髅寺院
+		 日文名: 髑髏の寺院
+		 英文名: Temple of Skulls
+		 卡片种类: 通常怪兽
+		 卡片密码: 00732302
+		 使用限制: 无限制
+		 种族: 不死
+		 属性: 暗
+		 星级: 4
+		 攻击力: 900
+		 防御力: 1300
+		 罕见度: 平卡N
+		 卡包: Booster03
+		 效果: 描述：全部由骷髅和骨头建立而成的寺院。会吸收接近的人的灵魂。
+		}
+		*/
+		Id:       2514,
+		Password: "00732302",
+		Name:     "骷髅寺院",                 // "Temple of Skulls"  "髑髏の寺院"
+		Lc:       ygo.LC_OrdinaryMonster, // 通常怪兽
+		Level:    4,
+		La:       ygo.LA_Earth,  // 暗
+		Lr:       ygo.LR_Zombie, // 不死
+		Attack:   900,
+		Defense:  1300,
+		IsValid:  true,
+	})
+
+	/*139*/
+	cardBag.Register(&ygo.CardOriginal{
+		/*{
+		 id: 2515
+		 中文名: 树精
+		 日文名: ドリアード
+		 英文名: Dryad
+		 卡片种类: 通常怪兽
+		 卡片密码: 84916669
+		 使用限制: 无限制
+		 种族: 魔法师
+		 属性: 地
+		 星级: 4
+		 攻击力: 1200
+		 防御力: 1400
+		 罕见度: 平卡N
+		 卡包: Booster03，TP07
+		 效果: 描述：森之精灵。借助草木之力封住对方的行动。
+		}
+		*/
+		Id:       2515,
+		Password: "84916669",
+		Name:     "树精",                   // "Dryad"  "ドリアード"
+		Lc:       ygo.LC_OrdinaryMonster, // 通常怪兽
+		Level:    4,
+		La:       ygo.LA_Earth,       // 地
+		Lr:       ygo.LR_SpellCaster, // 魔法师
+		Attack:   1200,
+		Defense:  1400,
+		IsValid:  true,
+	})
+
+	/*140*/
+	cardBag.Register(&ygo.CardOriginal{
+		/*{
+		 id: 2516
+		 中文名: 狂战士
+		 日文名: バーサーカー
+		 英文名: Mystic Clown
+		 卡片种类: 通常怪兽
+		 卡片密码: 47060154
+		 使用限制: 无限制
+		 种族: 恶魔
+		 属性: 暗
+		 星级: 4
+		 攻击力: 1500
+		 防御力: 1000
+		 罕见度: 平卡N
+		 卡包: EX-R(EX)，Booster03，Booster R2
+		 效果: 用狂暴的力量攻击，一旦暴走无人能挡。
+		}
+		*/
+		Id:       2516,
+		Password: "47060154",
+		Name:     "狂战士",                  // "Mystic Clown"  "バーサーカー"
+		Lc:       ygo.LC_OrdinaryMonster, // 通常怪兽
+		Level:    4,
+		La:       ygo.LA_Earth, // 暗
+		Lr:       ygo.LR_Fiend, // 恶魔
+		Attack:   1500,
+		Defense:  1000,
+		IsValid:  true,
+	})
+
+	/*141*/
+	cardBag.Register(&ygo.CardOriginal{
+		/*{
+		 id: 2517
+		 中文名: 复仇的河童
+		 日文名: 復讐のカッパ
+		 英文名: Kappa Avenger
+		 卡片种类: 通常怪兽
+		 卡片密码: 48109103
+		 使用限制: 无限制
+		 种族: 水
+		 属性: 水
+		 星级: 3
+		 攻击力: 1200
+		 防御力: 900
+		 罕见度: 平卡N
+		 卡包: Booster03
+		 效果: 描述：被同伴杀害，为了复仇而将心灵卖给邪恶的河童。
+		}
+		*/
+		Id:       2517,
+		Password: "48109103",
+		Name:     "复仇的河童",                // "Kappa Avenger"  "復讐のカッパ"
+		Lc:       ygo.LC_OrdinaryMonster, // 通常怪兽
+		Level:    3,
+		La:       ygo.LA_Earth, // 水
+		Lr:       ygo.LR_None,  // 水
+		Attack:   1200,
+		Defense:  900,
+		IsValid:  true,
+	})
+
+	/*142*/
+	cardBag.Register(&ygo.CardOriginal{
+		/*{
+		 id: 2533
+		 中文名: 龟鸟
+		 日文名: タートル·バード
+		 英文名: Turtle Bird
+		 卡片种类: 通常怪兽
+		 卡片密码: 72929454
+		 使用限制: 无限制
+		 种族: 水
+		 属性: 水
+		 星级: 6
+		 攻击力: 1900
+		 防御力: 1700
+		 罕见度: 平卡N
+		 卡包: Booster04，Booster Chronicle，Booster R2
+		 效果: 描述：主要栖息在水中，也能在空中飞翔的珍奇乌龟。
+		}
+		*/
+		Id:       2533,
+		Password: "72929454",
+		Name:     "龟鸟",                   // "Turtle Bird"  "タートル·バード"
+		Lc:       ygo.LC_OrdinaryMonster, // 通常怪兽
+		Level:    6,
+		La:       ygo.LA_Earth, // 水
+		Lr:       ygo.LR_None,  // 水
+		Attack:   1900,
+		Defense:  1700,
+		IsValid:  true,
+	})
+
+	/*143*/
+	cardBag.Register(&ygo.CardOriginal{
+		/*{
+		 id: 2534
+		 中文名: 电子鱼
+		 日文名: サイボーグ·バス
+		 英文名: Mech Bass
+		 卡片种类: 通常怪兽
+		 卡片密码: 50176820
+		 使用限制: 无限制
+		 种族: 机械
+		 属性: 水
+		 星级: 5
+		 攻击力: 1800
+		 防御力: 1500
+		 罕见度: 平卡N
+		 卡包: Booster04，Booster R2
+		 效果: 描述：以背后附着的炮台发射闪光粒子加农炮。
+		}
+		*/
+		Id:       2534,
+		Password: "50176820",
+		Name:     "电子鱼",                  // "Mech Bass"  "サイボーグ·バス"
+		Lc:       ygo.LC_OrdinaryMonster, // 通常怪兽
+		Level:    5,
+		La:       ygo.LA_Earth,   // 水
+		Lr:       ygo.LR_Machine, // 机械
+		Attack:   1800,
+		Defense:  1500,
+		IsValid:  true,
+	})
+
+	/*144*/
+	cardBag.Register(&ygo.CardOriginal{
+		/*{
+		 id: 2535
+		 中文名: 水陆的帝王
+		 日文名: 水陸の帝王
+		 英文名: Emperor of the Land and Sea
+		 卡片种类: 通常怪兽
+		 卡片密码: 11250655
+		 使用限制: 无限制
+		 种族: 爬虫类
+		 属性: 水
+		 星级: 5
+		 攻击力: 1800
+		 防御力: 1500
+		 罕见度: 平卡N
+		 卡包: Booster04，Booster R2
+		 效果: 描述：可以用大嘴向四方喷火的爬虫怪。
+		}
+		*/
+		Id:       2535,
+		Password: "11250655",
+		Name:     "水陆的帝王",                // "Emperor of the Land and Sea"  "水陸の帝王"
+		Lc:       ygo.LC_OrdinaryMonster, // 通常怪兽
+		Level:    5,
+		La:       ygo.LA_Earth,   // 水
+		Lr:       ygo.LR_Reptile, // 爬虫类
+		Attack:   1800,
+		Defense:  1500,
+		IsValid:  true,
+	})
+
+	/*145*/
+	cardBag.Register(&ygo.CardOriginal{
+		/*{
+		 id: 2536
+		 中文名: 红叶之女王
+		 日文名: 紅葉の女王
+		 英文名: Queen of Autumn Leaves
+		 卡片种类: 通常怪兽
+		 卡片密码: 04179849
+		 使用限制: 无限制
+		 种族: 植物
+		 属性: 地
+		 星级: 5
+		 攻击力: 1800
+		 防御力: 1500
+		 罕见度: 平卡N
+		 卡包: Booster04，Booster06，Booster Chronicle，Booster R2
+		 效果: 描述：生活在被红叶围绕的地方，绿树灵王的妃子。
+		}
+		*/
+		Id:       2536,
+		Password: "04179849",
+		Name:     "红叶之女王",                // "Queen of Autumn Leaves"  "紅葉の女王"
+		Lc:       ygo.LC_OrdinaryMonster, // 通常怪兽
+		Level:    5,
+		La:       ygo.LA_Earth, // 地
+		Lr:       ygo.LR_Plant, // 植物
+		Attack:   1800,
+		Defense:  1500,
+		IsValid:  true,
+	})
+
+	/*146*/
+	cardBag.Register(&ygo.CardOriginal{
+		/*{
+		 id: 2537
+		 中文名: 战神 奥利安
+		 日文名: 戦いの神 オリオン
+		 英文名: Orion the Battle Kami
+		 卡片种类: 通常怪兽
+		 卡片密码: 02971090
+		 使用限制: 无限制
+		 种族: 天使
+		 属性: 光
+		 星级: 5
+		 攻击力: 1800
+		 防御力: 1500
+		 罕见度: 平卡N
+		 卡包: Booster04，Booster R2
+		 效果: 描述：被誉为战神的天使。不过谁也没见过那场战事。
+		}
+		*/
+		Id:       2537,
+		Password: "02971090",
+		Name:     "战神 奥利安",               // "Orion the Battle Kami"  "戦いの神 オリオン"
+		Lc:       ygo.LC_OrdinaryMonster, // 通常怪兽
+		Level:    5,
+		La:       ygo.LA_Earth,  // 光
+		Lr:       ygo.LR_Devine, // 天使
+		Attack:   1800,
+		Defense:  1500,
+		IsValid:  true,
+	})
+
+	/*147*/
+	cardBag.Register(&ygo.CardOriginal{
+		/*{
+		 id: 2538
+		 中文名: 山之精灵
+		 日文名: 山の精霊
+		 英文名: Spirit of the Mountain
+		 卡片种类: 通常怪兽
+		 卡片密码: 34690519
+		 使用限制: 无限制
+		 种族: 魔法师
+		 属性: 地
+		 星级: 5
+		 攻击力: 1300
+		 防御力: 1800
+		 罕见度: 平卡N
+		 卡包: Booster04，Booster R2
+		 效果: 描述：据说听了它的笛音的人会失去力量。
+		}
+		*/
+		Id:       2538,
+		Password: "34690519",
+		Name:     "山之精灵",                 // "Spirit of the Mountain"  "山の精霊"
+		Lc:       ygo.LC_OrdinaryMonster, // 通常怪兽
+		Level:    5,
+		La:       ygo.LA_Earth,       // 地
+		Lr:       ygo.LR_SpellCaster, // 魔法师
+		Attack:   1300,
+		Defense:  1800,
+		IsValid:  true,
+	})
+
+	/*148*/
+	cardBag.Register(&ygo.CardOriginal{
+		/*{
+		 id: 2539
+		 中文名: 诞生的天使
+		 日文名: 誕生の天使
+		 英文名: Winged Egg of New Life
+		 卡片种类: 通常怪兽
+		 卡片密码: 42418084
+		 使用限制: 无限制
+		 种族: 天使
+		 属性: 光
+		 星级: 5
+		 攻击力: 1400
+		 防御力: 1700
+		 罕见度: 平卡N
+		 卡包: Booster04，Booster R2
+		 效果: 描述：据说它能知道女性腹部是否存在着生命。
+		}
+		*/
+		Id:       2539,
+		Password: "42418084",
+		Name:     "诞生的天使",                // "Winged Egg of New Life"  "誕生の天使"
+		Lc:       ygo.LC_OrdinaryMonster, // 通常怪兽
+		Level:    5,
+		La:       ygo.LA_Earth,  // 光
+		Lr:       ygo.LR_Devine, // 天使
+		Attack:   1400,
+		Defense:  1700,
+		IsValid:  true,
+	})
+
+	/*149*/
+	cardBag.Register(&ygo.CardOriginal{
+		/*{
+		 id: 2557
+		 中文名: 飞鹰
+		 日文名: ウイング·イーグル
+		 英文名: Wing Eagle
+		 卡片种类: 通常怪兽
+		 卡片密码: 47319141
+		 使用限制: 无限制
+		 种族: 鸟兽
+		 属性: 风
+		 星级: 5
+		 攻击力: 1800
+		 防御力: 1500
+		 罕见度: 平卡N
+		 卡包: Booster05，Booster Chronicle，Booster R3
+		 效果: 描述：从高空寻找猎物，一旦看上绝不让其逃走。
+		}
+		*/
+		Id:       2557,
+		Password: "47319141",
+		Name:     "飞鹰",                   // "Wing Eagle"  "ウイング·イーグル"
+		Lc:       ygo.LC_OrdinaryMonster, // 通常怪兽
+		Level:    5,
+		La:       ygo.LA_Earth,     // 风
+		Lr:       ygo.LR_WindBeast, // 鸟兽
+		Attack:   1800,
+		Defense:  1500,
+		IsValid:  true,
+	})
+
+	/*150*/
+	cardBag.Register(&ygo.CardOriginal{
+		/*{
+		 id: 2558
+		 中文名: 机器攻击者
+		 日文名: マシン·アタッカー
+		 英文名: Machine Attacker
+		 卡片种类: 通常怪兽
+		 卡片密码: 38116136
+		 使用限制: 无限制
+		 种族: 机械
+		 属性: 地
+		 星级: 5
+		 攻击力: 1600
+		 防御力: 1300
+		 罕见度: 平卡N
+		 卡包: Booster05
+		 效果: 描述：特攻用的机械。以突击之力打倒敌人。
+		}
+		*/
+		Id:       2558,
+		Password: "38116136",
+		Name:     "机器攻击者",                // "Machine Attacker"  "マシン·アタッカー"
+		Lc:       ygo.LC_OrdinaryMonster, // 通常怪兽
+		Level:    5,
+		La:       ygo.LA_Earth,   // 地
+		Lr:       ygo.LR_Machine, // 机械
+		Attack:   1600,
+		Defense:  1300,
+		IsValid:  true,
+	})
+
+	/*151*/
+	cardBag.Register(&ygo.CardOriginal{
+		/*{
+		 id: 2559
+		 中文名: 贪尸龙
+		 日文名: 屍を貪る竜
+		 英文名: Crawling Dragon #2
+		 卡片种类: 通常怪兽
+		 卡片密码: 38289717
+		 使用限制: 无限制
+		 种族: 恐龙
+		 属性: 地
+		 星级: 4
+		 攻击力: 1600
+		 防御力: 1200
+		 罕见度: 平卡N
+		 卡包: Booster05，Booster Chronicle，Booster R3
+		 效果: 描述：什么都能咬碎的恐龙，攻击力十分恐怖。
+		}
+		*/
+		Id:       2559,
+		Password: "38289717",
+		Name:     "贪尸龙",                  // "Crawling Dragon #2"  "屍を貪る竜"
+		Lc:       ygo.LC_OrdinaryMonster, // 通常怪兽
+		Level:    4,
+		La:       ygo.LA_Earth,    // 地
+		Lr:       ygo.LR_Dinosaur, // 恐龙
+		Attack:   1600,
+		Defense:  1200,
+		IsValid:  true,
+	})
+
+	/*152*/
+	cardBag.Register(&ygo.CardOriginal{
+		/*{
+		 id: 2560
+		 中文名: 彩虹人鱼
+		 日文名: レインボー·マリン·マーメイド
+		 英文名: Rainbow Marine Mermaid
+		 卡片种类: 通常怪兽
+		 卡片密码: 29402771
+		 使用限制: 无限制
+		 种族: 鱼
+		 属性: 水
+		 星级: 5
+		 攻击力: 1550
+		 防御力: 1700
+		 罕见度: 平卡N
+		 卡包: Booster05
+		 效果: 描述：空中出现彩虹桥时才会出现的珍奇美丽人鱼。
+		}
+		*/
+		Id:       2560,
+		Password: "29402771",
+		Name:     "彩虹人鱼",                 // "Rainbow Marine Mermaid"  "レインボー·マリン·マーメイド"
+		Lc:       ygo.LC_OrdinaryMonster, // 通常怪兽
+		Level:    5,
+		La:       ygo.LA_Earth, // 水
+		Lr:       ygo.LR_Fish,  // 鱼
+		Attack:   1550,
+		Defense:  1700,
+		IsValid:  true,
+	})
+
+	/*153*/
+	cardBag.Register(&ygo.CardOriginal{
+		/*{
+		 id: 2561
+		 中文名: 美杜莎的亡灵
+		 日文名: メデューサの亡霊
+		 英文名: The Snake Hair
+		 卡片种类: 通常怪兽
+		 卡片密码: 29491031
+		 使用限制: 无限制
+		 种族: 不死
+		 属性: 暗
+		 星级: 4
+		 攻击力: 1500
+		 防御力: 1200
+		 罕见度: 平卡N
+		 卡包: Booster05，Booster R3
+		 效果: 描述：头发满是毒蛇的怪兽。一旦被她的目光盯上，就会被石化。
+		}
+		*/
+		Id:       2561,
+		Password: "29491031",
+		Name:     "美杜莎的亡灵",               // "The Snake Hair"  "メデューサの亡霊"
+		Lc:       ygo.LC_OrdinaryMonster, // 通常怪兽
+		Level:    4,
+		La:       ygo.LA_Earth,  // 暗
+		Lr:       ygo.LR_Zombie, // 不死
+		Attack:   1500,
+		Defense:  1200,
+		IsValid:  true,
+	})
+
+	/*154*/
+	cardBag.Register(&ygo.CardOriginal{
+		/*{
+		 id: 2580
+		 中文名: 牛鬼
+		 日文名: 牛鬼
+		 英文名: Ushi Oni
+		 卡片种类: 通常怪兽
+		 卡片密码: 48649353
+		 使用限制: 无限制
+		 种族: 恶魔
+		 属性: 暗
+		 星级: 6
+		 攻击力: 2150
+		 防御力: 1950
+		 罕见度: 平卡N
+		 卡包: Booster06，Booster Chronicle，Booster R3，TP11
+		 效果: 描述：通过黑魔术苏醒的牛之恶魔。从壶中现身。
+		}
+		*/
+		Id:       2580,
+		Password: "48649353",
+		Name:     "牛鬼",                   // "Ushi Oni"  "牛鬼"
+		Lc:       ygo.LC_OrdinaryMonster, // 通常怪兽
+		Level:    6,
+		La:       ygo.LA_Earth, // 暗
+		Lr:       ygo.LR_Fiend, // 恶魔
+		Attack:   2150,
+		Defense:  1950,
+		IsValid:  true,
+	})
+
+	/*155*/
+	cardBag.Register(&ygo.CardOriginal{
+		/*{
+		 id: 2581
+		 中文名: 加尔瓦斯
+		 日文名: ガルヴァス
+		 英文名: Garvas
+		 卡片种类: 通常怪兽
+		 卡片密码: 69780745
+		 使用限制: 无限制
+		 种族: 兽
+		 属性: 地
+		 星级: 6
+		 攻击力: 2000
+		 防御力: 1700
+		 罕见度: 平卡N
+		 卡包: Booster06
+		 效果: 描述：恶之化身。样子如同长着羽毛的狮子。
+		}
+		*/
+		Id:       2581,
+		Password: "69780745",
+		Name:     "加尔瓦斯",                 // "Garvas"  "ガルヴァス"
+		Lc:       ygo.LC_OrdinaryMonster, // 通常怪兽
+		Level:    6,
+		La:       ygo.LA_Earth, // 地
+		Lr:       ygo.LR_Beast, // 兽
+		Attack:   2000,
+		Defense:  1700,
+		IsValid:  true,
+	})
+
+	/*156*/
+	cardBag.Register(&ygo.CardOriginal{
+		/*{
+		 id: 420
+		 中文名: 水母
+		 日文名: 海月－ジェリーフィッシュ－
+		 英文名: Jellyfish
+		 卡片种类: 通常怪兽
+		 卡片密码: 14851496
+		 使用限制: 无限制
+		 种族: 水
+		 属性: 水
+		 星级: 4
+		 攻击力: 1200
+		 防御力: 1500
+		 罕见度: 平卡N
+		 卡包: ME，DL04，Booster07
+		 效果: 描述：漂浮在海面上的海蜇，半透明的身体使人难以察觉。
+		}
+		*/
+		Id:       420,
+		Password: "14851496",
+		Name:     "水母",                   // "Jellyfish"  "海月－ジェリーフィッシュ－"
+		Lc:       ygo.LC_OrdinaryMonster, // 通常怪兽
+		Level:    4,
+		La:       ygo.LA_Earth, // 水
+		Lr:       ygo.LR_None,  // 水
+		Attack:   1200,
+		Defense:  1500,
+		IsValid:  true,
+	})
+
+	/*157*/
+	cardBag.Register(&ygo.CardOriginal{
+		/*{
+		 id: 422
+		 中文名: 暗魔界的霸王
+		 日文名: 闇魔界の覇王
+		 英文名: King of Yamimakai
+		 卡片种类: 通常怪兽
+		 卡片密码: 69455834
+		 使用限制: 无限制
+		 种族: 恶魔
+		 属性: 暗
+		 星级: 5
+		 攻击力: 2000
+		 防御力: 1530
+		 罕见度: 平卡N
+		 卡包: ME，BE02，DL04，Booster07
+		 效果: 描述：使用强大的暗之力量，破坏周围的一切。
+		}
+		*/
+		Id:       422,
+		Password: "69455834",
+		Name:     "暗魔界的霸王",               // "King of Yamimakai"  "闇魔界の覇王"
+		Lc:       ygo.LC_OrdinaryMonster, // 通常怪兽
+		Level:    5,
+		La:       ygo.LA_Earth, // 暗
+		Lr:       ygo.LR_Fiend, // 恶魔
+		Attack:   2000,
+		Defense:  1530,
+		IsValid:  true,
+	})
+
+	/*158*/
+	cardBag.Register(&ygo.CardOriginal{
+		/*{
+		 id: 435
+		 中文名: 强化石像怪
+		 日文名: ガーゴイル·パワード
+		 英文名: Ryu-Kishin Powered
+		 卡片种类: 通常怪兽
+		 卡片密码: 24611934
+		 使用限制: 无限制
+		 种族: 恶魔
+		 属性: 暗
+		 星级: 4
+		 攻击力: 1600
+		 防御力: 1200
+		 罕见度: 平卡N
+		 卡包: ME，BE02，EX-R(EX)，DL04，Booster07，KA，SK2
+		 效果: 描述：取得暗黑之力强化而成的石像鬼，尖锐的爪子值得警惕。
+		}
+		*/
+		Id:       435,
+		Password: "24611934",
+		Name:     "强化石像怪",                // "Ryu-Kishin Powered"  "ガーゴイル·パワード"
+		Lc:       ygo.LC_OrdinaryMonster, // 通常怪兽
+		Level:    4,
+		La:       ygo.LA_Earth, // 暗
+		Lr:       ygo.LR_Fiend, // 恶魔
+		Attack:   1600,
+		Defense:  1200,
+		IsValid:  true,
+	})
+
+	/*159*/
+	cardBag.Register(&ygo.CardOriginal{
+		/*{
+		 id: 479
+		 中文名: 电气小子
+		 日文名: エレキッズ
+		 英文名: Wattkid
+		 卡片种类: 通常怪兽
+		 卡片密码: 27324313
+		 使用限制: 无限制
+		 种族: 雷
+		 属性: 光
+		 星级: 3
+		 攻击力: 1000
+		 防御力: 500
+		 罕见度: 平卡N
+		 卡包: BE02，DL04，Booster01，Booster Chronicle，Booster R1，TU04
+		 效果: 描述：雷属性攻击异常厉害，若轻视它则会遭到电击。
+		}
+		*/
+		Id:       479,
+		Password: "27324313",
+		Name:     "电气小子",                 // "Wattkid"  "エレキッズ"
+		Lc:       ygo.LC_OrdinaryMonster, // 通常怪兽
+		Level:    3,
+		La:       ygo.LA_Earth,   // 光
+		Lr:       ygo.LR_Thunder, // 雷
+		Attack:   1000,
+		Defense:  500,
+		IsValid:  true,
+	})
+
+	/*160*/
+	cardBag.Register(&ygo.CardOriginal{
+		/*{
+		 id: 480
+		 中文名: 吸血跳蚤
+		 日文名: 吸血ノミ
+		 英文名: Giant Flea
+		 卡片种类: 通常怪兽
+		 卡片密码: 41762634
+		 使用限制: 无限制
+		 种族: 昆虫
+		 属性: 地
+		 星级: 4
+		 攻击力: 1500
+		 防御力: 1200
+		 罕见度: 平卡N
+		 卡包: DL04，Booster02，Booster Chronicle，Booster R1
+		 效果: 描述：攻击力高强的巨型吸血跳蚤，轻视它会非常危险。
+		}
+		*/
+		Id:       480,
+		Password: "41762634",
+		Name:     "吸血跳蚤",                 // "Giant Flea"  "吸血ノミ"
+		Lc:       ygo.LC_OrdinaryMonster, // 通常怪兽
+		Level:    4,
+		La:       ygo.LA_Earth,  // 地
+		Lr:       ygo.LR_Insect, // 昆虫
+		Attack:   1500,
+		Defense:  1200,
+		IsValid:  true,
+	})
+
+	/*161*/
+	cardBag.Register(&ygo.CardOriginal{
+		/*{
+		 id: 485
+		 中文名: 复活节岛的摩艾石像
+		 日文名: イースター島のモアイ
+		 英文名: The Statue of Easter Island
+		 卡片种类: 通常怪兽
+		 卡片密码: 10262698
+		 使用限制: 无限制
+		 种族: 岩石
+		 属性: 地
+		 星级: 4
+		 攻击力: 1100
+		 防御力: 1400
+		 罕见度: 平卡N
+		 卡包: BE02，DL04，Booster02，Booster Chronicle，Booster R1
+		 效果: 描述：存在于复活岛的石像，能够发射圆形的激光。
+		}
+		*/
+		Id:       485,
+		Password: "10262698",
+		Name:     "复活节岛的摩艾石像",            // "The Statue of Easter Island"  "イースター島のモアイ"
+		Lc:       ygo.LC_OrdinaryMonster, // 通常怪兽
+		Level:    4,
+		La:       ygo.LA_Earth, // 地
+		Lr:       ygo.LR_Rock,  // 岩石
+		Attack:   1100,
+		Defense:  1400,
+		IsValid:  true,
+	})
+
+	/*162*/
+	cardBag.Register(&ygo.CardOriginal{
+		/*{
+		 id: 486
+		 中文名: 友谊天使
+		 日文名: フレンドシップ
+		 英文名: Shining Friendship
+		 卡片种类: 通常怪兽
+		 卡片密码: 82085619
+		 使用限制: 无限制
+		 种族: 天使
+		 属性: 光
+		 星级: 4
+		 攻击力: 1300
+		 防御力: 1100
+		 罕见度: 平卡N
+		 卡包: BE02，DL04，Booster02，Booster Chronicle，Booster R1
+		 效果: 描述：即便在决斗中吵架，显示出友情就能和好。
+		}
+		*/
+		Id:       486,
+		Password: "82085619",
+		Name:     "友谊天使",                 // "Shining Friendship"  "フレンドシップ"
+		Lc:       ygo.LC_OrdinaryMonster, // 通常怪兽
+		Level:    4,
+		La:       ygo.LA_Earth,  // 光
+		Lr:       ygo.LR_Devine, // 天使
+		Attack:   1300,
+		Defense:  1100,
+		IsValid:  true,
+	})
+
+	/*163*/
+	cardBag.Register(&ygo.CardOriginal{
+		/*{
+		 id: 492
+		 中文名: 老虎斧战士
+		 日文名: タイガー·アックス
+		 英文名: Tiger Axe
+		 卡片种类: 通常怪兽
+		 卡片密码: 49791927
+		 使用限制: 无限制
+		 种族: 兽战士
+		 属性: 地
+		 星级: 4
+		 攻击力: 1300
+		 防御力: 1100
+		 罕见度: 平卡N，金字UR
+		 卡包: BE02，LE02，DL04，Booster03，Booster Chronicle，Booster R2，JY
+		 效果: 描述：手持巨斧的兽战士。能够放出行动迅速的人偶，攻击强劲。
+		}
+		*/
+		Id:       492,
+		Password: "49791927",
+		Name:     "老虎斧战士",                // "Tiger Axe"  "タイガー·アックス"
+		Lc:       ygo.LC_OrdinaryMonster, // 通常怪兽
+		Level:    4,
+		La:       ygo.LA_Earth,       // 地
+		Lr:       ygo.LR_BeastWarror, // 兽战士
+		Attack:   1300,
+		Defense:  1100,
+		IsValid:  true,
+	})
+
+	/*164*/
+	cardBag.Register(&ygo.CardOriginal{
+		/*{
+		 id: 493
+		 中文名: 巨斧袭击者
+		 日文名: アックス·レイダー
+		 英文名: Axe Raider
+		 卡片种类: 通常怪兽
+		 卡片密码: 48305365
+		 使用限制: 无限制
+		 种族: 战士
+		 属性: 地
+		 星级: 4
+		 攻击力: 1700
+		 防御力: 1150
+		 罕见度: 平卡N
+		 卡包: BE02，DL04，Booster04，Booster Chronicle，Booster R2，YSD03，JY，SJ2
+		 效果: 描述：持斧的战士。单手挥舞斧头的攻击相当强劲。
+		}
+		*/
+		Id:       493,
+		Password: "48305365",
+		Name:     "巨斧袭击者",                // "Axe Raider"  "アックス·レイダー"
+		Lc:       ygo.LC_OrdinaryMonster, // 通常怪兽
+		Level:    4,
+		La:       ygo.LA_Earth,   // 地
+		Lr:       ygo.LR_Warrior, // 战士
+		Attack:   1700,
+		Defense:  1150,
+		IsValid:  true,
+	})
+
+	/*165*/
+	cardBag.Register(&ygo.CardOriginal{
+		/*{
+		 id: 495
+		 中文名: 机械猎手
+		 日文名: メカ·ハンター
+		 英文名: Mechanicalchaser
+		 卡片种类: 通常怪兽
+		 卡片密码: 07359741
+		 使用限制: 无限制
+		 种族: 机械
+		 属性: 暗
+		 星级: 4
+		 攻击力: 1850
+		 防御力: 800
+		 罕见度: 平卡N
+		 卡包: BE02，DL04，SD10，Booster04，Booster Chronicle，Booster R2
+		 效果: 描述：听从机械王的命令，在抓住目标前都会紧追不舍的猎捕。
+		}
+		*/
+		Id:       495,
+		Password: "07359741",
+		Name:     "机械猎手",                 // "Mechanicalchaser"  "メカ·ハンター"
+		Lc:       ygo.LC_OrdinaryMonster, // 通常怪兽
+		Level:    4,
+		La:       ygo.LA_Earth,   // 暗
+		Lr:       ygo.LR_Machine, // 机械
+		Attack:   1850,
+		Defense:  800,
+		IsValid:  true,
+	})
+
+	/*166*/
+	cardBag.Register(&ygo.CardOriginal{
+		/*{
+		 id: 496
+		 中文名: 海鳞蛇
+		 日文名: シーザリオン
+		 英文名: Giant Red Seasnake
+		 卡片种类: 通常怪兽
+		 卡片密码: 58831685
+		 使用限制: 无限制
+		 种族: 水
+		 属性: 水
+		 星级: 4
+		 攻击力: 1800
+		 防御力: 800
+		 罕见度: 平卡N
+		 卡包: DL04，Booster04，Booster Chronicle，Booster R2
+		 效果: 描述：居住在海洋里的蛇型怪兽，它会去咬任何接近的物体。
+		}
+		*/
+		Id:       496,
+		Password: "58831685",
+		Name:     "海鳞蛇",                  // "Giant Red Seasnake"  "シーザリオン"
+		Lc:       ygo.LC_OrdinaryMonster, // 通常怪兽
+		Level:    4,
+		La:       ygo.LA_Earth, // 水
+		Lr:       ygo.LR_None,  // 水
+		Attack:   1800,
+		Defense:  800,
+		IsValid:  true,
+	})
+
+	/*167*/
+	cardBag.Register(&ygo.CardOriginal{
+		/*{
+		 id: 498
+		 中文名: 双生精灵
+		 日文名: ヂェミナイ·エルフ
+		 英文名: Gemini Elf
+		 卡片种类: 通常怪兽
+		 卡片密码: 69140098
+		 使用限制: 无限制
+		 种族: 魔法师
+		 属性: 地
+		 星级: 4
+		 攻击力: 1900
+		 防御力: 900
+		 罕见度: 平卡N
+		 卡包: BE02，DL04，SD06，Booster04，Booster Chronicle，Booster R2
+		 效果: 描述：相互配合发动攻击的双胞胎妖精姐妹。
+		}
+		*/
+		Id:       498,
+		Password: "69140098",
+		Name:     "双生精灵",                 // "Gemini Elf"  "ヂェミナイ·エルフ"
+		Lc:       ygo.LC_OrdinaryMonster, // 通常怪兽
+		Level:    4,
+		La:       ygo.LA_Earth,       // 地
+		Lr:       ygo.LR_SpellCaster, // 魔法师
+		Attack:   1900,
+		Defense:  900,
+		IsValid:  true,
+	})
+
+	/*168*/
+	cardBag.Register(&ygo.CardOriginal{
+		/*{
+		 id: 500
+		 中文名: 橐蜚
+		 日文名: タクヒ
+		 英文名: Takuhee
+		 卡片种类: 通常怪兽
+		 卡片密码: 03170832
+		 使用限制: 无限制
+		 种族: 鸟兽
+		 属性: 风
+		 星级: 4
+		 攻击力: 1450
+		 防御力: 1000
+		 罕见度: 平卡N
+		 卡包: DL04，Booster03，Booster Chronicle，Booster R2
+		 效果: 描述：这鸟出现的时候，就是什么不幸之事发生前的征兆。
+		}
+		*/
+		Id:       500,
+		Password: "03170832",
+		Name:     "橐蜚",                   // "Takuhee"  "タクヒ"
+		Lc:       ygo.LC_OrdinaryMonster, // 通常怪兽
+		Level:    4,
+		La:       ygo.LA_Earth,     // 风
+		Lr:       ygo.LR_WindBeast, // 鸟兽
+		Attack:   1450,
+		Defense:  1000,
+		IsValid:  true,
+	})
+
+	/*169*/
+	cardBag.Register(&ygo.CardOriginal{
+		/*{
+		 id: 502
+		 中文名: 泉之妖精
+		 日文名: 泉の妖精
+		 英文名: Fairy of the Fountain
+		 卡片种类: 通常怪兽
+		 卡片密码: 81563416
+		 使用限制: 无限制
+		 种族: 水
+		 属性: 水
+		 星级: 4
+		 攻击力: 1600
+		 防御力: 1100
+		 罕见度: 平卡N
+		 卡包: DL04，Booster04，Booster Chronicle，Booster R2
+		 效果: 描述：守护泉水的精灵。对任何污浊泉水者杀无赦。
+		}
+		*/
+		Id:       502,
+		Password: "81563416",
+		Name:     "泉之妖精",                 // "Fairy of the Fountain"  "泉の妖精"
+		Lc:       ygo.LC_OrdinaryMonster, // 通常怪兽
+		Level:    4,
+		La:       ygo.LA_Earth, // 水
+		Lr:       ygo.LR_None,  // 水
+		Attack:   1600,
+		Defense:  1100,
+		IsValid:  true,
+	})
+
+	/*170*/
+	cardBag.Register(&ygo.CardOriginal{
+		/*{
+		 id: 503
+		 中文名: 月光少女
+		 日文名: 月明かりの乙女
+		 英文名: Maiden of the Moonlight
+		 卡片种类: 通常怪兽
+		 卡片密码: 79629370
+		 使用限制: 无限制
+		 种族: 魔法师
+		 属性: 光
+		 星级: 4
+		 攻击力: 1500
+		 防御力: 1300
+		 罕见度: 平卡N
+		 卡包: DL04，Booster04，Booster Chronicle，Booster R2
+		 效果: 描述：月亮加护的魔导士。神秘的魔法能使人看到幻觉。
+		}
+		*/
+		Id:       503,
+		Password: "79629370",
+		Name:     "月光少女",                 // "Maiden of the Moonlight"  "月明かりの乙女"
+		Lc:       ygo.LC_OrdinaryMonster, // 通常怪兽
+		Level:    4,
+		La:       ygo.LA_Earth,       // 光
+		Lr:       ygo.LR_SpellCaster, // 魔法师
+		Attack:   1500,
+		Defense:  1300,
+		IsValid:  true,
+	})
+
+	/*171*/
+	cardBag.Register(&ygo.CardOriginal{
+		/*{
+		 id: 506
+		 中文名: 双头恐龙王
+		 日文名: 二頭を持つキング·レックス
+		 英文名: Two-Headed King Rex
+		 卡片种类: 通常怪兽
+		 卡片密码: 94119974
+		 使用限制: 无限制
+		 种族: 恐龙
+		 属性: 地
+		 星级: 4
+		 攻击力: 1600
+		 防御力: 1200
+		 罕见度: 平卡N，金字UR，爆闪PR
+		 卡包: BE02，DL04，Booster05，Booster Chronicle，Booster R3，TP19
+		 效果: 描述：恐龙族中的强力怪兽，两只头同时攻击。
+		}
+		*/
+		Id:       506,
+		Password: "94119974",
+		Name:     "双头恐龙王",                // "Two-Headed King Rex"  "二頭を持つキング·レックス"
+		Lc:       ygo.LC_OrdinaryMonster, // 通常怪兽
+		Level:    4,
+		La:       ygo.LA_Earth,    // 地
+		Lr:       ygo.LR_Dinosaur, // 恐龙
+		Attack:   1600,
+		Defense:  1200,
+		IsValid:  true,
+	})
+
+	/*172*/
+	cardBag.Register(&ygo.CardOriginal{
+		/*{
+		 id: 507
+		 中文名: 海龙神
+		 日文名: 海竜神
+		 英文名: Kairyu-Shin
+		 卡片种类: 通常怪兽
+		 卡片密码: 76634149
+		 使用限制: 无限制
+		 种族: 海龙
+		 属性: 水
+		 星级: 5
+		 攻击力: 1800
+		 防御力: 1500
+		 罕见度: 平卡N
+		 卡包: DL04，Booster06，Booster Chronicle，Booster R3
+		 效果: 描述：被称为海洋之主的海龙。掀起海啸吞噬一切。
+		}
+		*/
+		Id:       507,
+		Password: "76634149",
+		Name:     "海龙神",                  // "Kairyu-Shin"  "海竜神"
+		Lc:       ygo.LC_OrdinaryMonster, // 通常怪兽
+		Level:    5,
+		La:       ygo.LA_Earth,      // 水
+		Lr:       ygo.LR_Seaserpent, // 海龙
+		Attack:   1800,
+		Defense:  1500,
+		IsValid:  true,
+	})
+
+	/*173*/
+	cardBag.Register(&ygo.CardOriginal{
+		/*{
+		 id: 508
+		 中文名: 龙僵尸
+		 日文名: ドラゴン·ゾンビ
+		 英文名: Dragon Zombie
+		 卡片种类: 通常怪兽
+		 卡片密码: 66672569
+		 使用限制: 无限制
+		 种族: 不死
+		 属性: 暗
+		 星级: 3
+		 攻击力: 1600
+		 防御力: 0
+		 罕见度: 平卡N
+		 卡包: EX-R(EX)，DL04，Booster05，Booster Chronicle，Booster R3
+		 效果: 描述：被魔力唤醒的龙，吐出的气息能使物体腐烂。
+		}
+		*/
+		Id:       508,
+		Password: "66672569",
+		Name:     "龙僵尸",                  // "Dragon Zombie"  "ドラゴン·ゾンビ"
+		Lc:       ygo.LC_OrdinaryMonster, // 通常怪兽
+		Level:    3,
+		La:       ygo.LA_Earth,  // 暗
+		Lr:       ygo.LR_Zombie, // 不死
+		Attack:   1600,
+		Defense:  0,
+		IsValid:  true,
+	})
+
+	/*174*/
+	cardBag.Register(&ygo.CardOriginal{
+		/*{
+		 id: 510
+		 中文名: 神灯魔人
+		 日文名: ランプの魔人
+		 英文名: Lord of the Lamp
+		 卡片种类: 通常怪兽
+		 卡片密码: 99510761
+		 使用限制: 无限制
+		 种族: 恶魔
+		 属性: 暗
+		 星级: 4
+		 攻击力: 1400
+		 防御力: 1200
+		 罕见度: 平卡N
+		 卡包: BE02，DL04，Booster05，Booster Chronicle，Booster R3
+		 效果: 描述：从神灯里出现的魔灵，服从召唤者的意志。
+		}
+		*/
+		Id:       510,
+		Password: "99510761",
+		Name:     "神灯魔人",                 // "Lord of the Lamp"  "ランプの魔人"
+		Lc:       ygo.LC_OrdinaryMonster, // 通常怪兽
+		Level:    4,
+		La:       ygo.LA_Earth, // 暗
+		Lr:       ygo.LR_Fiend, // 恶魔
+		Attack:   1400,
+		Defense:  1200,
+		IsValid:  true,
+	})
 
 }

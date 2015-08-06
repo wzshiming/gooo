@@ -73,6 +73,21 @@ type Card struct {
 	counter         int // 计数器
 	lastAttackRound int // 最后攻击回合
 	lastChangeRound int // 最后改变表示形式回合
+	isValid         bool
+}
+
+func (ca *Card) ShowInfo() {
+	pl := ca.GetSummoner()
+	pl.CallAll(SetCardFace(ca, Arg{"攻击力": ca.GetAttack(), "防御力": ca.GetDefense()}))
+}
+
+func (ca *Card) HideInfo() {
+	pl := ca.GetSummoner()
+	pl.CallAll(SetCardFace(ca, Arg{}))
+}
+
+func (ca *Card) IsValid() bool {
+	return ca.isValid
 }
 
 func (ca *Card) Priority() int {
@@ -103,6 +118,9 @@ func (ca *Card) Priority() int {
 
 func (ca *Card) Dispatch(eventName string, args ...interface{}) {
 	yg := ca.GetSummoner().Game()
+	if Pay != eventName {
+		ca.Events.Dispatch(Pay, append(args, eventName)...)
+	}
 	yg.Chain(eventName, ca, ca.GetSummoner(), append(args))
 	ca.Events.Dispatch(eventName, args...)
 }

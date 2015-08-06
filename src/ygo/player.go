@@ -135,8 +135,8 @@ func NewPlayer(yg *YGO) *Player {
 
 func (pl *Player) Dispatch(eventName string, args ...interface{}) {
 	yg := pl.Game()
-	pl.Events.Dispatch(eventName, args...)
 	yg.Chain(eventName, nil, pl, append(args))
+	pl.Events.Dispatch(eventName, args...)
 }
 
 func (pl *Player) Game() *YGO {
@@ -191,6 +191,7 @@ func (pl *Player) Chain(eventName string, cs []*Card, a []interface{}) bool {
 			if v.ToUint() == wi.Uniq {
 				if v.GetSummoner() == pl {
 					pl.MsgPub("{self}连锁{event}", Arg{"self": v.GetId(), "event": eventName})
+					v.Events.Dispatch(Pay, append(a, eventName)...)
 					v.Events.Dispatch(Trigger+eventName, append(a, wi.Method)...)
 					return true
 				}

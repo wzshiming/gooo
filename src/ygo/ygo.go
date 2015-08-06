@@ -51,26 +51,12 @@ func NewYGO(r *misc.Rooms) *YGO {
 		yg.Players[sess.ToUint()] = p
 	})
 
-	//	yg.AddEventListener(FindCards, func(cards *Cards, ld LL_TYPE, lc LC_TYPE, la LA_TYPE, lr LR_TYPE, le LE_TYPE) {
-	//		t := []*Card{}
-	//		if ld != LL_None {
-	//			for _, v := range yg.Cards {
-	//				if v.GetPlace().GetName() == ld {
-	//					t = append(t, v)
-	//				}
-	//			}
-	//		}
-	//		if lc != LC_None {
-	//			for _, v := range t {
-	//				if v.GetPlace().GetName() == ld {
-	//					t = append(t, v)
-	//				}
-	//			}
-	//		}
-	//	})
-
 	return yg
 }
+
+//func (yg *YGO) Dispatch(eventName string, args ...interface{}) {
+//	rego.ERR(eventName, args)
+//}
 
 func (yg *YGO) Chain(eventName string, ca *Card, pl *Player, args []interface{}) {
 
@@ -80,18 +66,8 @@ func (yg *YGO) Chain(eventName string, ca *Card, pl *Player, args []interface{})
 	if pl != nil {
 		args = append(args, pl)
 	}
-	//event0 := Trigger + eventName
-	//pl.Msg("连锁事件 "+eventName+" {self}", nil)
 
 	yg.Dispatch(eventName, args...)
-
-	//	yg.ForEventEach(eventName, func(i interface{}) {
-	//		if v, ok := i.(*Card); ok {
-	//			pl.MsgPub("诱发事件 "+eventName+" {self}", Arg{"self": v.GetId()})
-	//			v.Dispatch(eventName, args...)
-	//		}
-
-	//	})
 
 	cs := []*Card{}
 	yg.ForEventEach(Chain, func(i interface{}) {

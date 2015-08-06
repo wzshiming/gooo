@@ -183,44 +183,83 @@ import (
         #if v["卡片种类"] != "通常怪兽"
     
         if i == 0 
+            i == 1
             j = j +1
             print "
 
 func elses#{j}(cardBag *ygo.CardVersion) {
-    var co *ygo.CardOriginal
     "
         end
 
-        
+        if v["卡片种类"] != "通常怪兽"
             print "
-    co = &ygo.CardOriginal{
-        /*#{_puts v}*/
-        Id:       #{v["id"]},
-        Password: \"#{v["卡片密码"]}\",
-        Name:     \"#{v["中文名"]}\", // \"#{v["英文名"]}\"  \"#{v["日文名"]}\"
-        Lc:       #{lc(v["卡片种类"])}, // #{v["卡片种类"]}
-        //Initialize:    func(ca *ygo.Card) {}, // 初始
-#{if /怪兽/.match v["卡片种类"] 
-    "Level:     #{ if v["星级"] != nil then v["星级"] else 0 end},
-    La:       #{la(v["属性"])}, // #{v["属性"]}
-    Lr:       #{lr(v["种族"])}, // #{v["种族"]}
-    Attack:   #{ if v["攻击力"] != nil && v["攻击力"] != "？" && v["攻击力"] != "?" then v["攻击力"] else 0 end},
-    Defense:  #{ if v["防御力"] != nil && v["防御力"] != "？" && v["防御力"] != "?" then v["防御力"] else 0 end},
-    Summon:          ygo.SuperiorCall, // 召唤"
-end}
-        IsValid:       false,
-}
-    cardBag.Register(co)
+            /*#{i}*/
+        cardBag.Register(&ygo.CardOriginal{
+            /*#{_puts v}*/
+            Id:       #{v["id"]},
+            Password: \"#{v["卡片密码"]}\",
+            Name:     \"#{v["中文名"]}\", // \"#{v["英文名"]}\"  \"#{v["日文名"]}\"
+            Lc:       #{lc(v["卡片种类"])}, // #{v["卡片种类"]}
+            
+    #{if /怪兽/.match v["卡片种类"] 
+        "Level:     #{ if v["星级"] != nil then v["星级"] else 0 end},
+        La:       #{la(v["属性"])}, // #{v["属性"]}
+        Lr:       #{lr(v["种族"])}, // #{v["种族"]}
+        Attack:   #{ if v["攻击力"] != nil && v["攻击力"] != "？" && v["攻击力"] != "?" then v["攻击力"] else 0 end},
+        Defense:  #{ if v["防御力"] != nil && v["防御力"] != "？" && v["防御力"] != "?" then v["防御力"] else 0 end},"
+    end}
+            //Initialize:    func(ca *ygo.Card) bool {}, // 初始
+            IsValid:       false,
+    })
 
-"
+    "
 
-        i = i + 1
-        if i == 1000
-            i = 0
-            print '}'
+            i = i + 1
+            if i == 1000
+                i = 0
+                print '}'
+            end
         end
     end
+    allcard.keys().each do|k|
+        v = allcard[k]
+        #if v["卡片种类"] != "通常怪兽"
+    
+        if i == 0 
+            j = j +1
+            print "
+func elses#{j}(cardBag *ygo.CardVersion) {
+    "
+        end
 
+        if v["卡片种类"] == "通常怪兽"
+            print "
+            /*#{i}*/
+        cardBag.Register(&ygo.CardOriginal{
+            /*#{_puts v}*/
+            Id:       #{v["id"]},
+            Password: \"#{v["卡片密码"]}\",
+            Name:     \"#{v["中文名"]}\", // \"#{v["英文名"]}\"  \"#{v["日文名"]}\"
+            Lc:       #{lc(v["卡片种类"])}, // #{v["卡片种类"]}
+    #{if /怪兽/.match v["卡片种类"] 
+        "Level:     #{ if v["星级"] != nil then v["星级"] else 0 end},
+        La:       #{la(v["属性"])}, // #{v["属性"]}
+        Lr:       #{lr(v["种族"])}, // #{v["种族"]}
+        Attack:   #{ if v["攻击力"] != nil && v["攻击力"] != "？" && v["攻击力"] != "?" then v["攻击力"] else 0 end},
+        Defense:  #{ if v["防御力"] != nil && v["防御力"] != "？" && v["防御力"] != "?" then v["防御力"] else 0 end},"
+    end}
+            IsValid:       true,
+    })
+
+    "
+
+            i = i + 1
+            if i == 1000
+                i = 0
+                print '}'
+            end
+        end
+    end
 print '}'
 end
 
@@ -269,7 +308,7 @@ if $0 == __FILE__
   #elses allcard
   #
   allcard = {}
-  files_list "./s/vol" do |path|
+  files_list "./s/Booster" do |path|
     i = JSON.parse(File.read(path).to_utf8!).to_h
     allcard[i["id"]] = i
   end

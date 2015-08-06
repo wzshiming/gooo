@@ -1,12 +1,11 @@
 package ygo
 
-import "github.com/wzshiming/dispatcher"
-
 func (ca *Card) Init() {
 	ca.Empty()
 	ca.original = *ca.baseOriginal
 	ca.effects = []*Card{}
 	ca.summoner = ca.owner
+	ca.isValid = true
 	ca.le = LE_None
 	ca.registerNormal()
 	if ca.IsMonster() {
@@ -22,10 +21,12 @@ func (ca *Card) registerNormal() {
 
 	// 进入墓地和 移除时 卡牌翻面
 	ca.AddEvent(InExtra, ca.FaceUpAttack)
+	//ca.AddEvent(InGrave, Disabled)
 	ca.AddEvent(InGrave, ca.FaceUpAttack)
+	//ca.AddEvent(InRemoved, Disabled)
 	ca.AddEvent(InRemoved, ca.FaceUpAttack)
 	// 被察觉
-	ca.AddEvent(Realize, ca.FaceUp)
+	//ca.AddEvent(Realize, ca.FaceUp)
 
 	//	// 发动
 	//	ca.AddEvent(Onset, ca.FaceUp)
@@ -42,11 +43,14 @@ func (ca *Card) registerNormal() {
 
 	// 失效
 	ca.AddEvent(Disabled, func() {
-		pl := ca.GetSummoner()
-		pl.MsgPub("{self}失效", Arg{"self": ca.GetId()})
-		ca.EmptyEvent(Offset)
-		ca.ToGrave()
-
+		if ca.IsValid() {
+			pl := ca.GetSummoner()
+			pl.MsgPub("{self}失效", Arg{"self": ca.GetId()})
+			ca.EmptyEvent(Offset)
+			ca.ToGrave()
+			ca.isValid = false
+			//ca.CloseEvent(Disabled)
+		}
 	})
 
 	// 被破坏
@@ -69,15 +73,15 @@ func (ca *Card) registerNormal() {
 
 	// 覆盖
 	ca.AddEvent(Use2, func() {
-		ca.Dispatch(Pay, Cover)
+		ca.Dispatch(Cover)
 	})
 
 	// 使用
 	ca.AddEvent(Use1, func() {
 		if ca.IsMonster() { // 怪兽
-			ca.Dispatch(Pay, Summon)
+			ca.Dispatch(Summon)
 		} else {
-			ca.Dispatch(Pay, Onset)
+			ca.Dispatch(Onset)
 		}
 	})
 
@@ -95,6 +99,9 @@ func (ca *Card) registerMagicAndTrap() {
 	ca.Range(InHand, OutHand, Arg{
 		// 代价 先覆盖
 		Pay: func(s string) {
+			if s != Onset && s != Cover {
+				return
+			}
 			pl := ca.GetSummoner()
 			if ca.GetSummoner().Szone.Len() < 5 {
 				ca.ToSzone()
@@ -103,8 +110,8 @@ func (ca *Card) registerMagicAndTrap() {
 			} else {
 				pl.MsgPub("覆盖{self}失败，魔陷区场地不足!", Arg{"self": ca.GetId()})
 				ca.Dispatch(Destroy)
+				ca.StopOnce(s)
 			}
-			ca.Dispatch(s)
 		},
 	})
 }
@@ -113,16 +120,19 @@ func (ca *Card) registerMagic() {
 	ca.AddEvent(Onset, func() {
 		pl := ca.GetSummoner()
 		pl.MsgPub("发动魔法卡{self}!", Arg{"self": ca.GetId()})
-		ca.Dispatch(Realize)
+		ca.FaceUp()
 		ca.Dispatch(UseMagic)
 	})
-	ca.AddEvent(OutSzone, ca.Init)
+}
+
+func (ca *Card) RegisterEffect0(f interface{}) {
+	ca.AddEvent(Effect0, f)
 }
 
 // 注册一张通常魔法卡
 func (ca *Card) RegisterOrdinaryMagic(f interface{}) {
 	ca.registerMagic()
-	ca.AddEventUnlike(Effect0, f)
+	ca.RegisterEffect0(f)
 	ca.AddEvent(Onset, func() {
 		if ca.IsInSzone() {
 			ca.Dispatch(Effect0)
@@ -131,30 +141,25 @@ func (ca *Card) RegisterOrdinaryMagic(f interface{}) {
 	})
 }
 
-// 注册一张永续魔法卡
-func (ca *Card) RegisterSustainsMagic(dis dispatcher.Events, event string, a Action, f interface{}) {
-	//	event0 := TriggerMust + event
-	//	ca.registerMagic()
-	//	ca.AddEvent(Onset, func() {
-	//		if ca.IsInSzone() {
-	//			dis.AddEvent(event,)
-	//			ca.GetSummoner().Game().RegisterCardEvents(event0, ca, a)
-	//			ca.AddEvent(OutSzone, func() {
-	//				ca.GetSummoner().Game().UnregisterCardEvents(event0, ca)
-	//			})
-	//		}
-	//	})
-	//	ca.AddEventUnlike(Effect0, f)
-	//	ca.AddEvent(event0, func() {
-	//		ca.Dispatch(Effect0)
-	//	})
+// 推送卡牌能连锁
+func (ca *Card) PushChain() {
+	yg := ca.GetSummoner().Game()
+	yg.AddEvent(Chain, ca)
+}
 
+// 注册全局效果监听 直到收到 失效Disabled
+func (ca *Card) RegisterGlobalListen(event string, e interface{}) {
+	yg := ca.GetSummoner().Game()
+	yg.AddEvent(event, e, ca)
+	ca.OnlyOnce(Disabled, func() {
+		yg.RemoveEvent(event, e, ca)
+	})
 }
 
 // 注册一个装备魔法卡  装备对象判断  装备上动作 装备下动作
 func (ca *Card) RegisterEquipMagic(a Action, f1 interface{}, f2 interface{}) {
 	ca.registerMagic()
-	ca.AddEventUnlike(Effect0, func() {
+	ca.RegisterEffect0(func() {
 		pl := ca.GetSummoner()
 		//yg := pl.Game()
 		c := pl.Select()
@@ -166,11 +171,9 @@ func (ca *Card) RegisterEquipMagic(a Action, f1 interface{}, f2 interface{}) {
 			ca.AddEvent(OutSzone, func() {
 				// 移除 对目标的监听
 				c.RemoveEvent(Change, ca)
-
 				// 卸下装备 执行
 				ca.Dispatch(Effect2)
 			})
-
 			// 监听目标的改变
 			c.AddEvent(Change, ca)
 
@@ -184,9 +187,8 @@ func (ca *Card) RegisterEquipMagic(a Action, f1 interface{}, f2 interface{}) {
 			ca.Dispatch(Disabled)
 		}
 	})
-
-	ca.AddEventUnlike(Effect1, f1)
-	ca.AddEventUnlike(Effect2, f2)
+	ca.AddEvent(Effect1, f1)
+	ca.AddEvent(Effect2, f2)
 }
 
 func (ca *Card) RegisterPlaceMagic(f interface{}) {
@@ -198,28 +200,22 @@ func (ca *Card) registerTrap(event string, e interface{}, f interface{}) {
 
 	ca.AddEvent(InSzone, func() {
 		pl := ca.GetSummoner()
-		yg := pl.Game()
 		pl.OnlyOnce(RoundEnd, func() {
-			yg.AddEvent(event, e)
-			//yg.RegisterCardEvents(event0, ca, a)
-			ca.AddEvent(OutSzone, func() {
-				yg.RemoveEvent(event, e)
-				//yg.UnregisterCardEvents(event0, ca)
-			})
+			ca.RegisterGlobalListen(event, e)
 		})
 	})
 
 	ca.AddEvent(Trigger+event, func() {
 		pl := ca.GetSummoner()
 		pl.MsgPub("发动陷阱卡{self}!", Arg{"self": ca.GetId()})
-		ca.Dispatch(Realize)
+		ca.FaceUp()
 		ca.Dispatch(UseTrap)
 		if ca.IsInSzone() {
 			ca.Dispatch(Effect0)
 			ca.Dispatch(Disabled)
 		}
 	})
-	ca.AddEventUnlike(Effect0, f)
+	ca.RegisterEffect0(f)
 }
 
 func (ca *Card) RegisterOrdinaryTrap(event string, e interface{}, f interface{}) {
@@ -231,6 +227,9 @@ func (ca *Card) RegisterMonster() {
 	ca.Range(InHand, OutHand, Arg{
 		// 代价
 		Pay: func(s string) {
+			if s != Summon && s != Cover {
+				return
+			}
 			pl := ca.GetSummoner()
 			pl.ResetReplyTime()
 			i := 0
@@ -248,10 +247,10 @@ func (ca *Card) RegisterMonster() {
 				} else {
 					pl.MsgPub("{self}召唤失败，祭品不足!", Arg{"self": ca.GetId()})
 					ca.Dispatch(Destroy)
+					ca.StopOnce(s)
 					return
 				}
 			}
-			ca.Dispatch(s)
 		},
 		// 召唤
 		Summon: func() {
@@ -261,7 +260,7 @@ func (ca *Card) RegisterMonster() {
 				ca.FaceUpAttack()
 				ca.SetNotCanChange()
 				pl.MsgPub("{self}召唤成功!", Arg{"self": ca.GetId()})
-				pl.CallAll(SetCardFace(ca, Arg{"攻击力": ca.GetAttack(), "防御力": ca.GetDefense()}))
+				ca.ShowInfo()
 			} else {
 				pl.MsgPub("{self}召唤失败，怪兽区场地不足!", Arg{"self": ca.GetId()})
 				ca.Dispatch(Destroy)
@@ -276,7 +275,7 @@ func (ca *Card) RegisterMonster() {
 				ca.SetNotCanChange()
 				pl.Msg("{self}覆盖成功!", Arg{"self": ca.GetId()})
 				ca.OnlyOnce(Flip, func() {
-					pl.CallAll(SetCardFace(ca, Arg{"攻击力": ca.GetAttack(), "防御力": ca.GetDefense()}))
+					ca.ShowInfo()
 				})
 			} else {
 				pl.MsgPub("{self}覆盖失败，怪兽区场地不足!", Arg{"self": ca.GetId()})
@@ -286,6 +285,9 @@ func (ca *Card) RegisterMonster() {
 	})
 
 	// 进入怪兽区
+	ca.AddEvent(OutMzone, func() {
+		ca.HideInfo()
+	})
 	ca.Range(InMzone, OutMzone, Arg{
 		// 被解放
 		Freedom: func(c *Card, i *int) {
@@ -300,7 +302,6 @@ func (ca *Card) RegisterMonster() {
 			pl := ca.GetSummoner()
 			if ca.IsCanChange() {
 				if ca.IsFaceDownDefense() {
-					ca.Dispatch(Realize)
 					ca.FaceUpAttack()
 					ca.Dispatch(Flip)
 					pl.MsgPub("{self}翻转召唤！", Arg{"self": ca.GetId()})
@@ -333,7 +334,7 @@ func (ca *Card) RegisterMonster() {
 			var b bool
 			if tar != nil {
 				b = tar.IsFaceDown()
-				tar.Dispatch(Realize)
+				ca.FaceUp()
 				if ca.IsInMzone() && tar.IsInMzone() {
 					ca.Dispatch(DamageStep, tar)
 				}
