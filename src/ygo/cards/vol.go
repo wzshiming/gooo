@@ -85,8 +85,21 @@ func vol(cardBag *ygo.CardVersion) {
 		Name:     "传说之剑",            // "Legendary Sword"  "伝説の剣"
 		Lc:       ygo.LC_EquipMagic, // 装备魔法
 
-		//Initialize:    func(ca *ygo.Card) bool {}, // 初始
-		IsValid: false,
+		Initialize: func(ca *ygo.Card) bool {
+			ca.RegisterEquipMagic(func(c *ygo.Card) bool {
+				return c.RaceIsWarrior()
+			}, func(c *ygo.Card) {
+				c.SetAttack(c.GetAttack() + 300)
+				c.SetDefense(c.GetDefense() + 300)
+				c.ShowInfo()
+			}, func(c *ygo.Card) {
+				c.SetAttack(c.GetAttack() - 300)
+				c.SetDefense(c.GetDefense() - 300)
+				c.ShowInfo()
+			})
+			return true
+		}, // 初始
+		IsValid: true,
 	})
 
 	/*2*/
@@ -117,8 +130,21 @@ func vol(cardBag *ygo.CardVersion) {
 		Name:     "猛兽之齿",            // "Beast Fangs"  "猛獣の歯"
 		Lc:       ygo.LC_EquipMagic, // 装备魔法
 
-		//Initialize:    func(ca *ygo.Card) bool {}, // 初始
-		IsValid: false,
+		Initialize: func(ca *ygo.Card) bool {
+			ca.RegisterEquipMagic(func(c *ygo.Card) bool {
+				return c.RaceIsBeast()
+			}, func(c *ygo.Card) {
+				c.SetAttack(c.GetAttack() + 300)
+				c.SetDefense(c.GetDefense() + 300)
+				c.ShowInfo()
+			}, func(c *ygo.Card) {
+				c.SetAttack(c.GetAttack() - 300)
+				c.SetDefense(c.GetDefense() - 300)
+				c.ShowInfo()
+			})
+			return true
+		}, // 初始
+		IsValid: true,
 	})
 
 	/*3*/
@@ -149,8 +175,21 @@ func vol(cardBag *ygo.CardVersion) {
 		Name:     "紫水晶",             // "Violet Crystal"  "紫水晶"
 		Lc:       ygo.LC_EquipMagic, // 装备魔法
 
-		//Initialize:    func(ca *ygo.Card) bool {}, // 初始
-		IsValid: false,
+		Initialize: func(ca *ygo.Card) bool {
+			ca.RegisterEquipMagic(func(c *ygo.Card) bool {
+				return c.RaceIsZombie()
+			}, func(c *ygo.Card) {
+				c.SetAttack(c.GetAttack() + 300)
+				c.SetDefense(c.GetDefense() + 300)
+				c.ShowInfo()
+			}, func(c *ygo.Card) {
+				c.SetAttack(c.GetAttack() - 300)
+				c.SetDefense(c.GetDefense() - 300)
+				c.ShowInfo()
+			})
+			return true
+		}, // 初始
+		IsValid: true,
 	})
 
 	/*4*/
@@ -181,8 +220,21 @@ func vol(cardBag *ygo.CardVersion) {
 		Name:     "秘术之书",            // "Book of Secret Arts"  "秘術の書"
 		Lc:       ygo.LC_EquipMagic, // 装备魔法
 
-		//Initialize:    func(ca *ygo.Card) bool {}, // 初始
-		IsValid: false,
+		Initialize: func(ca *ygo.Card) bool {
+			ca.RegisterEquipMagic(func(c *ygo.Card) bool {
+				return c.RaceIsSpellCaster()
+			}, func(c *ygo.Card) {
+				c.SetAttack(c.GetAttack() + 300)
+				c.SetDefense(c.GetDefense() + 300)
+				c.ShowInfo()
+			}, func(c *ygo.Card) {
+				c.SetAttack(c.GetAttack() - 300)
+				c.SetDefense(c.GetDefense() - 300)
+				c.ShowInfo()
+			})
+			return true
+		}, // 初始
+		IsValid: true,
 	})
 
 	/*5*/
@@ -213,8 +265,21 @@ func vol(cardBag *ygo.CardVersion) {
 		Name:     "波塞冬之力",           // "Power of Kaishin"  "ポセイドンの力"
 		Lc:       ygo.LC_EquipMagic, // 装备魔法
 
-		//Initialize:    func(ca *ygo.Card) bool {}, // 初始
-		IsValid: false,
+		Initialize: func(ca *ygo.Card) bool {
+			ca.RegisterEquipMagic(func(c *ygo.Card) bool {
+				return c.RaceIsAqua()
+			}, func(c *ygo.Card) {
+				c.SetAttack(c.GetAttack() + 300)
+				c.SetDefense(c.GetDefense() + 300)
+				c.ShowInfo()
+			}, func(c *ygo.Card) {
+				c.SetAttack(c.GetAttack() - 300)
+				c.SetDefense(c.GetDefense() - 300)
+				c.ShowInfo()
+			})
+			return true
+		}, // 初始
+		IsValid: true,
 	})
 
 	/*6*/
@@ -243,8 +308,20 @@ func vol(cardBag *ygo.CardVersion) {
 		Name:     "黑洞",                 // "Dark Hole"  "ブラック·ホール"
 		Lc:       ygo.LC_OrdinaryMagic, // 通常魔法
 
-		//Initialize:    func(ca *ygo.Card) bool {}, // 初始
-		IsValid: false,
+		Initialize: func(ca *ygo.Card) bool {
+			ca.RegisterOrdinaryMagic(func() {
+				e := func(c *ygo.Card) bool {
+					c.Dispatch(ygo.Destroy, ca)
+					return true
+				}
+				pl := ca.GetSummoner()
+				tar := pl.GetTarget()
+				pl.Mzone.ForEach(e)
+				tar.Mzone.ForEach(e)
+			})
+			return true
+		}, // 初始
+		IsValid: true,
 	})
 
 	/*7*/
@@ -273,8 +350,14 @@ func vol(cardBag *ygo.CardVersion) {
 		Name:     "红色药剂",               // "Red Medicine"  "レッド·ポーション"
 		Lc:       ygo.LC_OrdinaryMagic, // 通常魔法
 
-		//Initialize:    func(ca *ygo.Card) bool {}, // 初始
-		IsValid: false,
+		Initialize: func(ca *ygo.Card) bool {
+			ca.RegisterOrdinaryMagic(func() {
+				pl := ca.GetSummoner()
+				pl.ChangeHp(500)
+			})
+			return true
+		}, // 初始
+		IsValid: true,
 	})
 
 	/*8*/
@@ -303,8 +386,15 @@ func vol(cardBag *ygo.CardVersion) {
 		Name:     "火星",                 // "Sparks"  "火の粉"
 		Lc:       ygo.LC_OrdinaryMagic, // 通常魔法
 
-		//Initialize:    func(ca *ygo.Card) bool {}, // 初始
-		IsValid: false,
+		Initialize: func(ca *ygo.Card) bool {
+			ca.RegisterOrdinaryMagic(func() {
+				pl := ca.GetSummoner()
+				tar := pl.GetTarget()
+				tar.ChangeHp(-200)
+			})
+			return true
+		}, // 初始
+		IsValid: true,
 	})
 
 	/*9*/
@@ -516,8 +606,21 @@ func vol(cardBag *ygo.CardVersion) {
 		Name:     "暗能量",             // "Dark Energy"  "闇·エネルギー"
 		Lc:       ygo.LC_EquipMagic, // 装备魔法
 
-		//Initialize:    func(ca *ygo.Card) bool {}, // 初始
-		IsValid: false,
+		Initialize: func(ca *ygo.Card) bool {
+			ca.RegisterEquipMagic(func(c *ygo.Card) bool {
+				return c.RaceIsFiend()
+			}, func(c *ygo.Card) {
+				c.SetAttack(c.GetAttack() + 300)
+				c.SetDefense(c.GetDefense() + 300)
+				c.ShowInfo()
+			}, func(c *ygo.Card) {
+				c.SetAttack(c.GetAttack() - 300)
+				c.SetDefense(c.GetDefense() - 300)
+				c.ShowInfo()
+			})
+			return true
+		}, // 初始
+		IsValid: true,
 	})
 
 	/*15*/
@@ -549,8 +652,21 @@ func vol(cardBag *ygo.CardVersion) {
 		Name:     "镭射炮机甲铠",          // "Laser Cannon Armor"  "レーザー砲機甲鎧"
 		Lc:       ygo.LC_EquipMagic, // 装备魔法
 
-		//Initialize:    func(ca *ygo.Card) bool {}, // 初始
-		IsValid: false,
+		Initialize: func(ca *ygo.Card) bool {
+			ca.RegisterEquipMagic(func(c *ygo.Card) bool {
+				return c.RaceIsFiend()
+			}, func(c *ygo.Card) {
+				c.SetAttack(c.GetAttack() + 300)
+				c.SetDefense(c.GetDefense() + 300)
+				c.ShowInfo()
+			}, func(c *ygo.Card) {
+				c.SetAttack(c.GetAttack() - 300)
+				c.SetDefense(c.GetDefense() - 300)
+				c.ShowInfo()
+			})
+			return true
+		}, // 初始
+		IsValid: true,
 	})
 
 	/*16*/
@@ -581,8 +697,21 @@ func vol(cardBag *ygo.CardVersion) {
 		Name:     "魔菌",              // "Vile Germs"  "魔菌"
 		Lc:       ygo.LC_EquipMagic, // 装备魔法
 
-		//Initialize:    func(ca *ygo.Card) bool {}, // 初始
-		IsValid: false,
+		Initialize: func(ca *ygo.Card) bool {
+			ca.RegisterEquipMagic(func(c *ygo.Card) bool {
+				return c.RaceIsPlant()
+			}, func(c *ygo.Card) {
+				c.SetAttack(c.GetAttack() + 300)
+				c.SetDefense(c.GetDefense() + 300)
+				c.ShowInfo()
+			}, func(c *ygo.Card) {
+				c.SetAttack(c.GetAttack() - 300)
+				c.SetDefense(c.GetDefense() - 300)
+				c.ShowInfo()
+			})
+			return true
+		}, // 初始
+		IsValid: true,
 	})
 
 	/*17*/
@@ -613,8 +742,21 @@ func vol(cardBag *ygo.CardVersion) {
 		Name:     "银之弓矢",            // "Silver Bow and Arrow"  "銀の弓矢"
 		Lc:       ygo.LC_EquipMagic, // 装备魔法
 
-		//Initialize:    func(ca *ygo.Card) bool {}, // 初始
-		IsValid: false,
+		Initialize: func(ca *ygo.Card) bool {
+			ca.RegisterEquipMagic(func(c *ygo.Card) bool {
+				return c.RaceIsAngel()
+			}, func(c *ygo.Card) {
+				c.SetAttack(c.GetAttack() + 300)
+				c.SetDefense(c.GetDefense() + 300)
+				c.ShowInfo()
+			}, func(c *ygo.Card) {
+				c.SetAttack(c.GetAttack() - 300)
+				c.SetDefense(c.GetDefense() - 300)
+				c.ShowInfo()
+			})
+			return true
+		}, // 初始
+		IsValid: true,
 	})
 
 	/*18*/
@@ -645,8 +787,21 @@ func vol(cardBag *ygo.CardVersion) {
 		Name:     "龙之秘宝",            // "Dragon Treasure"  "ドラゴンの秘宝"
 		Lc:       ygo.LC_EquipMagic, // 装备魔法
 
-		//Initialize:    func(ca *ygo.Card) bool {}, // 初始
-		IsValid: false,
+		Initialize: func(ca *ygo.Card) bool {
+			ca.RegisterEquipMagic(func(c *ygo.Card) bool {
+				return c.RaceIsDragon()
+			}, func(c *ygo.Card) {
+				c.SetAttack(c.GetAttack() + 300)
+				c.SetDefense(c.GetDefense() + 300)
+				c.ShowInfo()
+			}, func(c *ygo.Card) {
+				c.SetAttack(c.GetAttack() - 300)
+				c.SetDefense(c.GetDefense() - 300)
+				c.ShowInfo()
+			})
+			return true
+		}, // 初始
+		IsValid: true,
 	})
 
 	/*19*/
@@ -677,8 +832,21 @@ func vol(cardBag *ygo.CardVersion) {
 		Name:     "电击鞭",             // "Electro-Whip"  "電撃鞭"
 		Lc:       ygo.LC_EquipMagic, // 装备魔法
 
-		//Initialize:    func(ca *ygo.Card) bool {}, // 初始
-		IsValid: false,
+		Initialize: func(ca *ygo.Card) bool {
+			ca.RegisterEquipMagic(func(c *ygo.Card) bool {
+				return c.RaceIsThunder()
+			}, func(c *ygo.Card) {
+				c.SetAttack(c.GetAttack() + 300)
+				c.SetDefense(c.GetDefense() + 300)
+				c.ShowInfo()
+			}, func(c *ygo.Card) {
+				c.SetAttack(c.GetAttack() - 300)
+				c.SetDefense(c.GetDefense() - 300)
+				c.ShowInfo()
+			})
+			return true
+		}, // 初始
+		IsValid: true,
 	})
 
 	/*20*/
@@ -709,8 +877,21 @@ func vol(cardBag *ygo.CardVersion) {
 		Name:     "魔性之月",            // "Mystical Moon"  "魔性の月"
 		Lc:       ygo.LC_EquipMagic, // 装备魔法
 
-		//Initialize:    func(ca *ygo.Card) bool {}, // 初始
-		IsValid: false,
+		Initialize: func(ca *ygo.Card) bool {
+			ca.RegisterEquipMagic(func(c *ygo.Card) bool {
+				return c.RaceIsBeastWarror()
+			}, func(c *ygo.Card) {
+				c.SetAttack(c.GetAttack() + 300)
+				c.SetDefense(c.GetDefense() + 300)
+				c.ShowInfo()
+			}, func(c *ygo.Card) {
+				c.SetAttack(c.GetAttack() - 300)
+				c.SetDefense(c.GetDefense() - 300)
+				c.ShowInfo()
+			})
+			return true
+		}, // 初始
+		IsValid: true,
 	})
 
 	/*21*/
@@ -773,8 +954,21 @@ func vol(cardBag *ygo.CardVersion) {
 		Name:     "机械改造工厂",          // "Machine Conversion Factory"  "機械改造工場"
 		Lc:       ygo.LC_EquipMagic, // 装备魔法
 
-		//Initialize:    func(ca *ygo.Card) bool {}, // 初始
-		IsValid: false,
+		Initialize: func(ca *ygo.Card) bool {
+			ca.RegisterEquipMagic(func(c *ygo.Card) bool {
+				return c.RaceIsMachine()
+			}, func(c *ygo.Card) {
+				c.SetAttack(c.GetAttack() + 300)
+				c.SetDefense(c.GetDefense() + 300)
+				c.ShowInfo()
+			}, func(c *ygo.Card) {
+				c.SetAttack(c.GetAttack() - 300)
+				c.SetDefense(c.GetDefense() - 300)
+				c.ShowInfo()
+			})
+			return true
+		}, // 初始
+		IsValid: true,
 	})
 
 	/*23*/
@@ -805,8 +999,22 @@ func vol(cardBag *ygo.CardVersion) {
 		Name:     "体温上升",            // "Raise Body Heat"  "体温の上昇"
 		Lc:       ygo.LC_EquipMagic, // 装备魔法
 
-		//Initialize:    func(ca *ygo.Card) bool {}, // 初始
-		IsValid: false,
+		Initialize: func(ca *ygo.Card) bool {
+			ca.RegisterEquipMagic(func(c *ygo.Card) bool {
+				return c.RaceIsDinosaur()
+			}, func(c *ygo.Card) {
+				c.SetAttack(c.GetAttack() + 300)
+				c.SetDefense(c.GetDefense() + 300)
+				c.ShowInfo()
+			}, func(c *ygo.Card) {
+				c.SetAttack(c.GetAttack() - 300)
+				c.SetDefense(c.GetDefense() - 300)
+				c.ShowInfo()
+			})
+			return true
+
+		}, // 初始
+		IsValid: true,
 	})
 
 	/*24*/
@@ -837,8 +1045,22 @@ func vol(cardBag *ygo.CardVersion) {
 		Name:     "随风翼",             // "Follow Wind"  "フォロー·ウィンド"
 		Lc:       ygo.LC_EquipMagic, // 装备魔法
 
-		//Initialize:    func(ca *ygo.Card) bool {}, // 初始
-		IsValid: false,
+		Initialize: func(ca *ygo.Card) bool {
+			ca.RegisterEquipMagic(func(c *ygo.Card) bool {
+				return c.RaceIsWindBeast()
+			}, func(c *ygo.Card) {
+				c.SetAttack(c.GetAttack() + 300)
+				c.SetDefense(c.GetDefense() + 300)
+				c.ShowInfo()
+			}, func(c *ygo.Card) {
+				c.SetAttack(c.GetAttack() - 300)
+				c.SetDefense(c.GetDefense() - 300)
+				c.ShowInfo()
+			})
+			return true
+
+		}, // 初始
+		IsValid: true,
 	})
 
 	/*25*/
@@ -867,8 +1089,14 @@ func vol(cardBag *ygo.CardVersion) {
 		Name:     "哥布林的秘药",             // "Goblin's Secret Remedy"  "ゴブリンの秘薬"
 		Lc:       ygo.LC_OrdinaryMagic, // 通常魔法
 
-		//Initialize:    func(ca *ygo.Card) bool {}, // 初始
-		IsValid: false,
+		Initialize: func(ca *ygo.Card) bool {
+			ca.RegisterOrdinaryMagic(func() {
+				pl := ca.GetSummoner()
+				pl.ChangeHp(600)
+			})
+			return true
+		}, // 初始
+		IsValid: true,
 	})
 
 	/*26*/
@@ -897,8 +1125,15 @@ func vol(cardBag *ygo.CardVersion) {
 		Name:     "火刑",                 // "Final Flame"  "火あぶりの刑"
 		Lc:       ygo.LC_OrdinaryMagic, // 通常魔法
 
-		//Initialize:    func(ca *ygo.Card) bool {}, // 初始
-		IsValid: false,
+		Initialize: func(ca *ygo.Card) bool {
+			ca.RegisterOrdinaryMagic(func() {
+				pl := ca.GetSummoner()
+				tar := pl.GetTarget()
+				tar.ChangeHp(-600)
+			})
+			return true
+		}, // 初始
+		IsValid: true,
 	})
 
 	/*27*/
@@ -1035,8 +1270,8 @@ func vol(cardBag *ygo.CardVersion) {
 		Lc:       ygo.LC_EffectMonster, // 效果怪兽
 
 		Level:   2,
-		La:      ygo.LA_Earth,  // 光
-		Lr:      ygo.LR_Devine, // 天使
+		La:      ygo.LA_Earth, // 光
+		Lr:      ygo.LR_Angel, // 天使
 		Attack:  900,
 		Defense: 400,
 		//Initialize:    func(ca *ygo.Card) bool {}, // 初始
@@ -3254,8 +3489,8 @@ func vol(cardBag *ygo.CardVersion) {
 		Lc:       ygo.LC_EffectMonster, // 效果怪兽
 
 		Level:   2,
-		La:      ygo.LA_Earth,  // 光
-		Lr:      ygo.LR_Devine, // 天使
+		La:      ygo.LA_Earth, // 光
+		Lr:      ygo.LR_Angel, // 天使
 		Attack:  500,
 		Defense: 700,
 		//Initialize:    func(ca *ygo.Card) bool {}, // 初始
@@ -4066,8 +4301,25 @@ func vol(cardBag *ygo.CardVersion) {
 		Name:     "执念之剑",            // "Sword of Deep-Seated"  "執念の剣"
 		Lc:       ygo.LC_EquipMagic, // 装备魔法
 
-		//Initialize:    func(ca *ygo.Card) bool {}, // 初始
-		IsValid: false,
+		Initialize: func(ca *ygo.Card) bool {
+			ca.AddEvent(ygo.InGrave, func() {
+				ca.Init()
+				ca.ToDeck()
+			})
+			ca.RegisterEquipMagic(func(c *ygo.Card) bool {
+				return true
+			}, func(c *ygo.Card) {
+				c.SetAttack(c.GetAttack() + 500)
+				c.SetDefense(c.GetDefense() + 500)
+				c.ShowInfo()
+			}, func(c *ygo.Card) {
+				c.SetAttack(c.GetAttack() - 500)
+				c.SetDefense(c.GetDefense() - 500)
+				c.ShowInfo()
+			})
+			return true
+		}, // 初始
+		IsValid: true,
 	})
 
 	/*107*/
@@ -4735,8 +4987,8 @@ func vol(cardBag *ygo.CardVersion) {
 		Name:     "竖琴精灵",                 // "Spirit of the Harp"  "ハープの精"
 		Lc:       ygo.LC_OrdinaryMonster, // 通常怪兽
 		Level:    4,
-		La:       ygo.LA_Earth,  // 光
-		Lr:       ygo.LR_Devine, // 天使
+		La:       ygo.LA_Earth, // 光
+		Lr:       ygo.LR_Angel, // 天使
 		Attack:   800,
 		Defense:  2000,
 		IsValid:  true,
@@ -5119,8 +5371,8 @@ func vol(cardBag *ygo.CardVersion) {
 		Name:     "小天使",                  // "Petit Angel"  "プチテンシ"
 		Lc:       ygo.LC_OrdinaryMonster, // 通常怪兽
 		Level:    3,
-		La:       ygo.LA_Earth,  // 光
-		Lr:       ygo.LR_Devine, // 天使
+		La:       ygo.LA_Earth, // 光
+		Lr:       ygo.LR_Angel, // 天使
 		Attack:   600,
 		Defense:  900,
 		IsValid:  true,
@@ -5343,8 +5595,8 @@ func vol(cardBag *ygo.CardVersion) {
 		Name:     "生命之沙漏",                // "Hourglass of Life"  "命の砂時計"
 		Lc:       ygo.LC_OrdinaryMonster, // 通常怪兽
 		Level:    2,
-		La:       ygo.LA_Earth,  // 光
-		Lr:       ygo.LR_Devine, // 天使
+		La:       ygo.LA_Earth, // 光
+		Lr:       ygo.LR_Angel, // 天使
 		Attack:   700,
 		Defense:  600,
 		IsValid:  true,
@@ -6079,8 +6331,8 @@ func vol(cardBag *ygo.CardVersion) {
 		Name:     "耳天使",                  // "Ocubeam"  "エンゼル·イヤーズ"
 		Lc:       ygo.LC_OrdinaryMonster, // 通常怪兽
 		Level:    5,
-		La:       ygo.LA_Earth,  // 光
-		Lr:       ygo.LR_Devine, // 天使
+		La:       ygo.LA_Earth, // 光
+		Lr:       ygo.LR_Angel, // 天使
 		Attack:   1550,
 		Defense:  1650,
 		IsValid:  true,
@@ -6111,8 +6363,8 @@ func vol(cardBag *ygo.CardVersion) {
 		Name:     "死之沉默天使 多玛",            // "Doma The Angel of Silence"  "死の沈黙の天使 ドマ"
 		Lc:       ygo.LC_OrdinaryMonster, // 通常怪兽
 		Level:    5,
-		La:       ygo.LA_Earth,  // 暗
-		Lr:       ygo.LR_Devine, // 天使
+		La:       ygo.LA_Earth, // 暗
+		Lr:       ygo.LR_Angel, // 天使
 		Attack:   1600,
 		Defense:  1400,
 		IsValid:  true,

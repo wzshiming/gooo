@@ -1463,7 +1463,7 @@ func booster(cardBag *ygo.CardVersion) {
 
 		Level:   2,
 		La:      ygo.LA_Earth,  // 光
-		Lr:      ygo.LR_Devine, // 天使
+		Lr:      ygo.LR_Angel, // 天使
 		Attack:  500,
 		Defense: 700,
 		//Initialize:    func(ca *ygo.Card) bool {}, // 初始
@@ -2364,7 +2364,7 @@ func booster(cardBag *ygo.CardVersion) {
 
 		Level:   4,
 		La:      ygo.LA_Earth,  // 光
-		Lr:      ygo.LR_Devine, // 天使
+		Lr:      ygo.LR_Angel, // 天使
 		Attack:  1100,
 		Defense: 1200,
 		//Initialize:    func(ca *ygo.Card) bool {}, // 初始
@@ -2473,7 +2473,7 @@ func booster(cardBag *ygo.CardVersion) {
 
 		Level:   4,
 		La:      ygo.LA_Earth,  // 光
-		Lr:      ygo.LR_Devine, // 天使
+		Lr:      ygo.LR_Angel, // 天使
 		Attack:  1200,
 		Defense: 1000,
 		//Initialize:    func(ca *ygo.Card) bool {}, // 初始
@@ -3803,7 +3803,7 @@ func booster(cardBag *ygo.CardVersion) {
 		Lc:       ygo.LC_OrdinaryMonster, // 通常怪兽
 		Level:    2,
 		La:       ygo.LA_Earth,  // 光
-		Lr:       ygo.LR_Devine, // 天使
+		Lr:       ygo.LR_Angel, // 天使
 		Attack:   600,
 		Defense:  400,
 		IsValid:  true,
@@ -4123,7 +4123,7 @@ func booster(cardBag *ygo.CardVersion) {
 		Lc:       ygo.LC_OrdinaryMonster, // 通常怪兽
 		Level:    2,
 		La:       ygo.LA_Earth,  // 光
-		Lr:       ygo.LR_Devine, // 天使
+		Lr:       ygo.LR_Angel, // 天使
 		Attack:   700,
 		Defense:  700,
 		IsValid:  true,
@@ -5147,7 +5147,7 @@ func booster(cardBag *ygo.CardVersion) {
 		Lc:       ygo.LC_OrdinaryMonster, // 通常怪兽
 		Level:    5,
 		La:       ygo.LA_Earth,  // 光
-		Lr:       ygo.LR_Devine, // 天使
+		Lr:       ygo.LR_Angel, // 天使
 		Attack:   1800,
 		Defense:  1500,
 		IsValid:  true,
@@ -5211,7 +5211,7 @@ func booster(cardBag *ygo.CardVersion) {
 		Lc:       ygo.LC_OrdinaryMonster, // 通常怪兽
 		Level:    5,
 		La:       ygo.LA_Earth,  // 光
-		Lr:       ygo.LR_Devine, // 天使
+		Lr:       ygo.LR_Angel, // 天使
 		Attack:   1400,
 		Defense:  1700,
 		IsValid:  true,
@@ -5659,7 +5659,7 @@ func booster(cardBag *ygo.CardVersion) {
 		Lc:       ygo.LC_OrdinaryMonster, // 通常怪兽
 		Level:    4,
 		La:       ygo.LA_Earth,  // 光
-		Lr:       ygo.LR_Devine, // 天使
+		Lr:       ygo.LR_Angel, // 天使
 		Attack:   1300,
 		Defense:  1100,
 		IsValid:  true,

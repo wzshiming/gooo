@@ -75,7 +75,7 @@ const (
 	LR_Reptile                                      //爬虫族
 	LR_Psycho                                       //念动力族
 	LR_DivineBeast                                  //幻神兽族
-	LR_Devine                                       //幻神族
+	LR_Angel                                        //天使族
 	LR_CreatorGod                                   //创造神族
 	LR_PhantomDragon                                //幻龙族
 )

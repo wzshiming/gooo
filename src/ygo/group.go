@@ -67,3 +67,16 @@ func (cp *Group) Remove(index int) (c *Card) {
 	}
 	return
 }
+
+func (cp *Group) PickedForUniq(uniq uint) (c *Card) {
+	c = cp.Cards.PickedForUniq(uniq)
+	if c != nil {
+		c.Dispatch(Out + string(cp.GetName()))
+	}
+	return
+}
+
+func (cp *Group) PickedFor(c *Card) {
+	cp.Cards.PickedFor(c)
+	c.Dispatch(Out + string(cp.GetName()))
+}

@@ -42,15 +42,12 @@ func (ca *Card) registerNormal() {
 	})
 
 	// 失效
-	ca.AddEvent(Disabled, func() {
-		if ca.IsValid() {
-			pl := ca.GetSummoner()
-			pl.MsgPub("{self}失效", Arg{"self": ca.GetId()})
-			ca.EmptyEvent(Offset)
-			ca.ToGrave()
-			ca.isValid = false
-			//ca.CloseEvent(Disabled)
-		}
+	ca.OnlyOnce(Disabled, func() {
+		pl := ca.GetSummoner()
+		pl.MsgPub("{self}失效", Arg{"self": ca.GetId()})
+		ca.EmptyEvent(Offset)
+		ca.ToGrave()
+		ca.isValid = false
 	})
 
 	// 被破坏
@@ -158,33 +155,41 @@ func (ca *Card) RegisterGlobalListen(event string, e interface{}) {
 
 // 注册一个装备魔法卡  装备对象判断  装备上动作 装备下动作
 func (ca *Card) RegisterEquipMagic(a Action, f1 interface{}, f2 interface{}) {
+
 	ca.registerMagic()
 	ca.RegisterEffect0(func() {
 		pl := ca.GetSummoner()
-		//yg := pl.Game()
+		pl.MsgPub("{self}选择装备的目标!", Arg{"self": ca.GetId()})
 		c := pl.Select()
 		if c != nil && a.Call(c) {
-			// 执行装备 上的效果
-			ca.Dispatch(Effect1, ca)
 
 			// 装备卡 离开场地时
-			ca.AddEvent(OutSzone, func() {
-				// 移除 对目标的监听
-				c.RemoveEvent(Change, ca)
-				// 卸下装备 执行
-				ca.Dispatch(Effect2)
-			})
-			// 监听目标的改变
-			c.AddEvent(Change, ca)
+			ca.OnlyOnce(OutSzone, func() {
+				ca.Dispatch(Effect2, c)
+			}, c)
 
-			// 判断目标的改变是否允许
-			ca.AddEvent(Change, func() {
+			c.OnlyOnce(OutMzone, func() {
+				ca.Dispatch(Disabled)
+			}, ca)
+
+			// 监听目标的改变判断目标的改变是否允许
+			c.AddEvent(Change, func() {
 				if !c.IsInMzone() || !a.Call(c) {
 					ca.Dispatch(Disabled)
 				}
-			})
+			}, ca)
+
+			// 执行装备 上的效果
+			ca.Dispatch(Effect1, c)
 		} else {
+			pl.MsgPub("选择的目标不合法,{self}被破坏!", Arg{"self": ca.GetId()})
 			ca.Dispatch(Disabled)
+		}
+	})
+	ca.AddEvent(Onset, func() {
+		if ca.IsInSzone() {
+			ca.Dispatch(Effect0)
+
 		}
 	})
 	ca.AddEvent(Effect1, f1)
@@ -197,7 +202,6 @@ func (ca *Card) RegisterPlaceMagic(f interface{}) {
 
 // 注册一个通常的陷阱卡   下个回合才能发动  以及 连锁的事件
 func (ca *Card) registerTrap(event string, e interface{}, f interface{}) {
-
 	ca.AddEvent(InSzone, func() {
 		pl := ca.GetSummoner()
 		pl.OnlyOnce(RoundEnd, func() {

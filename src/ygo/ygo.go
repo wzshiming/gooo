@@ -67,6 +67,7 @@ func (yg *YGO) Chain(eventName string, ca *Card, pl *Player, args []interface{})
 		args = append(args, pl)
 	}
 
+	yg.EmptyEvent(Chain)
 	yg.Dispatch(eventName, args...)
 
 	cs := []*Card{}
