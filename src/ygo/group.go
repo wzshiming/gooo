@@ -33,7 +33,7 @@ func (cp *Group) GetName() LL_TYPE {
 }
 
 func (cp *Group) BeginPush(c *Card) {
-	cp.Insert(c, len(cp.list))
+	cp.Insert(c, cp.Len())
 }
 
 func (cp *Group) EndPush(c *Card) {
@@ -52,7 +52,7 @@ func (cp *Group) Insert(c *Card, index int) {
 }
 
 func (cp *Group) BeginPop() (c *Card) {
-	return cp.Remove(len(cp.list) - 1)
+	return cp.Remove(cp.Len() - 1)
 }
 
 func (cp *Group) EndPop() (c *Card) {

@@ -424,8 +424,45 @@ func vol(cardBag *ygo.CardVersion) {
 		Name:     "地割",                 // "Fissure"  "地割れ"
 		Lc:       ygo.LC_OrdinaryMagic, // 通常魔法
 
-		//Initialize:    func(ca *ygo.Card) bool {}, // 初始
-		IsValid: false,
+		Initialize: func(ca *ygo.Card) bool {
+			ca.RegisterOrdinaryMagic(func() {
+
+				pl := ca.GetSummoner()
+				//tar := pl.GetTarget()
+
+				i := -1
+				pl.Mzone.ForEach(func(c *ygo.Card) bool {
+					if c.IsFaceUp() {
+						if i == -1 || i > c.GetAttack() {
+							i = c.GetAttack()
+						}
+					}
+					return true
+				})
+
+				cs := ygo.NewCards()
+				pl.Mzone.ForEach(func(c *ygo.Card) bool {
+					if c.IsFaceUp() {
+						if i == c.GetAttack() {
+							cs.EndPush(c)
+						}
+					}
+					return true
+				})
+
+				if cs.Len() == 1 {
+					cs.EndPop().Dispatch(ygo.Destroy)
+				} else if cs.Len() > 1 {
+					c := pl.SelectForCards(cs)
+					if c == nil {
+						c = cs.EndPop()
+					}
+					c.Dispatch(ygo.Destroy)
+				}
+			})
+			return true
+		}, // 初始
+		IsValid: true,
 	})
 
 	/*10*/
@@ -574,8 +611,23 @@ func vol(cardBag *ygo.CardVersion) {
 		Lr:      ygo.LR_Fiend, // 恶魔
 		Attack:  1380,
 		Defense: 1930,
-		//Initialize:    func(ca *ygo.Card) bool {}, // 初始
-		IsValid: false,
+		Initialize: func(ca *ygo.Card) bool {
+			ca.AddEvent(ygo.Flip, func() {
+				pl := ca.GetSummoner()
+				tar := pl.GetTarget()
+				if c := pl.SelectFor(tar.Szone, pl.Szone); c != nil {
+					c.FaceUp()
+					if c.IsTrap() {
+						c.Dispatch(ygo.Destroy)
+					} else {
+						c.FaceDown()
+					}
+				}
+			})
+			return true
+		}, // 初始
+
+		IsValid: true,
 	})
 
 	/*14*/
@@ -922,8 +974,17 @@ func vol(cardBag *ygo.CardVersion) {
 		Name:     "「守备」封禁",             // "Stop Defense"  "『守備』封じ"
 		Lc:       ygo.LC_OrdinaryMagic, // 通常魔法
 
-		//Initialize:    func(ca *ygo.Card) bool {}, // 初始
-		IsValid: false,
+		Initialize: func(ca *ygo.Card) bool {
+			ca.RegisterOrdinaryMagic(func() {
+				pl := ca.GetSummoner()
+				tar := pl.GetTarget()
+				if c := pl.SelectFor(tar.Mzone); c != nil && c.IsDefense() {
+					c.FaceUpAttack()
+				}
+			})
+			return true
+		}, // 初始
+		IsValid: true,
 	})
 
 	/*22*/
@@ -1274,8 +1335,15 @@ func vol(cardBag *ygo.CardVersion) {
 		Lr:      ygo.LR_Angel, // 天使
 		Attack:  900,
 		Defense: 400,
-		//Initialize:    func(ca *ygo.Card) bool {}, // 初始
-		IsValid: false,
+		Initialize: func(ca *ygo.Card) bool {
+			ca.RegisterFlip(func() {
+				pl := ca.GetSummoner()
+				pl.ActionDraw(1)
+			})
+			return true
+		}, // 初始
+
+		IsValid: true,
 	})
 
 	/*30*/
@@ -1322,8 +1390,23 @@ func vol(cardBag *ygo.CardVersion) {
 		Lr:      ygo.LR_Warrior, // 战士
 		Attack:  300,
 		Defense: 300,
-		//Initialize:    func(ca *ygo.Card) bool {}, // 初始
-		IsValid: false,
+		Initialize: func(ca *ygo.Card) bool {
+			ca.RegisterFlip(func() {
+				pl := ca.GetSummoner()
+				tar := pl.GetTarget()
+				if c := pl.SelectFor(tar.Szone, pl.Szone); c != nil {
+					c.FaceUp()
+					if c.IsMagic() {
+						c.Dispatch(ygo.Destroy)
+					} else {
+						c.FaceDown()
+					}
+				}
+			})
+			return true
+		}, // 初始
+
+		IsValid: true,
 	})
 
 	/*31*/
@@ -1368,8 +1451,18 @@ func vol(cardBag *ygo.CardVersion) {
 		Lr:      ygo.LR_Insect, // 昆虫
 		Attack:  450,
 		Defense: 600,
-		//Initialize:    func(ca *ygo.Card) bool {}, // 初始
-		IsValid: false,
+		Initialize: func(ca *ygo.Card) bool {
+			ca.RegisterFlip(func() {
+				pl := ca.GetSummoner()
+				tar := pl.GetTarget()
+				if c := pl.SelectFor(tar.Mzone, pl.Mzone); c != nil {
+					c.Dispatch(ygo.Destroy)
+				}
+			})
+			return true
+		}, // 初始
+
+		IsValid: true,
 	})
 
 	/*32*/
@@ -1416,8 +1509,19 @@ func vol(cardBag *ygo.CardVersion) {
 		Lr:      ygo.LR_Beast, // 兽
 		Attack:  450,
 		Defense: 500,
-		//Initialize:    func(ca *ygo.Card) bool {}, // 初始
-		IsValid: false,
+
+		Initialize: func(ca *ygo.Card) bool {
+			ca.RegisterFlip(func() {
+				pl := ca.GetSummoner()
+				tar := pl.GetTarget()
+				if c := pl.SelectFor(tar.Mzone, pl.Mzone); c != nil {
+					c.ToHand()
+				}
+			})
+			return true
+		}, // 初始
+
+		IsValid: true,
 	})
 
 	/*33*/
@@ -1450,8 +1554,22 @@ func vol(cardBag *ygo.CardVersion) {
 		Name:     "魔法除去",               // "De-Spell"  "魔法除去"
 		Lc:       ygo.LC_OrdinaryMagic, // 通常魔法
 
-		//Initialize:    func(ca *ygo.Card) bool {}, // 初始
-		IsValid: false,
+		Initialize: func(ca *ygo.Card) bool {
+			ca.RegisterOrdinaryMagic(func() {
+				pl := ca.GetSummoner()
+				tar := pl.GetTarget()
+				if c := pl.SelectFor(tar.Szone, pl.Szone); c != nil {
+					c.FaceUp()
+					if c.IsMagic() {
+						c.Dispatch(ygo.Destroy)
+					} else {
+						c.FaceDown()
+					}
+				}
+			})
+			return true
+		}, // 初始
+		IsValid: true,
 	})
 
 	/*34*/
@@ -1551,8 +1669,19 @@ func vol(cardBag *ygo.CardVersion) {
 		Name:     "掘墓的食尸鬼",             // "Gravedigger Ghoul"  "墓掘りグール"
 		Lc:       ygo.LC_OrdinaryMagic, // 通常魔法
 
-		//Initialize:    func(ca *ygo.Card) bool {}, // 初始
-		IsValid: false,
+		Initialize: func(ca *ygo.Card) bool {
+			ca.RegisterOrdinaryMagic(func() {
+				pl := ca.GetSummoner()
+				tar := pl.GetTarget()
+				for i := 0; i != 2; i++ {
+					if c := pl.SelectFor(tar.Grave); c != nil {
+						c.ToRemoved()
+					}
+				}
+			})
+			return true
+		}, // 初始
+		IsValid: true,
 	})
 
 	/*37*/
@@ -1961,8 +2090,18 @@ func vol(cardBag *ygo.CardVersion) {
 		Lr:      ygo.LR_Fiend, // 恶魔
 		Attack:  900,
 		Defense: 400,
-		//Initialize:    func(ca *ygo.Card) bool {}, // 初始
-		IsValid: false,
+		Initialize: func(ca *ygo.Card) bool {
+			ca.RegisterFlip(func() {
+				pl := ca.GetSummoner()
+				c := pl.SelectFor(pl.Grave)
+				if c.IsTrap() {
+					c.ToHand()
+				}
+			})
+			return true
+		}, // 初始
+
+		IsValid: true,
 	})
 
 	/*48*/
@@ -2619,8 +2758,18 @@ func vol(cardBag *ygo.CardVersion) {
 		Lr:      ygo.LR_SpellCaster, // 魔法师
 		Attack:  300,
 		Defense: 400,
-		//Initialize:    func(ca *ygo.Card) bool {}, // 初始
-		IsValid: false,
+		Initialize: func(ca *ygo.Card) bool {
+			ca.RegisterFlip(func() {
+				pl := ca.GetSummoner()
+				c := pl.SelectFor(pl.Grave)
+				if c.IsMagic() {
+					c.ToHand()
+				}
+			})
+			return true
+		}, // 初始
+
+		IsValid: true,
 	})
 
 	/*64*/
@@ -2820,8 +2969,25 @@ func vol(cardBag *ygo.CardVersion) {
 		Name:     "对死者的供奉",             // "Tribute to The Doomed"  "死者への手向け"
 		Lc:       ygo.LC_OrdinaryMagic, // 通常魔法
 
-		//Initialize:    func(ca *ygo.Card) bool {}, // 初始
-		IsValid: false,
+		Initialize: func(ca *ygo.Card) bool {
+			ca.RegisterPay(func(s string) {
+				if s == ygo.Onset {
+					pl := ca.GetSummoner()
+					if c := pl.SelectMust(pl.Hand); c != nil {
+						c.Dispatch(ygo.Cost)
+					}
+				}
+			})
+			ca.RegisterOrdinaryMagic(func() {
+				pl := ca.GetSummoner()
+				tar := pl.GetTarget()
+				if c := pl.SelectFor(tar.Mzone, pl.Mzone); c != nil {
+					c.Dispatch(ygo.Destroy)
+				}
+			})
+			return true
+		}, // 初始
+		IsValid: true,
 	})
 
 	/*69*/
@@ -2852,8 +3018,19 @@ func vol(cardBag *ygo.CardVersion) {
 		Name:     "魂之解放",               // "Soul Release"  "魂の解放"
 		Lc:       ygo.LC_OrdinaryMagic, // 通常魔法
 
-		//Initialize:    func(ca *ygo.Card) bool {}, // 初始
-		IsValid: false,
+		Initialize: func(ca *ygo.Card) bool {
+			ca.RegisterOrdinaryMagic(func() {
+				pl := ca.GetSummoner()
+				tar := pl.GetTarget()
+				for i := 0; i != 5; i++ {
+					if c := pl.SelectFor(tar.Grave, pl.Grave); c != nil {
+						c.ToRemoved()
+					}
+				}
+			})
+			return true
+		}, // 初始
+		IsValid: true,
 	})
 
 	/*70*/
@@ -2883,8 +3060,18 @@ func vol(cardBag *ygo.CardVersion) {
 		Name:     "开朗的殡葬师",             // "The Cheerful Coffin"  "陽気な葬儀屋"
 		Lc:       ygo.LC_OrdinaryMagic, // 通常魔法
 
-		//Initialize:    func(ca *ygo.Card) bool {}, // 初始
-		IsValid: false,
+		Initialize: func(ca *ygo.Card) bool {
+			ca.RegisterOrdinaryMagic(func() {
+				pl := ca.GetSummoner()
+				for i := 0; i != 3; i++ {
+					if c := pl.SelectFor(pl.Hand); c != nil {
+						c.Dispatch(ygo.Discard)
+					}
+				}
+			})
+			return true
+		}, // 初始
+		IsValid: true,
 	})
 
 	/*71*/
@@ -3292,8 +3479,19 @@ func vol(cardBag *ygo.CardVersion) {
 		Lr:      ygo.LR_Warrior, // 战士
 		Attack:  900,
 		Defense: 700,
-		//Initialize:    func(ca *ygo.Card) bool {}, // 初始
-		IsValid: false,
+		Initialize: func(ca *ygo.Card) bool {
+			ca.RegisterFlip(func() {
+				pl := ca.GetSummoner()
+				tar := pl.GetTarget()
+				i := tar.Szone.Len()
+				if i != 0 {
+					tar.ChangeHp(i * -500)
+				}
+			})
+			return true
+		}, // 初始
+
+		IsValid: true,
 	})
 
 	/*81*/
@@ -3324,8 +3522,16 @@ func vol(cardBag *ygo.CardVersion) {
 		Name:     "火炎地狱",               // "Tremendous Fire"  "火炎地獄"
 		Lc:       ygo.LC_OrdinaryMagic, // 通常魔法
 
-		//Initialize:    func(ca *ygo.Card) bool {}, // 初始
-		IsValid: false,
+		Initialize: func(ca *ygo.Card) bool {
+			ca.RegisterOrdinaryMagic(func() {
+				pl := ca.GetSummoner()
+				tar := pl.GetTarget()
+				tar.ChangeHp(-1000)
+				pl.ChangeHp(500)
+			})
+			return true
+		}, // 初始
+		IsValid: true,
 	})
 
 	/*82*/
@@ -3453,8 +3659,27 @@ func vol(cardBag *ygo.CardVersion) {
 		Lr:      ygo.LR_Thunder, // 雷
 		Attack:  1500,
 		Defense: 1300,
-		//Initialize:    func(ca *ygo.Card) bool {}, // 初始
-		IsValid: false,
+		Initialize: func(ca *ygo.Card) bool {
+			ca.RegisterFlip(func() {
+				pl := ca.GetSummoner()
+				pl.ChangeHp(3000)
+			})
+			ca.AddEvent(ygo.OutMzone, func() {
+				pl := ca.GetSummoner()
+				e1 := func() {
+					pl.ChangeHp(-5000)
+				}
+				e2 := func() {
+					ca.RemoveEvent(ygo.InGrave, e1)
+				}
+				ca.OnlyOnce(ygo.InHand, e2)
+				ca.OnlyOnce(ygo.InRemoved, e2)
+				ca.OnlyOnce(ygo.InGrave, e1)
+			})
+			return true
+		}, // 初始
+
+		IsValid: true,
 	})
 
 	/*85*/
@@ -4159,6 +4384,16 @@ func vol(cardBag *ygo.CardVersion) {
 
 		Initialize: func(ca *ygo.Card) bool {
 			obj := ca
+
+			ca.RegisterPay(func(s string) {
+				if s == ygo.UseMagic {
+					pl := ca.GetSummoner()
+					if c := pl.SelectMust(pl.Hand); c != nil {
+						c.Dispatch(ygo.Cost)
+					}
+				}
+			})
+
 			ca.RegisterOrdinaryTrap(ygo.UseMagic, func(c *ygo.Card) {
 				pl := ca.GetSummoner()
 				if pl.Hand.Len() >= 1 {
@@ -4166,11 +4401,6 @@ func vol(cardBag *ygo.CardVersion) {
 					ca.PushChain()
 				}
 			}, func() {
-				pl := ca.GetSummoner()
-				pl.MsgPub("选择支付的代价", nil)
-				if c := pl.SelectMust(pl.Hand); c != nil {
-					c.Dispatch(ygo.Cost)
-				}
 				obj.Dispatch(ygo.Disabled)
 			})
 			return true
@@ -4267,8 +4497,28 @@ func vol(cardBag *ygo.CardVersion) {
 		Name:     "右手持盾左手持剑",           // "Shield & Sword"  "右手に盾を左手に剣を"
 		Lc:       ygo.LC_OrdinaryMagic, // 通常魔法
 
-		//Initialize:    func(ca *ygo.Card) bool {}, // 初始
-		IsValid: false,
+		Initialize: func(ca *ygo.Card) bool {
+			ca.RegisterOrdinaryMagic(func() {
+				pl := ca.GetSummoner()
+				tar := pl.GetTarget()
+				var e func(c *ygo.Card) bool
+				e = func(c *ygo.Card) bool {
+					if c.IsFaceUp() {
+						c.SetAttack(c.GetAttack() - c.GetBaseAttack() + c.GetBaseDefense())
+						c.SetDefense(c.GetDefense() - c.GetBaseDefense() + c.GetBaseAttack())
+						pl.OnlyOnce(ygo.RoundEnd, func() {
+							c.SetAttack(c.GetAttack() + c.GetBaseAttack() - c.GetBaseDefense())
+							c.SetDefense(c.GetDefense() + c.GetBaseDefense() - c.GetBaseAttack())
+						}, ca, c)
+					}
+					return true
+				}
+				pl.Mzone.ForEach(e)
+				tar.Mzone.ForEach(e)
+			})
+			return true
+		}, // 初始
+		IsValid: true,
 	})
 
 	/*106*/
@@ -4351,8 +4601,19 @@ func vol(cardBag *ygo.CardVersion) {
 		Name:     "「攻击」封禁",             // "Block Attack"  "『攻撃』封じ"
 		Lc:       ygo.LC_OrdinaryMagic, // 通常魔法
 
-		//Initialize:    func(ca *ygo.Card) bool {}, // 初始
-		IsValid: false,
+		Initialize: func(ca *ygo.Card) bool {
+			ca.RegisterOrdinaryMagic(func() {
+				pl := ca.GetSummoner()
+				tar := pl.GetTarget()
+				if c := tar.SelectFor(tar.Mzone); c != nil {
+					if c.IsFaceUp() {
+						c.Defense()
+					}
+				}
+			})
+			return true
+		}, // 初始
+		IsValid: true,
 	})
 
 	/*108*/

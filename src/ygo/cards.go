@@ -4,29 +4,44 @@ import (
 	"github.com/wzshiming/rego"
 )
 
-type Cards struct {
-	list []*Card
-}
+type Cards []*Card
 
 func NewCards() *Cards {
-	return &Cards{
-		list: []*Card{},
-	}
+	return &Cards{}
 }
 
 func (cp *Cards) Clear() {
-	cp.list = []*Card{}
+	*cp = []*Card{}
+}
+
+func (cp *Cards) Clone() (p *Cards) {
+	p = NewCards()
+	c := append(*p, (*cp)...)
+	*p = c
+	return
 }
 
 func (cp *Cards) Len() int {
-	return len(cp.list)
+	return len(*cp)
+}
+
+func (cp *Cards) Get(index int) *Card {
+	return (*cp)[index]
 }
 
 func (cp *Cards) Shuffle() {
-	array := cp.list
-	for i := 0; i < len(array)*10; i++ {
-		for j := 0; j < len(array)-1; j++ {
-			if ((<-rego.LCG) % 4) != 0 {
+	for i := 0; i != 20; i++ {
+		cp.SortFor(func(c1, c2 *Card) bool {
+			return ((<-rego.LCG) % 5) != 0
+		})
+	}
+}
+
+func (cp *Cards) SortFor(f func(c1, c2 *Card) bool) {
+	array := *cp
+	for i := 0; i < len(array); i++ {
+		for j := 0; j < len(array)-i-1; j++ {
+			if f(array[j], array[j+1]) {
 				array[j], array[j+1] = array[j+1], array[j]
 			}
 		}
@@ -34,7 +49,7 @@ func (cp *Cards) Shuffle() {
 }
 
 func (cp *Cards) BeginPush(c *Card) {
-	cp.Insert(c, len(cp.list))
+	cp.Insert(c, len(*cp))
 }
 
 func (cp *Cards) EndPush(c *Card) {
@@ -42,12 +57,12 @@ func (cp *Cards) EndPush(c *Card) {
 }
 
 func (cp *Cards) Insert(c *Card, index int) {
-	cp.list = append(cp.list[:index], append([]*Card{c}, cp.list[index:]...)...)
+	(*cp) = append((*cp)[:index], append([]*Card{c}, (*cp)[index:]...)...)
 
 }
 
 func (cp *Cards) BeginPop() (c *Card) {
-	return cp.Remove(len(cp.list) - 1)
+	return cp.Remove(len(*cp) - 1)
 }
 
 func (cp *Cards) EndPop() (c *Card) {
@@ -55,16 +70,16 @@ func (cp *Cards) EndPop() (c *Card) {
 }
 
 func (cp *Cards) Remove(index int) (c *Card) {
-	if len(cp.list) == 0 {
+	if len(*cp) == 0 {
 		return
 	}
-	c = cp.list[index]
-	cp.list = append(cp.list[:index], cp.list[index+1:]...)
+	c = (*cp)[index]
+	(*cp) = append((*cp)[:index], (*cp)[index+1:]...)
 	return
 }
 
 func (cp *Cards) PickedForUniq(uniq uint) (c *Card) {
-	for k, v := range cp.list {
+	for k, v := range *cp {
 		if v.ToUint() == uniq {
 			v.place = nil
 			return cp.Remove(k)
@@ -74,7 +89,7 @@ func (cp *Cards) PickedForUniq(uniq uint) (c *Card) {
 }
 
 func (cp *Cards) ExistForUniq(uniq uint) (c *Card) {
-	for _, v := range cp.list {
+	for _, v := range *cp {
 		if v.ToUint() == uniq {
 			c = v
 		}
@@ -99,7 +114,7 @@ func (cp *Cards) Uniqs() (us []uint) {
 }
 
 func (cp *Cards) ForEach(fun func(*Card) bool) {
-	for _, v := range cp.list {
+	for _, v := range *cp {
 		if !fun(v) {
 			return
 		}
@@ -107,7 +122,7 @@ func (cp *Cards) ForEach(fun func(*Card) bool) {
 }
 
 func (cp *Cards) Find(fun func(*Card) bool) (indexs []int) {
-	for k, v := range cp.list {
+	for k, v := range *cp {
 		if fun(v) {
 			indexs = append(indexs, k)
 		}

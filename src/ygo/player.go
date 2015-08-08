@@ -478,152 +478,31 @@ func (pl *Player) Select() (t *Card) {
 	return
 }
 
-func (pl *Player) SelectMust(cp *Group) (t *Card) {
-	//pl.ClearCode()
-	for {
-		pl.CallAll(flashPhases(pl))
-		select {
-		case <-time.After(time.Second):
-			pl.PassTime -= time.Second
-			if pl.PassTime <= 0 {
-				t = cp.EndPop()
-				return
+func (pl *Player) SelectForCards(ca *Cards) *Card {
+	if c := pl.Select(); c != nil {
+		for _, v := range *ca {
+			if v == c {
+				return c
 			}
-		case p := <-pl.GetCode():
-			if t = cp.ExistForUniq(p.Uniq); t == nil {
-				t = cp.EndPop()
+		}
+	}
+	return nil
+}
+
+func (pl *Player) SelectFor(cp ...*Group) *Card {
+	if c := pl.Select(); c != nil {
+		for _, v := range cp {
+			if v.IsExistCard(c) {
+				return c
 			}
-			return
-		}
-	}
-
-	return
-}
-
-func (pl *Player) SelectSzone() (t *Card) {
-	if tar := pl.Select(); tar != nil {
-		pla := tar.GetPlace()
-		if pla.GetName() == LL_Szone {
-			return tar
 		}
 	}
 	return nil
 }
 
-func (pl *Player) SelectSzoneTarget() (t *Card) {
-	if tar := pl.Select(); tar != nil {
-		pla := tar.GetPlace()
-		if pla.GetName() == LL_Szone && pla.GetOwner() != pl {
-			return tar
-		}
+func (pl *Player) SelectMust(cp *Group) *Card {
+	if c := pl.Select(); c != nil && cp.IsExistCard(c) {
+		return c
 	}
-	return nil
-}
-
-func (pl *Player) SelectSzoneSelf() (t *Card) {
-	if tar := pl.Select(); tar != nil {
-		pla := tar.GetPlace()
-		if pla.GetName() == LL_Szone && pla.GetOwner() == pl {
-			return tar
-		}
-	}
-	return nil
-}
-
-func (pl *Player) SelectMzone() (t *Card) {
-	if tar := pl.Select(); tar != nil {
-		pla := tar.GetPlace()
-		if pla.GetName() == LL_Mzone {
-			return tar
-		}
-	}
-	return nil
-}
-
-func (pl *Player) SelectMzoneTarget() (t *Card) {
-	if tar := pl.Select(); tar != nil {
-		pla := tar.GetPlace()
-		if pla.GetName() == LL_Mzone && pla.GetOwner() != pl {
-			return tar
-		}
-	}
-	return nil
-}
-
-func (pl *Player) SelectMzoneSelf() (t *Card) {
-	if tar := pl.Select(); tar != nil {
-		pla := tar.GetPlace()
-		if pla.GetName() == LL_Mzone && pla.GetOwner() == pl {
-			return tar
-		}
-	}
-	return nil
-}
-
-func (pl *Player) SelectGrave() (t *Card) {
-	if tar := pl.Select(); tar != nil {
-		pla := tar.GetPlace()
-		if pla.GetName() == LL_Grave {
-			return tar
-		}
-	}
-	return nil
-}
-
-func (pl *Player) SelectGraveTarget() (t *Card) {
-	if tar := pl.Select(); tar != nil {
-		pla := tar.GetPlace()
-		if pla.GetName() == LL_Grave && pla.GetOwner() != pl {
-			return tar
-		}
-	}
-	return nil
-}
-
-func (pl *Player) SelectGraveSelf() (t *Card) {
-	if tar := pl.Select(); tar != nil {
-		pla := tar.GetPlace()
-		if pla.GetName() == LL_Grave && pla.GetOwner() == pl {
-			return tar
-		}
-	}
-	return nil
-}
-
-func (pl *Player) SelectHand() (t *Card) {
-	if tar := pl.Select(); tar != nil {
-		pla := tar.GetPlace()
-		if pla.GetName() == LL_Hand {
-			return tar
-		}
-	}
-	return nil
-}
-
-func (pl *Player) SelectHandTarget() (t *Card) {
-	if tar := pl.Select(); tar != nil {
-		pla := tar.GetPlace()
-		if pla.GetName() == LL_Hand && pla.GetOwner() != pl {
-			return tar
-		}
-	}
-	return nil
-}
-
-func (pl *Player) SelectHandSelf() (t *Card) {
-	if tar := pl.Select(); tar != nil {
-		pla := tar.GetPlace()
-		if pla.GetName() == LL_Hand && pla.GetOwner() == pl {
-			return tar
-		}
-	}
-	return nil
-}
-
-func (pl *Player) SelectFunc(size int, cp *Group, fun func(c *Card) bool) {
-	for i := 0; i != size; i++ {
-		t := pl.SelectMust(cp)
-		fun(t)
-	}
-	return
+	return cp.EndPop()
 }

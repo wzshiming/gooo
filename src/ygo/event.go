@@ -25,11 +25,6 @@ func (ca *Card) registerNormal() {
 	ca.AddEvent(InGrave, ca.FaceUpAttack)
 	//ca.AddEvent(InRemoved, Disabled)
 	ca.AddEvent(InRemoved, ca.FaceUpAttack)
-	// 被察觉
-	//ca.AddEvent(Realize, ca.FaceUp)
-
-	//	// 发动
-	//	ca.AddEvent(Onset, ca.FaceUp)
 
 	// 花费
 	ca.AddEvent(Cost, ca.ToGrave)
@@ -160,7 +155,8 @@ func (ca *Card) RegisterEquipMagic(a Action, f1 interface{}, f2 interface{}) {
 	ca.RegisterEffect0(func() {
 		pl := ca.GetSummoner()
 		pl.MsgPub("{self}选择装备的目标!", Arg{"self": ca.GetId()})
-		c := pl.Select()
+		tar := pl.GetTarget()
+		c := pl.SelectFor(pl.Mzone, tar.Mzone)
 		if c != nil && a.Call(c) {
 
 			// 装备卡 离开场地时
@@ -224,6 +220,14 @@ func (ca *Card) registerTrap(event string, e interface{}, f interface{}) {
 
 func (ca *Card) RegisterOrdinaryTrap(event string, e interface{}, f interface{}) {
 	ca.registerTrap(event, e, f)
+}
+
+func (ca *Card) RegisterPay(f interface{}) {
+	ca.AddEvent(Pay, f)
+}
+
+func (ca *Card) RegisterFlip(f interface{}) {
+	ca.AddEvent(Flip, f)
 }
 
 func (ca *Card) RegisterMonster() {
