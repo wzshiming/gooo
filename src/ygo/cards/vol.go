@@ -428,10 +428,10 @@ func vol(cardBag *ygo.CardVersion) {
 			ca.RegisterOrdinaryMagic(func() {
 
 				pl := ca.GetSummoner()
-				//tar := pl.GetTarget()
+				tar := pl.GetTarget()
 
 				i := -1
-				pl.Mzone.ForEach(func(c *ygo.Card) bool {
+				tar.Mzone.ForEach(func(c *ygo.Card) bool {
 					if c.IsFaceUp() {
 						if i == -1 || i > c.GetAttack() {
 							i = c.GetAttack()
@@ -441,7 +441,7 @@ func vol(cardBag *ygo.CardVersion) {
 				})
 
 				cs := ygo.NewCards()
-				pl.Mzone.ForEach(func(c *ygo.Card) bool {
+				tar.Mzone.ForEach(func(c *ygo.Card) bool {
 					if c.IsFaceUp() {
 						if i == c.GetAttack() {
 							cs.EndPush(c)
@@ -530,8 +530,18 @@ func vol(cardBag *ygo.CardVersion) {
 		Name:     "融合",                 // "Polymerization"  "融合"
 		Lc:       ygo.LC_OrdinaryMagic, // 通常魔法
 
-		//Initialize:    func(ca *ygo.Card) bool {}, // 初始
-		IsValid: false,
+		Initialize: func(ca *ygo.Card) bool {
+			ca.RegisterOrdinaryMagic(func() {
+				pl := ca.GetSummoner()
+				if c := pl.SelectFor(pl.Extra); c != nil {
+					if c.IsFusionMonster() {
+						c.Dispatch(ygo.SummonSpecial)
+					}
+				}
+			})
+			return true
+		}, // 初始
+		IsValid: true,
 	})
 
 	/*12*/
@@ -616,11 +626,11 @@ func vol(cardBag *ygo.CardVersion) {
 				pl := ca.GetSummoner()
 				tar := pl.GetTarget()
 				if c := pl.SelectFor(tar.Szone, pl.Szone); c != nil {
-					c.FaceUp()
+					c.SetFaceUp()
 					if c.IsTrap() {
 						c.Dispatch(ygo.Destroy)
 					} else {
-						c.FaceDown()
+						c.SetFaceDown()
 					}
 				}
 			})
@@ -979,7 +989,7 @@ func vol(cardBag *ygo.CardVersion) {
 				pl := ca.GetSummoner()
 				tar := pl.GetTarget()
 				if c := pl.SelectFor(tar.Mzone); c != nil && c.IsDefense() {
-					c.FaceUpAttack()
+					c.SetFaceUpAttack()
 				}
 			})
 			return true
@@ -1232,8 +1242,9 @@ func vol(cardBag *ygo.CardVersion) {
 		Lc:       ygo.LC_OrdinaryMagic, // 通常魔法
 
 		Initialize: func(ca *ygo.Card) bool {
-			ca.RegisterOrdinaryMagic(func() {
-				pl := ca.GetSummoner().GetTarget()
+			ca.RegisterUnordinaryMagic(func() {
+				pl := ca.GetSummoner()
+				tar := pl.GetTarget()
 				i := 0
 				e := func() {
 					i++
@@ -1241,21 +1252,20 @@ func vol(cardBag *ygo.CardVersion) {
 						ca.Dispatch(ygo.Disabled)
 					}
 				}
-				pl.AddEvent(ygo.RoundEnd, e)
+				tar.AddEvent(ygo.RoundEnd, e)
 				ca.AddEvent(ygo.Disabled, func() {
-					pl.RemoveEvent(ygo.RoundEnd, e)
+					tar.RemoveEvent(ygo.RoundEnd, e)
 				})
 
-				pl.Mzone.ForEach(func(c *ygo.Card) bool {
-					c.FaceUp()
+				tar.Mzone.ForEach(func(c *ygo.Card) bool {
+					c.SetFaceUp()
 					return true
 				})
 				ca.RegisterGlobalListen(ygo.Declaration, func(c *ygo.Card) {
-					if c.GetSummoner() == pl {
+					if c.GetSummoner() == tar {
 						c.StopOnce(ygo.Declaration)
 					}
 				})
-				ca.StopOnce(ygo.Disabled)
 			})
 			return true
 		}, // 初始
@@ -1395,11 +1405,11 @@ func vol(cardBag *ygo.CardVersion) {
 				pl := ca.GetSummoner()
 				tar := pl.GetTarget()
 				if c := pl.SelectFor(tar.Szone, pl.Szone); c != nil {
-					c.FaceUp()
+					c.SetFaceUp()
 					if c.IsMagic() {
 						c.Dispatch(ygo.Destroy)
 					} else {
-						c.FaceDown()
+						c.SetFaceDown()
 					}
 				}
 			})
@@ -1559,11 +1569,11 @@ func vol(cardBag *ygo.CardVersion) {
 				pl := ca.GetSummoner()
 				tar := pl.GetTarget()
 				if c := pl.SelectFor(tar.Szone, pl.Szone); c != nil {
-					c.FaceUp()
+					c.SetFaceUp()
 					if c.IsMagic() {
 						c.Dispatch(ygo.Destroy)
 					} else {
-						c.FaceDown()
+						c.SetFaceDown()
 					}
 				}
 			})
@@ -2973,7 +2983,7 @@ func vol(cardBag *ygo.CardVersion) {
 			ca.RegisterPay(func(s string) {
 				if s == ygo.Onset {
 					pl := ca.GetSummoner()
-					if c := pl.SelectMust(pl.Hand); c != nil {
+					if c := pl.SelectFor(pl.Hand); c != nil {
 						c.Dispatch(ygo.Cost)
 					}
 				}
@@ -3527,7 +3537,7 @@ func vol(cardBag *ygo.CardVersion) {
 				pl := ca.GetSummoner()
 				tar := pl.GetTarget()
 				tar.ChangeHp(-1000)
-				pl.ChangeHp(500)
+				pl.ChangeHp(-500)
 			})
 			return true
 		}, // 初始
@@ -4388,7 +4398,7 @@ func vol(cardBag *ygo.CardVersion) {
 			ca.RegisterPay(func(s string) {
 				if s == ygo.UseMagic {
 					pl := ca.GetSummoner()
-					if c := pl.SelectMust(pl.Hand); c != nil {
+					if c := pl.SelectFor(pl.Hand); c != nil {
 						c.Dispatch(ygo.Cost)
 					}
 				}
@@ -4498,7 +4508,7 @@ func vol(cardBag *ygo.CardVersion) {
 		Lc:       ygo.LC_OrdinaryMagic, // 通常魔法
 
 		Initialize: func(ca *ygo.Card) bool {
-			ca.RegisterOrdinaryMagic(func() {
+			ca.RegisterUnordinaryMagic(func() {
 				pl := ca.GetSummoner()
 				tar := pl.GetTarget()
 				var e func(c *ygo.Card) bool
@@ -4506,13 +4516,16 @@ func vol(cardBag *ygo.CardVersion) {
 					if c.IsFaceUp() {
 						c.SetAttack(c.GetAttack() - c.GetBaseAttack() + c.GetBaseDefense())
 						c.SetDefense(c.GetDefense() - c.GetBaseDefense() + c.GetBaseAttack())
-						pl.OnlyOnce(ygo.RoundEnd, func() {
+						ca.OnlyOnce(ygo.Disabled, func() {
 							c.SetAttack(c.GetAttack() + c.GetBaseAttack() - c.GetBaseDefense())
 							c.SetDefense(c.GetDefense() + c.GetBaseDefense() - c.GetBaseAttack())
 						}, ca, c)
 					}
 					return true
 				}
+				pl.OnlyOnce(ygo.RoundEnd, func() {
+					ca.Dispatch(ygo.Disabled)
+				})
 				pl.Mzone.ForEach(e)
 				tar.Mzone.ForEach(e)
 			})
@@ -4605,9 +4618,9 @@ func vol(cardBag *ygo.CardVersion) {
 			ca.RegisterOrdinaryMagic(func() {
 				pl := ca.GetSummoner()
 				tar := pl.GetTarget()
-				if c := tar.SelectFor(tar.Mzone); c != nil {
+				if c := pl.SelectFor(tar.Mzone); c != nil {
 					if c.IsFaceUp() {
-						c.Defense()
+						c.SetFaceDefense()
 					}
 				}
 			})

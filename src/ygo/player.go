@@ -357,10 +357,11 @@ func (pl *Player) end(lp LP_TYPE) bool {
 	pl.Msg("选择丢弃的手牌", nil)
 	if i := pl.Hand.Len() - pl.MaxSdi; i > 0 {
 		for k := 0; k != i; k++ {
-			ca := pl.SelectMust(pl.Hand)
-			if ca != nil {
-				ca.Dispatch(Discard)
+			ca := pl.SelectFor(pl.Hand)
+			if ca == nil {
+				ca = pl.Hand.EndPop()
 			}
+			ca.Dispatch(Discard)
 		}
 	}
 	pl.Msg("对方回合", nil)
@@ -414,7 +415,7 @@ func (pl *Player) ActionDraw(s int) {
 			return
 		}
 		pl.Dispatch(DrawNum, pl)
-		t := pl.Deck.BeginPop()
+		t := pl.Deck.EndPop()
 		pl.Hand.EndPush(t)
 	}
 }
@@ -479,6 +480,8 @@ func (pl *Player) Select() (t *Card) {
 }
 
 func (pl *Player) SelectForCards(ca *Cards) *Card {
+
+	pl.Msg("从下列卡牌选择", nil)
 	if c := pl.Select(); c != nil {
 		for _, v := range *ca {
 			if v == c {
@@ -490,6 +493,11 @@ func (pl *Player) SelectForCards(ca *Cards) *Card {
 }
 
 func (pl *Player) SelectFor(cp ...*Group) *Card {
+	s := []string{}
+	for _, v := range cp {
+		s = append(s, v.GetOwner().Name+" "+string(v.GetName()))
+	}
+	pl.Msg("从下列区域选择卡牌 {c1}", Arg{"c1": s})
 	if c := pl.Select(); c != nil {
 		for _, v := range cp {
 			if v.IsExistCard(c) {
@@ -498,11 +506,4 @@ func (pl *Player) SelectFor(cp ...*Group) *Card {
 		}
 	}
 	return nil
-}
-
-func (pl *Player) SelectMust(cp *Group) *Card {
-	if c := pl.Select(); c != nil && cp.IsExistCard(c) {
-		return c
-	}
-	return cp.EndPop()
 }

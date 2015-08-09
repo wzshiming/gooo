@@ -36,28 +36,6 @@ func (co *CardOriginal) Make(pl *Player) *Card {
 	return c
 }
 
-//var handMethods = map[LC_TYPE][]LI_TYPE{
-//	LC_None:            []LI_TYPE{},
-//	LC_Monster:         []LI_TYPE{LI_Use1, LI_Use2}, //怪兽
-//	LC_Magic:           []LI_TYPE{LI_Use1, LI_Use2}, //魔法
-//	LC_Trap:            []LI_TYPE{LI_Use2},          //陷阱
-//	LC_OrdinaryMonster: []LI_TYPE{LI_Use1, LI_Use2}, //普通怪兽 通常 黄色
-//	LC_EffectMonster:   []LI_TYPE{LI_Use1, LI_Use2}, //效果怪兽 橙色
-//	LC_FusionMonster:   []LI_TYPE{LI_Use1, LI_Use2}, //融合怪兽 紫色
-//	LC_ExcessMonster:   []LI_TYPE{LI_Use1, LI_Use2}, //超量怪兽 xyz 黑色
-//	LC_HomologyMonster: []LI_TYPE{LI_Use1, LI_Use2}, //同调怪兽 白色
-//	LC_RiteMonster:     []LI_TYPE{LI_Use1, LI_Use2}, //仪式怪兽 蓝色
-//	LC_OrdinaryMagic:   []LI_TYPE{LI_Use1, LI_Use2}, //普通魔法 通常
-//	LC_RiteMagic:       []LI_TYPE{LI_Use1, LI_Use2}, //仪式魔法
-//	LC_SustainsMagic:   []LI_TYPE{LI_Use1, LI_Use2}, //永续魔法 速度2
-//	LC_EquipMagic:      []LI_TYPE{LI_Use1, LI_Use2}, //装备魔法
-//	LC_PlaceMagic:      []LI_TYPE{LI_Use1, LI_Use2}, //场地魔法
-//	LC_RushMagic:       []LI_TYPE{LI_Use1, LI_Use2}, //速攻魔法
-//	LC_OrdinaryTrap:    []LI_TYPE{LI_Use2},          //普通陷阱 速度2
-//	LC_SustainsTrap:    []LI_TYPE{LI_Use2},          //永续陷阱 速度2
-//	LC_ReactionTrap:    []LI_TYPE{LI_Use2},          //反击陷阱 速度3
-//}
-
 type Card struct {
 	dispatcher.Events
 	rego.Unique
@@ -92,18 +70,7 @@ func (ca *Card) IsValid() bool {
 
 func (ca *Card) Priority() int {
 	switch ca.baseOriginal.Lc {
-	case LC_OrdinaryMonster: //普通怪兽 黄色
-		return 1
-	case LC_EffectMonster: //效果怪兽 橙色
-		return 1
-	case LC_OrdinaryMagic: //普通魔法 通常
-		return 1
-	case LC_SustainsMagic: //永续魔法
-		return 1
-	case LC_EquipMagic: //装备魔法
-		return 1
-	case LC_PlaceMagic: //场地魔法
-		return 1
+
 	case LC_RushMagic: //速攻魔法 速度2
 		return 2
 	case LC_OrdinaryTrap: //普通陷阱 速度2
@@ -112,6 +79,8 @@ func (ca *Card) Priority() int {
 		return 2
 	case LC_ReactionTrap: //反击陷阱 速度3
 		return 3
+	default:
+		return 1
 	}
 	return 0
 }
@@ -128,10 +97,6 @@ func (ca *Card) Dispatch(eventName string, args ...interface{}) {
 func (ca *Card) GetPlace() *Group {
 	return ca.place
 }
-
-//func (ca *Card) HandMethods() []LI_TYPE {
-//	return handMethods[ca.original.Lc]
-//}
 
 // 获得召唤者
 func (ca *Card) GetSummoner() *Player {
@@ -157,6 +122,40 @@ func (ca *Card) GetId() uint {
 // 获得基础类型
 func (ca *Card) GetBaseType() LC_TYPE {
 	return ca.baseOriginal.Lc
+}
+
+func (ca *Card) Is(a ...interface{}) bool {
+	for _, v := range a {
+		switch s := v.(type) {
+		case LC_TYPE:
+			if ca.original.Lc&s == 0 {
+				return false
+			}
+		case LA_TYPE:
+			if ca.original.La&s == 0 {
+				return false
+			}
+		case LE_TYPE:
+			if ca.le&s == 0 {
+				return false
+			}
+		case LR_TYPE:
+			if ca.original.Lr&s == 0 {
+				return false
+			}
+		case LL_TYPE:
+			if ca.place.name != s {
+				return false
+			}
+		case *Player:
+			if ca.GetSummoner() != s {
+				return false
+			}
+		default:
+			return false
+		}
+	}
+	return true
 }
 
 // 获得类型
@@ -353,10 +352,6 @@ func (ca *Card) IsCanChange() bool {
 	return true
 }
 
-func IsCanChange(ca *Card) bool {
-	return ca.IsCanChange()
-}
-
 // 设置能够改变表示形式
 func (ca *Card) SetCanChange() bool {
 	ca.lastChangeRound = 0
@@ -364,18 +359,10 @@ func (ca *Card) SetCanChange() bool {
 	return true
 }
 
-func SetCanChange(ca *Card) bool {
-	return ca.SetCanChange()
-}
-
 // 设置不能够改变表示形式
 func (ca *Card) SetNotCanChange() bool {
 	ca.lastChangeRound = ca.GetSummoner().GetRound()
 	return true
-}
-
-func SetNotCanChange(ca *Card) bool {
-	return ca.SetNotCanChange()
 }
 
 // 判断能够攻击
@@ -386,28 +373,16 @@ func (ca *Card) IsCanAttack() bool {
 	return true
 }
 
-func IsCanAttack(ca *Card) bool {
-	return ca.IsCanAttack()
-}
-
 // 设置能够攻击
 func (ca *Card) SetCanAttack() bool {
 	ca.lastAttackRound = 0
 	return true
 }
 
-func SetCanAttack(ca *Card) bool {
-	return ca.SetCanAttack()
-}
-
 // 设置不能够攻击
 func (ca *Card) SetNotCanAttack() bool {
 	ca.lastAttackRound = ca.GetSummoner().GetRound()
 	return true
-}
-
-func SetNotCanAttack(ca *Card) bool {
-	return ca.SetNotCanAttack()
 }
 
 // 设置表示形式
@@ -427,12 +402,8 @@ func (ca *Card) IsAttack() bool {
 }
 
 // 设置攻击表示
-func (ca *Card) Attack() {
+func (ca *Card) SetFaceAttack() {
 	ca.setLE(LE_Attack | (ca.le & LE_fd))
-}
-
-func Attack(ca *Card) {
-	ca.Attack()
 }
 
 // 判断是防御表示
@@ -440,13 +411,9 @@ func (ca *Card) IsDefense() bool {
 	return (ca.le & LE_Defense) == LE_Defense
 }
 
-// 设置是表示
-func (ca *Card) Defense() {
+// 设置防御表示
+func (ca *Card) SetFaceDefense() {
 	ca.setLE(LE_Defense | (ca.le & LE_fd))
-}
-
-func Defense(ca *Card) {
-	ca.Defense()
 }
 
 // 判断是面朝
@@ -455,12 +422,8 @@ func (ca *Card) IsFaceUp() bool {
 }
 
 // 设置是面朝上
-func (ca *Card) FaceUp() {
+func (ca *Card) SetFaceUp() {
 	ca.setLE(LE_FaceUp | (ca.le & LE_ad))
-}
-
-func FaceUp(ca *Card) {
-	ca.FaceUp()
 }
 
 // 判断是面朝下
@@ -469,12 +432,8 @@ func (ca *Card) IsFaceDown() bool {
 }
 
 // 设置是面朝下
-func (ca *Card) FaceDown() {
+func (ca *Card) SetFaceDown() {
 	ca.setLE(LE_FaceDown | (ca.le & LE_ad))
-}
-
-func FaceDown(ca *Card) {
-	ca.FaceDown()
 }
 
 // 判断是面朝上攻击表示
@@ -483,12 +442,8 @@ func (ca *Card) IsFaceUpAttack() bool {
 }
 
 // 设置是面朝上攻击表示
-func (ca *Card) FaceUpAttack() {
+func (ca *Card) SetFaceUpAttack() {
 	ca.setLE(LE_FaceUpAttack)
-}
-
-func FaceUpAttack(ca *Card) {
-	ca.FaceUpAttack()
 }
 
 // 判断是面朝下攻击表示
@@ -497,12 +452,8 @@ func (ca *Card) IsFaceDownAttack() bool {
 }
 
 // 设置是面朝下攻击表示
-func (ca *Card) FaceDownAttack() {
+func (ca *Card) SetFaceDownAttack() {
 	ca.setLE(LE_FaceDownAttack)
-}
-
-func FaceDownAttack(ca *Card) {
-	ca.FaceDownAttack()
 }
 
 // 判断是面朝上防御表示
@@ -511,12 +462,8 @@ func (ca *Card) IsFaceUpDefense() bool {
 }
 
 // 设置是面朝上防御表示
-func (ca *Card) FaceUpDefense() {
+func (ca *Card) SetFaceUpDefense() {
 	ca.setLE(LE_FaceUpDefense)
-}
-
-func FaceUpDefense(ca *Card) {
-	ca.FaceUpDefense()
 }
 
 // 判断是面朝下防御表示
@@ -525,12 +472,8 @@ func (ca *Card) IsFaceDownDefense() bool {
 }
 
 // 设置是面朝下防御表示
-func (ca *Card) FaceDownDefense() {
+func (ca *Card) SetFaceDownDefense() {
 	ca.setLE(LE_FaceDownDefense)
-}
-
-func FaceDownDefense(ca *Card) {
-	ca.FaceDownDefense()
 }
 
 // 拿起  不属于任何牌堆里
@@ -546,18 +489,10 @@ func (ca *Card) ToGrave() bool {
 	return true
 }
 
-func ToGrave(ca *Card) bool {
-	return ca.ToGrave()
-}
-
 // 移动到除外
 func (ca *Card) ToRemoved() bool {
 	ca.GetOwner().Removed.EndPush(ca)
 	return true
-}
-
-func ToRemoved(ca *Card) bool {
-	return ca.ToRemoved()
 }
 
 // 移动到手牌
@@ -566,18 +501,10 @@ func (ca *Card) ToHand() bool {
 	return true
 }
 
-func ToHand(ca *Card) bool {
-	return ca.ToHand()
-}
-
 // 移动到额外
 func (ca *Card) ToExtra() bool {
 	ca.GetOwner().Extra.EndPush(ca)
 	return true
-}
-
-func ToExtra(ca *Card) bool {
-	return ca.ToExtra()
 }
 
 // 移动到怪兽
@@ -586,18 +513,10 @@ func (ca *Card) ToMzone() bool {
 	return true
 }
 
-func ToMzone(ca *Card) bool {
-	return ca.ToMzone()
-}
-
 // 移动到魔法
 func (ca *Card) ToSzone() bool {
 	ca.GetOwner().Szone.EndPush(ca)
 	return true
-}
-
-func ToSzone(ca *Card) bool {
-	return ca.ToSzone()
 }
 
 // 移动到卡组
@@ -606,22 +525,15 @@ func (ca *Card) ToDeck() bool {
 	return true
 }
 
-func ToDeck(ca *Card) bool {
-	return ca.ToDeck()
-}
-
 // 移动到场地
 func (ca *Card) ToField() bool {
 	f := ca.GetOwner().Field
-	for f.Len() != 0 {
-		f.ForEach(ToGrave)
-	}
-	ca.GetOwner().Field.EndPush(ca)
+	f.ForEach(func(c *Card) bool {
+		c.ToGrave()
+		return true
+	})
+	f.EndPush(ca)
 	return true
-}
-
-func ToField(ca *Card) bool {
-	return ca.ToField()
 }
 
 // 是在场地
@@ -630,18 +542,10 @@ func (ca *Card) IsInField() bool {
 	return p != nil && p.GetName() == LL_Field
 }
 
-func IsInField(ca *Card) bool {
-	return ca.IsInField()
-}
-
 // 是在卡组
 func (ca *Card) IsInDeck() bool {
 	p := ca.GetPlace()
 	return p != nil && p.GetName() == LL_Deck
-}
-
-func IsInDeck(ca *Card) bool {
-	return ca.IsInDeck()
 }
 
 // 是在额外
@@ -650,18 +554,10 @@ func (ca *Card) IsInExtra() bool {
 	return p != nil && p.GetName() == LL_Extra
 }
 
-func IsInExtra(ca *Card) bool {
-	return ca.IsInExtra()
-}
-
 // 是在墓地
 func (ca *Card) IsInGrave() bool {
 	p := ca.GetPlace()
 	return p != nil && p.GetName() == LL_Grave
-}
-
-func IsInGrave(ca *Card) bool {
-	return ca.IsInGrave()
 }
 
 // 是在手牌
@@ -670,18 +566,10 @@ func (ca *Card) IsInHand() bool {
 	return p != nil && p.GetName() == LL_Hand
 }
 
-func IsInHand(ca *Card) bool {
-	return ca.IsInHand()
-}
-
 // 是在怪兽区
 func (ca *Card) IsInMzone() bool {
 	p := ca.GetPlace()
 	return p != nil && p.GetName() == LL_Mzone
-}
-
-func IsInMzone(ca *Card) bool {
-	return ca.IsInMzone()
 }
 
 // 是在魔陷区
@@ -690,18 +578,10 @@ func (ca *Card) IsInSzone() bool {
 	return p != nil && p.GetName() == LL_Szone
 }
 
-func IsInSzone(ca *Card) bool {
-	return ca.IsInSzone()
-}
-
 // 是在手牌
 func (ca *Card) IsInRemoved() bool {
 	p := ca.GetPlace()
 	return p != nil && p.GetName() == LL_Removed
-}
-
-func IsInRemoved(ca *Card) bool {
-	return ca.IsInRemoved()
 }
 
 //战士族

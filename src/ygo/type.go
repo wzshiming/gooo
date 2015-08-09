@@ -6,10 +6,10 @@ type LC_TYPE uint32
 const (
 	LC_None LC_TYPE = 0
 
-	LC_OrdinaryMonster LC_TYPE = 1 << (32 - 1 - iota) //普通怪兽 通常 黄色
+	LC_OrdinaryMonster LC_TYPE = 1 << (32 - 1 - iota) //普通怪兽 黄色
 	LC_EffectMonster                                  //效果怪兽 橙色
 	LC_FusionMonster                                  //融合怪兽 紫色
-	LC_ExcessMonster                                  //超量怪兽 xyz 黑色
+	LC_ExcessMonster                                  //超量怪兽 黑色
 	LC_HomologyMonster                                //同调怪兽 白色
 	LC_RiteMonster                                    //仪式怪兽 蓝色
 	LC_OrdinaryMagic                                  //普通魔法 通常
@@ -113,12 +113,6 @@ const (
 	LI_Over = 101 // 鼠标悬浮
 	LI_Out  = 102 // 鼠标离开
 
-//	LI_OrdinaryMonsterCall  = LI_TYPE(LC_OrdinaryMonster) | LI_Use1 // 普通怪兽召唤
-//	LI_OrdinaryMonsterCover = LI_TYPE(LC_OrdinaryMonster) | LI_Use2 // 普通怪兽覆盖
-//	LI_MagicUse             = LI_TYPE(LC_Magic) | LI_Use1           // 魔法卡使用
-//	LI_MagicAndTrapCover    = LI_TYPE(LC_MagicAndTrap) | LI_Use2    // 魔陷覆盖
-//	LI_TrapRespond          = LI_TYPE(LC_Trap) | LI_Respond         // 陷阱回应
-
 )
 
 // 召唤方式 Summon
@@ -135,7 +129,7 @@ const (
 	LS_Fusion                                  // 融合
 	LS_Ritual                                  // 仪式
 	LS_Synchro                                 // 同调
-	LS_XYZ                                     // 超量
+	LS_Excess                                  // 超量
 	LS_Pendulum                                // 摇摆
 )
 
@@ -151,6 +145,7 @@ const (
 	LP_Battle                   // 战斗
 	LP_Main2                    // 主阶段2
 	LP_End                      // 结束
+	LP_Chain                    // 连锁
 	LP_Damage                   // 战斗
 	LP_DamageCal                // 战斗计算
 )

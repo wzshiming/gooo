@@ -31,13 +31,20 @@ func (cv *CardVersion) Get(id uint) *CardOriginal {
 	return cv.List[id]
 }
 
-func (cv *CardVersion) Find(name string) (c []uint) {
+func (cv *CardVersion) Find(name string, val bool) (c []uint) {
 	reg := regexp.MustCompile(fmt.Sprintf("~([^(~~)]*%s[^(~~)]*)~", name))
 	al := reg.FindAllStringSubmatch(cv.nameReg, -1)
 	for _, v := range al {
 		if len(v) == 2 {
 			if d := cv.nameList[v[1]]; d != nil {
-				c = append(c, d.Id)
+				if val {
+					if d.IsValid {
+						c = append(c, d.Id)
+					}
+				} else {
+					c = append(c, d.Id)
+				}
+
 			}
 		}
 	}

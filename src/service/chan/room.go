@@ -84,7 +84,7 @@ func (r *Room) CardFind(args agent.Request, reply *agent.Response) error {
 	args.Request.DeJson(&gr)
 	b := r.saveQuery[gr.Query]
 	if b == nil {
-		b = rego.EnJson(cardBag.Find(gr.Query))
+		b = rego.EnJson(cardBag.Find(gr.Query,true))
 		r.saveQuery[gr.Query] = b
 	}
 

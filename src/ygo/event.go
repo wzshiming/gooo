@@ -19,12 +19,14 @@ func (ca *Card) Init() {
 
 func (ca *Card) registerNormal() {
 
+	ca.AddEvent(InDeck, ca.SetFaceDownAttack)
+
 	// 进入墓地和 移除时 卡牌翻面
-	ca.AddEvent(InExtra, ca.FaceUpAttack)
+	ca.AddEvent(InExtra, ca.SetFaceUpAttack)
 	//ca.AddEvent(InGrave, Disabled)
-	ca.AddEvent(InGrave, ca.FaceUpAttack)
+	ca.AddEvent(InGrave, ca.SetFaceUpAttack)
 	//ca.AddEvent(InRemoved, Disabled)
-	ca.AddEvent(InRemoved, ca.FaceUpAttack)
+	ca.AddEvent(InRemoved, ca.SetFaceUpAttack)
 
 	// 花费
 	ca.AddEvent(Cost, ca.ToGrave)
@@ -40,7 +42,6 @@ func (ca *Card) registerNormal() {
 	ca.OnlyOnce(Disabled, func() {
 		pl := ca.GetSummoner()
 		pl.MsgPub("{self}失效", Arg{"self": ca.GetId()})
-		ca.EmptyEvent(Offset)
 		ca.ToGrave()
 		ca.isValid = false
 	})
@@ -97,7 +98,7 @@ func (ca *Card) registerMagicAndTrap() {
 			pl := ca.GetSummoner()
 			if ca.GetSummoner().Szone.Len() < 5 {
 				ca.ToSzone()
-				ca.FaceDownAttack()
+				ca.SetFaceDownAttack()
 				//pl.Msg("覆盖{self}成功!", Arg{"self": ca.GetId()})
 			} else {
 				pl.MsgPub("覆盖{self}失败，魔陷区场地不足!", Arg{"self": ca.GetId()})
@@ -112,7 +113,7 @@ func (ca *Card) registerMagic() {
 	ca.AddEvent(Onset, func() {
 		pl := ca.GetSummoner()
 		pl.MsgPub("发动魔法卡{self}!", Arg{"self": ca.GetId()})
-		ca.FaceUp()
+		ca.SetFaceUp()
 		ca.Dispatch(UseMagic)
 	})
 }
@@ -129,6 +130,17 @@ func (ca *Card) RegisterOrdinaryMagic(f interface{}) {
 		if ca.IsInSzone() {
 			ca.Dispatch(Effect0)
 			ca.Dispatch(Disabled)
+		}
+	})
+}
+
+// 注册一张通常魔法卡手动失效
+func (ca *Card) RegisterUnordinaryMagic(f interface{}) {
+	ca.registerMagic()
+	ca.RegisterEffect0(f)
+	ca.AddEvent(Onset, func() {
+		if ca.IsInSzone() {
+			ca.Dispatch(Effect0)
 		}
 	})
 }
@@ -150,14 +162,11 @@ func (ca *Card) RegisterGlobalListen(event string, e interface{}) {
 
 // 注册一个装备魔法卡  装备对象判断  装备上动作 装备下动作
 func (ca *Card) RegisterEquipMagic(a Action, f1 interface{}, f2 interface{}) {
-
-	ca.registerMagic()
-	ca.RegisterEffect0(func() {
+	ca.RegisterUnordinaryMagic(func() {
 		pl := ca.GetSummoner()
 		pl.MsgPub("{self}选择装备的目标!", Arg{"self": ca.GetId()})
 		tar := pl.GetTarget()
-		c := pl.SelectFor(pl.Mzone, tar.Mzone)
-		if c != nil && a.Call(c) {
+		if c := pl.SelectFor(pl.Mzone, tar.Mzone); c != nil && a.Call(c) {
 
 			// 装备卡 离开场地时
 			ca.OnlyOnce(OutSzone, func() {
@@ -182,12 +191,6 @@ func (ca *Card) RegisterEquipMagic(a Action, f1 interface{}, f2 interface{}) {
 			ca.Dispatch(Disabled)
 		}
 	})
-	ca.AddEvent(Onset, func() {
-		if ca.IsInSzone() {
-			ca.Dispatch(Effect0)
-
-		}
-	})
 	ca.AddEvent(Effect1, f1)
 	ca.AddEvent(Effect2, f2)
 }
@@ -208,7 +211,7 @@ func (ca *Card) registerTrap(event string, e interface{}, f interface{}) {
 	ca.AddEvent(Trigger+event, func() {
 		pl := ca.GetSummoner()
 		pl.MsgPub("发动陷阱卡{self}!", Arg{"self": ca.GetId()})
-		ca.FaceUp()
+		ca.SetFaceUp()
 		ca.Dispatch(UseTrap)
 		if ca.IsInSzone() {
 			ca.Dispatch(Effect0)
@@ -250,7 +253,7 @@ func (ca *Card) RegisterMonster() {
 				pl.MsgPub("{self}需要解放{size}只怪兽作为代价", Arg{"self": ca.GetId(), "size": i})
 			}
 			for k := 0; k < i; {
-				if t := pl.SelectMust(pl.Mzone); t != nil {
+				if t := pl.SelectFor(pl.Mzone); t != nil {
 					t.Dispatch(Freedom, ca, &k)
 				} else {
 					pl.MsgPub("{self}召唤失败，祭品不足!", Arg{"self": ca.GetId()})
@@ -265,7 +268,7 @@ func (ca *Card) RegisterMonster() {
 			pl := ca.GetSummoner()
 			if ca.GetSummoner().Mzone.Len() < 5 {
 				ca.ToMzone()
-				ca.FaceUpAttack()
+				ca.SetFaceUpAttack()
 				ca.SetNotCanChange()
 				pl.MsgPub("{self}召唤成功!", Arg{"self": ca.GetId()})
 				ca.ShowInfo()
@@ -279,7 +282,7 @@ func (ca *Card) RegisterMonster() {
 			pl := ca.GetSummoner()
 			if ca.GetSummoner().Mzone.Len() < 5 {
 				ca.ToMzone()
-				ca.FaceDownDefense()
+				ca.SetFaceDownDefense()
 				ca.SetNotCanChange()
 				pl.Msg("{self}覆盖成功!", Arg{"self": ca.GetId()})
 				ca.OnlyOnce(Flip, func() {
@@ -310,14 +313,14 @@ func (ca *Card) RegisterMonster() {
 			pl := ca.GetSummoner()
 			if ca.IsCanChange() {
 				if ca.IsFaceDownDefense() {
-					ca.FaceUpAttack()
+					ca.SetFaceUpAttack()
 					ca.Dispatch(Flip)
 					pl.MsgPub("{self}翻转召唤！", Arg{"self": ca.GetId()})
 				} else if ca.IsFaceUpDefense() {
-					ca.FaceUpAttack()
+					ca.SetFaceUpAttack()
 					pl.MsgPub("{self}变成攻击表示！", Arg{"self": ca.GetId()})
 				} else if ca.IsFaceUpAttack() {
-					ca.FaceUpDefense()
+					ca.SetFaceUpDefense()
 					pl.MsgPub("{self}变成防御表示！", Arg{"self": ca.GetId()})
 				} else {
 					pl.Msg("{self}当前状态无法改变表示形式！", Arg{"self": ca.GetId()})
@@ -342,14 +345,14 @@ func (ca *Card) RegisterMonster() {
 			var b bool
 			if tar != nil {
 				b = tar.IsFaceDown()
-				ca.FaceUp()
+				ca.SetFaceUp()
 				if ca.IsInMzone() && tar.IsInMzone() {
 					ca.Dispatch(DamageStep, tar)
 				}
 
 			} else {
 				if ca.IsInMzone() {
-					ca.Dispatch(DamageStep, tar)
+					ca.Dispatch(DamageStep)
 				}
 			}
 			if b {
@@ -385,6 +388,7 @@ func (ca *Card) RegisterMonster() {
 				ca.Dispatch(Fought, tar)
 				tar.Dispatch(Fought, ca)
 			} else {
+				ca.Dispatch(Deduct)
 				pl.GetTarget().ChangeHp(-ca.GetAttack())
 				pl.MsgPub("{self}直接攻击了{rival}！", Arg{"self": ca.GetId()})
 			}
