@@ -14,7 +14,7 @@ type Player struct {
 	MsgChan
 	Name    string         // 用户名
 	Session *agent.Session // 会话
-	Phases  LP_TYPE
+	Phases  lp_type
 
 	// 规则属性
 	Index     int           // 玩家索引
@@ -190,7 +190,7 @@ func (pl *Player) Chain(eventName string, cs []*Card, a []interface{}) bool {
 		for _, v := range cs {
 			if v.ToUint() == wi.Uniq {
 				if v.GetSummoner() == pl {
-					pl.MsgPub("{self}连锁{event}", Arg{"self": v.GetId(), "event": eventName})
+					pl.MsgPub("{self}连锁{event}", Arg{"self": v.ToUint(), "event": eventName})
 					v.Events.Dispatch(Pay, append(a, eventName)...)
 					v.Events.Dispatch(Trigger+eventName, append(a, wi.Method)...)
 					return true
@@ -225,7 +225,7 @@ func (pl *Player) round() (err error) {
 	return
 }
 
-func (pl *Player) draw(lp LP_TYPE) bool {
+func (pl *Player) draw(lp lp_type) bool {
 	defer func() {
 		if x := recover(); x != nil {
 			rego.DebugStack()
@@ -241,7 +241,7 @@ func (pl *Player) draw(lp LP_TYPE) bool {
 	return true
 }
 
-func (pl *Player) standby(lp LP_TYPE) bool {
+func (pl *Player) standby(lp lp_type) bool {
 	defer func() {
 		if x := recover(); x != nil {
 			rego.DebugStack()
@@ -252,7 +252,7 @@ func (pl *Player) standby(lp LP_TYPE) bool {
 	return true
 }
 
-func (pl *Player) main(lp LP_TYPE) bool {
+func (pl *Player) main(lp lp_type) bool {
 	defer func() {
 		if x := recover(); x != nil {
 			rego.DebugStack()
@@ -295,7 +295,7 @@ func (pl *Player) main(lp LP_TYPE) bool {
 	return true
 }
 
-func (pl *Player) battle(lp LP_TYPE) bool {
+func (pl *Player) battle(lp lp_type) bool {
 	defer func() {
 		if x := recover(); x != nil {
 			rego.DebugStack()
@@ -346,7 +346,7 @@ func (pl *Player) battle(lp LP_TYPE) bool {
 	return true
 }
 
-func (pl *Player) end(lp LP_TYPE) bool {
+func (pl *Player) end(lp lp_type) bool {
 	defer func() {
 		if x := recover(); x != nil {
 			rego.DebugStack()

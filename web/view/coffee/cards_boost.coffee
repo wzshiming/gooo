@@ -195,7 +195,7 @@ Vast:: = new cards_boost((i)->
 )
 
 
-
+#¿É·­Ò³µÄ
 Paging = (@x = 0, @y = 0, @a = 0, @b = 8 ,@c = 10, @l = 8)->
   @queue = []
   @event = []

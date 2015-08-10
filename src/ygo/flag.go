@@ -30,8 +30,11 @@ const (
 	Summon        = "Summon"        // 召唤
 	SummonFlip    = "SummonFlip"    // 反转召唤
 	SummonSpecial = "SummonSpecial" // 特殊召唤
-	Cover         = "Cover"         // 覆盖
-	Onset         = "Onset"         // 主动发动
+
+	SummonFusion = "SummonFusion" // 融合召唤
+
+	Cover = "Cover" // 覆盖
+	Onset = "Onset" // 主动发动
 
 	// 战斗阶段事件
 	Declaration = "Declaration" // 攻击宣言

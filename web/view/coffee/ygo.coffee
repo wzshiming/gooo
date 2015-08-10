@@ -31,6 +31,7 @@ YGO::init = (args) ->
       if k >= @users.length
         k = k - @users.length
       if k == 0
+        @playerindex = i
         angle = 0
         x = 0
         y = 0
@@ -63,11 +64,10 @@ YGO::remind = (args) ->
 YGO::setCardFace = (args) ->
   c = Card::Find(args.uniq)
   if c
-    delete args.uniq
-    for own k,v of args
+    for own k,v of args.params
       c.SetHTML k,v
-#    m = args.message.format args.params
-#    c.Msg  m
+
+
   else
     MsgErr "setCardFace err"
   #  if @scene.AllCard[args.uniq] == null
@@ -102,8 +102,8 @@ YGO::exprCard = (args) ->
       c.Attack()
     else if (args.expr & 1 << 27) != 0
       c.Defense()
-  else
-    MsgErr "exprCard err"
+  #else
+    #MsgErr "exprCard err"
   return
 
 YGO::flagName = (args) ->
@@ -117,7 +117,14 @@ YGO::setFace = (args) ->
     face.SetHTML k,v
 
 YGO::message = (args) ->
+#  for own k,v of args.params
+#    c = Card::Find(v)
+#    if c
+#      CardInfo c,(data)->
+#        args.params[k] = data["中文名"] # 不支持中文
+
   m = args.message.format args.params
+
   face.Msg  m
 #  @msg.element.innerHTML = '<h1>' + args.message + '</h1>'
   return
@@ -139,7 +146,8 @@ YGO::flagStep = (args) ->
     "MP2"
   else if args.step == 6
     "EP"
-
+  else
+    "现在什么阶段?"
   face.SetHTML "阶段", p
   if typeof args.wait == 'number'
     ti = args.wait / 1000000000

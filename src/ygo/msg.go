@@ -68,7 +68,7 @@ func Touch(t uint, x, y, z int) (string, interface{}) {
 	}
 }
 
-func ExprCard(t *Card, le LE_TYPE) (string, interface{}) {
+func ExprCard(t *Card, le le_type) (string, interface{}) {
 	return "exprCard", map[string]interface{}{
 		"uniq": t.ToUint(),
 		"expr": le,
@@ -90,14 +90,13 @@ func Message(format string, a Arg) (string, interface{}) {
 }
 
 func SetCardFace(t *Card, a Arg) (string, interface{}) {
-	if a == nil {
-		a = Arg{}
+	return "setCardFace", map[string]interface{}{
+		"uniq":   t.ToUint(),
+		"params": a,
 	}
-	a["uniq"] = t.ToUint()
-	return "setCardFace", a
 }
 
-func MoveCard(t *Card, pos LL_TYPE) (string, interface{}) {
+func MoveCard(t *Card, pos ll_type) (string, interface{}) {
 	return "moveCard", map[string]interface{}{
 		"uniq":   t.ToUint(),
 		"master": t.GetSummoner().Index,

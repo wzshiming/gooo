@@ -1,12 +1,12 @@
 package ygo
 
 // 卡牌类型 Card Types
-type LC_TYPE uint32
+type lc_type uint32
 
 const (
-	LC_None LC_TYPE = 0
+	LC_None lc_type = 0
 
-	LC_OrdinaryMonster LC_TYPE = 1 << (32 - 1 - iota) //普通怪兽 黄色
+	LC_OrdinaryMonster lc_type = 1 << (32 - 1 - iota) //普通怪兽 黄色
 	LC_EffectMonster                                  //效果怪兽 橙色
 	LC_FusionMonster                                  //融合怪兽 紫色
 	LC_ExcessMonster                                  //超量怪兽 黑色
@@ -33,12 +33,12 @@ const (
 )
 
 // 怪兽属性 Attributes
-type LA_TYPE uint32
+type la_type uint32
 
 const (
-	LA_None LA_TYPE = 0
+	LA_None la_type = 0
 
-	LA_Earth  LA_TYPE = 1 << (32 - 1 - iota) //地
+	LA_Earth  la_type = 1 << (32 - 1 - iota) //地
 	LA_Water                                 //水
 	LA_Fire                                  //火
 	LA_Wind                                  //风
@@ -48,12 +48,12 @@ const (
 )
 
 // 怪兽种族 Races
-type LR_TYPE uint32
+type lr_type uint32
 
 const (
-	LR_None LR_TYPE = 0
+	LR_None lr_type = 0
 
-	LR_Warrior       LR_TYPE = 1 << (32 - 1 - iota) //战士族
+	LR_Warrior       lr_type = 1 << (32 - 1 - iota) //战士族
 	LR_SpellCaster                                  //魔法使用族
 	LR_Fairy                                        //精灵族
 	LR_Fiend                                        //恶魔族
@@ -81,12 +81,12 @@ const (
 )
 
 // 表示形式 Expression
-type LE_TYPE uint32
+type le_type uint32
 
 const (
-	LE_None LE_TYPE = 0
+	LE_None le_type = 0
 
-	LE_FaceUp   LE_TYPE = 1 << (32 - 1 - iota) // 正面朝上
+	LE_FaceUp   le_type = 1 << (32 - 1 - iota) // 正面朝上
 	LE_FaceDown                                // 正面朝下
 	LE_Attack                                  // 攻击状态
 	LE_Defense                                 // 守备状态
@@ -101,10 +101,10 @@ const (
 )
 
 // 手牌主动方法 Initiative
-type LI_TYPE uint32
+type li_type uint32
 
 const (
-	LI_None LI_TYPE = iota
+	LI_None li_type = iota
 
 	LI_Use1 = 1   // 使用
 	LI_Use2 = 5   // 覆盖
@@ -116,12 +116,12 @@ const (
 )
 
 // 召唤方式 Summon
-type LS_TYPE uint32
+type ls_type uint32
 
 const (
-	LS_None LS_TYPE = 0
+	LS_None ls_type = 0
 
-	LS_Normal   LS_TYPE = 1 << (32 - 1 - iota) // 通常
+	LS_Normal   ls_type = 1 << (32 - 1 - iota) // 通常
 	LS_Advance                                 // 上级
 	LS_Dual                                    // 二重
 	LS_Flip                                    // 翻转
@@ -134,12 +134,12 @@ const (
 )
 
 // 游戏阶段 Phase
-type LP_TYPE uint32
+type lp_type uint32
 
 const (
-	LP_None LP_TYPE = 0
+	LP_None lp_type = 0
 
-	LP_Draw      LP_TYPE = iota // 抽牌
+	LP_Draw      lp_type = iota // 抽牌
 	LP_Standby                  // 预备
 	LP_Main1                    // 主阶段1
 	LP_Battle                   // 战斗
@@ -151,10 +151,10 @@ const (
 )
 
 // 卡牌放置位置 Locations
-type LL_TYPE string
+type ll_type string
 
 const (
-	LL_None = ""
+	LL_None ll_type = ""
 
 	LL_Deck    = "deck"    // 卡组
 	LL_Hand    = "hand"    // 手牌

@@ -29,6 +29,7 @@ Face::Msg = (msg) ->
   b = document.createElement('p')
   b.innerText = CurentTime() + "\n" + msg + "\n"
   @chat.appendChild b
+  @chat.scrollTop = @chat.scrollHeight
   return
 
 Face::SetInput = (name = null, u = null) ->
@@ -90,7 +91,7 @@ Face::ShowCard = (c) ->
     t = this
     #@text.innerText = c.img.src.innerText
     #console.dir c
-    $.get("/cards/json/#{c.id}.json",((data,status)->
+    CardInfo c,(data)->
       str = ""
       for own k,v of JSON.parse data
         str += "#{k}: #{v}<br>"
@@ -98,7 +99,7 @@ Face::ShowCard = (c) ->
         str += "场上状态<br>"
         str += c.img.src.innerText
       t.text.innerHTML = str
-    ))
+
   else
     #@img.src = " "
     @img.style.display = "none"

@@ -7,11 +7,11 @@ import (
 type Group struct {
 	Cards
 	dispatcher.Events
-	name  LL_TYPE
+	name  ll_type
 	owner *Player // 所有者
 }
 
-func NewGroup(pl *Player, name LL_TYPE) *Group {
+func NewGroup(pl *Player, name ll_type) *Group {
 	return &Group{
 		Events: dispatcher.NewForkEvent(pl.GetFork()),
 		owner:  pl,
@@ -24,11 +24,11 @@ func (cp *Group) GetOwner() *Player {
 	return cp.owner
 }
 
-func (cp *Group) SetName(name LL_TYPE) {
+func (cp *Group) SetName(name ll_type) {
 	cp.name = name
 }
 
-func (cp *Group) GetName() LL_TYPE {
+func (cp *Group) GetName() ll_type {
 	return cp.name
 }
 

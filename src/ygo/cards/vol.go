@@ -91,11 +91,11 @@ func vol(cardBag *ygo.CardVersion) {
 			}, func(c *ygo.Card) {
 				c.SetAttack(c.GetAttack() + 300)
 				c.SetDefense(c.GetDefense() + 300)
-				c.ShowInfo()
+
 			}, func(c *ygo.Card) {
 				c.SetAttack(c.GetAttack() - 300)
 				c.SetDefense(c.GetDefense() - 300)
-				c.ShowInfo()
+
 			})
 			return true
 		}, // 初始
@@ -136,11 +136,11 @@ func vol(cardBag *ygo.CardVersion) {
 			}, func(c *ygo.Card) {
 				c.SetAttack(c.GetAttack() + 300)
 				c.SetDefense(c.GetDefense() + 300)
-				c.ShowInfo()
+
 			}, func(c *ygo.Card) {
 				c.SetAttack(c.GetAttack() - 300)
 				c.SetDefense(c.GetDefense() - 300)
-				c.ShowInfo()
+
 			})
 			return true
 		}, // 初始
@@ -181,11 +181,11 @@ func vol(cardBag *ygo.CardVersion) {
 			}, func(c *ygo.Card) {
 				c.SetAttack(c.GetAttack() + 300)
 				c.SetDefense(c.GetDefense() + 300)
-				c.ShowInfo()
+
 			}, func(c *ygo.Card) {
 				c.SetAttack(c.GetAttack() - 300)
 				c.SetDefense(c.GetDefense() - 300)
-				c.ShowInfo()
+
 			})
 			return true
 		}, // 初始
@@ -226,11 +226,11 @@ func vol(cardBag *ygo.CardVersion) {
 			}, func(c *ygo.Card) {
 				c.SetAttack(c.GetAttack() + 300)
 				c.SetDefense(c.GetDefense() + 300)
-				c.ShowInfo()
+
 			}, func(c *ygo.Card) {
 				c.SetAttack(c.GetAttack() - 300)
 				c.SetDefense(c.GetDefense() - 300)
-				c.ShowInfo()
+
 			})
 			return true
 		}, // 初始
@@ -271,11 +271,11 @@ func vol(cardBag *ygo.CardVersion) {
 			}, func(c *ygo.Card) {
 				c.SetAttack(c.GetAttack() + 300)
 				c.SetDefense(c.GetDefense() + 300)
-				c.ShowInfo()
+
 			}, func(c *ygo.Card) {
 				c.SetAttack(c.GetAttack() - 300)
 				c.SetDefense(c.GetDefense() - 300)
-				c.ShowInfo()
+
 			})
 			return true
 		}, // 初始
@@ -535,7 +535,7 @@ func vol(cardBag *ygo.CardVersion) {
 				pl := ca.GetSummoner()
 				if c := pl.SelectFor(pl.Extra); c != nil {
 					if c.IsFusionMonster() {
-						c.Dispatch(ygo.SummonSpecial)
+						c.Dispatch(ygo.SummonFusion)
 					}
 				}
 			})
@@ -574,8 +574,15 @@ func vol(cardBag *ygo.CardVersion) {
 		Lr:      ygo.LR_Dragon, // 龙
 		Attack:  2600,
 		Defense: 2100,
-		//Initialize:    func(ca *ygo.Card) bool {}, // 初始
-		IsValid: false,
+
+		//		Initialize: func(ca *ygo.Card) bool {
+		//			ca.RegisterPay(func(s string) {
+		//				if ygo.SummonFusion == s {
+
+		//				}
+		//			})
+		//		}, // 初始
+		//		IsValid: true,
 	})
 
 	/*13*/
@@ -622,7 +629,7 @@ func vol(cardBag *ygo.CardVersion) {
 		Attack:  1380,
 		Defense: 1930,
 		Initialize: func(ca *ygo.Card) bool {
-			ca.AddEvent(ygo.Flip, func() {
+			ca.RegisterFlip(func() {
 				pl := ca.GetSummoner()
 				tar := pl.GetTarget()
 				if c := pl.SelectFor(tar.Szone, pl.Szone); c != nil {
@@ -674,11 +681,11 @@ func vol(cardBag *ygo.CardVersion) {
 			}, func(c *ygo.Card) {
 				c.SetAttack(c.GetAttack() + 300)
 				c.SetDefense(c.GetDefense() + 300)
-				c.ShowInfo()
+
 			}, func(c *ygo.Card) {
 				c.SetAttack(c.GetAttack() - 300)
 				c.SetDefense(c.GetDefense() - 300)
-				c.ShowInfo()
+
 			})
 			return true
 		}, // 初始
@@ -720,11 +727,11 @@ func vol(cardBag *ygo.CardVersion) {
 			}, func(c *ygo.Card) {
 				c.SetAttack(c.GetAttack() + 300)
 				c.SetDefense(c.GetDefense() + 300)
-				c.ShowInfo()
+
 			}, func(c *ygo.Card) {
 				c.SetAttack(c.GetAttack() - 300)
 				c.SetDefense(c.GetDefense() - 300)
-				c.ShowInfo()
+
 			})
 			return true
 		}, // 初始
@@ -765,11 +772,11 @@ func vol(cardBag *ygo.CardVersion) {
 			}, func(c *ygo.Card) {
 				c.SetAttack(c.GetAttack() + 300)
 				c.SetDefense(c.GetDefense() + 300)
-				c.ShowInfo()
+
 			}, func(c *ygo.Card) {
 				c.SetAttack(c.GetAttack() - 300)
 				c.SetDefense(c.GetDefense() - 300)
-				c.ShowInfo()
+
 			})
 			return true
 		}, // 初始
@@ -810,11 +817,11 @@ func vol(cardBag *ygo.CardVersion) {
 			}, func(c *ygo.Card) {
 				c.SetAttack(c.GetAttack() + 300)
 				c.SetDefense(c.GetDefense() + 300)
-				c.ShowInfo()
+
 			}, func(c *ygo.Card) {
 				c.SetAttack(c.GetAttack() - 300)
 				c.SetDefense(c.GetDefense() - 300)
-				c.ShowInfo()
+
 			})
 			return true
 		}, // 初始
@@ -855,11 +862,11 @@ func vol(cardBag *ygo.CardVersion) {
 			}, func(c *ygo.Card) {
 				c.SetAttack(c.GetAttack() + 300)
 				c.SetDefense(c.GetDefense() + 300)
-				c.ShowInfo()
+
 			}, func(c *ygo.Card) {
 				c.SetAttack(c.GetAttack() - 300)
 				c.SetDefense(c.GetDefense() - 300)
-				c.ShowInfo()
+
 			})
 			return true
 		}, // 初始
@@ -900,11 +907,11 @@ func vol(cardBag *ygo.CardVersion) {
 			}, func(c *ygo.Card) {
 				c.SetAttack(c.GetAttack() + 300)
 				c.SetDefense(c.GetDefense() + 300)
-				c.ShowInfo()
+
 			}, func(c *ygo.Card) {
 				c.SetAttack(c.GetAttack() - 300)
 				c.SetDefense(c.GetDefense() - 300)
-				c.ShowInfo()
+
 			})
 			return true
 		}, // 初始
@@ -945,11 +952,11 @@ func vol(cardBag *ygo.CardVersion) {
 			}, func(c *ygo.Card) {
 				c.SetAttack(c.GetAttack() + 300)
 				c.SetDefense(c.GetDefense() + 300)
-				c.ShowInfo()
+
 			}, func(c *ygo.Card) {
 				c.SetAttack(c.GetAttack() - 300)
 				c.SetDefense(c.GetDefense() - 300)
-				c.ShowInfo()
+
 			})
 			return true
 		}, // 初始
@@ -1031,11 +1038,11 @@ func vol(cardBag *ygo.CardVersion) {
 			}, func(c *ygo.Card) {
 				c.SetAttack(c.GetAttack() + 300)
 				c.SetDefense(c.GetDefense() + 300)
-				c.ShowInfo()
+
 			}, func(c *ygo.Card) {
 				c.SetAttack(c.GetAttack() - 300)
 				c.SetDefense(c.GetDefense() - 300)
-				c.ShowInfo()
+
 			})
 			return true
 		}, // 初始
@@ -1076,11 +1083,11 @@ func vol(cardBag *ygo.CardVersion) {
 			}, func(c *ygo.Card) {
 				c.SetAttack(c.GetAttack() + 300)
 				c.SetDefense(c.GetDefense() + 300)
-				c.ShowInfo()
+
 			}, func(c *ygo.Card) {
 				c.SetAttack(c.GetAttack() - 300)
 				c.SetDefense(c.GetDefense() - 300)
-				c.ShowInfo()
+
 			})
 			return true
 
@@ -1122,11 +1129,11 @@ func vol(cardBag *ygo.CardVersion) {
 			}, func(c *ygo.Card) {
 				c.SetAttack(c.GetAttack() + 300)
 				c.SetDefense(c.GetDefense() + 300)
-				c.ShowInfo()
+
 			}, func(c *ygo.Card) {
 				c.SetAttack(c.GetAttack() - 300)
 				c.SetDefense(c.GetDefense() - 300)
-				c.ShowInfo()
+
 			})
 			return true
 
@@ -4574,11 +4581,11 @@ func vol(cardBag *ygo.CardVersion) {
 			}, func(c *ygo.Card) {
 				c.SetAttack(c.GetAttack() + 500)
 				c.SetDefense(c.GetDefense() + 500)
-				c.ShowInfo()
+
 			}, func(c *ygo.Card) {
 				c.SetAttack(c.GetAttack() - 500)
 				c.SetDefense(c.GetDefense() - 500)
-				c.ShowInfo()
+
 			})
 			return true
 		}, // 初始

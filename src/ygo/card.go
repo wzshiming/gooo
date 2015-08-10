@@ -10,11 +10,11 @@ type CardOriginal struct {
 	Id       uint    // 卡牌id
 	Name     string  // 名字
 	Password string  // 卡牌密码
-	Lc       LC_TYPE // 卡牌类型
+	Lc       lc_type // 卡牌类型
 
 	// 怪兽卡 属性
-	La      LA_TYPE // 怪兽属性
-	Lr      LR_TYPE // 怪兽种族
+	La      la_type // 怪兽属性
+	Lr      lr_type // 怪兽种族
 	Level   int     // 星级
 	Attack  int     // 攻击力
 	Defense int     // 防御力
@@ -46,7 +46,7 @@ type Card struct {
 	effects      []*Card // 对此卡牌影响的卡牌
 	summoner     *Player // 召唤者
 	owner        *Player // 所有者
-	le           LE_TYPE // 表示形式
+	le           le_type // 表示形式
 	//怪兽卡 属性
 	counter         int // 计数器
 	lastAttackRound int // 最后攻击回合
@@ -120,30 +120,30 @@ func (ca *Card) GetId() uint {
 }
 
 // 获得基础类型
-func (ca *Card) GetBaseType() LC_TYPE {
+func (ca *Card) GetBaseType() lc_type {
 	return ca.baseOriginal.Lc
 }
 
 func (ca *Card) Is(a ...interface{}) bool {
 	for _, v := range a {
 		switch s := v.(type) {
-		case LC_TYPE:
+		case lc_type:
 			if ca.original.Lc&s == 0 {
 				return false
 			}
-		case LA_TYPE:
+		case la_type:
 			if ca.original.La&s == 0 {
 				return false
 			}
-		case LE_TYPE:
+		case le_type:
 			if ca.le&s == 0 {
 				return false
 			}
-		case LR_TYPE:
+		case lr_type:
 			if ca.original.Lr&s == 0 {
 				return false
 			}
-		case LL_TYPE:
+		case ll_type:
 			if ca.place.name != s {
 				return false
 			}
@@ -159,7 +159,7 @@ func (ca *Card) Is(a ...interface{}) bool {
 }
 
 // 获得类型
-func (ca *Card) GetType() LC_TYPE {
+func (ca *Card) GetType() lc_type {
 	return ca.original.Lc
 }
 
@@ -259,39 +259,39 @@ func (ca *Card) IsReactionTrap() bool {
 }
 
 // 设置类型
-func (ca *Card) SetType(l LC_TYPE) {
+func (ca *Card) SetType(l lc_type) {
 	ca.original.Lc = l
 	ca.Dispatch(Change, ca)
 }
 
 // 获得基础属性
-func (ca *Card) GetBaseAttribute() LA_TYPE {
+func (ca *Card) GetBaseAttribute() la_type {
 	return ca.baseOriginal.La
 }
 
 // 获得属性
-func (ca *Card) GetAttribute() LA_TYPE {
+func (ca *Card) GetAttribute() la_type {
 	return ca.original.La
 }
 
 //  设置属性
-func (ca *Card) SetAttribute(l LA_TYPE) {
+func (ca *Card) SetAttribute(l la_type) {
 	ca.original.La = l
 	ca.Dispatch(Change, ca)
 }
 
 // 获得基础种族
-func (ca *Card) GetBaseRace() LR_TYPE {
+func (ca *Card) GetBaseRace() lr_type {
 	return ca.baseOriginal.Lr
 }
 
 // 获得种族
-func (ca *Card) GetRace() LR_TYPE {
+func (ca *Card) GetRace() lr_type {
 	return ca.original.Lr
 }
 
 // 设置种族
-func (ca *Card) SetRace(l LR_TYPE) {
+func (ca *Card) SetRace(l lr_type) {
 	ca.original.Lr = l
 	ca.Dispatch(Change, ca)
 }
@@ -310,6 +310,8 @@ func (ca *Card) GetAttack() int {
 func (ca *Card) SetAttack(i int) {
 	ca.original.Attack = i
 	ca.Dispatch(Change, ca)
+	pl := ca.GetSummoner()
+	pl.CallAll(SetCardFace(ca, Arg{"攻击力": i}))
 }
 
 // 获得基础防御
@@ -326,6 +328,8 @@ func (ca *Card) GetDefense() int {
 func (ca *Card) SetDefense(i int) {
 	ca.original.Defense = i
 	ca.Dispatch(Change, ca)
+	pl := ca.GetSummoner()
+	pl.CallAll(SetCardFace(ca, Arg{"防御力": i}))
 }
 
 // 获得基础等级
@@ -386,7 +390,7 @@ func (ca *Card) SetNotCanAttack() bool {
 }
 
 // 设置表示形式
-func (ca *Card) setLE(l LE_TYPE) {
+func (ca *Card) setLE(l le_type) {
 	ca.le = l
 	pl := ca.GetSummoner()
 	pl.Dispatch(Expres, ca)
