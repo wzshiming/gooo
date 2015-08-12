@@ -480,8 +480,9 @@ func (pl *Player) Select() (t *Card) {
 }
 
 func (pl *Player) SelectForCards(ca *Cards) *Card {
-
-	pl.Msg("从下列卡牌选择", nil)
+	defer pl.Call(SetPick(nil, pl))
+	pl.Call(SetPick(ca, pl))
+	//pl.Msg("从下列卡牌选择", nil)
 	if c := pl.Select(); c != nil {
 		for _, v := range *ca {
 			if v == c {
@@ -492,11 +493,30 @@ func (pl *Player) SelectForCards(ca *Cards) *Card {
 	return nil
 }
 
+//func (pl *Player) SelectFor(cp ...*Group) *Card {
+//	s := []string{}
+//	for _, v := range cp {
+//		s = append(s, v.GetOwner().Name+" "+string(v.GetName()))
+//	}
+
+//	pl.Msg("从下列区域选择卡牌 {c1}", Arg{"c1": s})
+//	cs := NewCards()
+//	for _, v := range cp {
+//		v.ForEach(func(c *Card) bool {
+//			cs.EndPush(c)
+//			return true
+//		})
+//	}
+
+//	return pl.SelectForCards(cs)
+//}
+
 func (pl *Player) SelectFor(cp ...*Group) *Card {
 	s := []string{}
 	for _, v := range cp {
 		s = append(s, v.GetOwner().Name+" "+string(v.GetName()))
 	}
+
 	pl.Msg("从下列区域选择卡牌 {c1}", Arg{"c1": s})
 	if c := pl.Select(); c != nil {
 		for _, v := range cp {

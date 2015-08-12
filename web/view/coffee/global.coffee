@@ -1,3 +1,4 @@
+
 container = null
 face = null
 mouse = null
@@ -22,13 +23,13 @@ CardInfo = (c, f ) ->
 
 CurentTime = ->
   now = new Date();
-  year = now.getFullYear()       #Äê
-  month = now.getMonth() + 1     #ÔÂ
-  day = now.getDate()            #ÈÕ
+  year = now.getFullYear()       #å¹´
+  month = now.getMonth() + 1     #æœˆ
+  day = now.getDate()            #æ—¥
 
-  hh = now.getHours()            #Ê±
-  mm = now.getMinutes()          #·Ö
-  ss = now.getSeconds()          #Ãë
+  hh = now.getHours()            #æ—¶
+  mm = now.getMinutes()          #åˆ†
+  ss = now.getSeconds()          #ç§’
   clock = year + "-"
   if(month < 10)
     clock += "0"

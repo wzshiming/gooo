@@ -95,9 +95,9 @@ Face::ShowCard = (c) ->
       str = ""
       for own k,v of JSON.parse data
         str += "#{k}: #{v}<br>"
-      if c.img.src.innerText
-        str += "场上状态<br>"
-        str += c.img.src.innerText
+#      if c.img.src.innerText
+#        str += "场上状态<br>"
+#        str += c.img.src.innerText
       t.text.innerHTML = str
 
   else

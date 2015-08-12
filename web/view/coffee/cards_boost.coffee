@@ -1,4 +1,3 @@
-# ok
 
 
 gridX = (x) ->
@@ -77,34 +76,7 @@ cards_boost::addEventListener = (s,f,b) ->
     v.addEventListener l...
   return
 
-
-
-# ÌáÊ¾ÌôÑ¡µÄ
-Pick =  (@x = 0, @y = 0, @a = 0)->
-  @queue = []
-  @event = []
-  @rotation = (new (THREE.Matrix4)).makeRotationZ(@a)
-  return
-
-Pick:: = new cards_boost((i)->
-  object = new (THREE.Object3D)
-  object.matrix.makeTranslation gridX(@x + i), gridY(@y), 1000 + i
-  object.applyMatrix @rotation
-  object.position
-)
-
-Pick::Push = (c, s = null)->
-  if c
-    @push c
-    @Update s
-  return
-
-Pick::Pop = (s = null) ->
-  r = @pop this
-  @Update s
-  r
-
-# ¶ÑÔÚÒ»ÆðµÄ
+# å †åœ¨ä¸€èµ·çš„
 Pile =  (@x = 0, @y = 0, @a = 0)->
   @queue = []
   @event = []
@@ -141,7 +113,7 @@ Dig =  (@x = 0, @y = 0, @a = 0, @s = 100)->
   ), false
   return
 
-Dig:: = new cards_boost((i)->
+Dig:: = new cards_boost (i)->
   object = new (THREE.Object3D)
   if @p == 0
     object.matrix.makeTranslation gridX(@x), gridY(@y), i + 1
@@ -154,10 +126,10 @@ Dig:: = new cards_boost((i)->
       z = 1 - (@Length() - 40) / @Length()
     object.applyMatrix (new (THREE.Matrix4)).makeRotationZ(@a - (i - @Length() / 2) / 180 * PI * 9 * z)
     object.position#.multiplyScalar 0.9
-)
 
 
-# Î»ÖÃ ÉìËõ
+
+# ä½ç½® ä¼¸ç¼©
 flex = (x,y,a,r,i,l)->
   object = new (THREE.Object3D)
   z = 1
@@ -166,16 +138,16 @@ flex = (x,y,a,r,i,l)->
   object.matrix.makeTranslation gridX(x + r / 2 + 0.5 +  (i - l / 2) * 1.2 * z ), gridY(y), i + 1
   object.applyMatrix a
   object.position
-#ÊÖÉÏµÄ
+#æ‰‹ä¸Šçš„
 Hand =  (@x = 0, @y = 0, @a = 0, @b = 8, @c = 10)->
   @queue = []
   @event = []
   @rotation = (new (THREE.Matrix4)).makeRotationZ(@a)
   return
 
-Hand:: = new cards_boost((i)->
+Hand:: = new cards_boost (i)->
   flex(@x,@y,@rotation,@b,i,@Length())
-)
+
 
 Vast =  (@x = 0, @y = 0, @a = 0,@b = 8,@c=10)->
   @queue = []
@@ -195,7 +167,7 @@ Vast:: = new cards_boost((i)->
 )
 
 
-#¿É·­Ò³µÄ
+#å¯ç¿»é¡µçš„
 Paging = (@x = 0, @y = 0, @a = 0, @b = 8 ,@c = 10, @l = 8)->
   @queue = []
   @event = []
@@ -249,16 +221,45 @@ Paging::Next = ->
   for i in [0...@c * @l]
     @show.Push @down.Pop()
 
-#ºá×ÅÆÌ¿ªµÄ
+#æ¨ªç€é“ºå¼€çš„
 Rows =  (@x = 0, @y = 0, @a = 0)->
   @queue = []
   @event = []
   @rotation = (new (THREE.Matrix4)).makeRotationZ(@a)
   return
 
-Rows:: = new cards_boost((i)->
+Rows:: = new cards_boost (i)->
   object = new (THREE.Object3D)
   object.matrix.makeTranslation gridX(@x + i * 2), gridY(@y), i + 1
   object.applyMatrix @rotation
   object.position
-)
+
+
+# æç¤ºæŒ‘é€‰çš„
+Pick =  (@x = 0, @y = 0, @a = 0)->
+  @queue = []
+  @event = []
+  @rotation = (new (THREE.Matrix4)).makeRotationZ(@a)
+  return
+
+Pick:: = new cards_boost (i)->
+  object = new (THREE.Object3D)
+  object.matrix.makeTranslation gridX(@x + i * 2), gridY(@y), 1000 + i
+  object.applyMatrix @rotation
+  object.position
+
+
+Pick::Push = (c, s = null)->
+  if c
+    @push c
+    @Update s
+  return
+
+Pick::Pop = (s = null) ->
+  r = @pop this
+  @Update s
+  r
+
+Pick::Clear = () ->
+  while @Length() != 0
+    @Pop().Update()

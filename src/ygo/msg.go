@@ -89,6 +89,20 @@ func Message(format string, a Arg) (string, interface{}) {
 	}
 }
 
+func SetPick(cs *Cards, pl *Player) (string, interface{}) {
+	if cs != nil {
+		return "setPick", map[string]interface{}{
+			"master": pl.Index,
+			"uniqs":  cs.Uniqs(),
+		}
+	}
+	return "setPick", map[string]interface{}{
+		"master": pl.Index,
+		"uniqs":  []int{},
+	}
+
+}
+
 func SetCardFace(t *Card, a Arg) (string, interface{}) {
 	return "setCardFace", map[string]interface{}{
 		"uniq":   t.ToUint(),

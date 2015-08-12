@@ -1,6 +1,6 @@
-# ok
 
-# ÓÀÔ¶³¯ÏòÊÓ¿Ú
+
+# æ°¸è¿œæœå‘è§†å£
 Shade = (@scene, t) ->
   @element = document.createElement('div')
   @element.className = 'shade'
@@ -13,7 +13,7 @@ Shade = (@scene, t) ->
   return
 
 
-# µ¥ÃæµÄÔªËØ
+# å•é¢çš„å…ƒç´ 
 Element = (@scene) ->
   @element = document.createElement('div')
   @object = new (THREE.CSS3DSprite)(@element)
@@ -24,7 +24,7 @@ Element = (@scene) ->
   return
 
 
-#Ë«ÃæµÄ¿¨Æ¬
+#åŒé¢çš„å¡ç‰‡
 Card = (@scene, id=0, b=0) ->
 
   @element = document.createElement('div')
@@ -57,7 +57,7 @@ Card = (@scene, id=0, b=0) ->
   @z = @object.position.z
   @ry = 0
   @rz = 0
-  #ÉèÖÃ¿¨Æ¬ µÄÊôÐÔÏÔÊ¾
+  #è®¾ç½®å¡ç‰‡ çš„å±žæ€§æ˜¾ç¤º
 
   return
 
@@ -75,27 +75,31 @@ Card::SetUniq = (uniq) ->
   return
 
 
-#ÉèÖÃÕýÃæ
+#è®¾ç½®æ­£é¢
 Card::SetFront = (@id) ->
   @img.src = "/cards/img/" + @id + ".jpg"
   return
 
-#ÉèÖÃ±³Ãæ
+#è®¾ç½®èƒŒé¢
 Card::SetBack = (@b) ->
   @elementB.src = "/cards/cover/" + @b + ".jpg"
   return
 
-#ÒÆ³ý
+#ç§»é™¤
 Card::Remove = ->
   @Placed()
   @scene.remove @object
   delete @Index[@uniq] if @uniq
   return
 
-#ÉèÖÃËùÔÚ×é
+#è®¾ç½®æ‰€åœ¨ç»„
 Card::SetHold = (@hold = null) ->
 
-#ÄÃÆð
+Card::Update = (s = null) ->
+  if @hold
+    @hold.Update s
+
+#æ‹¿èµ·
 Card::Placed = ->
   if @hold
     return @hold.Placed(this)
@@ -109,7 +113,7 @@ Card::Nature  = (s=1000)->
   t = (Math.random() - 0.5) * PI / 20
   Rotate @object,{y:@ry,z:@rz + t},s
 
-#ÒÆ¶¯ÖÁ
+#ç§»åŠ¨è‡³
 Card::Move = (pos, s = 500) ->
   b = false
   p = {}
@@ -181,12 +185,12 @@ Card::MoveTo = (pos, s = 500) ->
   #@Nature s
   return
 
-#µ÷Õû×ËÌ¬
+#è°ƒæ•´å§¿æ€
 Card::PoseTo = (pose, s = 1000) ->
   Move @object, pose, s
   return
 
-#Ãæ³¯ÉÏ
+#é¢æœä¸Š
 Card::FaceUp = (s = 200) ->
   if @ry == 0
     return
@@ -195,7 +199,7 @@ Card::FaceUp = (s = 200) ->
   #@Nature s
   return
 
-#Ãæ³¯ÏÂ
+#é¢æœä¸‹
 Card::FaceDown =  (s = 200) ->
   if @ry == PI
     return
@@ -204,7 +208,7 @@ Card::FaceDown =  (s = 200) ->
   #@Nature s
   return
 
-#¹¥»÷±íÊ¾
+#æ”»å‡»è¡¨ç¤º
 Card::Attack = (s = 200)  ->
   if @rz == 0
     return
@@ -215,7 +219,7 @@ Card::Attack = (s = 200)  ->
   #@Nature s
   return
 
-#·ÀÓù±íÊ¾
+#é˜²å¾¡è¡¨ç¤º
 Card::Defense =  (s = 200) ->
   if @rz == PI / 2
     return
@@ -227,11 +231,11 @@ Card::Defense =  (s = 200) ->
   return
 
 Card::Remind = ->
-  this.SetHTML("×´Ì¬","¿ÉÒÔÁ¬Ëø")
+  this.SetHTML("çŠ¶æ€","å¯ä»¥è¿žé”")
   window.setTimeout (->
-    this.SetHTML("×´Ì¬")
+    this.SetHTML("çŠ¶æ€")
   ),10000
-#Í£Ö¹ÒÆ¶¯
+#åœæ­¢ç§»åŠ¨
 Card::Stop = ->
   TWEEN.remove @object
   return

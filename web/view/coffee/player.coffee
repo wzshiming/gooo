@@ -1,5 +1,3 @@
-# ok
-
 
 Player = (@scene, @index = 0, @x = 0, @y = 0, @a = 0) ->
   @decks = {}
@@ -23,11 +21,14 @@ Player = (@scene, @index = 0, @x = 0, @y = 0, @a = 0) ->
   # 场地卡
   @decks.field = new Pile @x + 4, @y + 3, @a
 
-  #怪物卡区
+  # 怪物卡区
   @decks.mzone = new Rows @x + 6, @y + 2, @a
 
-  #魔陷区
+  # 魔陷区
   @decks.szone = new Rows @x + 6, @y + 4, @a
+
+  # 选择
+  @decks.pick = new Pick @x + 6, @y + 1, @a
 
   for k,v of @decks
     if k != "deck"
@@ -49,12 +50,12 @@ Player::Join = (u, lay, s = null) ->
         c = new Card(@scene)
         c.FaceDown()
         c.Attack()
-        timer = null
-        if lay == "deck"
-          c.SetUniq  "#{ @index }_{ @inDeckSize++ }"
-          c.FaceDown()
-        else
-          c.SetUniq u
+    if lay == "deck"
+      c.SetUniq  "#{ @index }_{ @inDeckSize++ }"
+      c.SetFront 0
+      c.FaceDown()
+    else
+      c.SetUniq u
     @decks[lay].Push c, s
   return
 

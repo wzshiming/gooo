@@ -2,14 +2,16 @@ package main
 
 import (
 	"errors"
+
 	"github.com/wzshiming/rego"
 	//"fmt"
-	"github.com/wzshiming/rego/agent"
-	"github.com/wzshiming/rego/misc"
 	"service/proto"
 	"time"
 	"ygo"
 	"ygo/cards"
+
+	"github.com/wzshiming/rego/agent"
+	"github.com/wzshiming/rego/misc"
 	//"ygo/defaul"
 )
 
@@ -65,9 +67,13 @@ func (r *Room) Games() {
 	tick := time.Tick(time.Second * 1)
 	for {
 		<-tick
+		r.room.BroadcastPush(map[string]string{"info": "匹配队友中请等待..."}, func(sess *agent.Session) {
+			r.room.Leave(sess)
+		})
 		if r.room.Len() >= 2 {
-			g := r.room.GroupFromSize(2)
-			go r.YGOGame(g...)
+			if g := r.room.GroupFromSize(2); g != nil {
+				go r.YGOGame(g...)
+			}
 		}
 	}
 }
@@ -84,7 +90,7 @@ func (r *Room) CardFind(args agent.Request, reply *agent.Response) error {
 	args.Request.DeJson(&gr)
 	b := r.saveQuery[gr.Query]
 	if b == nil {
-		b = rego.EnJson(cardBag.Find(gr.Query,true))
+		b = rego.EnJson(cardBag.Find(gr.Query, true))
 		r.saveQuery[gr.Query] = b
 	}
 

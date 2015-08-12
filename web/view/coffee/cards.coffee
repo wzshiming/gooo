@@ -1,14 +1,13 @@
-# ok
 
 
-# ¿¨ÅÆ×é
+# å¡ç‰Œç»„
 Cards = ->
   return
 
 Cards:: = []
 
 
-#Ñ¹Èë
+#åŽ‹å…¥
 Cards::Push = (c) ->
   if c
     c.Placed()
@@ -16,7 +15,7 @@ Cards::Push = (c) ->
     c.SetHold this
   return
 
-#µ¯³ö
+#å¼¹å‡º
 Cards::Pop = ->
   c = @pop()
   if c
@@ -27,20 +26,20 @@ Cards::Insert = (i,c) ->
   @splice(i, 0, c)
   c.SetHold this
   return
-#ÒÆ³ý
+#ç§»é™¤
 Cards::Remove = (i) ->
   c = @splice(i, 1)[0]
   c.SetHold()
   c
 
-#ÄÃÆð
+#æ‹¿èµ·
 Cards::Placed = (u) ->
   i = @Index(u)
   if i != -1
     @Remove i
   i
 
-#»ñÈ¡Ë÷Òý
+#èŽ·å–ç´¢å¼•
 Cards::Index = (u) ->
   if typeof u == "object"
     for v, k in this
@@ -52,13 +51,13 @@ Cards::Index = (u) ->
         return k
   return -1
 
-#Çå¿Õ
+#æ¸…ç©º
 Cards::Clear = ->
   while @Length() != 0
     @Pop().Remove()
   return
 
-#È«²¿ÒÆ¶¯ÖÁ
+#å…¨éƒ¨ç§»åŠ¨è‡³
 Cards::MoveTo = (to) ->
   while @Length() != 0
     to.Push @Pop()

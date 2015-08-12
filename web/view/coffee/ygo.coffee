@@ -2,10 +2,11 @@ YGO = (@scene) ->
   @players = []
   t = this
   WsGameRegister (e) ->
-    if typeof t[e.method] == 'function'
-      t[e.method] e.args
-    else
-      MsgErr e.method
+    if e.method
+      if typeof t[e.method] == 'function'
+        t[e.method] e.args
+      else
+        MsgErr e.method
   return
 
 YGO::init = (args) ->
@@ -61,25 +62,23 @@ YGO::remind = (args) ->
   else
     MsgErr "remind err"
 
+YGO::setPick = (args) ->
+  @players[args.master].decks.pick.Clear()
+  for v in args.uniqs
+    @players[args.master].Join v, "pick"
+
+
 YGO::setCardFace = (args) ->
   c = Card::Find(args.uniq)
   if c
     for own k,v of args.params
       c.SetHTML k,v
-
-
   else
     MsgErr "setCardFace err"
-  #  if @scene.AllCard[args.uniq] == null
-  #    new Card(@scene, args.uniq, @players[args.master])
-  #  @scene.AllCard[args.uniq].master.moveCard args.uniq, args.pos
   return
 
 YGO::moveCard = (args) ->
   @players[args.master].Join args.uniq, args.pos
-  #  if @scene.AllCard[args.uniq] == null
-  #    new Card(@scene, args.uniq, @players[args.master])
-  #  @scene.AllCard[args.uniq].master.moveCard args.uniq, args.pos
   return
 
 YGO::setFront = (args) ->
@@ -88,7 +87,7 @@ YGO::setFront = (args) ->
     c.SetFront(args.desk)
   else
     MsgErr "setFront err"
-  #@scene.AllCard[args.uniq].SetFront args.desk
+
   return
 
 YGO::exprCard = (args) ->
@@ -102,14 +101,12 @@ YGO::exprCard = (args) ->
       c.Attack()
     else if (args.expr & 1 << 27) != 0
       c.Defense()
-  #else
+  else
     #MsgErr "exprCard err"
   return
 
 YGO::flagName = (args) ->
   face.SetHTML "回合数", args.round
-#  t = @users[args.player]
-#  @['flag0'].element.innerHTML = '<h1>回合' + args.round + '</h1>'
   return
 
 YGO::setFace = (args) ->
@@ -117,16 +114,13 @@ YGO::setFace = (args) ->
     face.SetHTML k,v
 
 YGO::message = (args) ->
-#  for own k,v of args.params
-#    c = Card::Find(v)
-#    if c
-#      CardInfo c,(data)->
-#        args.params[k] = data["中文名"] # 不支持中文
-
+  for own k,v of args.params
+    c = Card::Find(v)
+    if c
+      CardInfo c,(data)->
+        args.params[k] = data["中文名"] # 不支持中文 数据key 改成英文的 ...
   m = args.message.format args.params
-
   face.Msg  m
-#  @msg.element.innerHTML = '<h1>' + args.message + '</h1>'
   return
 
 YGO::flagStep = (args) ->

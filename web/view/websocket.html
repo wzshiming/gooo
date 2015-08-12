@@ -50,6 +50,8 @@
 		var n2 = i+","+n;
 		if(msg != null && (typeof msg.error == "string") && msg.error != ""){
 			MsgErr(msg.error);
+		}else if(msg != null && (typeof msg.info == "string") && msg.info != ""){
+			MsgInfo(msg.info);
 		}else if(typeof this.Callback[n2] == "function"){
 			var t = this.Callback[n2](msg);
             console.log(n2, msg);

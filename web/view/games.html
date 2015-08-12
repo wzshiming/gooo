@@ -8,16 +8,6 @@
             <!--<img alt="300x200" src="http://lorempixel.com/600/200/people" width="200"/>-->
             <div class="caption">
                 <p>
-                    <a id="ygo_test" class="btn btn-primary" href="javascript:(function(){})()">测试功能</a>
-                </p>
-            </div>
-        </div>
-    </div>
-    <div class="col-md-4 column">
-        <div class="jumbotron well">
-            <!--<img alt="300x200" src="http://lorempixel.com/600/200/people" width="200"/>-->
-            <div class="caption">
-                <p>
                     <a id="ygo_play" class="btn btn-primary" href="javascript:(function(){})()">快速游戏</a>
                 </p>
             </div>
@@ -40,19 +30,13 @@
 //$('#ygo').hide();
 //Start();
 
-$('#ygo_test').click(function() {
-    $('#ygo').show();
-    window.StartTest();
-    $('#home').hide();
-});
-
 $('#ygo_play').click(function() {
     WsMatchCompetitors(function(r) {
         if (!r) {
             return true
         }
 
-        console.log(r)
+        //console.log(r)
         if (r.status == "init") {
             $('#ygo').show();
             window.StartGame();

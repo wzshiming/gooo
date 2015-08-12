@@ -22,7 +22,7 @@ func (ca *Card) Init() {
 
 func (ca *Card) registerNormal() {
 
-	ca.AddEvent(InDeck, ca.SetFaceDownAttack)
+	//ca.AddEvent(InDeck, ca.SetFaceDownAttack)
 
 	// 进入墓地和 移除时 卡牌翻面
 	ca.AddEvent(InExtra, ca.SetFaceUpAttack)
