@@ -93,11 +93,8 @@ Face::ShowCard = (c) ->
     #console.dir c
     CardInfo c,(data)->
       str = ""
-      for own k,v of JSON.parse data
+      for own k,v of data
         str += "#{k}: #{v}<br>"
-#      if c.img.src.innerText
-#        str += "场上状态<br>"
-#        str += c.img.src.innerText
       t.text.innerHTML = str
 
   else

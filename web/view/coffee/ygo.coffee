@@ -115,10 +115,13 @@ YGO::setFace = (args) ->
 
 YGO::message = (args) ->
   for own k,v of args.params
+    if v == @users[@playerindex].name
+      args.params[k] = "您"
     c = Card::Find(v)
     if c
       CardInfo c,(data)->
-        args.params[k] = data["中文名"] # 不支持中文 数据key 改成英文的 ...
+        args.params[k] = " #{data["type"]} 「#{data["name"]}」 "
+
   m = args.message.format args.params
   face.Msg  m
   return

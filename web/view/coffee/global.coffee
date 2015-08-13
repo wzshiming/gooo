@@ -16,10 +16,17 @@ log = (x)->
 String::format = (params)->
   @replace /{([^{}]+)}/gm,(match,name) ->"#{params[name]}"
 
+
+tmpCardInfo = []
 CardInfo = (c, f ) ->
-  $.get("/cards/json/#{c.id}.json",((data,status)->
-      f(data)
-  ))
+  if tmpCardInfo[c.id]
+    f(tmpCardInfo[c.id])
+  else
+    $.get("/cards/i18n/zh-CN/#{c.id}.json",((data,status)->
+      d = JSON.parse data
+      tmpCardInfo[c.id] = d
+      f(d)
+    ))
 
 CurentTime = ->
   now = new Date();
