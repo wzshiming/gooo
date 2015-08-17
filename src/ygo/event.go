@@ -85,9 +85,9 @@ func (ca *Card) registerNormal() {
 	// 被抽到手牌
 	ca.AddEvent(InHand, func() {
 		pl := ca.GetSummoner()
-		pl.Call(SetFront(ca))
-		pl.Call(ExprCard(ca, LE_FaceUpAttack))
-		pl.GetTarget().Call(ExprCard(ca, LE_FaceDownAttack))
+		pl.Call(setFront(ca))
+		pl.Call(exprCard(ca, LE_FaceUpAttack))
+		pl.GetTarget().Call(exprCard(ca, LE_FaceDownAttack))
 
 	})
 }

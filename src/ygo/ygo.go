@@ -70,18 +70,19 @@ func (yg *YGO) Chain(eventName string, ca *Card, pl *Player, args []interface{})
 	yg.EmptyEvent(Chain)
 	yg.Dispatch(eventName, args...)
 
-	cs := []*Card{}
+	cs := NewCards()
 	yg.ForEventEach(Chain, func(i interface{}) {
 		if v, ok := i.(*Card); ok {
-			cs = append(cs, v)
+			cs.EndPush(v)
+
 		}
 	})
-	if len(cs) > 0 {
+	if cs.Len() > 0 {
 		//pl := ca.GetSummoner()
 		pl.MsgPub("连锁事件 "+eventName+" {self}", nil)
 
-		if !pl.Chain(eventName, cs, args) {
-			pl.GetTarget().Chain(eventName, cs, args)
+		if !pl.Chain(eventName, ca, cs, args) {
+			pl.GetTarget().Chain(eventName, ca, cs, args)
 		}
 	}
 	yg.EmptyEvent(Chain)

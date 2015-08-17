@@ -172,296 +172,6 @@ func booster(cardBag *ygo.CardVersion) {
 	/*4*/
 	cardBag.Register(&ygo.CardOriginal{
 		/*{
-		 id: 159
-		 调整: [传说之剑]
-		<伝説の剣>
-		[2010/09/08]
-
-		●战士族怪兽才能装备。1只装备怪兽的攻击力及守备力上升300分。
-		◇发动时选择场上1只符合条件的怪兽（取对象）
-		◇效果处理时对象怪兽不是战士族的场合，这张卡送去墓地
-		◇效果适用中对象怪兽变成战士族以外的种族的场合，这张卡破坏
-		 中文名: 传说之剑
-		 日文名: 伝説の剣
-		 英文名: Legendary Sword
-		 卡片种类: 装备魔法
-		 卡片密码: 61854111
-		 使用限制: 无限制
-		 罕见度: 平卡N，银字R
-		 卡包: LB，VOL01，DL02，Booster01
-		 效果: 战士族才能装备。1只装备怪兽的攻击力和守备力上升300。
-		}
-		*/
-		Id:       159,
-		Password: "61854111",
-		Name:     "传说之剑",            // "Legendary Sword"  "伝説の剣"
-		Lc:       ygo.LC_EquipMagic, // 装备魔法
-
-		//Initialize:    func(ca *ygo.Card) bool {}, // 初始
-		IsValid: false,
-	})
-
-	/*5*/
-	cardBag.Register(&ygo.CardOriginal{
-		/*{
-		 id: 160
-		 调整: [猛兽之齿]
-		<猛獣の歯>
-		[2010/09/10]
-
-		●兽族才能装备。1只装备怪兽的攻击力与守备力上升300分。
-		◇发动时选择1只符合条件的怪兽（取对象）
-		◇效果处理时装备怪兽种族变为兽族以外的场合，这张卡送去墓地
-		◇装备状态中对象怪兽变为兽族以外的场合，这张卡破坏
-		 中文名: 猛兽之齿
-		 日文名: 猛獣の歯
-		 英文名: Beast Fangs
-		 卡片种类: 装备魔法
-		 卡片密码: 46009906
-		 使用限制: 无限制
-		 罕见度: 平卡N，银字R
-		 卡包: LB，VOL01，DL02，Booster01
-		 效果: 兽族才能装备。1只装备怪兽的攻击力和守备力上升300。
-		}
-		*/
-		Id:       160,
-		Password: "46009906",
-		Name:     "猛兽之齿",            // "Beast Fangs"  "猛獣の歯"
-		Lc:       ygo.LC_EquipMagic, // 装备魔法
-
-		//Initialize:    func(ca *ygo.Card) bool {}, // 初始
-		IsValid: false,
-	})
-
-	/*6*/
-	cardBag.Register(&ygo.CardOriginal{
-		/*{
-		 id: 161
-		 调整: [紫水晶]
-		<紫水晶>
-		[2010/09/10]
-
-		●不死族才能装备。1只装备怪兽的攻击力与守备力上升300分。
-		◇发动时选择1只符合条件的怪兽（取对象）
-		◇效果处理时装备怪兽种族变为不死族以外的场合，这张卡送去墓地
-		◇装备状态中对象怪兽变为不死族以外的场合，这张卡破坏
-		 中文名: 紫水晶
-		 日文名: 紫水晶
-		 英文名: Violet Crystal
-		 卡片种类: 装备魔法
-		 卡片密码: 15052462
-		 使用限制: 无限制
-		 罕见度: 平卡N，银字R
-		 卡包: LB，VOL01，DL02，Booster01
-		 效果: 不死族才能装备。1只装备怪兽的攻击力和守备力上升300。
-		}
-		*/
-		Id:       161,
-		Password: "15052462",
-		Name:     "紫水晶",             // "Violet Crystal"  "紫水晶"
-		Lc:       ygo.LC_EquipMagic, // 装备魔法
-
-		//Initialize:    func(ca *ygo.Card) bool {}, // 初始
-		IsValid: false,
-	})
-
-	/*7*/
-	cardBag.Register(&ygo.CardOriginal{
-		/*{
-		 id: 162
-		 调整: [秘术之书]
-		<秘術の書>
-		[2010/09/08]
-
-		●魔法师族怪兽才能装备。1只装备怪兽的攻击力及守备力上升300分。
-		◇发动时选择场上1只符合条件的怪兽（取对象）
-		◇效果处理时对象怪兽不是魔法师族的场合，这张卡送去墓地
-		◇效果适用中对象怪兽变成魔法师族以外的种族的场合，这张卡破坏
-		 中文名: 秘术之书
-		 日文名: 秘術の書
-		 英文名: Book of Secret Arts
-		 卡片种类: 装备魔法
-		 卡片密码: 91595718
-		 使用限制: 无限制
-		 罕见度: 平卡N，银字R
-		 卡包: LB，EX-R(EX)，VOL01，DL02，Booster01，TP21
-		 效果: 魔法师族怪兽才能装备。装备怪兽的攻击力·守备力上升300。
-		}
-		*/
-		Id:       162,
-		Password: "91595718",
-		Name:     "秘术之书",            // "Book of Secret Arts"  "秘術の書"
-		Lc:       ygo.LC_EquipMagic, // 装备魔法
-
-		//Initialize:    func(ca *ygo.Card) bool {}, // 初始
-		IsValid: false,
-	})
-
-	/*8*/
-	cardBag.Register(&ygo.CardOriginal{
-		/*{
-		 id: 163
-		 调整: [波塞冬之力]
-		<ポセイドンの力>
-		[2010/09/10]
-
-		●水族才能装备。1只装备怪兽的攻击力与守备力上升300分。
-		◇发动时选择1只符合条件的怪兽（取对象）
-		◇效果处理时装备怪兽种族变为水族以外的场合，这张卡送去墓地
-		◇装备状态中对象怪兽变为水族以外的场合，这张卡破坏
-		 中文名: 波塞冬之力
-		 日文名: ポセイドンの力
-		 英文名: Power of Kaishin
-		 卡片种类: 装备魔法
-		 卡片密码: 77027445
-		 使用限制: 无限制
-		 罕见度: 平卡N，银字R
-		 卡包: LB，VOL01，DL02，Booster01
-		 效果: 水族才能装备。1只装备怪兽的攻击力和守备力上升300。
-		}
-		*/
-		Id:       163,
-		Password: "77027445",
-		Name:     "波塞冬之力",           // "Power of Kaishin"  "ポセイドンの力"
-		Lc:       ygo.LC_EquipMagic, // 装备魔法
-
-		//Initialize:    func(ca *ygo.Card) bool {}, // 初始
-		IsValid: false,
-	})
-
-	/*9*/
-	cardBag.Register(&ygo.CardOriginal{
-		/*{
-		 id: 184
-		 中文名: 龙骑士 盖亚
-		 日文名: 竜騎士ガイア
-		 英文名: Gaia the Dragon Champion
-		 卡片种类: 融合怪兽
-		 卡片密码: 66889139
-		 使用限制: 无限制
-		 种族: 龙
-		 属性: 风
-		 星级: 7
-		 攻击力: 2600
-		 防御力: 2100
-		 罕见度: 立体UTR，面闪SR，银字R，金字UR
-		 卡包: PG，BE01，VOL03，DL02，309，Booster R2，15AY
-		 效果: 融合：「暗黑骑士 盖亚」＋「诅咒之龙」。
-		}
-		*/
-		Id:       184,
-		Password: "66889139",
-		Name:     "龙骑士 盖亚",             // "Gaia the Dragon Champion"  "竜騎士ガイア"
-		Lc:       ygo.LC_FusionMonster, // 融合怪兽
-
-		Level:   7,
-		La:      ygo.LA_Earth,  // 风
-		Lr:      ygo.LR_Dragon, // 龙
-		Attack:  2600,
-		Defense: 2100,
-		//Initialize:    func(ca *ygo.Card) bool {}, // 初始
-		IsValid: false,
-	})
-
-	/*10*/
-	cardBag.Register(&ygo.CardOriginal{
-		/*{
-		 id: 194
-		 调整: [暗能量]
-		<闇·エネルギー>
-		[2010/09/08]
-
-		●恶魔族怪兽才能装备。1只装备怪兽的攻击力及守备力上升300分。
-		◇发动时选择场上1只符合条件的怪兽（取对象）
-		◇效果处理时对象怪兽不是恶魔族的场合，这张卡送去墓地
-		◇效果适用中对象怪兽变成恶魔族以外的种族的场合，这张卡破坏
-		 中文名: 暗能量
-		 日文名: 闇·エネルギー
-		 英文名: Dark Energy
-		 卡片种类: 装备魔法
-		 卡片密码: 04614116
-		 使用限制: 无限制
-		 罕见度: 平卡N
-		 卡包: PG，EX-R(EX)，VOL02，DL02，Booster R2
-		 效果: 恶魔族才能装备。1只装备怪兽的攻击力·守备力上升300。
-		}
-		*/
-		Id:       194,
-		Password: "04614116",
-		Name:     "暗能量",             // "Dark Energy"  "闇·エネルギー"
-		Lc:       ygo.LC_EquipMagic, // 装备魔法
-
-		//Initialize:    func(ca *ygo.Card) bool {}, // 初始
-		IsValid: false,
-	})
-
-	/*11*/
-	cardBag.Register(&ygo.CardOriginal{
-		/*{
-		 id: 198
-		 调整: [龙之秘宝]
-		<ドラゴンの秘宝>
-		[2010/09/08]
-
-		●龙族怪兽才能装备。1只装备怪兽的攻击力及守备力上升300分。
-		◇发动时选择场上1只符合条件的怪兽（取对象）
-		◇效果处理时对象怪兽不是龙族的场合，这张卡送去墓地
-		◇效果适用中对象怪兽变成龙族以外的种族的场合，这张卡破坏
-		 中文名: 龙之秘宝
-		 日文名: ドラゴンの秘宝
-		 英文名: Dragon Treasure
-		 卡片种类: 装备魔法
-		 卡片密码: 01435851
-		 使用限制: 无限制
-		 罕见度: 平卡N
-		 卡包: PG，VOL03，DL02，Booster R2
-		 效果: 龙族才能装备。1只装备怪兽的攻击力·守备力上升300。
-		}
-		*/
-		Id:       198,
-		Password: "01435851",
-		Name:     "龙之秘宝",            // "Dragon Treasure"  "ドラゴンの秘宝"
-		Lc:       ygo.LC_EquipMagic, // 装备魔法
-
-		//Initialize:    func(ca *ygo.Card) bool {}, // 初始
-		IsValid: false,
-	})
-
-	/*12*/
-	cardBag.Register(&ygo.CardOriginal{
-		/*{
-		 id: 201
-		 调整: [「守备」封禁]
-		<『守備』封じ>
-		[2010/09/08]
-
-		●选择对方场上的1只守备表示怪兽，变为表侧攻击表示。
-		◇发动时选择对方场上存在的1只守备表示怪兽（取对象）
-		◇效果处理时对象卡不在场上守备表示存在的场合，这个效果不适用
-		◇「等级限制B地区/レベル制限Ｂ地区」的效果适用中，这张卡把怪兽变为攻击表示后，由于「等级限制B地区/レベル制限Ｂ地区」的效果立刻变为守备表示
-		 中文名: 「守备」封禁
-		 日文名: 『守備』封じ
-		 英文名: Stop Defense
-		 卡片种类: 通常魔法
-		 卡片密码: 63102017
-		 使用限制: 无限制
-		 罕见度: 平卡N
-		 卡包: PG，BE01，VOL03，DL02，Booster R2
-		 效果: 选择1只对方场上的守备表示的怪兽变表侧攻击表示。
-		}
-		*/
-		Id:       201,
-		Password: "63102017",
-		Name:     "「守备」封禁",             // "Stop Defense"  "『守備』封じ"
-		Lc:       ygo.LC_OrdinaryMagic, // 通常魔法
-
-		//Initialize:    func(ca *ygo.Card) bool {}, // 初始
-		IsValid: false,
-	})
-
-	/*13*/
-	cardBag.Register(&ygo.CardOriginal{
-		/*{
 		 id: 2081
 		 调整: [城壁]
 		<城壁>
@@ -490,7 +200,7 @@ func booster(cardBag *ygo.CardVersion) {
 		IsValid: false,
 	})
 
-	/*14*/
+	/*5*/
 	cardBag.Register(&ygo.CardOriginal{
 		/*{
 		 id: 2082
@@ -521,7 +231,7 @@ func booster(cardBag *ygo.CardVersion) {
 		IsValid: false,
 	})
 
-	/*15*/
+	/*6*/
 	cardBag.Register(&ygo.CardOriginal{
 		/*{
 		 id: 2083
@@ -551,41 +261,7 @@ func booster(cardBag *ygo.CardVersion) {
 		IsValid: false,
 	})
 
-	/*16*/
-	cardBag.Register(&ygo.CardOriginal{
-		/*{
-		 id: 218
-		 调整: [魔法除去]
-		<魔法除去>
-		[2010/09/08]
-
-		●场上的1张魔法卡破坏。选择的卡是覆盖的场合，翻开那张卡确认，是魔法卡就破坏。陷阱卡的场合变回原样。
-		◇发动时选择这张卡以外的在自己或对方场上的魔法及陷阱区域存在的1张表侧表示的魔法卡或里侧表示覆盖着的1张卡（取对象）
-		◇可以选择作为装备的怪兽卡
-		◇可以选择由于「纳祭之魔/サクリファイス」的效果作为装备的「阿匹卜之化神/アポピスの化神」等为对象
-		◇效果处理时，对象卡不在场上存在的场合，这个效果不适用
-		◇作为怪兽装备的在魔法及陷阱区域存在的里侧怪兽卡在这个效果处理时破坏
-		 中文名: 魔法除去
-		 日文名: 魔法除去
-		 英文名: De-Spell
-		 卡片种类: 通常魔法
-		 卡片密码: 19159413
-		 使用限制: 无限制
-		 罕见度: 平卡N
-		 卡包: PG，EX-R(EX)，VOL02，DL02，Booster R2，YU
-		 效果: 破坏1张场上的魔法卡。选择的卡盖伏的场合，确认那张卡，是魔法卡就破坏，是陷阱卡就变回原来的盖伏形式。
-		}
-		*/
-		Id:       218,
-		Password: "19159413",
-		Name:     "魔法除去",               // "De-Spell"  "魔法除去"
-		Lc:       ygo.LC_OrdinaryMagic, // 通常魔法
-
-		//Initialize:    func(ca *ygo.Card) bool {}, // 初始
-		IsValid: false,
-	})
-
-	/*17*/
+	/*7*/
 	cardBag.Register(&ygo.CardOriginal{
 		/*{
 		 id: 2351
@@ -616,7 +292,7 @@ func booster(cardBag *ygo.CardVersion) {
 		IsValid: false,
 	})
 
-	/*18*/
+	/*8*/
 	cardBag.Register(&ygo.CardOriginal{
 		/*{
 		 id: 2352
@@ -647,7 +323,7 @@ func booster(cardBag *ygo.CardVersion) {
 		IsValid: false,
 	})
 
-	/*19*/
+	/*9*/
 	cardBag.Register(&ygo.CardOriginal{
 		/*{
 		 id: 2353
@@ -678,7 +354,7 @@ func booster(cardBag *ygo.CardVersion) {
 		IsValid: false,
 	})
 
-	/*20*/
+	/*10*/
 	cardBag.Register(&ygo.CardOriginal{
 		/*{
 		 id: 2354
@@ -709,7 +385,7 @@ func booster(cardBag *ygo.CardVersion) {
 		IsValid: false,
 	})
 
-	/*21*/
+	/*11*/
 	cardBag.Register(&ygo.CardOriginal{
 		/*{
 		 id: 2355
@@ -740,7 +416,7 @@ func booster(cardBag *ygo.CardVersion) {
 		IsValid: false,
 	})
 
-	/*22*/
+	/*12*/
 	cardBag.Register(&ygo.CardOriginal{
 		/*{
 		 id: 2377
@@ -773,7 +449,7 @@ func booster(cardBag *ygo.CardVersion) {
 		IsValid: false,
 	})
 
-	/*23*/
+	/*13*/
 	cardBag.Register(&ygo.CardOriginal{
 		/*{
 		 id: 2378
@@ -806,94 +482,7 @@ func booster(cardBag *ygo.CardVersion) {
 		IsValid: false,
 	})
 
-	/*24*/
-	cardBag.Register(&ygo.CardOriginal{
-		/*{
-		 id: 240
-		 调整: [暗之假面]
-		<闇の仮面>
-		[2010/09/08]
-
-		●反转：从自己的墓地选择1张陷阱卡。被选择的卡加入自己的手卡。
-		◇反转效果（进入连锁）
-		◇必须发动
-		◇发动时选择自己墓地中的1张陷阱卡（取对象）
-		◇这张卡被攻击在信息确认时变为表侧的场合，效果延迟到怪兽被破坏确定时之后发动（具体请参考伤害步骤的详细说明）
-		◇自己的墓地不存在能被选择的卡时，这个效果不发动
-		◇效果处理时对象卡不在墓地中存在的场合，这个效果不适用
-		 中文名: 暗之假面
-		 日文名: 闇の仮面
-		 英文名: Mask of Darkness
-		 卡片种类: 效果怪兽
-		 卡片密码: 28933734
-		 使用限制: 无限制
-		 种族: 恶魔
-		 属性: 暗
-		 星级: 2
-		 攻击力: 900
-		 防御力: 400
-		 罕见度: 银字R，平卡N，黄金GR
-		 卡包: RB，BE01，YSD02，VOL04，DL02，SD12，Booster R3，GS03
-		 效果: 反转：选择自己墓地存在的1张陷阱卡加入手卡。
-		}
-		*/
-		Id:       240,
-		Password: "28933734",
-		Name:     "暗之假面",               // "Mask of Darkness"  "闇の仮面"
-		Lc:       ygo.LC_EffectMonster, // 效果怪兽
-
-		Level:   2,
-		La:      ygo.LA_Earth, // 暗
-		Lr:      ygo.LR_Fiend, // 恶魔
-		Attack:  900,
-		Defense: 400,
-		//Initialize:    func(ca *ygo.Card) bool {}, // 初始
-		IsValid: false,
-	})
-
-	/*25*/
-	cardBag.Register(&ygo.CardOriginal{
-		/*{
-		 id: 241
-		 调整: [白衣怪盗]
-		<白い泥棒>
-		[2010/09/08]
-
-		●这张卡给予对方玩家战斗伤害时，对方随机丢弃1张手卡。
-		◇诱发效果（进入连锁）
-		◇必须发动
-		◇详细时点请参考伤害步骤详解
-		 中文名: 白衣怪盗
-		 日文名: 白い泥棒
-		 英文名: White Magical Hat
-		 卡片种类: 效果怪兽
-		 卡片密码: 15150365
-		 使用限制: 无限制
-		 种族: 魔法师
-		 属性: 光
-		 星级: 3
-		 攻击力: 1000
-		 防御力: 700
-		 罕见度: 平卡N，银字R
-		 卡包: RB，BE01，VOL05，DL02，Booster R3
-		 效果: 这张卡造成对方玩家基本分伤害的时候，对方随机丢弃1张卡。
-		}
-		*/
-		Id:       241,
-		Password: "15150365",
-		Name:     "白衣怪盗",               // "White Magical Hat"  "白い泥棒"
-		Lc:       ygo.LC_EffectMonster, // 效果怪兽
-
-		Level:   3,
-		La:      ygo.LA_Earth,       // 光
-		Lr:      ygo.LR_SpellCaster, // 魔法师
-		Attack:  1000,
-		Defense: 700,
-		//Initialize:    func(ca *ygo.Card) bool {}, // 初始
-		IsValid: false,
-	})
-
-	/*26*/
+	/*14*/
 	cardBag.Register(&ygo.CardOriginal{
 		/*{
 		 id: 2554
@@ -927,49 +516,7 @@ func booster(cardBag *ygo.CardVersion) {
 		IsValid: false,
 	})
 
-	/*27*/
-	cardBag.Register(&ygo.CardOriginal{
-		/*{
-		 id: 268
-		 调整: [伪陷阱]
-		<伪物のわな>
-		[10/09/13]
-
-		●对方使用破坏自己场上的陷阱卡的魔法·陷阱·效果怪兽的效果时可以发动。这张卡代替破坏，其他的陷阱卡不破坏。覆盖的卡要被破坏的场合，那些卡全部翻开确认。
-		◇必须在自己场上有其他陷阱卡存在时才能发动
-		◇发动时给对方确认覆盖的卡
-		◇连锁这张卡的发动，发动「沙尘之大龙卷/砂尘の大竜巻」在场上覆盖陷阱卡的场合，之后不能确认那张覆盖的陷阱卡
-		◇不能对应「元素英雄 天空侠/E·HERO エアーマン」等不确定的破坏效果发动这张卡
-		◇「王宫的通告/王宫のお触れ」在场上存在时，发动这张卡的场合也确认覆盖卡
-		◇这张卡在自己场上有其他陷阱卡存在时可以对应「暗之卡组破坏病毒/闇のデッキ破壊ウイルス」发动，那个场合自己场上的陷阱卡不破坏，手卡中的陷阱卡破坏
-		◇这张卡对应「黑蔷薇龙/ブラック·ローズ·ドラゴン」的破坏效果发动的场合，自己场上的其他陷阱卡不破坏
-		◇「旋风/サイクロン」以1张覆盖的陷阱卡为对象发动的场合这张卡对应发动，在发动时只确认那张对象卡
-		◇对应这张卡的发动而发动「旋风/サイクロン」并以这张卡为对象的场合，效果处理时不能代替其他陷阱卡破坏
-		◇可以对应「命运英雄 钻石人/D－HERO ダイヤモンドガイ」墓地发动的「大风暴/大岚」等发动
-		◇这张卡可以对应「星尘龙/スターダスト·ドラゴン」的效果发动而发动
-		◇「星尘龙/スターダスト·ドラゴン」不能对应这张卡的发动而发动
-		★是否能对应魔法卡效果的发动而发动 调整中
-		 中文名: 伪陷阱
-		 日文名: 偽物のわな
-		 英文名: Fake Trap
-		 卡片种类: 通常陷阱
-		 卡片密码: 03027001
-		 使用限制: 无限制
-		 罕见度: 平卡N
-		 卡包: RB，BE01，Booster R3，VOL05，DL02，TP02，JY
-		 效果: 把自己场上的陷阱卡破坏的魔法·陷阱·效果怪兽的效果对方发动时才能发动，把这张卡作为代替破坏，其他的自己的陷阱卡不破坏。盖放的卡破坏的场合，那些卡全部翻开确认。
-		}
-		*/
-		Id:       268,
-		Password: "03027001",
-		Name:     "伪陷阱",               // "Fake Trap"  "偽物のわな"
-		Lc:       ygo.LC_OrdinaryTrap, // 通常陷阱
-
-		//Initialize:    func(ca *ygo.Card) bool {}, // 初始
-		IsValid: false,
-	})
-
-	/*28*/
+	/*15*/
 	cardBag.Register(&ygo.CardOriginal{
 		/*{
 		 id: 421
@@ -1012,7 +559,7 @@ func booster(cardBag *ygo.CardVersion) {
 		IsValid: false,
 	})
 
-	/*29*/
+	/*16*/
 	cardBag.Register(&ygo.CardOriginal{
 		/*{
 		 id: 426
@@ -1054,7 +601,7 @@ func booster(cardBag *ygo.CardVersion) {
 		IsValid: false,
 	})
 
-	/*30*/
+	/*17*/
 	cardBag.Register(&ygo.CardOriginal{
 		/*{
 		 id: 427
@@ -1097,7 +644,7 @@ func booster(cardBag *ygo.CardVersion) {
 		IsValid: false,
 	})
 
-	/*31*/
+	/*18*/
 	cardBag.Register(&ygo.CardOriginal{
 		/*{
 		 id: 428
@@ -1140,7 +687,7 @@ func booster(cardBag *ygo.CardVersion) {
 		IsValid: false,
 	})
 
-	/*32*/
+	/*19*/
 	cardBag.Register(&ygo.CardOriginal{
 		/*{
 		 id: 429
@@ -1184,7 +731,7 @@ func booster(cardBag *ygo.CardVersion) {
 		IsValid: false,
 	})
 
-	/*33*/
+	/*20*/
 	cardBag.Register(&ygo.CardOriginal{
 		/*{
 		 id: 430
@@ -1227,83 +774,7 @@ func booster(cardBag *ygo.CardVersion) {
 		IsValid: false,
 	})
 
-	/*34*/
-	cardBag.Register(&ygo.CardOriginal{
-		/*{
-		 id: 431
-		 调整: [剑之女王]
-		<剣の女王>
-		[2010/09/08]
-
-		●反转：对方场上每有1张魔法·陷阱卡，给予对方基本分500分的伤害。
-		◇反转效果（进入连锁）
-		◇必须发动
-		◇这张卡被攻击在信息确认时变为表侧的场合，效果延迟到怪兽被破坏确定时之后发动（具体请参考伤害步骤的详细说明）
-		◇效果处理时计算对方场上的魔法·陷阱卡数量
-		◇效果处理时对方场上不存在魔法·陷阱卡的场合，这个效果不适用
-		 中文名: 剑之女王
-		 日文名: 剣の女王
-		 英文名: Princess of Tsurugi
-		 卡片种类: 效果怪兽
-		 卡片密码: 51371017
-		 使用限制: 无限制
-		 种族: 战士
-		 属性: 风
-		 星级: 3
-		 攻击力: 900
-		 防御力: 700
-		 罕见度: 平卡N，银字R
-		 卡包: ME，BE02，YSD01，VOL07，DL04，Booster07
-		 效果: 反转：对方场上每存在1张魔法·陷阱，对方受到500分的伤害。
-		}
-		*/
-		Id:       431,
-		Password: "51371017",
-		Name:     "剑之女王",               // "Princess of Tsurugi"  "剣の女王"
-		Lc:       ygo.LC_EffectMonster, // 效果怪兽
-
-		Level:   3,
-		La:      ygo.LA_Earth,   // 风
-		Lr:      ygo.LR_Warrior, // 战士
-		Attack:  900,
-		Defense: 700,
-		//Initialize:    func(ca *ygo.Card) bool {}, // 初始
-		IsValid: false,
-	})
-
-	/*35*/
-	cardBag.Register(&ygo.CardOriginal{
-		/*{
-		 id: 432
-		 调整: [火炎地狱]
-		<火炎地獄>
-		[2010/09/08]
-
-		●给予对方基本分1000分的伤害，自己受到500分的伤害。
-		◇同时发生伤害
-		◇对应这张卡的发动，对方发动「地狱的冷枪/地獄の扉越し銃」「痛魂之咒术/痛魂の呪術」的场合，自己受到合计1500分的伤害
-		◇对应这张卡的发动，对方发动「黑板擦的陷阱/黒板消しの罠」的场合，对方受到的1000分伤害无效
-		 中文名: 火炎地狱
-		 日文名: 火炎地獄
-		 英文名: Tremendous Fire
-		 卡片种类: 通常魔法
-		 卡片密码: 46918794
-		 使用限制: 无限制
-		 罕见度: 平卡N
-		 卡包: ME，BE02，VOL07，DL04，Booster07，YSD03
-		 效果: 给予对方基本分1000分伤害，自己受到500分伤害。
-		}
-		*/
-		Id:       432,
-		Password: "46918794",
-		Name:     "火炎地狱",               // "Tremendous Fire"  "火炎地獄"
-		Lc:       ygo.LC_OrdinaryMagic, // 通常魔法
-
-		//Initialize:    func(ca *ygo.Card) bool {}, // 初始
-		IsValid: false,
-	})
-
-	/*36*/
+	/*21*/
 	cardBag.Register(&ygo.CardOriginal{
 		/*{
 		 id: 433
@@ -1346,50 +817,7 @@ func booster(cardBag *ygo.CardVersion) {
 		IsValid: false,
 	})
 
-	/*37*/
-	cardBag.Register(&ygo.CardOriginal{
-		/*{
-		 id: 438
-		 调整: [雷龙]
-		<サンダー·ドラゴン>
-		[2010/09/08]
-
-		●可以从手卡把这张卡丢弃，从卡组把另外的最多2张「雷龙」加入手卡。那之后卡组洗切。这个效果只能在自己的主要阶段使用。
-		◇启动效果（进入连锁）
-		◇发动时把这张卡从手卡丢弃（代价）
-		◇效果处理时至少选择1张加入手牌
-		◇确认卡组中不存在可以检索的卡时，不能发动这个效果
-		 中文名: 雷龙
-		 日文名: サンダー·ドラゴン
-		 英文名: Thunder Dragon
-		 卡片种类: 效果怪兽
-		 卡片密码: 31786629
-		 使用限制: 无限制
-		 种族: 雷
-		 属性: 光
-		 星级: 5
-		 攻击力: 1600
-		 防御力: 1500
-		 罕见度: 平卡N
-		 卡包: ME，BE02，VOL07，DL04，Booster07
-		 效果: 丢弃手卡的这张卡，从卡组选出最多2张的「雷龙」加入手卡。之后洗卡。这个效果只能在自己的主要阶段使用。
-		}
-		*/
-		Id:       438,
-		Password: "31786629",
-		Name:     "雷龙",                 // "Thunder Dragon"  "サンダー·ドラゴン"
-		Lc:       ygo.LC_EffectMonster, // 效果怪兽
-
-		Level:   5,
-		La:      ygo.LA_Earth,   // 光
-		Lr:      ygo.LR_Thunder, // 雷
-		Attack:  1600,
-		Defense: 1500,
-		//Initialize:    func(ca *ygo.Card) bool {}, // 初始
-		IsValid: false,
-	})
-
-	/*38*/
+	/*22*/
 	cardBag.Register(&ygo.CardOriginal{
 		/*{
 		 id: 441
@@ -1430,47 +858,7 @@ func booster(cardBag *ygo.CardVersion) {
 		IsValid: false,
 	})
 
-	/*39*/
-	cardBag.Register(&ygo.CardOriginal{
-		/*{
-		 id: 442
-		 调整: [超级流星]
-		<スーパースター>
-		[2010/09/08]
-
-		●只要这张卡在场上表侧表示存在，全部光属性怪兽的攻击力上升500分。暗属性怪兽的攻击力下降400分。
-		◇永续效果（不进入连锁）
-		 中文名: 超级流星
-		 日文名: スーパースター
-		 英文名: Hoshiningen
-		 卡片种类: 效果怪兽
-		 卡片密码: 67629977
-		 使用限制: 无限制
-		 种族: 天使
-		 属性: 光
-		 星级: 2
-		 攻击力: 500
-		 防御力: 700
-		 罕见度: 平卡N，银字R
-		 卡包: ME，BE02，VOL06，DL04，Booster06
-		 效果: 只要这张卡场上表侧表示存在，全部的光属性怪兽攻击力上升500。暗属性的怪兽攻击力下降400。
-		}
-		*/
-		Id:       442,
-		Password: "67629977",
-		Name:     "超级流星",               // "Hoshiningen"  "スーパースター"
-		Lc:       ygo.LC_EffectMonster, // 效果怪兽
-
-		Level:   2,
-		La:      ygo.LA_Earth,  // 光
-		Lr:      ygo.LR_Angel, // 天使
-		Attack:  500,
-		Defense: 700,
-		//Initialize:    func(ca *ygo.Card) bool {}, // 初始
-		IsValid: false,
-	})
-
-	/*40*/
+	/*23*/
 	cardBag.Register(&ygo.CardOriginal{
 		/*{
 		 id: 444
@@ -1515,7 +903,7 @@ func booster(cardBag *ygo.CardVersion) {
 		IsValid: false,
 	})
 
-	/*41*/
+	/*24*/
 	cardBag.Register(&ygo.CardOriginal{
 		/*{
 		 id: 448
@@ -1557,232 +945,7 @@ func booster(cardBag *ygo.CardVersion) {
 		IsValid: false,
 	})
 
-	/*42*/
-	cardBag.Register(&ygo.CardOriginal{
-		/*{
-		 id: 449
-		 调整: [海星小子]
-		<スター·ボーイ>
-		[2010/09/08]
-
-		●只要这张卡在场上表侧表示存在，全部水属性怪兽的攻击力上升500分。炎属性怪兽的攻击力下降400分。
-		◇永续效果（不进入连锁）
-		 中文名: 海星小子
-		 日文名: スター·ボーイ
-		 英文名: Star Boy
-		 卡片种类: 效果怪兽
-		 卡片密码: 08201910
-		 使用限制: 无限制
-		 种族: 水
-		 属性: 水
-		 星级: 2
-		 攻击力: 550
-		 防御力: 500
-		 罕见度: 平卡N
-		 卡包: ME，BE02，VOL06，DL04，Booster06，SD04
-		 效果: 只要这张卡在场上表侧表示存在，全部水属性的怪兽攻击力上升500。炎属性的怪兽攻击力下降400。
-		}
-		*/
-		Id:       449,
-		Password: "08201910",
-		Name:     "海星小子",               // "Star Boy"  "スター·ボーイ"
-		Lc:       ygo.LC_EffectMonster, // 效果怪兽
-
-		Level:   2,
-		La:      ygo.LA_Earth, // 水
-		Lr:      ygo.LR_None,  // 水
-		Attack:  550,
-		Defense: 500,
-		//Initialize:    func(ca *ygo.Card) bool {}, // 初始
-		IsValid: false,
-	})
-
-	/*43*/
-	cardBag.Register(&ygo.CardOriginal{
-		/*{
-		 id: 455
-		 调整: [小奇美拉]
-		<リトル·キメラ>
-		[2010/09/08]
-
-		●只要这张卡在场上表侧表示存在，全部炎属性怪兽的攻击力上升500分。水属性怪兽的攻击力下降400分。
-		◇永续效果（不进入连锁）
-		 中文名: 小奇美拉
-		 日文名: リトル·キメラ
-		 英文名: Little Chimera
-		 卡片种类: 效果怪兽
-		 卡片密码: 68658728
-		 使用限制: 无限制
-		 种族: 兽
-		 属性: 炎
-		 星级: 2
-		 攻击力: 600
-		 防御力: 550
-		 罕见度: 平卡N
-		 卡包: ME，BE02，VOL06，DL04，Booster06，SD03，SD24
-		 效果: 只要这张卡在场上表侧表示存在，全部炎属性的怪兽攻击力上升500。水属性的怪兽攻击力下降400。
-		}
-		*/
-		Id:       455,
-		Password: "68658728",
-		Name:     "小奇美拉",               // "Little Chimera"  "リトル·キメラ"
-		Lc:       ygo.LC_EffectMonster, // 效果怪兽
-
-		Level:   2,
-		La:      ygo.LA_None,  // 炎
-		Lr:      ygo.LR_Beast, // 兽
-		Attack:  600,
-		Defense: 550,
-		//Initialize:    func(ca *ygo.Card) bool {}, // 初始
-		IsValid: false,
-	})
-
-	/*44*/
-	cardBag.Register(&ygo.CardOriginal{
-		/*{
-		 id: 456
-		 调整: [刃蝇]
-		<ブレードフライ>
-		[2010/09/08]
-
-		●只要这张卡在场上表侧表示存在，全部风属性怪兽的攻击力上升500分。地属性怪兽的攻击力下降400分。
-		◇永续效果（不进入连锁）
-		 中文名: 刃蝇
-		 日文名: ブレードフライ
-		 英文名: Bladefly
-		 卡片种类: 效果怪兽
-		 卡片密码: 28470714
-		 使用限制: 无限制
-		 种族: 昆虫
-		 属性: 风
-		 星级: 2
-		 攻击力: 600
-		 防御力: 700
-		 罕见度: 平卡N
-		 卡包: ME，BE02，VOL06，DL04，Booster06，SD08
-		 效果: 只要这张卡在场上表侧表示存在，全部风属性的怪兽攻击力上升500。地属性的怪兽攻击力下降400。
-		}
-		*/
-		Id:       456,
-		Password: "28470714",
-		Name:     "刃蝇",                 // "Bladefly"  "ブレードフライ"
-		Lc:       ygo.LC_EffectMonster, // 效果怪兽
-
-		Level:   2,
-		La:      ygo.LA_Earth,  // 风
-		Lr:      ygo.LR_Insect, // 昆虫
-		Attack:  600,
-		Defense: 700,
-		//Initialize:    func(ca *ygo.Card) bool {}, // 初始
-		IsValid: false,
-	})
-
-	/*45*/
-	cardBag.Register(&ygo.CardOriginal{
-		/*{
-		 id: 459
-		 调整: [见习魔女]
-		<見習い魔女>
-		[2010/09/08]
-
-		●只要这张卡在场上表侧表示存在，全部暗属性怪兽的攻击力上升500分。光属性怪兽的攻击力下降400分。
-		◇永续效果（不进入连锁）
-		 中文名: 见习魔女
-		 日文名: 見習い魔女
-		 英文名: Witch's Apprentice
-		 卡片种类: 效果怪兽
-		 卡片密码: 80741828
-		 使用限制: 无限制
-		 种族: 魔法师
-		 属性: 暗
-		 星级: 2
-		 攻击力: 550
-		 防御力: 500
-		 罕见度: 平卡N
-		 卡包: ME，BE02，VOL06，DL04，Booster06
-		 效果: 只要这张卡在场上表侧表示存在，全部暗属性的怪兽攻击力上升500。光属性的怪兽攻击力下降400。
-		}
-		*/
-		Id:       459,
-		Password: "80741828",
-		Name:     "见习魔女",               // "Witch's Apprentice"  "見習い魔女"
-		Lc:       ygo.LC_EffectMonster, // 效果怪兽
-
-		Level:   2,
-		La:      ygo.LA_Earth,       // 暗
-		Lr:      ygo.LR_SpellCaster, // 魔法师
-		Attack:  550,
-		Defense: 500,
-		//Initialize:    func(ca *ygo.Card) bool {}, // 初始
-		IsValid: false,
-	})
-
-	/*46*/
-	cardBag.Register(&ygo.CardOriginal{
-		/*{
-		 id: 472
-		 调整: [细菌感染]
-		<細菌感染>
-		[2010/09/08]
-
-		●机械族以外的怪兽才能装备。装备怪兽的攻击力在每次自己的准备阶段下降300分。
-		◇发动时选择场上表侧表示存在的机械族以外的怪兽（取对象）
-		◇效果处理时对象怪兽变为机械族的场合，这张卡送去墓地
-		◇效果适用中对象怪兽变为机械族的场合，这张卡破坏
-		◇「王宮の勅命/王宮の勅命」效果适用不影响这张卡的回合计算，在「王宮の勅命/王宮の勅命」效果失去后，装备怪兽降低那个回合数×300分的攻击力
-		 中文名: 细菌感染
-		 日文名: 細菌感染
-		 英文名: Germ Infection
-		 卡片种类: 装备魔法
-		 卡片密码: 24668830
-		 使用限制: 无限制
-		 罕见度: 平卡N
-		 卡包: ME，VOL07，DL04，Booster07
-		 效果: 机械族以外的怪兽装备可能。装备怪兽的攻击力在每次的自己的准备阶段攻击力下降300。
-		}
-		*/
-		Id:       472,
-		Password: "24668830",
-		Name:     "细菌感染",            // "Germ Infection"  "細菌感染"
-		Lc:       ygo.LC_EquipMagic, // 装备魔法
-
-		//Initialize:    func(ca *ygo.Card) bool {}, // 初始
-		IsValid: false,
-	})
-
-	/*47*/
-	cardBag.Register(&ygo.CardOriginal{
-		/*{
-		 id: 473
-		 调整: [麻药]
-		<しびれ薬>
-		[2010/09/08]
-
-		●机械族以外的怪兽才能装备。装备怪兽不能攻击宣言。
-		◇发动时选择场上表侧表示存在的机械族以外的怪兽（取对象）
-		◇效果处理时对象怪兽变为机械族的场合，这张卡送去墓地
-		◇效果适用中对象怪兽变为机械族的场合，这张卡破坏
-		 中文名: 麻药
-		 日文名: しびれ薬
-		 英文名: Paralyzing Potion
-		 卡片种类: 装备魔法
-		 卡片密码: 50152549
-		 使用限制: 无限制
-		 罕见度: 平卡N
-		 卡包: ME，VOL07，DL04，Booster07
-		 效果: 机械族以外的怪兽装备可能。装备怪兽不能攻击宣言。
-		}
-		*/
-		Id:       473,
-		Password: "50152549",
-		Name:     "麻药",              // "Paralyzing Potion"  "しびれ薬"
-		Lc:       ygo.LC_EquipMagic, // 装备魔法
-
-		//Initialize:    func(ca *ygo.Card) bool {}, // 初始
-		IsValid: false,
-	})
-
-	/*48*/
+	/*25*/
 	cardBag.Register(&ygo.CardOriginal{
 		/*{
 		 id: 475
@@ -1813,7 +976,7 @@ func booster(cardBag *ygo.CardVersion) {
 		IsValid: false,
 	})
 
-	/*49*/
+	/*26*/
 	cardBag.Register(&ygo.CardOriginal{
 		/*{
 		 id: 476
@@ -1847,7 +1010,7 @@ func booster(cardBag *ygo.CardVersion) {
 		IsValid: false,
 	})
 
-	/*50*/
+	/*27*/
 	cardBag.Register(&ygo.CardOriginal{
 		/*{
 		 id: 477
@@ -1878,7 +1041,7 @@ func booster(cardBag *ygo.CardVersion) {
 		IsValid: false,
 	})
 
-	/*51*/
+	/*28*/
 	cardBag.Register(&ygo.CardOriginal{
 		/*{
 		 id: 478
@@ -1910,7 +1073,7 @@ func booster(cardBag *ygo.CardVersion) {
 		IsValid: false,
 	})
 
-	/*52*/
+	/*29*/
 	cardBag.Register(&ygo.CardOriginal{
 		/*{
 		 id: 481
@@ -1942,7 +1105,7 @@ func booster(cardBag *ygo.CardVersion) {
 		IsValid: false,
 	})
 
-	/*53*/
+	/*30*/
 	cardBag.Register(&ygo.CardOriginal{
 		/*{
 		 id: 482
@@ -1974,7 +1137,7 @@ func booster(cardBag *ygo.CardVersion) {
 		IsValid: false,
 	})
 
-	/*54*/
+	/*31*/
 	cardBag.Register(&ygo.CardOriginal{
 		/*{
 		 id: 483
@@ -2004,7 +1167,7 @@ func booster(cardBag *ygo.CardVersion) {
 		IsValid: false,
 	})
 
-	/*55*/
+	/*32*/
 	cardBag.Register(&ygo.CardOriginal{
 		/*{
 		 id: 484
@@ -2034,7 +1197,7 @@ func booster(cardBag *ygo.CardVersion) {
 		IsValid: false,
 	})
 
-	/*56*/
+	/*33*/
 	cardBag.Register(&ygo.CardOriginal{
 		/*{
 		 id: 487
@@ -2064,7 +1227,7 @@ func booster(cardBag *ygo.CardVersion) {
 		IsValid: false,
 	})
 
-	/*57*/
+	/*34*/
 	cardBag.Register(&ygo.CardOriginal{
 		/*{
 		 id: 488
@@ -2095,7 +1258,7 @@ func booster(cardBag *ygo.CardVersion) {
 		IsValid: false,
 	})
 
-	/*58*/
+	/*35*/
 	cardBag.Register(&ygo.CardOriginal{
 		/*{
 		 id: 489
@@ -2127,7 +1290,7 @@ func booster(cardBag *ygo.CardVersion) {
 		IsValid: false,
 	})
 
-	/*59*/
+	/*36*/
 	cardBag.Register(&ygo.CardOriginal{
 		/*{
 		 id: 490
@@ -2159,7 +1322,7 @@ func booster(cardBag *ygo.CardVersion) {
 		IsValid: false,
 	})
 
-	/*60*/
+	/*37*/
 	cardBag.Register(&ygo.CardOriginal{
 		/*{
 		 id: 491
@@ -2202,7 +1365,7 @@ func booster(cardBag *ygo.CardVersion) {
 		IsValid: false,
 	})
 
-	/*61*/
+	/*38*/
 	cardBag.Register(&ygo.CardOriginal{
 		/*{
 		 id: 494
@@ -2242,7 +1405,7 @@ func booster(cardBag *ygo.CardVersion) {
 		IsValid: false,
 	})
 
-	/*62*/
+	/*39*/
 	cardBag.Register(&ygo.CardOriginal{
 		/*{
 		 id: 497
@@ -2286,7 +1449,7 @@ func booster(cardBag *ygo.CardVersion) {
 		IsValid: false,
 	})
 
-	/*63*/
+	/*40*/
 	cardBag.Register(&ygo.CardOriginal{
 		/*{
 		 id: 499
@@ -2328,7 +1491,7 @@ func booster(cardBag *ygo.CardVersion) {
 		IsValid: false,
 	})
 
-	/*64*/
+	/*41*/
 	cardBag.Register(&ygo.CardOriginal{
 		/*{
 		 id: 501
@@ -2363,7 +1526,7 @@ func booster(cardBag *ygo.CardVersion) {
 		Lc:       ygo.LC_EffectMonster, // 效果怪兽
 
 		Level:   4,
-		La:      ygo.LA_Earth,  // 光
+		La:      ygo.LA_Earth, // 光
 		Lr:      ygo.LR_Angel, // 天使
 		Attack:  1100,
 		Defense: 1200,
@@ -2371,7 +1534,7 @@ func booster(cardBag *ygo.CardVersion) {
 		IsValid: false,
 	})
 
-	/*65*/
+	/*42*/
 	cardBag.Register(&ygo.CardOriginal{
 		/*{
 		 id: 504
@@ -2404,7 +1567,7 @@ func booster(cardBag *ygo.CardVersion) {
 		IsValid: false,
 	})
 
-	/*66*/
+	/*43*/
 	cardBag.Register(&ygo.CardOriginal{
 		/*{
 		 id: 505
@@ -2435,7 +1598,7 @@ func booster(cardBag *ygo.CardVersion) {
 		IsValid: false,
 	})
 
-	/*67*/
+	/*44*/
 	cardBag.Register(&ygo.CardOriginal{
 		/*{
 		 id: 509
@@ -2472,7 +1635,7 @@ func booster(cardBag *ygo.CardVersion) {
 		Lc:       ygo.LC_EffectMonster, // 效果怪兽
 
 		Level:   4,
-		La:      ygo.LA_Earth,  // 光
+		La:      ygo.LA_Earth, // 光
 		Lr:      ygo.LR_Angel, // 天使
 		Attack:  1200,
 		Defense: 1000,
@@ -2480,7 +1643,7 @@ func booster(cardBag *ygo.CardVersion) {
 		IsValid: false,
 	})
 
-	/*68*/
+	/*45*/
 	cardBag.Register(&ygo.CardOriginal{
 		/*{
 		 id: 511
@@ -2525,7 +1688,7 @@ func booster(cardBag *ygo.CardVersion) {
 		IsValid: false,
 	})
 
-	/*69*/
+	/*46*/
 	cardBag.Register(&ygo.CardOriginal{
 		/*{
 		 id: 512
@@ -2570,7 +1733,7 @@ func booster(cardBag *ygo.CardVersion) {
 		IsValid: false,
 	})
 
-	/*70*/
+	/*47*/
 	cardBag.Register(&ygo.CardOriginal{
 		/*{
 		 id: 513
@@ -2612,7 +1775,7 @@ func booster(cardBag *ygo.CardVersion) {
 		IsValid: false,
 	})
 
-	/*71*/
+	/*48*/
 	cardBag.Register(&ygo.CardOriginal{
 		/*{
 		 id: 514
@@ -2653,7 +1816,7 @@ func booster(cardBag *ygo.CardVersion) {
 		IsValid: false,
 	})
 
-	/*72*/
+	/*49*/
 	cardBag.Register(&ygo.CardOriginal{
 		/*{
 		 id: 515
@@ -2696,7 +1859,7 @@ func booster(cardBag *ygo.CardVersion) {
 		IsValid: false,
 	})
 
-	/*73*/
+	/*50*/
 	cardBag.Register(&ygo.CardOriginal{
 		/*{
 		 id: 516
@@ -2737,7 +1900,7 @@ func booster(cardBag *ygo.CardVersion) {
 		IsValid: false,
 	})
 
-	/*74*/
+	/*51*/
 	cardBag.Register(&ygo.CardOriginal{
 		/*{
 		 id: 517
@@ -2780,7 +1943,7 @@ func booster(cardBag *ygo.CardVersion) {
 		IsValid: false,
 	})
 
-	/*75*/
+	/*52*/
 	cardBag.Register(&ygo.CardOriginal{
 		/*{
 		 id: 518
@@ -2823,7 +1986,7 @@ func booster(cardBag *ygo.CardVersion) {
 		IsValid: false,
 	})
 
-	/*76*/
+	/*53*/
 	cardBag.Register(&ygo.CardOriginal{
 		/*{
 		 id: 519
@@ -2866,7 +2029,7 @@ func booster(cardBag *ygo.CardVersion) {
 		IsValid: false,
 	})
 
-	/*77*/
+	/*54*/
 	cardBag.Register(&ygo.CardOriginal{
 		/*{
 		 id: 520
@@ -2909,7 +2072,7 @@ func booster(cardBag *ygo.CardVersion) {
 		IsValid: false,
 	})
 
-	/*78*/
+	/*55*/
 	cardBag.Register(&ygo.CardOriginal{
 		/*{
 		 id: 521
@@ -2951,7 +2114,7 @@ func booster(cardBag *ygo.CardVersion) {
 		IsValid: false,
 	})
 
-	/*79*/
+	/*56*/
 	cardBag.Register(&ygo.CardOriginal{
 		/*{
 		 id: 522
@@ -2985,7 +2148,7 @@ func booster(cardBag *ygo.CardVersion) {
 		IsValid: false,
 	})
 
-	/*80*/
+	/*57*/
 	cardBag.Register(&ygo.CardOriginal{
 		/*{
 		 id: 523
@@ -3030,7 +2193,7 @@ func booster(cardBag *ygo.CardVersion) {
 		IsValid: false,
 	})
 
-	/*81*/
+	/*58*/
 	cardBag.Register(&ygo.CardOriginal{
 		/*{
 		 id: 524
@@ -3062,7 +2225,7 @@ func booster(cardBag *ygo.CardVersion) {
 		IsValid: false,
 	})
 
-	/*82*/
+	/*59*/
 	cardBag.Register(&ygo.CardOriginal{
 		/*{
 		 id: 525
@@ -3092,7 +2255,7 @@ func booster(cardBag *ygo.CardVersion) {
 		IsValid: false,
 	})
 
-	/*83*/
+	/*60*/
 	cardBag.Register(&ygo.CardOriginal{
 		/*{
 		 id: 526
@@ -3123,7 +2286,7 @@ func booster(cardBag *ygo.CardVersion) {
 		IsValid: false,
 	})
 
-	/*84*/
+	/*61*/
 	cardBag.Register(&ygo.CardOriginal{
 		/*{
 		 id: 527
@@ -3158,7 +2321,7 @@ func booster(cardBag *ygo.CardVersion) {
 		IsValid: false,
 	})
 
-	/*85*/
+	/*62*/
 	cardBag.Register(&ygo.CardOriginal{
 		/*{
 		 id: 528
@@ -3190,7 +2353,7 @@ func booster(cardBag *ygo.CardVersion) {
 		IsValid: false,
 	})
 
-	/*86*/
+	/*63*/
 	cardBag.Register(&ygo.CardOriginal{
 		/*{
 		 id: 529
@@ -3221,7 +2384,7 @@ func booster(cardBag *ygo.CardVersion) {
 		IsValid: false,
 	})
 
-	/*87*/
+	/*64*/
 	cardBag.Register(&ygo.CardOriginal{
 		/*{
 		 id: 530
@@ -3264,7 +2427,7 @@ func booster(cardBag *ygo.CardVersion) {
 		IsValid: false,
 	})
 
-	/*88*/
+	/*65*/
 	cardBag.Register(&ygo.CardOriginal{
 		/*{
 		 id: 1227
@@ -3296,39 +2459,7 @@ func booster(cardBag *ygo.CardVersion) {
 		IsValid:  true,
 	})
 
-	/*89*/
-	cardBag.Register(&ygo.CardOriginal{
-		/*{
-		 id: 144
-		 中文名: 暗黑骑士 盖亚
-		 日文名: 暗黒騎士ガイア
-		 英文名: Gaia The Fierce Knight
-		 卡片种类: 通常怪兽
-		 卡片密码: 06368038
-		 使用限制: 无限制
-		 种族: 战士
-		 属性: 地
-		 星级: 7
-		 攻击力: 2300
-		 防御力: 2100
-		 罕见度: 金字UR，银字R，立体UTR，平卡N
-		 卡包: LB，BE01，LE02，PH，EX-R(EX)，VOL01，DL02，Booster R1，15AY
-		 效果: 描述：骑着风驰电掣般的马的骑士。当心突进攻击。
-		}
-		*/
-		Id:       144,
-		Password: "06368038",
-		Name:     "暗黑骑士 盖亚",              // "Gaia The Fierce Knight"  "暗黒騎士ガイア"
-		Lc:       ygo.LC_OrdinaryMonster, // 通常怪兽
-		Level:    7,
-		La:       ygo.LA_Earth,   // 地
-		Lr:       ygo.LR_Warrior, // 战士
-		Attack:   2300,
-		Defense:  2100,
-		IsValid:  true,
-	})
-
-	/*90*/
+	/*66*/
 	cardBag.Register(&ygo.CardOriginal{
 		/*{
 		 id: 149
@@ -3360,7 +2491,7 @@ func booster(cardBag *ygo.CardVersion) {
 		IsValid:  true,
 	})
 
-	/*91*/
+	/*67*/
 	cardBag.Register(&ygo.CardOriginal{
 		/*{
 		 id: 150
@@ -3392,7 +2523,7 @@ func booster(cardBag *ygo.CardVersion) {
 		IsValid:  true,
 	})
 
-	/*92*/
+	/*68*/
 	cardBag.Register(&ygo.CardOriginal{
 		/*{
 		 id: 152
@@ -3424,7 +2555,7 @@ func booster(cardBag *ygo.CardVersion) {
 		IsValid:  true,
 	})
 
-	/*93*/
+	/*69*/
 	cardBag.Register(&ygo.CardOriginal{
 		/*{
 		 id: 154
@@ -3456,296 +2587,7 @@ func booster(cardBag *ygo.CardVersion) {
 		IsValid:  true,
 	})
 
-	/*94*/
-	cardBag.Register(&ygo.CardOriginal{
-		/*{
-		 id: 229
-		 中文名: 恶魔召唤
-		 日文名: デーモンの召喚
-		 英文名: Summoned Skull
-		 卡片种类: 通常怪兽
-		 卡片密码: 70781052
-		 使用限制: 无限制
-		 种族: 恶魔
-		 属性: 暗
-		 星级: 6
-		 攻击力: 2500
-		 防御力: 1200
-		 罕见度: 平卡N，金字UR，面闪SR，银字R，立体UTR，爆闪PR
-		 卡包: RB，BE01，LE03，SC，EX-R(EX)，VOL04，DL02，Booster R3，YAP01，DPYG，DT09，15AY
-		 效果: 描述：使用黑暗力量，迷惑人心的恶魔。在恶魔族中以相当强大的力量著称。
-		}
-		*/
-		Id:       229,
-		Password: "70781052",
-		Name:     "恶魔召唤",                 // "Summoned Skull"  "デーモンの召喚"
-		Lc:       ygo.LC_OrdinaryMonster, // 通常怪兽
-		Level:    6,
-		La:       ygo.LA_Earth, // 暗
-		Lr:       ygo.LR_Fiend, // 恶魔
-		Attack:   2500,
-		Defense:  1200,
-		IsValid:  true,
-	})
-
-	/*95*/
-	cardBag.Register(&ygo.CardOriginal{
-		/*{
-		 id: 2305
-		 中文名: 暗杀者
-		 日文名: アサシン
-		 英文名: Ansatsu
-		 卡片种类: 通常怪兽
-		 卡片密码: 48365709
-		 使用限制: 无限制
-		 种族: 战士
-		 属性: 地
-		 星级: 5
-		 攻击力: 1700
-		 防御力: 1200
-		 罕见度: 平卡N，银字R
-		 卡包: EX-R(EX)，VOL03，Booster02
-		 效果: 描述：能在黑暗中悄然无声地靠近敌人，精通暗杀的战士。
-		}
-		*/
-		Id:       2305,
-		Password: "48365709",
-		Name:     "暗杀者",                  // "Ansatsu"  "アサシン"
-		Lc:       ygo.LC_OrdinaryMonster, // 通常怪兽
-		Level:    5,
-		La:       ygo.LA_Earth,   // 地
-		Lr:       ygo.LR_Warrior, // 战士
-		Attack:   1700,
-		Defense:  1200,
-		IsValid:  true,
-	})
-
-	/*96*/
-	cardBag.Register(&ygo.CardOriginal{
-		/*{
-		 id: 2306
-		 中文名: 卡库塔斯
-		 日文名: カクタス
-		 英文名: Akihiron
-		 卡片种类: 通常怪兽
-		 卡片密码: 36904469
-		 使用限制: 无限制
-		 种族: 水
-		 属性: 水
-		 星级: 5
-		 攻击力: 1700
-		 防御力: 1400
-		 罕见度: 银字R
-		 卡包: VOL03，Booster02
-		 效果: 描述：潜在水中形状不明的怪兽。
-		}
-		*/
-		Id:       2306,
-		Password: "36904469",
-		Name:     "卡库塔斯",                 // "Akihiron"  "カクタス"
-		Lc:       ygo.LC_OrdinaryMonster, // 通常怪兽
-		Level:    5,
-		La:       ygo.LA_Earth, // 水
-		Lr:       ygo.LR_None,  // 水
-		Attack:   1700,
-		Defense:  1400,
-		IsValid:  true,
-	})
-
-	/*97*/
-	cardBag.Register(&ygo.CardOriginal{
-		/*{
-		 id: 2307
-		 中文名: 机械巨兵
-		 日文名: 機械の巨兵
-		 英文名: Giant Mech-soldier
-		 卡片种类: 通常怪兽
-		 卡片密码: 72299832
-		 使用限制: 无限制
-		 种族: 机械
-		 属性: 地
-		 星级: 6
-		 攻击力: 1750
-		 防御力: 1900
-		 罕见度: 银字R
-		 卡包: VOL03，Booster02
-		 效果: 描述：巨斧的一击可以割开大地。
-		}
-		*/
-		Id:       2307,
-		Password: "72299832",
-		Name:     "机械巨兵",                 // "Giant Mech-soldier"  "機械の巨兵"
-		Lc:       ygo.LC_OrdinaryMonster, // 通常怪兽
-		Level:    6,
-		La:       ygo.LA_Earth,   // 地
-		Lr:       ygo.LR_Machine, // 机械
-		Attack:   1750,
-		Defense:  1900,
-		IsValid:  true,
-	})
-
-	/*98*/
-	cardBag.Register(&ygo.CardOriginal{
-		/*{
-		 id: 2308
-		 中文名: 神圣人偶
-		 日文名: ホーリー·ドール
-		 英文名: Rogue Doll
-		 卡片种类: 通常怪兽
-		 卡片密码: 91939608
-		 使用限制: 无限制
-		 种族: 魔法师
-		 属性: 光
-		 星级: 4
-		 攻击力: 1600
-		 防御力: 1000
-		 罕见度: 银字R
-		 卡包: EX-R(EX)，VOL03，Booster02，PE
-		 效果: 描述：操纵神圣力量的人偶。在黑暗之中攻击力很强。
-		}
-		*/
-		Id:       2308,
-		Password: "91939608",
-		Name:     "神圣人偶",                 // "Rogue Doll"  "ホーリー·ドール"
-		Lc:       ygo.LC_OrdinaryMonster, // 通常怪兽
-		Level:    4,
-		La:       ygo.LA_Earth,       // 光
-		Lr:       ygo.LR_SpellCaster, // 魔法师
-		Attack:   1600,
-		Defense:  1000,
-		IsValid:  true,
-	})
-
-	/*99*/
-	cardBag.Register(&ygo.CardOriginal{
-		/*{
-		 id: 2309
-		 中文名: 魔加农
-		 日文名: マキャノン
-		 英文名: Mabarrel
-		 卡片种类: 通常怪兽
-		 卡片密码: 98795934
-		 使用限制: 无限制
-		 种族: 恶魔
-		 属性: 暗
-		 星级: 5
-		 攻击力: 1700
-		 防御力: 1400
-		 罕见度: 银字R，平卡N
-		 卡包: VOL03，Booster02
-		 效果: 描述：大炮状的恶魔。以飞快的速度发射眼球弹。
-		}
-		*/
-		Id:       2309,
-		Password: "98795934",
-		Name:     "魔加农",                  // "Mabarrel"  "マキャノン"
-		Lc:       ygo.LC_OrdinaryMonster, // 通常怪兽
-		Level:    5,
-		La:       ygo.LA_Earth, // 暗
-		Lr:       ygo.LR_Fiend, // 恶魔
-		Attack:   1700,
-		Defense:  1400,
-		IsValid:  true,
-	})
-
-	/*100*/
-	cardBag.Register(&ygo.CardOriginal{
-		/*{
-		 id: 2358
-		 中文名: 乌鸦天狗
-		 日文名: カラス天狗
-		 英文名: Crow Goblin
-		 卡片种类: 通常怪兽
-		 卡片密码: 77998771
-		 使用限制: 无限制
-		 种族: 鸟兽
-		 属性: 风
-		 星级: 5
-		 攻击力: 1850
-		 防御力: 1600
-		 罕见度: 银字R
-		 卡包: VOL05，Booster05
-		 效果: 描述：知道各种事的天狗。据说能使用神通之力。
-		}
-		*/
-		Id:       2358,
-		Password: "77998771",
-		Name:     "乌鸦天狗",                 // "Crow Goblin"  "カラス天狗"
-		Lc:       ygo.LC_OrdinaryMonster, // 通常怪兽
-		Level:    5,
-		La:       ygo.LA_Earth,     // 风
-		Lr:       ygo.LR_WindBeast, // 鸟兽
-		Attack:   1850,
-		Defense:  1600,
-		IsValid:  true,
-	})
-
-	/*101*/
-	cardBag.Register(&ygo.CardOriginal{
-		/*{
-		 id: 2359
-		 调整: （这张卡在规则上也当作「异虫」卡使用）
-		 中文名: 迷宫的蠕虫
-		 日文名: ダンジョン·ワーム
-		 英文名: Dungeon Worm
-		 卡片种类: 通常怪兽
-		 卡片密码: 51228280
-		 使用限制: 无限制
-		 种族: 昆虫
-		 属性: 地
-		 星级: 5
-		 攻击力: 1800
-		 防御力: 1500
-		 罕见度: 银字R
-		 卡包: VOL05，Booster05
-		 效果: 描述：（这张卡在规则上也当作「异虫」卡使用）潜在迷路者的地下，捕食经过此处迷路的生物。
-		}
-		*/
-		Id:       2359,
-		Password: "51228280",
-		Name:     "迷宫的蠕虫",                // "Dungeon Worm"  "ダンジョン·ワーム"
-		Lc:       ygo.LC_OrdinaryMonster, // 通常怪兽
-		Level:    5,
-		La:       ygo.LA_Earth,  // 地
-		Lr:       ygo.LR_Insect, // 昆虫
-		Attack:   1800,
-		Defense:  1500,
-		IsValid:  true,
-	})
-
-	/*102*/
-	cardBag.Register(&ygo.CardOriginal{
-		/*{
-		 id: 2360
-		 中文名: 粗暴帝王
-		 日文名: ルード·カイザー
-		 英文名: Rude Kaiser
-		 卡片种类: 通常怪兽
-		 卡片密码: 26378150
-		 使用限制: 无限制
-		 种族: 兽战士
-		 属性: 地
-		 星级: 5
-		 攻击力: 1800
-		 防御力: 1600
-		 罕见度: 银字R
-		 卡包: EX-R(EX)，VOL05，Booster05
-		 效果: 描述：双手所持的魔人斧的破坏力相当强。
-		}
-		*/
-		Id:       2360,
-		Password: "26378150",
-		Name:     "粗暴帝王",                 // "Rude Kaiser"  "ルード·カイザー"
-		Lc:       ygo.LC_OrdinaryMonster, // 通常怪兽
-		Level:    5,
-		La:       ygo.LA_Earth,       // 地
-		Lr:       ygo.LR_BeastWarror, // 兽战士
-		Attack:   1800,
-		Defense:  1600,
-		IsValid:  true,
-	})
-
-	/*103*/
+	/*70*/
 	cardBag.Register(&ygo.CardOriginal{
 		/*{
 		 id: 2445
@@ -3777,7 +2619,7 @@ func booster(cardBag *ygo.CardVersion) {
 		IsValid:  true,
 	})
 
-	/*104*/
+	/*71*/
 	cardBag.Register(&ygo.CardOriginal{
 		/*{
 		 id: 2446
@@ -3802,14 +2644,14 @@ func booster(cardBag *ygo.CardVersion) {
 		Name:     "气象控制员",                // "Weather Control"  "ウェザー·コントロール"
 		Lc:       ygo.LC_OrdinaryMonster, // 通常怪兽
 		Level:    2,
-		La:       ygo.LA_Earth,  // 光
+		La:       ygo.LA_Earth, // 光
 		Lr:       ygo.LR_Angel, // 天使
 		Attack:   600,
 		Defense:  400,
 		IsValid:  true,
 	})
 
-	/*105*/
+	/*72*/
 	cardBag.Register(&ygo.CardOriginal{
 		/*{
 		 id: 2447
@@ -3841,7 +2683,7 @@ func booster(cardBag *ygo.CardVersion) {
 		IsValid:  true,
 	})
 
-	/*106*/
+	/*73*/
 	cardBag.Register(&ygo.CardOriginal{
 		/*{
 		 id: 2448
@@ -3873,7 +2715,7 @@ func booster(cardBag *ygo.CardVersion) {
 		IsValid:  true,
 	})
 
-	/*107*/
+	/*74*/
 	cardBag.Register(&ygo.CardOriginal{
 		/*{
 		 id: 2449
@@ -3905,7 +2747,7 @@ func booster(cardBag *ygo.CardVersion) {
 		IsValid:  true,
 	})
 
-	/*108*/
+	/*75*/
 	cardBag.Register(&ygo.CardOriginal{
 		/*{
 		 id: 2450
@@ -3937,7 +2779,7 @@ func booster(cardBag *ygo.CardVersion) {
 		IsValid:  true,
 	})
 
-	/*109*/
+	/*76*/
 	cardBag.Register(&ygo.CardOriginal{
 		/*{
 		 id: 2451
@@ -3969,7 +2811,7 @@ func booster(cardBag *ygo.CardVersion) {
 		IsValid:  true,
 	})
 
-	/*110*/
+	/*77*/
 	cardBag.Register(&ygo.CardOriginal{
 		/*{
 		 id: 2452
@@ -4001,7 +2843,7 @@ func booster(cardBag *ygo.CardVersion) {
 		IsValid:  true,
 	})
 
-	/*111*/
+	/*78*/
 	cardBag.Register(&ygo.CardOriginal{
 		/*{
 		 id: 2453
@@ -4033,7 +2875,7 @@ func booster(cardBag *ygo.CardVersion) {
 		IsValid:  true,
 	})
 
-	/*112*/
+	/*79*/
 	cardBag.Register(&ygo.CardOriginal{
 		/*{
 		 id: 2454
@@ -4065,7 +2907,7 @@ func booster(cardBag *ygo.CardVersion) {
 		IsValid:  true,
 	})
 
-	/*113*/
+	/*80*/
 	cardBag.Register(&ygo.CardOriginal{
 		/*{
 		 id: 2455
@@ -4097,7 +2939,7 @@ func booster(cardBag *ygo.CardVersion) {
 		IsValid:  true,
 	})
 
-	/*114*/
+	/*81*/
 	cardBag.Register(&ygo.CardOriginal{
 		/*{
 		 id: 2456
@@ -4122,14 +2964,14 @@ func booster(cardBag *ygo.CardVersion) {
 		Name:     "神圣之锁",                 // "Mystical Capture Chain"  "聖なる鎖"
 		Lc:       ygo.LC_OrdinaryMonster, // 通常怪兽
 		Level:    2,
-		La:       ygo.LA_Earth,  // 光
+		La:       ygo.LA_Earth, // 光
 		Lr:       ygo.LR_Angel, // 天使
 		Attack:   700,
 		Defense:  700,
 		IsValid:  true,
 	})
 
-	/*115*/
+	/*82*/
 	cardBag.Register(&ygo.CardOriginal{
 		/*{
 		 id: 2457
@@ -4161,7 +3003,7 @@ func booster(cardBag *ygo.CardVersion) {
 		IsValid:  true,
 	})
 
-	/*116*/
+	/*83*/
 	cardBag.Register(&ygo.CardOriginal{
 		/*{
 		 id: 2458
@@ -4193,7 +3035,7 @@ func booster(cardBag *ygo.CardVersion) {
 		IsValid:  true,
 	})
 
-	/*117*/
+	/*84*/
 	cardBag.Register(&ygo.CardOriginal{
 		/*{
 		 id: 2459
@@ -4225,7 +3067,7 @@ func booster(cardBag *ygo.CardVersion) {
 		IsValid:  true,
 	})
 
-	/*118*/
+	/*85*/
 	cardBag.Register(&ygo.CardOriginal{
 		/*{
 		 id: 2477
@@ -4257,7 +3099,7 @@ func booster(cardBag *ygo.CardVersion) {
 		IsValid:  true,
 	})
 
-	/*119*/
+	/*86*/
 	cardBag.Register(&ygo.CardOriginal{
 		/*{
 		 id: 2478
@@ -4289,7 +3131,7 @@ func booster(cardBag *ygo.CardVersion) {
 		IsValid:  true,
 	})
 
-	/*120*/
+	/*87*/
 	cardBag.Register(&ygo.CardOriginal{
 		/*{
 		 id: 2479
@@ -4321,7 +3163,7 @@ func booster(cardBag *ygo.CardVersion) {
 		IsValid:  true,
 	})
 
-	/*121*/
+	/*88*/
 	cardBag.Register(&ygo.CardOriginal{
 		/*{
 		 id: 2480
@@ -4353,7 +3195,7 @@ func booster(cardBag *ygo.CardVersion) {
 		IsValid:  true,
 	})
 
-	/*122*/
+	/*89*/
 	cardBag.Register(&ygo.CardOriginal{
 		/*{
 		 id: 2481
@@ -4385,7 +3227,7 @@ func booster(cardBag *ygo.CardVersion) {
 		IsValid:  true,
 	})
 
-	/*123*/
+	/*90*/
 	cardBag.Register(&ygo.CardOriginal{
 		/*{
 		 id: 2482
@@ -4417,7 +3259,7 @@ func booster(cardBag *ygo.CardVersion) {
 		IsValid:  true,
 	})
 
-	/*124*/
+	/*91*/
 	cardBag.Register(&ygo.CardOriginal{
 		/*{
 		 id: 2483
@@ -4449,7 +3291,7 @@ func booster(cardBag *ygo.CardVersion) {
 		IsValid:  true,
 	})
 
-	/*125*/
+	/*92*/
 	cardBag.Register(&ygo.CardOriginal{
 		/*{
 		 id: 2484
@@ -4481,7 +3323,7 @@ func booster(cardBag *ygo.CardVersion) {
 		IsValid:  true,
 	})
 
-	/*126*/
+	/*93*/
 	cardBag.Register(&ygo.CardOriginal{
 		/*{
 		 id: 2502
@@ -4513,7 +3355,7 @@ func booster(cardBag *ygo.CardVersion) {
 		IsValid:  true,
 	})
 
-	/*127*/
+	/*94*/
 	cardBag.Register(&ygo.CardOriginal{
 		/*{
 		 id: 2503
@@ -4545,7 +3387,7 @@ func booster(cardBag *ygo.CardVersion) {
 		IsValid:  true,
 	})
 
-	/*128*/
+	/*95*/
 	cardBag.Register(&ygo.CardOriginal{
 		/*{
 		 id: 2504
@@ -4577,7 +3419,7 @@ func booster(cardBag *ygo.CardVersion) {
 		IsValid:  true,
 	})
 
-	/*129*/
+	/*96*/
 	cardBag.Register(&ygo.CardOriginal{
 		/*{
 		 id: 2505
@@ -4609,7 +3451,7 @@ func booster(cardBag *ygo.CardVersion) {
 		IsValid:  true,
 	})
 
-	/*130*/
+	/*97*/
 	cardBag.Register(&ygo.CardOriginal{
 		/*{
 		 id: 2506
@@ -4641,7 +3483,7 @@ func booster(cardBag *ygo.CardVersion) {
 		IsValid:  true,
 	})
 
-	/*131*/
+	/*98*/
 	cardBag.Register(&ygo.CardOriginal{
 		/*{
 		 id: 2507
@@ -4673,7 +3515,7 @@ func booster(cardBag *ygo.CardVersion) {
 		IsValid:  true,
 	})
 
-	/*132*/
+	/*99*/
 	cardBag.Register(&ygo.CardOriginal{
 		/*{
 		 id: 2508
@@ -4705,7 +3547,7 @@ func booster(cardBag *ygo.CardVersion) {
 		IsValid:  true,
 	})
 
-	/*133*/
+	/*100*/
 	cardBag.Register(&ygo.CardOriginal{
 		/*{
 		 id: 2509
@@ -4737,7 +3579,7 @@ func booster(cardBag *ygo.CardVersion) {
 		IsValid:  true,
 	})
 
-	/*134*/
+	/*101*/
 	cardBag.Register(&ygo.CardOriginal{
 		/*{
 		 id: 2510
@@ -4769,7 +3611,7 @@ func booster(cardBag *ygo.CardVersion) {
 		IsValid:  true,
 	})
 
-	/*135*/
+	/*102*/
 	cardBag.Register(&ygo.CardOriginal{
 		/*{
 		 id: 2511
@@ -4801,7 +3643,7 @@ func booster(cardBag *ygo.CardVersion) {
 		IsValid:  true,
 	})
 
-	/*136*/
+	/*103*/
 	cardBag.Register(&ygo.CardOriginal{
 		/*{
 		 id: 2512
@@ -4833,7 +3675,7 @@ func booster(cardBag *ygo.CardVersion) {
 		IsValid:  true,
 	})
 
-	/*137*/
+	/*104*/
 	cardBag.Register(&ygo.CardOriginal{
 		/*{
 		 id: 2513
@@ -4865,7 +3707,7 @@ func booster(cardBag *ygo.CardVersion) {
 		IsValid:  true,
 	})
 
-	/*138*/
+	/*105*/
 	cardBag.Register(&ygo.CardOriginal{
 		/*{
 		 id: 2514
@@ -4897,7 +3739,7 @@ func booster(cardBag *ygo.CardVersion) {
 		IsValid:  true,
 	})
 
-	/*139*/
+	/*106*/
 	cardBag.Register(&ygo.CardOriginal{
 		/*{
 		 id: 2515
@@ -4929,7 +3771,7 @@ func booster(cardBag *ygo.CardVersion) {
 		IsValid:  true,
 	})
 
-	/*140*/
+	/*107*/
 	cardBag.Register(&ygo.CardOriginal{
 		/*{
 		 id: 2516
@@ -4961,7 +3803,7 @@ func booster(cardBag *ygo.CardVersion) {
 		IsValid:  true,
 	})
 
-	/*141*/
+	/*108*/
 	cardBag.Register(&ygo.CardOriginal{
 		/*{
 		 id: 2517
@@ -4993,7 +3835,7 @@ func booster(cardBag *ygo.CardVersion) {
 		IsValid:  true,
 	})
 
-	/*142*/
+	/*109*/
 	cardBag.Register(&ygo.CardOriginal{
 		/*{
 		 id: 2533
@@ -5025,7 +3867,7 @@ func booster(cardBag *ygo.CardVersion) {
 		IsValid:  true,
 	})
 
-	/*143*/
+	/*110*/
 	cardBag.Register(&ygo.CardOriginal{
 		/*{
 		 id: 2534
@@ -5057,7 +3899,7 @@ func booster(cardBag *ygo.CardVersion) {
 		IsValid:  true,
 	})
 
-	/*144*/
+	/*111*/
 	cardBag.Register(&ygo.CardOriginal{
 		/*{
 		 id: 2535
@@ -5089,7 +3931,7 @@ func booster(cardBag *ygo.CardVersion) {
 		IsValid:  true,
 	})
 
-	/*145*/
+	/*112*/
 	cardBag.Register(&ygo.CardOriginal{
 		/*{
 		 id: 2536
@@ -5121,7 +3963,7 @@ func booster(cardBag *ygo.CardVersion) {
 		IsValid:  true,
 	})
 
-	/*146*/
+	/*113*/
 	cardBag.Register(&ygo.CardOriginal{
 		/*{
 		 id: 2537
@@ -5146,14 +3988,14 @@ func booster(cardBag *ygo.CardVersion) {
 		Name:     "战神 奥利安",               // "Orion the Battle Kami"  "戦いの神 オリオン"
 		Lc:       ygo.LC_OrdinaryMonster, // 通常怪兽
 		Level:    5,
-		La:       ygo.LA_Earth,  // 光
+		La:       ygo.LA_Earth, // 光
 		Lr:       ygo.LR_Angel, // 天使
 		Attack:   1800,
 		Defense:  1500,
 		IsValid:  true,
 	})
 
-	/*147*/
+	/*114*/
 	cardBag.Register(&ygo.CardOriginal{
 		/*{
 		 id: 2538
@@ -5185,7 +4027,7 @@ func booster(cardBag *ygo.CardVersion) {
 		IsValid:  true,
 	})
 
-	/*148*/
+	/*115*/
 	cardBag.Register(&ygo.CardOriginal{
 		/*{
 		 id: 2539
@@ -5210,14 +4052,14 @@ func booster(cardBag *ygo.CardVersion) {
 		Name:     "诞生的天使",                // "Winged Egg of New Life"  "誕生の天使"
 		Lc:       ygo.LC_OrdinaryMonster, // 通常怪兽
 		Level:    5,
-		La:       ygo.LA_Earth,  // 光
+		La:       ygo.LA_Earth, // 光
 		Lr:       ygo.LR_Angel, // 天使
 		Attack:   1400,
 		Defense:  1700,
 		IsValid:  true,
 	})
 
-	/*149*/
+	/*116*/
 	cardBag.Register(&ygo.CardOriginal{
 		/*{
 		 id: 2557
@@ -5249,7 +4091,7 @@ func booster(cardBag *ygo.CardVersion) {
 		IsValid:  true,
 	})
 
-	/*150*/
+	/*117*/
 	cardBag.Register(&ygo.CardOriginal{
 		/*{
 		 id: 2558
@@ -5281,7 +4123,7 @@ func booster(cardBag *ygo.CardVersion) {
 		IsValid:  true,
 	})
 
-	/*151*/
+	/*118*/
 	cardBag.Register(&ygo.CardOriginal{
 		/*{
 		 id: 2559
@@ -5313,7 +4155,7 @@ func booster(cardBag *ygo.CardVersion) {
 		IsValid:  true,
 	})
 
-	/*152*/
+	/*119*/
 	cardBag.Register(&ygo.CardOriginal{
 		/*{
 		 id: 2560
@@ -5345,7 +4187,7 @@ func booster(cardBag *ygo.CardVersion) {
 		IsValid:  true,
 	})
 
-	/*153*/
+	/*120*/
 	cardBag.Register(&ygo.CardOriginal{
 		/*{
 		 id: 2561
@@ -5377,7 +4219,7 @@ func booster(cardBag *ygo.CardVersion) {
 		IsValid:  true,
 	})
 
-	/*154*/
+	/*121*/
 	cardBag.Register(&ygo.CardOriginal{
 		/*{
 		 id: 2580
@@ -5409,7 +4251,7 @@ func booster(cardBag *ygo.CardVersion) {
 		IsValid:  true,
 	})
 
-	/*155*/
+	/*122*/
 	cardBag.Register(&ygo.CardOriginal{
 		/*{
 		 id: 2581
@@ -5441,7 +4283,7 @@ func booster(cardBag *ygo.CardVersion) {
 		IsValid:  true,
 	})
 
-	/*156*/
+	/*123*/
 	cardBag.Register(&ygo.CardOriginal{
 		/*{
 		 id: 420
@@ -5473,7 +4315,7 @@ func booster(cardBag *ygo.CardVersion) {
 		IsValid:  true,
 	})
 
-	/*157*/
+	/*124*/
 	cardBag.Register(&ygo.CardOriginal{
 		/*{
 		 id: 422
@@ -5505,7 +4347,7 @@ func booster(cardBag *ygo.CardVersion) {
 		IsValid:  true,
 	})
 
-	/*158*/
+	/*125*/
 	cardBag.Register(&ygo.CardOriginal{
 		/*{
 		 id: 435
@@ -5537,7 +4379,7 @@ func booster(cardBag *ygo.CardVersion) {
 		IsValid:  true,
 	})
 
-	/*159*/
+	/*126*/
 	cardBag.Register(&ygo.CardOriginal{
 		/*{
 		 id: 479
@@ -5569,7 +4411,7 @@ func booster(cardBag *ygo.CardVersion) {
 		IsValid:  true,
 	})
 
-	/*160*/
+	/*127*/
 	cardBag.Register(&ygo.CardOriginal{
 		/*{
 		 id: 480
@@ -5601,7 +4443,7 @@ func booster(cardBag *ygo.CardVersion) {
 		IsValid:  true,
 	})
 
-	/*161*/
+	/*128*/
 	cardBag.Register(&ygo.CardOriginal{
 		/*{
 		 id: 485
@@ -5633,7 +4475,7 @@ func booster(cardBag *ygo.CardVersion) {
 		IsValid:  true,
 	})
 
-	/*162*/
+	/*129*/
 	cardBag.Register(&ygo.CardOriginal{
 		/*{
 		 id: 486
@@ -5658,14 +4500,14 @@ func booster(cardBag *ygo.CardVersion) {
 		Name:     "友谊天使",                 // "Shining Friendship"  "フレンドシップ"
 		Lc:       ygo.LC_OrdinaryMonster, // 通常怪兽
 		Level:    4,
-		La:       ygo.LA_Earth,  // 光
+		La:       ygo.LA_Earth, // 光
 		Lr:       ygo.LR_Angel, // 天使
 		Attack:   1300,
 		Defense:  1100,
 		IsValid:  true,
 	})
 
-	/*163*/
+	/*130*/
 	cardBag.Register(&ygo.CardOriginal{
 		/*{
 		 id: 492
@@ -5697,7 +4539,7 @@ func booster(cardBag *ygo.CardVersion) {
 		IsValid:  true,
 	})
 
-	/*164*/
+	/*131*/
 	cardBag.Register(&ygo.CardOriginal{
 		/*{
 		 id: 493
@@ -5729,7 +4571,7 @@ func booster(cardBag *ygo.CardVersion) {
 		IsValid:  true,
 	})
 
-	/*165*/
+	/*132*/
 	cardBag.Register(&ygo.CardOriginal{
 		/*{
 		 id: 495
@@ -5761,7 +4603,7 @@ func booster(cardBag *ygo.CardVersion) {
 		IsValid:  true,
 	})
 
-	/*166*/
+	/*133*/
 	cardBag.Register(&ygo.CardOriginal{
 		/*{
 		 id: 496
@@ -5793,7 +4635,7 @@ func booster(cardBag *ygo.CardVersion) {
 		IsValid:  true,
 	})
 
-	/*167*/
+	/*134*/
 	cardBag.Register(&ygo.CardOriginal{
 		/*{
 		 id: 498
@@ -5825,7 +4667,7 @@ func booster(cardBag *ygo.CardVersion) {
 		IsValid:  true,
 	})
 
-	/*168*/
+	/*135*/
 	cardBag.Register(&ygo.CardOriginal{
 		/*{
 		 id: 500
@@ -5857,7 +4699,7 @@ func booster(cardBag *ygo.CardVersion) {
 		IsValid:  true,
 	})
 
-	/*169*/
+	/*136*/
 	cardBag.Register(&ygo.CardOriginal{
 		/*{
 		 id: 502
@@ -5889,7 +4731,7 @@ func booster(cardBag *ygo.CardVersion) {
 		IsValid:  true,
 	})
 
-	/*170*/
+	/*137*/
 	cardBag.Register(&ygo.CardOriginal{
 		/*{
 		 id: 503
@@ -5921,7 +4763,7 @@ func booster(cardBag *ygo.CardVersion) {
 		IsValid:  true,
 	})
 
-	/*171*/
+	/*138*/
 	cardBag.Register(&ygo.CardOriginal{
 		/*{
 		 id: 506
@@ -5953,7 +4795,7 @@ func booster(cardBag *ygo.CardVersion) {
 		IsValid:  true,
 	})
 
-	/*172*/
+	/*139*/
 	cardBag.Register(&ygo.CardOriginal{
 		/*{
 		 id: 507
@@ -5985,7 +4827,7 @@ func booster(cardBag *ygo.CardVersion) {
 		IsValid:  true,
 	})
 
-	/*173*/
+	/*140*/
 	cardBag.Register(&ygo.CardOriginal{
 		/*{
 		 id: 508
@@ -6017,7 +4859,7 @@ func booster(cardBag *ygo.CardVersion) {
 		IsValid:  true,
 	})
 
-	/*174*/
+	/*141*/
 	cardBag.Register(&ygo.CardOriginal{
 		/*{
 		 id: 510

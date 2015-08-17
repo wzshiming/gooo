@@ -42,7 +42,7 @@ type Player struct {
 	Szone   *Group // 魔法卡陷阱卡区 5
 	Field   *Group // 场地卡
 
-	isChain bool
+	lastSummonRound int // 最后召唤回合
 	//	pending   map[uint]*Card
 	//	cardevent map[string][]*Card
 	// 是否失败
@@ -74,15 +74,15 @@ func NewPlayer(yg *YGO) *Player {
 			if ca != nil {
 				if m.Method == uint(LI_Over) {
 					if pr != 0 {
-						pl.GetTarget().CallAll(Touch(pr, 1, 1, 1))
+						pl.GetTarget().CallAll(touch(pr, 1, 1, 1))
 						pr = 0
 					}
-					pl.GetTarget().Call(Touch(m.Uniq, -1, -100, 100))
+					pl.GetTarget().Call(touch(m.Uniq, -1, -100, 100))
 				} else if m.Method == uint(LI_Out) {
 					if pr == m.Uniq {
 						pr = 0
 					}
-					pl.GetTarget().CallAll(Touch(m.Uniq, 1, 1, 1))
+					pl.GetTarget().CallAll(touch(m.Uniq, 1, 1, 1))
 				} else {
 					return true
 				}
@@ -101,7 +101,7 @@ func NewPlayer(yg *YGO) *Player {
 	pl.Field = NewGroup(pl, LL_Field)
 
 	pl.AddEvent(RoundBegin, func() {
-		pl.MsgPub("{self}开始第{round}回合", Arg{"round": pl.GetRound()})
+		pl.MsgPub("{self}进入第{round}回合", Arg{"round": pl.GetRound()})
 	})
 
 	pl.AddEvent(DP, func() {
@@ -154,7 +154,7 @@ func (pl *Player) Msg(fmts string, a Arg) {
 		a["rival"] = pl.GetTarget().Name
 	}
 
-	pl.Call(Message(fmts, a))
+	pl.Call(message(fmts, a))
 }
 
 func (pl *Player) MsgPub(fmts string, a Arg) {
@@ -167,7 +167,7 @@ func (pl *Player) MsgPub(fmts string, a Arg) {
 	if a["rival"] == nil {
 		a["rival"] = pl.GetTarget().Name
 	}
-	pl.CallAll(Message(fmts, a))
+	pl.CallAll(message(fmts, a))
 }
 
 func (pl *Player) Fail() {
@@ -182,22 +182,40 @@ func (pl *Player) ForEachPlayer(fun func(p *Player)) {
 	pl.Game().ForEachPlayer(fun)
 }
 
-func (pl *Player) Chain(eventName string, cs []*Card, a []interface{}) bool {
+func (pl *Player) Chain(eventName string, ca *Card, cs *Cards, a []interface{}) bool {
 	pl.ResetReplyTime()
 	pl.MsgPub("等待{self}连锁", nil)
-	if wi := pl.SelectWill(); wi.Uniq != 0 {
-		//pl.MsgPub("{self}选择{method}", Arg{"method": wi.Method})
-		for _, v := range cs {
-			if v.ToUint() == wi.Uniq {
-				if v.GetSummoner() == pl {
-					pl.MsgPub("{self}连锁{event}", Arg{"self": v.ToUint(), "event": eventName})
-					v.Events.Dispatch(Pay, append(a, eventName)...)
-					v.Events.Dispatch(Trigger+eventName, append(a, wi.Method)...)
-					return true
-				}
-			}
+	css := NewCards()
+	cs.ForEach(func(c *Card) bool {
+		if c != ca && c.GetSummoner() == pl {
+			css.EndPush(c)
 		}
-		pl.MsgPub("{self}错误的连锁", nil)
+		return true
+	})
+
+	if wi := pl.SelectWill(); wi.Uniq != 0 && wi.Uniq != 1 {
+		//pl.MsgPub("{self}选择{method}", Arg{"method": wi.Method})
+		css.ForEach(func(c *Card) bool {
+			if c.ToUint() == wi.Uniq {
+				e := func() {
+					pl.MsgPub("{self}连锁{event}", Arg{"self": c.ToUint(), "event": eventName})
+					c.Events.Dispatch(Pay, append(a, eventName)...)
+					c.Events.Dispatch(Trigger+eventName, append(a, wi.Method)...)
+				}
+				if ca.Priority() > c.Priority() {
+					ca.OnlyOnce(eventName, e, c)
+					c.OnlyOnce(Disabled, func() {
+						ca.RemoveEvent(eventName, e, c)
+					})
+				} else {
+					e()
+				}
+				return false
+			}
+			return true
+		})
+
+		//pl.MsgPub("{self}错误的连锁", nil)
 	} else {
 		pl.MsgPub("{self}不连锁", nil)
 	}
@@ -210,10 +228,7 @@ func (pl *Player) GetRound() int {
 
 func (pl *Player) round() (err error) {
 	pl.RoundSize++
-	pl.CallAll("flagName", map[string]interface{}{
-		"round":  pl.GetRound(),
-		"player": pl.Index,
-	})
+	pl.CallAll(flagName(pl))
 	pl.Dispatch(RoundBegin, pl)
 	pl.Dispatch(DP, LP_Draw)
 	pl.Dispatch(SP, LP_Standby)
@@ -364,13 +379,11 @@ func (pl *Player) end(lp lp_type) bool {
 			ca.Dispatch(Discard)
 		}
 	}
-	pl.Msg("对方回合", nil)
 	return true
 }
 
 func (pl *Player) init() {
 	pl.ActionDraw(5)
-	pl.isChain = true
 }
 
 func (pl *Player) initDeck(a []uint, b []uint) {
@@ -461,10 +474,21 @@ func (pl *Player) SelectWill() (p MsgCode) {
 	return
 }
 
+func (pl *Player) IsCanSummon() bool {
+	return pl.lastSummonRound < pl.GetRound()
+}
+func (pl *Player) SetCanSummon() {
+	pl.lastSummonRound = 0
+}
+
+func (pl *Player) SetNotCanSummon() {
+	pl.lastSummonRound = pl.GetRound()
+}
+
 func (pl *Player) Select() (t *Card) {
 	//pl.ClearCode()
+	pl.CallAll(flashPhases(pl))
 	for {
-		pl.CallAll(flashPhases(pl))
 		select {
 		case <-time.After(time.Second):
 			pl.PassTime -= time.Second
@@ -480,8 +504,8 @@ func (pl *Player) Select() (t *Card) {
 }
 
 func (pl *Player) SelectForCards(ca *Cards) *Card {
-	defer pl.Call(SetPick(nil, pl))
-	pl.Call(SetPick(ca, pl))
+	defer pl.Call(setPick(nil, pl))
+	pl.Call(setPick(ca, pl))
 	//pl.Msg("从下列卡牌选择", nil)
 	if c := pl.Select(); c != nil {
 		for _, v := range *ca {
@@ -511,16 +535,30 @@ func (pl *Player) SelectForCards(ca *Cards) *Card {
 //	return pl.SelectForCards(cs)
 //}
 
-func (pl *Player) SelectFor(cp ...*Group) *Card {
+func (pl *Player) SelectFor(ci ...interface{}) *Card {
 	s := []string{}
-	for _, v := range cp {
-		s = append(s, v.GetOwner().Name+" "+string(v.GetName()))
+	as := []Action{}
+	cp := []*Group{}
+	for _, v := range ci {
+		switch t := v.(type) {
+		case *Group:
+			s = append(s, t.GetOwner().Name+" "+string(t.GetName()))
+			cp = append(cp, t)
+		case Action:
+			as = append(as, t)
+		}
 	}
 
 	pl.Msg("从下列区域选择卡牌 {c1}", Arg{"c1": s})
 	if c := pl.Select(); c != nil {
+
 		for _, v := range cp {
 			if v.IsExistCard(c) {
+				for _, a := range as {
+					if !a.Call(c) {
+						return nil
+					}
+				}
 				return c
 			}
 		}

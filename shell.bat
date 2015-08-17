@@ -1,4 +1,5 @@
 @echo off
+set path=;
 set path=%path%;d:\lib\nodejs
 set path=%path%;d:\lib\ruby2\bin
 set path=%path%;d:\lib\python27

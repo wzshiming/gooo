@@ -95,7 +95,7 @@ $lrs = {
     "植物"=>"Plant",
     "机械"=>"Machine",
     "战士"=>"Warrior",
-    "天使"=>"Devine",
+    "天使"=>"Angel",
     "不死"=>"Zombie",
     "恶魔"=>"Fiend",
     "岩石"=>"Rock",
@@ -307,10 +307,18 @@ if $0 == __FILE__
   #卡片种类
   #elses allcard
   #
+  #
+  exitd = {}
+  files_list "./s/vol" do |path|
+    i = JSON.parse(File.read(path).to_utf8!).to_h
+    exitd[i["id"]] = true
+  end
   allcard = {}
   files_list "./s/Booster" do |path|
     i = JSON.parse(File.read(path).to_utf8!).to_h
-    allcard[i["id"]] = i
+    unless exitd[i["id"]]
+        allcard[i["id"]] = i
+    end
   end
   elses allcard
 end

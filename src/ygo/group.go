@@ -44,7 +44,7 @@ func (cp *Group) Insert(c *Card, index int) {
 	if c.place != nil {
 		c.place.PickedFor(c)
 	}
-	c.GetSummoner().CallAll(MoveCard(c, cp.GetName()))
+	c.GetSummoner().CallAll(moveCard(c, cp.GetName()))
 
 	c.place = cp
 	cp.Cards.Insert(c, index)

@@ -38,7 +38,7 @@ func NewRoom() *Room {
 
 func (r *Room) YGOGame(sesss ...*agent.Session) {
 	uniq := sesss[0].ToUint()
-	room := misc.NewRooms("YGO")
+	room := misc.NewRooms("YGOGame")
 	for _, v := range sesss {
 		head := r.room.Head(v)
 		v.LockSession()
@@ -61,13 +61,16 @@ func (r *Room) YGOGame(sesss ...*agent.Session) {
 	r.gameList[uniq] = game
 	game.CardVer = cardBag
 	game.Loop()
+	for _, v := range sesss {
+		room.LeaveMutex(v)
+	}
 }
 
 func (r *Room) Games() {
 	tick := time.Tick(time.Second * 1)
 	for {
 		<-tick
-		r.room.BroadcastPush(map[string]string{"info": "匹配队友中请等待..."}, func(sess *agent.Session) {
+		r.room.BroadcastPush(map[string]string{"info": "匹配对手中请等待..."}, func(sess *agent.Session) {
 			r.room.Leave(sess)
 		})
 		if r.room.Len() >= 2 {
@@ -125,6 +128,7 @@ func (r *Room) MatchCompetitors(args agent.Request, reply *agent.Response) error
 	if id := misc.GetFromRoom(args.Session, "YGOGame"); id != 0 {
 		return errors.New(Trans.Value("chan.hasjoined"))
 	}
+
 	// 储存牌组
 	id := uint64(misc.GetFromRoom(args.Session, "Users"))
 	deck := GetDeck(id)

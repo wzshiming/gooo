@@ -2992,6 +2992,8 @@ func vol(cardBag *ygo.CardVersion) {
 					pl := ca.GetSummoner()
 					if c := pl.SelectFor(pl.Hand); c != nil {
 						c.Dispatch(ygo.Cost)
+					} else {
+						c.StopOnce(s)
 					}
 				}
 			})
@@ -4407,6 +4409,8 @@ func vol(cardBag *ygo.CardVersion) {
 					pl := ca.GetSummoner()
 					if c := pl.SelectFor(pl.Hand); c != nil {
 						c.Dispatch(ygo.Cost)
+					} else {
+						c.StopOnce(s)
 					}
 				}
 			})

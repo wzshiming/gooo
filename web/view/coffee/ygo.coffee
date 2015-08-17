@@ -164,3 +164,6 @@ YGO::touch = (args)->
   if c
     c.MoveAdd args
 
+YGO::over = ()->
+  ExitPage()
+  MsgInfo "游戏结束"

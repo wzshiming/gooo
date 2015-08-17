@@ -4,10 +4,15 @@ face = null
 mouse = null
 
 InitGlobal = ->
-  container = document.getElementById "ygo"
+  container = document.getElementById "page"
   face = new Face()
   mouse = new Mouse()
   Card::SetHTML = Face::SetHTML
+
+ExitPage = ->
+  #$('#page').hide()
+  $('#home').show()
+  container.innerHTML = ""
 
 log = (x)->
   console.dir x
@@ -89,7 +94,9 @@ gui =  (id, classs) ->
     renderer = new (THREE.CSS3DRenderer)
     renderer.setSize window.innerWidth, window.innerHeight
     renderer.domElement.style.position = 'absolute'
-    @game = document.createElement "id"
+
+    @game = document.createElement 'div'
+    @game.id = id
     container.appendChild @game
     @game.appendChild renderer.domElement
     controls = new (THREE.TrackballControls)(camera, renderer.domElement)

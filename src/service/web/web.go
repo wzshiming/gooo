@@ -2,6 +2,9 @@ package main
 
 import (
 	"fmt"
+	ht "html/template"
+	"net/http"
+
 	"github.com/go-martini/martini"
 	"github.com/gorilla/websocket"
 	"github.com/martini-contrib/render"
@@ -11,8 +14,6 @@ import (
 	"github.com/wzshiming/rego/agent/defaul"
 	"github.com/wzshiming/rego/cfg"
 	"github.com/wzshiming/rego/route"
-	ht "html/template"
-	"net/http"
 )
 
 var upgrader = websocket.Upgrader{
@@ -59,6 +60,9 @@ func run(ag *agent.Agent) {
 		IndentXML:  true,                       // Output human readable XML
 		//HTMLContentType: "application/xhtml+xml",    // Output XHTML content type instead of default "text/html"
 	}))
+	m.Get("/index.html", func(params martini.Params, r render.Render) {
+		r.HTML(200, "index", map[string]interface{}{}, render.HTMLOptions{Layout: "layout"})
+	})
 	m.Get("/", func(params martini.Params, r render.Render) {
 		r.HTML(200, "index", map[string]interface{}{}, render.HTMLOptions{Layout: "layout"})
 	})

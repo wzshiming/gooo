@@ -53,13 +53,13 @@ type Call struct {
 	Args   interface{} `json:"args"`
 }
 
-func Remind(t uint) (string, interface{}) {
+func remind(t uint) (string, interface{}) {
 	return "remind", map[string]interface{}{
 		"uniq": t,
 	}
 }
 
-func Touch(t uint, x, y, z int) (string, interface{}) {
+func touch(t uint, x, y, z int) (string, interface{}) {
 	return "touch", map[string]interface{}{
 		"uniq": t,
 		"x":    x,
@@ -68,28 +68,28 @@ func Touch(t uint, x, y, z int) (string, interface{}) {
 	}
 }
 
-func ExprCard(t *Card, le le_type) (string, interface{}) {
+func exprCard(t *Card, le le_type) (string, interface{}) {
 	return "exprCard", map[string]interface{}{
 		"uniq": t.ToUint(),
 		"expr": le,
 	}
 }
 
-func SetFront(t *Card) (string, interface{}) {
+func setFront(t *Card) (string, interface{}) {
 	return "setFront", map[string]interface{}{
 		"desk": t.GetId(),
 		"uniq": t.ToUint(),
 	}
 }
 
-func Message(format string, a Arg) (string, interface{}) {
+func message(format string, a Arg) (string, interface{}) {
 	return "message", map[string]interface{}{
 		"message": format,
 		"params":  a,
 	}
 }
 
-func SetPick(cs *Cards, pl *Player) (string, interface{}) {
+func setPick(cs *Cards, pl *Player) (string, interface{}) {
 	if cs != nil {
 		return "setPick", map[string]interface{}{
 			"master": pl.Index,
@@ -103,14 +103,14 @@ func SetPick(cs *Cards, pl *Player) (string, interface{}) {
 
 }
 
-func SetCardFace(t *Card, a Arg) (string, interface{}) {
+func setCardFace(t *Card, a Arg) (string, interface{}) {
 	return "setCardFace", map[string]interface{}{
 		"uniq":   t.ToUint(),
 		"params": a,
 	}
 }
 
-func MoveCard(t *Card, pos ll_type) (string, interface{}) {
+func moveCard(t *Card, pos ll_type) (string, interface{}) {
 	return "moveCard", map[string]interface{}{
 		"uniq":   t.ToUint(),
 		"master": t.GetSummoner().Index,
@@ -127,4 +127,11 @@ func flashPhases(pl *Player) (string, interface{}) {
 
 func setFace(a Arg) (string, interface{}) {
 	return "setFace", a
+}
+
+func flagName(pl *Player) (string, interface{}) {
+	return "flagName", map[string]interface{}{
+		"round":  pl.GetRound(),
+		"player": pl.Index,
+	}
 }

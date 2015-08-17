@@ -85,7 +85,8 @@ Manage = (@scene) ->
     WsCardFind { query: event.srcElement.value }, (data) ->
       t.UpdateQuery data
   ),false
-
+  face.SetButton "退后", (event) ->
+    ExitPage()
   face.SetButton "保存", (event) ->
     unless t.decks[t.deckname.value]
       t.decks[t.deckname.value] = new Pile 19 ,  -4 + t.k *2, 0

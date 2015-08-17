@@ -56,12 +56,12 @@ type Card struct {
 
 func (ca *Card) ShowInfo() {
 	pl := ca.GetSummoner()
-	pl.CallAll(SetCardFace(ca, Arg{"攻击力": ca.GetAttack(), "防御力": ca.GetDefense()}))
+	pl.CallAll(setCardFace(ca, Arg{"攻击力": ca.GetAttack(), "防御力": ca.GetDefense()}))
 }
 
 func (ca *Card) HideInfo() {
 	pl := ca.GetSummoner()
-	pl.CallAll(SetCardFace(ca, Arg{}))
+	pl.CallAll(setCardFace(ca, Arg{}))
 }
 
 func (ca *Card) IsValid() bool {
@@ -311,7 +311,7 @@ func (ca *Card) SetAttack(i int) {
 	ca.original.Attack = i
 	ca.Dispatch(Change, ca)
 	pl := ca.GetSummoner()
-	pl.CallAll(SetCardFace(ca, Arg{"攻击力": i}))
+	pl.CallAll(setCardFace(ca, Arg{"攻击力": i}))
 }
 
 // 获得基础防御
@@ -329,7 +329,7 @@ func (ca *Card) SetDefense(i int) {
 	ca.original.Defense = i
 	ca.Dispatch(Change, ca)
 	pl := ca.GetSummoner()
-	pl.CallAll(SetCardFace(ca, Arg{"防御力": i}))
+	pl.CallAll(setCardFace(ca, Arg{"防御力": i}))
 }
 
 // 获得基础等级
@@ -350,43 +350,33 @@ func (ca *Card) SetLevel(i int) {
 
 // 判断能够改变表示形式
 func (ca *Card) IsCanChange() bool {
-	if ca.lastChangeRound == ca.GetSummoner().GetRound() {
-		return false
-	}
-	return true
+	return ca.lastChangeRound < ca.GetSummoner().GetRound()
 }
 
 // 设置能够改变表示形式
-func (ca *Card) SetCanChange() bool {
+func (ca *Card) SetCanChange() {
 	ca.lastChangeRound = 0
 	ca.Dispatch(Change, ca)
-	return true
 }
 
 // 设置不能够改变表示形式
-func (ca *Card) SetNotCanChange() bool {
+func (ca *Card) SetNotCanChange() {
 	ca.lastChangeRound = ca.GetSummoner().GetRound()
-	return true
 }
 
 // 判断能够攻击
 func (ca *Card) IsCanAttack() bool {
-	if ca.lastAttackRound == ca.GetSummoner().GetRound() {
-		return false
-	}
-	return true
+	return ca.lastAttackRound < ca.GetSummoner().GetRound()
 }
 
 // 设置能够攻击
-func (ca *Card) SetCanAttack() bool {
+func (ca *Card) SetCanAttack() {
 	ca.lastAttackRound = 0
-	return true
 }
 
 // 设置不能够攻击
-func (ca *Card) SetNotCanAttack() bool {
+func (ca *Card) SetNotCanAttack() {
 	ca.lastAttackRound = ca.GetSummoner().GetRound()
-	return true
 }
 
 // 设置表示形式
@@ -394,9 +384,9 @@ func (ca *Card) setLE(l le_type) {
 	ca.le = l
 	pl := ca.GetSummoner()
 	pl.Dispatch(Expres, ca)
-	pl.CallAll(ExprCard(ca, l))
+	pl.CallAll(exprCard(ca, l))
 	if ca.IsFaceUp() {
-		pl.CallAll(SetFront(ca))
+		pl.CallAll(setFront(ca))
 	}
 }
 

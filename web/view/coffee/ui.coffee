@@ -6,5 +6,7 @@ window.StartGame =  ->
   return
 
 window.StartNeaten = ->
+
+
   gui "Manage",Manage
   return
