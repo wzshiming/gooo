@@ -432,32 +432,25 @@ func vol(cardBag *ygo.CardVersion) {
 
 				i := -1
 				tar.Mzone.ForEach(func(c *ygo.Card) bool {
-					if c.IsFaceUp() {
-						if i == -1 || i > c.GetAttack() {
-							i = c.GetAttack()
-						}
+					if c.IsFaceUp() && (i == -1 || i > c.GetAttack()) {
+						i = c.GetAttack()
 					}
 					return true
 				})
 
-				cs := ygo.NewCards()
-				tar.Mzone.ForEach(func(c *ygo.Card) bool {
-					if c.IsFaceUp() {
-						if i == c.GetAttack() {
-							cs.EndPush(c)
-						}
+				cs := tar.Mzone.Find(func(c *ygo.Card) bool {
+					if c.IsFaceUp() && i == c.GetAttack() {
+						return true
 					}
-					return true
+					return false
 				})
 
 				if cs.Len() == 1 {
-					cs.EndPop().Dispatch(ygo.Destroy)
+					cs.EndPop().Dispatch(ygo.Destroy, ca)
 				} else if cs.Len() > 1 {
-					c := pl.SelectForCards(cs)
-					if c == nil {
-						c = cs.EndPop()
+					if c := pl.SelectForCards(cs); c != nil {
+						c.Dispatch(ygo.Destroy, ca)
 					}
-					c.Dispatch(ygo.Destroy)
 				}
 			})
 			return true
@@ -575,14 +568,11 @@ func vol(cardBag *ygo.CardVersion) {
 		Attack:  2600,
 		Defense: 2100,
 
-		//		Initialize: func(ca *ygo.Card) bool {
-		//			ca.RegisterPay(func(s string) {
-		//				if ygo.SummonFusion == s {
-
-		//				}
-		//			})
-		//		}, // 初始
-		//		IsValid: true,
+		Initialize: func(ca *ygo.Card) bool {
+			ca.RegisterFusionMonster("暗黑骑士 盖亚", "诅咒之龙")
+			return true
+		}, // 初始
+		IsValid: true,
 	})
 
 	/*13*/
@@ -635,7 +625,7 @@ func vol(cardBag *ygo.CardVersion) {
 				if c := pl.SelectFor(tar.Szone, pl.Szone); c != nil {
 					c.SetFaceUp()
 					if c.IsTrap() {
-						c.Dispatch(ygo.Destroy)
+						c.Dispatch(ygo.Destroy, ca)
 					} else {
 						c.SetFaceDown()
 					}
@@ -1309,8 +1299,11 @@ func vol(cardBag *ygo.CardVersion) {
 		Lr:      ygo.LR_Machine, // 机械
 		Attack:  1850,
 		Defense: 1700,
-		//Initialize:    func(ca *ygo.Card) bool {}, // 初始
-		IsValid: false,
+		Initialize: func(ca *ygo.Card) bool {
+			ca.RegisterFusionMonster("钢铁巨神像", "下级龙")
+			return true
+		}, // 初始
+		IsValid: true,
 	})
 
 	/*29*/
@@ -1414,7 +1407,7 @@ func vol(cardBag *ygo.CardVersion) {
 				if c := pl.SelectFor(tar.Szone, pl.Szone); c != nil {
 					c.SetFaceUp()
 					if c.IsMagic() {
-						c.Dispatch(ygo.Destroy)
+						c.Dispatch(ygo.Destroy, ca)
 					} else {
 						c.SetFaceDown()
 					}
@@ -1473,7 +1466,7 @@ func vol(cardBag *ygo.CardVersion) {
 				pl := ca.GetSummoner()
 				tar := pl.GetTarget()
 				if c := pl.SelectFor(tar.Mzone, pl.Mzone); c != nil {
-					c.Dispatch(ygo.Destroy)
+					c.Dispatch(ygo.Destroy, ca)
 				}
 			})
 			return true
@@ -1578,7 +1571,7 @@ func vol(cardBag *ygo.CardVersion) {
 				if c := pl.SelectFor(tar.Szone, pl.Szone); c != nil {
 					c.SetFaceUp()
 					if c.IsMagic() {
-						c.Dispatch(ygo.Destroy)
+						c.Dispatch(ygo.Destroy, ca)
 					} else {
 						c.SetFaceDown()
 					}
@@ -1617,8 +1610,25 @@ func vol(cardBag *ygo.CardVersion) {
 		Name:     "死者苏生",               // "Monster Reborn"  "死者蘇生"
 		Lc:       ygo.LC_OrdinaryMagic, // 通常魔法
 
-		//Initialize:    func(ca *ygo.Card) bool {}, // 初始
-		IsValid: false,
+		Initialize: func(ca *ygo.Card) bool {
+			ca.RegisterUnordinaryMagic(func() {
+				pl := ca.GetSummoner()
+				tar := pl.GetTarget()
+				if c := pl.SelectFor(tar.Grave, pl.Grave); c != nil {
+					c.EffectplMonsterManipulate(ca)
+					c.AddEvent(ygo.Disabled, func() {
+						ca.Dispatch(ygo.Disabled)
+					})
+					ca.AddEvent(ygo.Disabled, func() {
+						c.Dispatch(ygo.Disabled)
+					})
+				} else {
+					ca.Dispatch(ygo.Disabled)
+				}
+			})
+			return true
+		}, // 初始
+		IsValid: true,
 	})
 
 	/*35*/
@@ -1731,8 +1741,11 @@ func vol(cardBag *ygo.CardVersion) {
 		Lr:      ygo.LR_Warrior, // 战士
 		Attack:  1500,
 		Defense: 1200,
-		//Initialize:    func(ca *ygo.Card) bool {}, // 初始
-		IsValid: false,
+		Initialize: func(ca *ygo.Card) bool {
+			ca.RegisterFusionMonster("磁力战士1号", "磁力战士2号")
+			return true
+		}, // 初始
+		IsValid: true,
 	})
 
 	/*38*/
@@ -1765,8 +1778,11 @@ func vol(cardBag *ygo.CardVersion) {
 		Lr:      ygo.LR_SpellCaster, // 魔法师
 		Attack:  1300,
 		Defense: 1100,
-		//Initialize:    func(ca *ygo.Card) bool {}, // 初始
-		IsValid: false,
+		Initialize: func(ca *ygo.Card) bool {
+			ca.RegisterFusionMonster("圣精灵", "黑魔族的窗帘")
+			return true
+		}, // 初始
+		IsValid: true,
 	})
 
 	/*39*/
@@ -1799,8 +1815,11 @@ func vol(cardBag *ygo.CardVersion) {
 		Lr:      ygo.LR_WindBeast, // 鸟兽
 		Attack:  1300,
 		Defense: 900,
-		//Initialize:    func(ca *ygo.Card) bool {}, // 初始
-		IsValid: false,
+		Initialize: func(ca *ygo.Card) bool {
+			ca.RegisterFusionMonster("大炮鸟", "邪炎之翼")
+			return true
+		}, // 初始
+		IsValid: true,
 	})
 
 	/*40*/
@@ -1833,8 +1852,11 @@ func vol(cardBag *ygo.CardVersion) {
 		Lr:      ygo.LR_Zombie, // 不死
 		Attack:  1200,
 		Defense: 900,
-		//Initialize:    func(ca *ygo.Card) bool {}, // 初始
-		IsValid: false,
+		Initialize: func(ca *ygo.Card) bool {
+			ca.RegisterFusionMonster("白骨", "格斗战士 阿提米特")
+			return true
+		}, // 初始
+		IsValid: true,
 	})
 
 	/*41*/
@@ -1867,8 +1889,11 @@ func vol(cardBag *ygo.CardVersion) {
 		Lr:      ygo.LR_Warrior, // 战士
 		Attack:  1200,
 		Defense: 900,
-		//Initialize:    func(ca *ygo.Card) bool {}, // 初始
-		IsValid: false,
+		Initialize: func(ca *ygo.Card) bool {
+			ca.RegisterFusionMonster("神鱼", "舌鱼")
+			return true
+		}, // 初始
+		IsValid: true,
 	})
 
 	/*42*/
@@ -1901,8 +1926,11 @@ func vol(cardBag *ygo.CardVersion) {
 		Lr:      ygo.LR_Fish,  // 鱼
 		Attack:  1900,
 		Defense: 1600,
-		//Initialize:    func(ca *ygo.Card) bool {}, // 初始
-		IsValid: false,
+		Initialize: func(ca *ygo.Card) bool {
+			ca.RegisterFusionMonster("神鱼", "舌鱼")
+			return true
+		}, // 初始
+		IsValid: true,
 	})
 
 	/*43*/
@@ -1935,8 +1963,11 @@ func vol(cardBag *ygo.CardVersion) {
 		Lr:      ygo.LR_Dinosaur, // 恐龙
 		Attack:  1900,
 		Defense: 1500,
-		//Initialize:    func(ca *ygo.Card) bool {}, // 初始
-		IsValid: false,
+		Initialize: func(ca *ygo.Card) bool {
+			ca.RegisterFusionMonster("虎纹龙", "火焰毒蛇")
+			return true
+		}, // 初始
+		IsValid: true,
 	})
 
 	/*44*/
@@ -2234,12 +2265,15 @@ func vol(cardBag *ygo.CardVersion) {
 		Lc:       ygo.LC_FusionMonster, // 融合怪兽
 
 		Level:   9,
-		La:      ygo.LA_Earth,  // 暗
-		Lr:      ygo.LR_Dragon, // 龙
+		La:      ygo.LA_Earth,                 // 暗
+		Lr:      ygo.LR_Dragon | ygo.LR_Fiend, // 龙
 		Attack:  3200,
 		Defense: 2500,
-		//Initialize:    func(ca *ygo.Card) bool {}, // 初始
-		IsValid: false,
+		Initialize: func(ca *ygo.Card) bool {
+			ca.RegisterFusionMonster("恶魔召唤", "真红眼黑龙")
+			return true
+		}, // 初始
+		IsValid: true,
 	})
 
 	/*51*/
@@ -2314,8 +2348,11 @@ func vol(cardBag *ygo.CardVersion) {
 		Lr:      ygo.LR_None,  // 水
 		Attack:  2100,
 		Defense: 1800,
-		//Initialize:    func(ca *ygo.Card) bool {}, // 初始
-		IsValid: false,
+		Initialize: func(ca *ygo.Card) bool {
+			ca.RegisterFusionMonster("魔法灯", "兵主部")
+			return true
+		}, // 初始
+		IsValid: true,
 	})
 
 	/*53*/
@@ -3001,7 +3038,7 @@ func vol(cardBag *ygo.CardVersion) {
 				pl := ca.GetSummoner()
 				tar := pl.GetTarget()
 				if c := pl.SelectFor(tar.Mzone, pl.Mzone); c != nil {
-					c.Dispatch(ygo.Destroy)
+					c.Dispatch(ygo.Destroy, ca)
 				}
 			})
 			return true
@@ -3128,8 +3165,24 @@ func vol(cardBag *ygo.CardVersion) {
 		Name:     "心变",                 // "Change of Heart"  "心変わり"
 		Lc:       ygo.LC_OrdinaryMagic, // 通常魔法
 
-		//Initialize:    func(ca *ygo.Card) bool {}, // 初始
-		IsValid: false,
+		Initialize: func(ca *ygo.Card) bool {
+			ca.RegisterUnordinaryMagic(func() {
+				pl := ca.GetSummoner()
+				tar := pl.GetTarget()
+				if c := pl.SelectFor(tar.Mzone); c != nil {
+					c.EffectplMonsterManipulate(ca)
+					e := func() {
+						ca.Dispatch(ygo.Disabled)
+					}
+					pl.OnlyOnce(ygo.RoundEnd, e)
+					c.OnlyOnce(ygo.Disabled, e)
+				} else {
+					ca.Dispatch(ygo.Disabled)
+				}
+			})
+			return true
+		}, // 初始
+		IsValid: true,
 	})
 
 	/*72*/
@@ -3378,8 +3431,11 @@ func vol(cardBag *ygo.CardVersion) {
 		Lr:      ygo.LR_Dragon, // 龙
 		Attack:  2400,
 		Defense: 2000,
-		//Initialize:    func(ca *ygo.Card) bool {}, // 初始
-		IsValid: false,
+		Initialize: func(ca *ygo.Card) bool {
+			ca.RegisterFusionMonster("时间魔术师", "宝贝龙")
+			return true
+		}, // 初始
+		IsValid: true,
 	})
 
 	/*78*/
@@ -3454,8 +3510,11 @@ func vol(cardBag *ygo.CardVersion) {
 		Lr:      ygo.LR_BeastWarror, // 兽战士
 		Attack:  2000,
 		Defense: 1700,
-		//Initialize:    func(ca *ygo.Card) bool {}, // 初始
-		IsValid: false,
+		Initialize: func(ca *ygo.Card) bool {
+			ca.RegisterFusionMonster("牛头人", "人马兽")
+			return true
+		}, // 初始
+		IsValid: true,
 	})
 
 	/*80*/
@@ -3771,8 +3830,11 @@ func vol(cardBag *ygo.CardVersion) {
 		Lr:      ygo.LR_SpellCaster, // 魔法师
 		Attack:  1750,
 		Defense: 1500,
-		//Initialize:    func(ca *ygo.Card) bool {}, // 初始
-		IsValid: false,
+		Initialize: func(ca *ygo.Card) bool {
+			ca.RegisterFusionMonster("黑森林的魔女", "高等女祭司")
+			return true
+		}, // 初始
+		IsValid: true,
 	})
 
 	/*87*/
@@ -3805,8 +3867,11 @@ func vol(cardBag *ygo.CardVersion) {
 		Lr:      ygo.LR_Machine, // 机械
 		Attack:  1800,
 		Defense: 1400,
-		//Initialize:    func(ca *ygo.Card) bool {}, // 初始
-		IsValid: false,
+		Initialize: func(ca *ygo.Card) bool {
+			ca.RegisterFusionMonster("炸弹先生", "双头恐龙王")
+			return true
+		}, // 初始
+		IsValid: true,
 	})
 
 	/*88*/
@@ -4255,8 +4320,11 @@ func vol(cardBag *ygo.CardVersion) {
 		Lr:      ygo.LR_Thunder, // 雷
 		Attack:  2800,
 		Defense: 2100,
-		//Initialize:    func(ca *ygo.Card) bool {}, // 初始
-		IsValid: false,
+		Initialize: func(ca *ygo.Card) bool {
+			ca.RegisterFusionMonster("雷龙", "雷龙")
+			return true
+		}, // 初始
+		IsValid: true,
 	})
 
 	/*99*/
@@ -4577,7 +4645,6 @@ func vol(cardBag *ygo.CardVersion) {
 
 		Initialize: func(ca *ygo.Card) bool {
 			ca.AddEvent(ygo.InGrave, func() {
-				ca.Init()
 				ca.ToDeck()
 			})
 			ca.RegisterEquipMagic(func(c *ygo.Card) bool {

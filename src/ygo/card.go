@@ -98,6 +98,16 @@ func (ca *Card) GetPlace() *Group {
 	return ca.place
 }
 
+// 设置名字
+func (ca *Card) SetName(name string) {
+	ca.original.Name = name
+}
+
+// 获得名字
+func (ca *Card) GetName() string {
+	return ca.original.Name
+}
+
 // 获得召唤者
 func (ca *Card) GetSummoner() *Player {
 	return ca.summoner
@@ -503,13 +513,23 @@ func (ca *Card) ToExtra() bool {
 
 // 移动到怪兽
 func (ca *Card) ToMzone() bool {
-	ca.GetSummoner().Mzone.EndPush(ca)
+	pl := ca.GetSummoner()
+	if pl.Mzone.Len() >= 5 {
+		ca.Dispatch(Disabled)
+	} else {
+		pl.Mzone.EndPush(ca)
+	}
 	return true
 }
 
 // 移动到魔法
 func (ca *Card) ToSzone() bool {
-	ca.GetOwner().Szone.EndPush(ca)
+	pl := ca.GetSummoner()
+	if pl.Szone.Len() >= 5 {
+		ca.Dispatch(Disabled)
+	} else {
+		pl.Szone.EndPush(ca)
+	}
 	return true
 }
 

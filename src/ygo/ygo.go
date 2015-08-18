@@ -10,6 +10,22 @@ import (
 	"github.com/wzshiming/rego/misc"
 )
 
+type Action func(ca *Card) bool
+
+func (ac Action) IsExits() bool {
+	if ac != nil {
+		return true
+	}
+	return false
+}
+
+func (ac Action) Call(ca *Card) bool {
+	if ac != nil {
+		return ac(ca)
+	}
+	return false
+}
+
 type Arg map[string]interface{}
 
 type YGO struct {
@@ -163,7 +179,7 @@ func (yg *YGO) Loop() {
 		yg.Players[v].initDeck(s.Deck.GetMain(), s.Deck.GetExtra())
 	}
 
-	nap(10) // 手牌初始化
+	nap(20) // 手牌初始化
 	for _, v := range yg.round {
 		yg.Players[v].init()
 	}

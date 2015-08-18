@@ -6,8 +6,19 @@ import (
 
 type Cards []*Card
 
-func NewCards() *Cards {
-	return &Cards{}
+func NewCards(css ...*Cards) *Cards {
+	cs := &Cards{}
+	for _, v := range css {
+		cs.Join(v)
+	}
+	return cs
+}
+
+func (cp *Cards) Join(cs *Cards) {
+	cs.ForEach(func(c *Card) bool {
+		cp.EndPush(c)
+		return true
+	})
 }
 
 func (cp *Cards) Clear() {
@@ -121,10 +132,11 @@ func (cp *Cards) ForEach(fun func(*Card) bool) {
 	}
 }
 
-func (cp *Cards) Find(fun func(*Card) bool) (indexs []int) {
-	for k, v := range *cp {
+func (cp *Cards) Find(fun func(*Card) bool) (cs *Cards) {
+	cs = NewCards()
+	for _, v := range *cp {
 		if fun(v) {
-			indexs = append(indexs, k)
+			cs.EndPush(v)
 		}
 	}
 	return

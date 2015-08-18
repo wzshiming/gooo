@@ -27,14 +27,13 @@ const (
 	Use2 = "Use2" // 用户按钮2
 
 	// 主阶段事件
+	Cover         = "Cover"         // 覆盖
+	Onset         = "Onset"         // 主动发动
 	Summon        = "Summon"        // 召唤
 	SummonFlip    = "SummonFlip"    // 反转召唤
 	SummonSpecial = "SummonSpecial" // 特殊召唤
-
+	//特殊召唤 子事件
 	SummonFusion = "SummonFusion" // 融合召唤
-
-	Cover = "Cover" // 覆盖
-	Onset = "Onset" // 主动发动
 
 	// 战斗阶段事件
 	Declaration = "Declaration" // 攻击宣言
