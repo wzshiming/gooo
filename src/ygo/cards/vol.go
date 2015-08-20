@@ -1611,17 +1611,15 @@ func vol(cardBag *ygo.CardVersion) {
 		Lc:       ygo.LC_OrdinaryMagic, // 通常魔法
 
 		Initialize: func(ca *ygo.Card) bool {
-			ca.RegisterUnordinaryMagic(func() {
+			ca.RegisterOrdinaryMagic(func() {
 				pl := ca.GetSummoner()
 				tar := pl.GetTarget()
 				if c := pl.SelectFor(tar.Grave, pl.Grave); c != nil {
-					c.EffectplMonsterManipulate(ca)
-					c.AddEvent(ygo.Disabled, func() {
-						ca.Dispatch(ygo.Disabled)
-					})
-					ca.AddEvent(ygo.Disabled, func() {
-						c.Dispatch(ygo.Disabled)
-					})
+					if c.GetSummoner() != ca.GetSummoner() {
+						pl := ca.GetSummoner()
+						c.SetSummoner(pl)
+					}
+					c.Dispatch(ygo.SummonSpecial)
 				} else {
 					ca.Dispatch(ygo.Disabled)
 				}
@@ -3166,18 +3164,19 @@ func vol(cardBag *ygo.CardVersion) {
 		Lc:       ygo.LC_OrdinaryMagic, // 通常魔法
 
 		Initialize: func(ca *ygo.Card) bool {
-			ca.RegisterUnordinaryMagic(func() {
+			ca.RegisterOrdinaryMagic(func() {
 				pl := ca.GetSummoner()
 				tar := pl.GetTarget()
 				if c := pl.SelectFor(tar.Mzone); c != nil {
-					c.EffectplMonsterManipulate(ca)
-					e := func() {
-						ca.Dispatch(ygo.Disabled)
+					t := c.GetSummoner()
+					if c.SetSummoner(ca.GetSummoner()); c.IsInMzone() {
+						c.ToMzone()
+						pl.OnlyOnce(ygo.RoundEnd, func() {
+							if c.SetSummoner(t); c.IsInMzone() {
+								c.ToMzone()
+							}
+						}, ca, c)
 					}
-					pl.OnlyOnce(ygo.RoundEnd, e)
-					c.OnlyOnce(ygo.Disabled, e)
-				} else {
-					ca.Dispatch(ygo.Disabled)
 				}
 			})
 			return true
@@ -4587,7 +4586,7 @@ func vol(cardBag *ygo.CardVersion) {
 		Lc:       ygo.LC_OrdinaryMagic, // 通常魔法
 
 		Initialize: func(ca *ygo.Card) bool {
-			ca.RegisterUnordinaryMagic(func() {
+			ca.RegisterOrdinaryMagic(func() {
 				pl := ca.GetSummoner()
 				tar := pl.GetTarget()
 				var e func(c *ygo.Card) bool
@@ -4595,16 +4594,14 @@ func vol(cardBag *ygo.CardVersion) {
 					if c.IsFaceUp() {
 						c.SetAttack(c.GetAttack() - c.GetBaseAttack() + c.GetBaseDefense())
 						c.SetDefense(c.GetDefense() - c.GetBaseDefense() + c.GetBaseAttack())
-						ca.OnlyOnce(ygo.Disabled, func() {
+						pl.OnlyOnce(ygo.RoundEnd, func() {
 							c.SetAttack(c.GetAttack() + c.GetBaseAttack() - c.GetBaseDefense())
 							c.SetDefense(c.GetDefense() + c.GetBaseDefense() - c.GetBaseAttack())
 						}, ca, c)
 					}
 					return true
 				}
-				pl.OnlyOnce(ygo.RoundEnd, func() {
-					ca.Dispatch(ygo.Disabled)
-				})
+
 				pl.Mzone.ForEach(e)
 				tar.Mzone.ForEach(e)
 			})

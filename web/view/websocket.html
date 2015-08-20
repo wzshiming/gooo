@@ -3,15 +3,36 @@
 <script>
 	Base64.extendString();
 	//var ws = new WebSocket("ws://127.0.0.1:3006/");
+
 	var ws = new WebSocket("ws://" +window.location.host + "/conn");
+
+
 	ws.onopen = function(e){
+
 		//MsgInfo("Welcome back");
 		MsgInfo("服务器连接成功");
 	};
+	ws.msglist = null;
+	ws.msgloop = function(){
+		while(ws.msglist.length != 0) {
+			d = ws.msglist.shift()
+			msg = JSON.parse(d.slice(4, d.length));
+			this.event( d.charCodeAt(0), d.charCodeAt(1), d.charCodeAt(2), d.charCodeAt(3), msg );
+		}
+		ws.msglist = null
+	}
 	ws.onmessage = function(e){
 		d = e.data.fromBase64();
-		msg = JSON.parse(d.slice(4, d.length));
-		this.event( d.charCodeAt(0), d.charCodeAt(1), d.charCodeAt(2), d.charCodeAt(3), msg );
+		if(ws.msglist == null) {
+			ws.msglist = []
+			ws.msglist.push(d)
+			ws.msgloop()
+		}else {
+			ws.msglist.push(d)
+		}
+
+//		msg = JSON.parse(d.slice(4, d.length));
+//		this.event( d.charCodeAt(0), d.charCodeAt(1), d.charCodeAt(2), d.charCodeAt(3), msg );
 	};
 	
 	ws.onclose = function(e){
@@ -21,7 +42,8 @@
 	
 	ws.onerror = function(e){
 	};
-	
+
+
 	ws.Callback = {};
 	ws.i = 0;
 	

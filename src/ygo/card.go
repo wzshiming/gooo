@@ -88,9 +88,9 @@ func (ca *Card) Priority() int {
 func (ca *Card) Dispatch(eventName string, args ...interface{}) {
 	yg := ca.GetSummoner().Game()
 	if Pay != eventName {
-		ca.Events.Dispatch(Pay, append(args, eventName)...)
+		ca.Events.Dispatch(Pay, eventName)
 	}
-	yg.Chain(eventName, ca, ca.GetSummoner(), append(args))
+	yg.Chain(eventName, ca, ca.GetSummoner(), args)
 	ca.Events.Dispatch(eventName, args...)
 }
 
@@ -488,66 +488,58 @@ func (ca *Card) Placed() {
 }
 
 // 移动到墓地
-func (ca *Card) ToGrave() bool {
+func (ca *Card) ToGrave() {
 	ca.GetOwner().Grave.EndPush(ca)
-	return true
 }
 
 // 移动到除外
-func (ca *Card) ToRemoved() bool {
+func (ca *Card) ToRemoved() {
 	ca.GetOwner().Removed.EndPush(ca)
-	return true
 }
 
 // 移动到手牌
-func (ca *Card) ToHand() bool {
+func (ca *Card) ToHand() {
 	ca.GetOwner().Hand.EndPush(ca)
-	return true
 }
 
 // 移动到额外
-func (ca *Card) ToExtra() bool {
+func (ca *Card) ToExtra() {
 	ca.GetOwner().Extra.EndPush(ca)
-	return true
 }
 
 // 移动到怪兽
-func (ca *Card) ToMzone() bool {
+func (ca *Card) ToMzone() {
 	pl := ca.GetSummoner()
 	if pl.Mzone.Len() >= 5 {
 		ca.Dispatch(Disabled)
 	} else {
 		pl.Mzone.EndPush(ca)
 	}
-	return true
 }
 
 // 移动到魔法
-func (ca *Card) ToSzone() bool {
-	pl := ca.GetSummoner()
+func (ca *Card) ToSzone() {
+	pl := ca.GetOwner()
 	if pl.Szone.Len() >= 5 {
 		ca.Dispatch(Disabled)
 	} else {
 		pl.Szone.EndPush(ca)
 	}
-	return true
 }
 
 // 移动到卡组
-func (ca *Card) ToDeck() bool {
+func (ca *Card) ToDeck() {
 	ca.GetOwner().Deck.EndPush(ca)
-	return true
 }
 
 // 移动到场地
-func (ca *Card) ToField() bool {
+func (ca *Card) ToField() {
 	f := ca.GetOwner().Field
 	f.ForEach(func(c *Card) bool {
 		c.ToGrave()
 		return true
 	})
 	f.EndPush(ca)
-	return true
 }
 
 // 是在场地

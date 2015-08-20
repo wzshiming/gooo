@@ -6,11 +6,10 @@ func (ca *Card) Init() {
 	ca.effects = []*Card{}
 	//ca.summoner = ca.owner
 	ca.isValid = true
-	ca.le = LE_None
+	//	ca.le = LE
 	ca.registerNormal()
 	if ca.IsMonster() {
 		ca.registerMonster()
-
 	} else if ca.IsMagicAndTrap() {
 		ca.registerMagicAndTrap()
 	}
@@ -18,16 +17,15 @@ func (ca *Card) Init() {
 
 }
 
+// 事件各种混乱
+// 重新整理
+// 精确到  魔陷卡使用过后  魔陷卡被破坏  怪兽卡被解放破坏  等....
 func (ca *Card) registerNormal() {
 
 	//ca.AddEvent(InDeck, ca.SetFaceDownAttack)
 
 	// 进入墓地和 移除时 卡牌翻面
 	ca.AddEvent(InExtra, ca.SetFaceUpAttack)
-	//ca.AddEvent(InGrave, Disabled)
-	ca.AddEvent(InGrave, ca.SetFaceUpAttack)
-	//ca.AddEvent(InRemoved, Disabled)
-	ca.AddEvent(InRemoved, ca.SetFaceUpAttack)
 
 	// 花费
 	ca.AddEvent(Cost, func() {
@@ -47,15 +45,23 @@ func (ca *Card) registerNormal() {
 	ca.AddEvent(Disabled, func() {
 		if ca.isValid {
 			//pl := ca.GetSummoner()
-			ca.ToGrave()
 			ca.isValid = false
+			ca.ToGrave()
 			ca.CloseEvent(Disabled)
 			//pl.MsgPub("{self}失效", Arg{"self": ca.ToUint()})
 		}
 	})
 
-	// 离开墓地初始化
+	// 进入墓地和除外
+	ca.AddEvent(InGrave, ca.SetFaceUpAttack)
+	ca.AddEvent(InRemoved, ca.SetFaceUpAttack)
+
+	// 离开墓地和除外 初始化
 	ca.AddEvent(OutGrave, func() {
+		ca.Init()
+	})
+
+	ca.AddEvent(OutRemoved, func() {
 		ca.Init()
 	})
 
@@ -121,10 +127,15 @@ func (ca *Card) registerMagicAndTrap() {
 }
 
 func (ca *Card) registerMagic() {
-	ca.AddEvent(Onset, func() {
-		pl := ca.GetSummoner()
+	ca.RegisterPay(func(s string) {
+		if s != UseMagic {
+			return
+		}
 		ca.SetFaceUp()
+		pl := ca.GetSummoner()
 		pl.MsgPub("发动{self}!", Arg{"self": ca.ToUint()})
+	})
+	ca.AddEvent(Onset, func() {
 		ca.Dispatch(UseMagic)
 	})
 }
@@ -135,11 +146,9 @@ func (ca *Card) RegisterEffect0(f interface{}) {
 
 // 注册一张通常魔法卡
 func (ca *Card) RegisterOrdinaryMagic(f interface{}) {
-	ca.registerMagic()
-	ca.RegisterEffect0(f)
+	ca.RegisterUnordinaryMagic(f)
 	ca.AddEvent(Onset, func() {
 		if ca.IsInSzone() {
-			ca.Dispatch(Effect0)
 			ca.Dispatch(Disabled)
 		}
 	})
@@ -297,8 +306,9 @@ func (ca *Card) registerMonster() {
 
 	ca.AddEvent(SummonSpecial, func() {
 		pl := ca.GetSummoner()
-		ca.SetFaceUpAttack()
+		ca.isValid = true
 		ca.ToMzone()
+		ca.SetFaceUpAttack()
 		ca.ShowInfo()
 		pl.MsgPub("{self}特殊召唤！", Arg{"self": ca.ToUint()})
 	})

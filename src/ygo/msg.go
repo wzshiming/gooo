@@ -111,9 +111,15 @@ func setCardFace(t *Card, a Arg) (string, interface{}) {
 }
 
 func moveCard(t *Card, pos ll_type) (string, interface{}) {
+	i := 0
+	if pos == LL_Mzone {
+		i = t.GetSummoner().Index
+	} else {
+		i = t.GetOwner().Index
+	}
 	return "moveCard", map[string]interface{}{
 		"uniq":   t.ToUint(),
-		"master": t.GetSummoner().Index,
+		"master": i,
 		"pos":    pos,
 	}
 }
