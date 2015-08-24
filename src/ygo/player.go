@@ -66,12 +66,9 @@ func NewPlayer(yg *YGO) *Player {
 	var pr uint
 	pl.MsgChan = NewMsgChan(func(m MsgCode) bool {
 		//rego.INFO(m)
-		if m.Uniq == 1 {
-			return true
-		}
+
 		if m.Uniq != 0 {
-			ca := pl.Game().GetCard(m.Uniq)
-			if ca != nil {
+			if ca := pl.Game().GetCard(m.Uniq); ca != nil {
 				if m.Method == uint(LI_Over) {
 					if pr != 0 {
 						pl.GetTarget().CallAll(touch(pr, 1, 1, 1))
@@ -87,7 +84,8 @@ func NewPlayer(yg *YGO) *Player {
 					return true
 				}
 			}
-
+		} else {
+			return true
 		}
 		return false
 	})
@@ -153,7 +151,7 @@ func (pl *Player) Msg(fmts string, a Arg) {
 	if a["rival"] == nil {
 		a["rival"] = pl.GetTarget().Name
 	}
-
+	nap(1)
 	pl.Call(message(fmts, a))
 }
 
@@ -167,11 +165,13 @@ func (pl *Player) MsgPub(fmts string, a Arg) {
 	if a["rival"] == nil {
 		a["rival"] = pl.GetTarget().Name
 	}
+	nap(2)
 	pl.CallAll(message(fmts, a))
 }
 
 func (pl *Player) Fail() {
 	pl.fail = true
+	panic("Fail")
 }
 
 func (pl *Player) IsFail() bool {
@@ -183,6 +183,14 @@ func (pl *Player) ForEachPlayer(fun func(p *Player)) {
 }
 
 func (pl *Player) Chain(eventName string, ca *Card, cs *Cards, a []interface{}) bool {
+	t := pl.Phases
+	defer func() {
+		pl.Phases = t
+		pl.CallAll(flashPhases(pl))
+	}()
+	pl.Phases = LP_Chain
+	pl.CallAll(flashPhases(pl))
+
 	pl.ResetReplyTime()
 	pl.MsgPub("等待{self}连锁", nil)
 	css := NewCards()
@@ -193,26 +201,25 @@ func (pl *Player) Chain(eventName string, ca *Card, cs *Cards, a []interface{}) 
 		return true
 	})
 
-	if wi := pl.SelectWill(); wi.Uniq != 0 && wi.Uniq != 1 {
+	if wi := pl.SelectWill(); wi.Uniq != 0 {
 		//pl.MsgPub("{self}选择{method}", Arg{"method": wi.Method})
 		css.ForEach(func(c *Card) bool {
-			if c.ToUint() == wi.Uniq {
-				e := func() {
-					pl.MsgPub("{self}连锁{event}", Arg{"self": c.ToUint(), "event": eventName})
-					c.Events.Dispatch(Pay, append(a, eventName)...)
-					c.Events.Dispatch(Trigger+eventName, append(a, wi.Method)...)
-				}
-				if ca.Priority() > c.Priority() {
-					ca.OnlyOnce(eventName, e, c)
-					c.OnlyOnce(Disabled, func() {
-						ca.RemoveEvent(eventName, e, c)
-					})
-				} else {
-					e()
-				}
-				return false
+			if c.ToUint() != wi.Uniq {
+				return true
 			}
-			return true
+
+			e := func() {
+				pl.MsgPub("{self}连锁{event}", Arg{"self": c.ToUint(), "event": eventName})
+				c.Events.Dispatch(Pay, append(a, eventName)...)
+				c.Events.Dispatch(Trigger, append(a, wi.Method)...)
+			}
+			if ca.Priority() >= c.Priority() {
+				ca.OnlyOnce(eventName, e, c)
+			} else {
+				e()
+			}
+			return false
+
 		})
 
 		//pl.MsgPub("{self}错误的连锁", nil)
@@ -227,6 +234,15 @@ func (pl *Player) GetRound() int {
 }
 
 func (pl *Player) round() (err error) {
+	defer func() {
+		if x := recover(); x != nil {
+			if _, ok := x.(string); ok {
+
+			} else {
+				rego.DebugStack()
+			}
+		}
+	}()
 	pl.RoundSize++
 	pl.CallAll(flagName(pl))
 	pl.Dispatch(RoundBegin, pl)
@@ -240,48 +256,27 @@ func (pl *Player) round() (err error) {
 	return
 }
 
-func (pl *Player) draw(lp lp_type) bool {
-	defer func() {
-		if x := recover(); x != nil {
-			rego.DebugStack()
-		}
-	}()
+func (pl *Player) draw(lp lp_type) {
 	pl.Phases = lp
 	pl.CallAll(flashPhases(pl))
-	if pl.Deck.Len() == 0 {
-		pl.Fail()
-		return false
-	}
+
 	pl.ActionDraw(1)
-	return true
+
 }
 
-func (pl *Player) standby(lp lp_type) bool {
-	defer func() {
-		if x := recover(); x != nil {
-			rego.DebugStack()
-		}
-	}()
+func (pl *Player) standby(lp lp_type) {
 	pl.Phases = lp
 	pl.CallAll(flashPhases(pl))
-	return true
+
 }
 
-func (pl *Player) main(lp lp_type) bool {
-	defer func() {
-		if x := recover(); x != nil {
-			rego.DebugStack()
-		}
-	}()
+func (pl *Player) main(lp lp_type) {
 	pl.Phases = lp
 	//pl.ClearCode()
 	pl.ResetWaitTime()
 	for {
 		p := pl.SelectWill()
 		if p.Uniq == 0 {
-			break
-		}
-		if p.Uniq == 1 {
 			if p.Method == uint(LP_Battle) && lp == LP_Main1 {
 				break
 			} else if p.Method == uint(LP_End) {
@@ -291,6 +286,10 @@ func (pl *Player) main(lp lp_type) bool {
 				}
 				break
 			}
+			if p.Method == 0 {
+				break
+			}
+			continue
 		}
 
 		if t := pl.Hand.ExistForUniq(p.Uniq); t != nil {
@@ -307,30 +306,25 @@ func (pl *Player) main(lp lp_type) bool {
 			pl.Msg("非法目标", nil)
 		}
 	}
-	return true
 }
 
-func (pl *Player) battle(lp lp_type) bool {
-	defer func() {
-		if x := recover(); x != nil {
-			rego.DebugStack()
-		}
-	}()
+func (pl *Player) battle(lp lp_type) {
 	pl.Phases = lp
 	//pl.ClearCode()
 	pl.ResetWaitTime()
 	for {
 		i := pl.SelectWill()
 		if i.Uniq == 0 {
-			break
-		}
-		if i.Uniq == 1 {
 			if i.Method == uint(LP_Main2) {
 				break
 			} else if i.Method == uint(LP_End) {
 				pl.StopOnce(MP)
 				break
 			}
+			if i.Method == 0 {
+				break
+			}
+			continue
 		}
 
 		t1 := pl.Mzone.ExistForUniq(i.Uniq)
@@ -356,21 +350,15 @@ func (pl *Player) battle(lp lp_type) bool {
 		} else {
 			t1.Dispatch(Declaration)
 		}
-
 	}
-	return true
+
 }
 
-func (pl *Player) end(lp lp_type) bool {
-	defer func() {
-		if x := recover(); x != nil {
-			rego.DebugStack()
-		}
-	}()
+func (pl *Player) end(lp lp_type) {
 	pl.Phases = lp
-	pl.ResetReplyTime()
-	pl.Msg("选择丢弃的手牌", nil)
 	if i := pl.Hand.Len() - pl.MaxSdi; i > 0 {
+		pl.ResetReplyTime()
+		pl.Msg("请{self}选择丢弃的手牌", nil)
 		for k := 0; k != i; k++ {
 			ca := pl.SelectFor(pl.Hand)
 			if ca == nil {
@@ -379,7 +367,6 @@ func (pl *Player) end(lp lp_type) bool {
 			ca.Dispatch(Discard)
 		}
 	}
-	return true
 }
 
 func (pl *Player) init() {
@@ -395,6 +382,10 @@ func (pl *Player) initDeck(a []uint, b []uint) {
 	pl.ActionShuffle()
 }
 
+func (pl *Player) GetHp() int {
+	return pl.Hp
+}
+
 func (pl *Player) ChangeHp(i int) {
 	pl.Dispatch(HPChange, pl, i)
 
@@ -404,7 +395,12 @@ func (pl *Player) ChangeHp(i int) {
 		pl.MsgPub("{self}受到{num}基本分回复！", Arg{"num": i})
 	}
 	pl.Hp += i
-	pl.CallAll(setFace(map[string]interface{}{pl.Name: pl.Hp}))
+	if pl.Hp < 0 {
+		pl.Fail()
+	} else {
+		pl.CallAll(setFace(map[string]interface{}{pl.Name: pl.Hp}))
+	}
+
 }
 
 func (pl *Player) GetTarget() *Player {
@@ -422,15 +418,16 @@ func (pl *Player) ActionDraw(s int) {
 	if s <= 0 {
 		return
 	}
-	pl.Dispatch(Draw, pl)
 	for i := 0; i != s; i++ {
 		if pl.Deck.Len() == 0 {
+			pl.Fail()
 			return
 		}
 		pl.Dispatch(DrawNum, pl)
 		t := pl.Deck.EndPop()
 		pl.Hand.EndPush(t)
 	}
+	pl.Dispatch(Draw, pl)
 }
 
 func (pl *Player) Call(method string, reply interface{}) error {
@@ -458,9 +455,8 @@ func (pl *Player) ResetWaitTime() {
 
 func (pl *Player) SelectWill() (p MsgCode) {
 	//pl.ClearCode()
-
+	pl.CallAll(flashPhases(pl))
 	for {
-		pl.CallAll(flashPhases(pl))
 		select {
 		case <-time.After(time.Second):
 			pl.PassTime -= time.Second

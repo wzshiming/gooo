@@ -318,6 +318,9 @@ func (ca *Card) GetAttack() int {
 
 // 设置攻击
 func (ca *Card) SetAttack(i int) {
+	if i < 0 {
+		i = 0
+	}
 	ca.original.Attack = i
 	ca.Dispatch(Change, ca)
 	pl := ca.GetSummoner()
@@ -336,6 +339,9 @@ func (ca *Card) GetDefense() int {
 
 // 设置防御
 func (ca *Card) SetDefense(i int) {
+	if i < 0 {
+		i = 0
+	}
 	ca.original.Defense = i
 	ca.Dispatch(Change, ca)
 	pl := ca.GetSummoner()

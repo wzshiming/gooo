@@ -6,9 +6,14 @@ import (
 	"time"
 
 	"github.com/wzshiming/dispatcher"
+	"github.com/wzshiming/rego"
 	"github.com/wzshiming/rego/agent"
 	"github.com/wzshiming/rego/misc"
 )
+
+func RandInt(i int) int {
+	return int(<-rego.LCG) % i
+}
 
 type Action func(ca *Card) bool
 
@@ -90,7 +95,6 @@ func (yg *YGO) Chain(eventName string, ca *Card, pl *Player, args []interface{})
 	yg.ForEventEach(Chain, func(i interface{}) {
 		if v, ok := i.(*Card); ok {
 			cs.EndPush(v)
-
 		}
 	})
 	if cs.Len() > 0 {
@@ -186,23 +190,26 @@ func (yg *YGO) Loop() {
 
 	yg.Players[yg.round[0]].MsgPub("游戏开始，{self}先手！", nil)
 	nap(10)
+loop:
 	for {
 		for _, v := range yg.round {
 			nap(5)
 			yg.Current = yg.Players[v]
 			if !yg.Current.IsFail() {
 				yg.Current.round()
-				//				if yg.CheckWinner(); yg.Over {
-				//					return
-				//				}
+				if yg.Current.IsFail() {
+					yg.Over = true
+					break loop
+				}
 			} else {
 				yg.Over = true
-			}
-			if yg.Over {
-				yg.CallAll("over", nil)
-				yg.Current.MsgPub("游戏结束", nil)
-				return
+				break loop
 			}
 		}
 	}
+
+	yg.CallAll("over", nil)
+	yg.Current.MsgPub("游戏结束", nil)
+	return
+
 }

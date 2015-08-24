@@ -11,19 +11,23 @@ YGO = (@scene) ->
 
 YGO::init = (args) ->
   face.SetButton "BP", ->
-    WsSelectable 1,4
+    WsSelectable 0,4
 
   face.SetButton "MP2", ->
-    WsSelectable 1,5
+    WsSelectable 0,5
 
   face.SetButton "EP", ->
-    WsSelectable 1,6
+    WsSelectable 0,6
 
   face.SetButton "Yes", ->
-    WsSelectable 1,10
+    WsSelectable 0,10
 
   face.SetButton "No", ->
-    WsSelectable 1,11
+    WsSelectable 0,11
+
+  face.SetButton "Defeat", ->
+    WsSelectable 0,666
+
   @users = args.users
   @index = args.index
   if @users instanceof Array
@@ -143,6 +147,8 @@ YGO::flagStep = (args) ->
     "MP2"
   else if args.step == 6
     "EP"
+  else if args.step == 7
+    "Chain"
   else
     "现在什么阶段?"
   face.SetHTML "阶段", p

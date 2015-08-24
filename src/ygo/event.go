@@ -6,6 +6,7 @@ func (ca *Card) Init() {
 	ca.effects = []*Card{}
 	//ca.summoner = ca.owner
 	ca.isValid = true
+	ca.OpenEvent(Disabled)
 	//	ca.le = LE
 	ca.registerNormal()
 	if ca.IsMonster() {
@@ -56,14 +57,14 @@ func (ca *Card) registerNormal() {
 	ca.AddEvent(InGrave, ca.SetFaceUpAttack)
 	ca.AddEvent(InRemoved, ca.SetFaceUpAttack)
 
-	// 离开墓地和除外 初始化
-	ca.AddEvent(OutGrave, func() {
-		ca.Init()
-	})
+	//	// 离开墓地和除外 初始化
+	//	ca.AddEvent(OutGrave, func() {
+	//		ca.Init()
+	//	})
 
-	ca.AddEvent(OutRemoved, func() {
-		ca.Init()
-	})
+	//	ca.AddEvent(OutRemoved, func() {
+	//		ca.Init()
+	//	})
 
 	// 被破坏
 	ca.AddEvent(Destroy, func(c *Card) {
@@ -147,7 +148,7 @@ func (ca *Card) RegisterEffect0(f interface{}) {
 // 注册一张通常魔法卡
 func (ca *Card) RegisterOrdinaryMagic(f interface{}) {
 	ca.RegisterUnordinaryMagic(f)
-	ca.AddEvent(Onset, func() {
+	ca.AddEvent(UseMagic, func() {
 		if ca.IsInSzone() {
 			ca.Dispatch(Disabled)
 		}
@@ -158,17 +159,21 @@ func (ca *Card) RegisterOrdinaryMagic(f interface{}) {
 func (ca *Card) RegisterUnordinaryMagic(f interface{}) {
 	ca.registerMagic()
 	ca.RegisterEffect0(f)
-	ca.AddEvent(Onset, func() {
+	ca.AddEvent(UseMagic, func() {
+		pl := ca.GetSummoner()
 		if ca.IsInSzone() {
 			ca.Dispatch(Effect0)
+			pl.MsgPub("发动{self}成功!", Arg{"self": ca.ToUint()})
 		}
 	})
 }
 
 // 推送卡牌能连锁
-func (ca *Card) PushChain() {
+func (ca *Card) PushChain(f interface{}) {
 	yg := ca.GetSummoner().Game()
 	yg.AddEvent(Chain, ca)
+	ca.EmptyEvent(Chain)
+	ca.AddEvent(Chain, f)
 }
 
 // 注册全局效果监听 直到收到 失效Disabled
@@ -206,6 +211,7 @@ func (ca *Card) RegisterEquipMagic(a Action, f1 interface{}, f2 interface{}) {
 
 			// 执行装备 上的效果
 			ca.Dispatch(Effect1, c)
+			pl.MsgPub("{self}装备成功!", Arg{"self": ca.ToUint()})
 		} else {
 			ca.Dispatch(Disabled)
 			pl.MsgPub("选择的目标不合法,{self}被破坏!", Arg{"self": ca.ToUint()})
@@ -220,29 +226,39 @@ func (ca *Card) RegisterPlaceMagic(f interface{}) {
 }
 
 // 注册一个通常的陷阱卡   下个回合才能发动  以及 连锁的事件
-func (ca *Card) registerTrap(event string, e interface{}, f interface{}) {
+func (ca *Card) registerTrap(event string, e interface{}) {
 	ca.AddEvent(InSzone, func() {
 		pl := ca.GetSummoner()
 		pl.OnlyOnce(RoundEnd, func() {
 			ca.RegisterGlobalListen(event, e)
-		})
-	})
+		}, ca, e)
+	}, e)
 
-	ca.AddEvent(Trigger+event, func() {
+	ca.AddEvent(Trigger, func() {
 		pl := ca.GetSummoner()
 		ca.SetFaceUp()
-		pl.MsgPub("发动{self}!", Arg{"self": ca.ToUint()})
-		ca.Dispatch(UseTrap)
 		if ca.IsInSzone() {
-			ca.Dispatch(Effect0)
+			pl.MsgPub("发动{self}!", Arg{"self": ca.ToUint()})
+			ca.Dispatch(UseTrap)
+			if ca.IsInSzone() {
+				pl.MsgPub("发动{self}成功!", Arg{"self": ca.ToUint()})
+				ca.Dispatch(Chain)
+			}
+		}
+	})
+}
+
+func (ca *Card) RegisterOrdinaryTrap(event string, e interface{}) {
+	ca.RegisterUnordinaryTrap(event, e)
+	ca.AddEvent(Trigger, func() {
+		if ca.IsInSzone() {
 			ca.Dispatch(Disabled)
 		}
 	})
-	ca.RegisterEffect0(f)
 }
 
-func (ca *Card) RegisterOrdinaryTrap(event string, e interface{}, f interface{}) {
-	ca.registerTrap(event, e, f)
+func (ca *Card) RegisterUnordinaryTrap(event string, e interface{}) {
+	ca.registerTrap(event, e)
 }
 
 func (ca *Card) RegisterPay(f interface{}) {
@@ -341,24 +357,27 @@ func (ca *Card) registerMonster() {
 					return
 				}
 			}
-
+			if s == Summon {
+				ca.SetFaceUpAttack()
+			}
 		},
 		// 召唤
 		Summon: func() {
 			pl := ca.GetSummoner()
-			ca.ToMzone()
-			if ca.IsInMzone() {
+			if ca.IsInHand() {
+				ca.ToMzone()
 				ca.SetFaceUpAttack()
 				ca.SetNotCanChange()
 				pl.MsgPub("{self}召唤成功!", Arg{"self": ca.ToUint()})
 				ca.ShowInfo()
+
 			}
 		},
 		// 覆盖
 		Cover: func() {
 			pl := ca.GetSummoner()
-			ca.ToMzone()
-			if ca.IsInMzone() {
+			if ca.IsInHand() {
+				ca.ToMzone()
 				ca.SetFaceDownDefense()
 				ca.SetNotCanChange()
 				pl.Msg("{self}覆盖成功!", Arg{"self": ca.ToUint()})
@@ -417,21 +436,21 @@ func (ca *Card) registerMonster() {
 		},
 
 		// 发出战斗宣言
-		Declaration: func(tar *Card) {
+		Declaration: func(c *Card) {
 			pl := ca.GetSummoner()
 
-			if tar != nil {
-				pl.MsgPub("{self}对{rival}发出战斗宣言！", Arg{"self": ca.ToUint(), "rival": tar.ToUint()})
+			if c != nil {
+				pl.MsgPub("{self}对{rival}发出战斗宣言！", Arg{"self": ca.ToUint(), "rival": c.ToUint()})
 			} else {
 				pl.MsgPub("{self}对{rival}发出战斗宣言！", Arg{"self": ca.ToUint()})
 			}
 
 			var b bool
-			if tar != nil {
-				b = tar.IsFaceDown()
+			if c != nil {
+				b = c.IsFaceDown()
 				ca.SetFaceUp()
-				if ca.IsInMzone() && tar.IsInMzone() {
-					ca.Dispatch(DamageStep, tar)
+				if ca.IsInMzone() && c.IsInMzone() {
+					ca.Dispatch(DamageStep, c)
 				}
 
 			} else {
@@ -440,40 +459,44 @@ func (ca *Card) registerMonster() {
 				}
 			}
 			if b {
-				tar.Dispatch(Flip)
+				c.Dispatch(Flip)
 			}
 		},
 		// 战斗判定
-		DamageStep: func(tar *Card) {
+		DamageStep: func(c *Card) {
 			pl := ca.GetSummoner()
-			if tar != nil {
-				plt := tar.GetSummoner()
-				pl.MsgPub("{self}攻击了{rival}！", Arg{"self": ca.ToUint(), "rival": tar.ToUint()})
-				if tar.IsAttack() {
-					t := ca.GetAttack() - tar.GetAttack()
+			if c != nil {
+				tar := c.GetSummoner()
+				pl.MsgPub("{self}攻击了{rival}！", Arg{"self": ca.ToUint(), "rival": c.ToUint()})
+				if c.IsAttack() {
+					t := ca.GetAttack() - c.GetAttack()
 					if t > 0 {
-						tar.Dispatch(Destroy, ca)
-						plt.ChangeHp(-t)
+						c.Dispatch(Destroy, ca)
+						tar.ChangeHp(-t)
+						c.Dispatch(Deduct, tar)
 					} else if t < 0 {
-						ca.Dispatch(Destroy, tar)
+						ca.Dispatch(Destroy, c)
 						pl.ChangeHp(t)
+						ca.Dispatch(Deduct, pl)
 					} else {
-						tar.Dispatch(Destroy, ca)
-						ca.Dispatch(Destroy, tar)
+						c.Dispatch(Destroy, ca)
+						ca.Dispatch(Destroy, c)
 					}
-				} else if tar.IsDefense() {
-					t := ca.GetAttack() - tar.GetDefense()
+				} else if c.IsDefense() {
+					t := ca.GetAttack() - c.GetDefense()
 					if t > 0 {
-						tar.Dispatch(Destroy, ca)
+						c.Dispatch(Destroy, ca)
 					} else if t < 0 {
 						pl.ChangeHp(t)
+						ca.Dispatch(Deduct, pl)
 					}
 				}
-				ca.Dispatch(Fought, tar)
-				tar.Dispatch(Fought, ca)
+				ca.Dispatch(Fought, c)
+				c.Dispatch(Fought, ca)
 			} else {
-				ca.Dispatch(Deduct)
-				pl.GetTarget().ChangeHp(-ca.GetAttack())
+				tar := pl.GetTarget()
+				tar.ChangeHp(-ca.GetAttack())
+				ca.Dispatch(Deduct, tar)
 				pl.MsgPub("{self}直接攻击了{rival}！", Arg{"self": ca.ToUint()})
 			}
 

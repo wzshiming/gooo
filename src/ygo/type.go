@@ -106,12 +106,13 @@ type li_type uint32
 const (
 	LI_None li_type = iota
 
-	LI_Use1 = 1   // 使用
-	LI_Use2 = 5   // 覆盖
-	LI_Yes  = 10  // 是
-	LI_No   = 11  // 否
-	LI_Over = 101 // 鼠标悬浮
-	LI_Out  = 102 // 鼠标离开
+	LI_Use1   = 1   // 使用
+	LI_Use2   = 5   // 覆盖
+	LI_Yes    = 10  // 是
+	LI_No     = 11  // 否
+	LI_Defeat = 666 // 认输
+	LI_Over   = 101 // 鼠标悬浮
+	LI_Out    = 102 // 鼠标离开
 
 )
 
