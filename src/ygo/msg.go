@@ -141,3 +141,14 @@ func flagName(pl *Player) (string, interface{}) {
 		"player": pl.Index,
 	}
 }
+
+func trigg(cs *Cards) (string, interface{}) {
+	if cs != nil {
+		return "trigg", map[string]interface{}{
+			"uniqs": cs.Uniqs(),
+		}
+	}
+	return "trigg", map[string]interface{}{
+		"uniqs": []int{},
+	}
+}

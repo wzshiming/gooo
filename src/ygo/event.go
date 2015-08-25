@@ -231,26 +231,23 @@ func (ca *Card) registerTrap(event string, e interface{}) {
 		pl := ca.GetSummoner()
 		pl.OnlyOnce(RoundEnd, func() {
 			ca.RegisterGlobalListen(event, e)
-		}, ca, e)
+		}, ca)
 	}, e)
 
-	ca.AddEvent(Trigger, func() {
+	ca.AddEvent(Trigger, UseTrap)
+	ca.AddEvent(UseTrap, func() {
 		pl := ca.GetSummoner()
 		ca.SetFaceUp()
 		if ca.IsInSzone() {
-			pl.MsgPub("发动{self}!", Arg{"self": ca.ToUint()})
-			ca.Dispatch(UseTrap)
-			if ca.IsInSzone() {
-				pl.MsgPub("发动{self}成功!", Arg{"self": ca.ToUint()})
-				ca.Dispatch(Chain)
-			}
+			ca.Dispatch(Chain)
+			pl.MsgPub("发动{self}成功!", Arg{"self": ca.ToUint()})
 		}
 	})
 }
 
 func (ca *Card) RegisterOrdinaryTrap(event string, e interface{}) {
 	ca.RegisterUnordinaryTrap(event, e)
-	ca.AddEvent(Trigger, func() {
+	ca.AddEvent(UseTrap, func() {
 		if ca.IsInSzone() {
 			ca.Dispatch(Disabled)
 		}

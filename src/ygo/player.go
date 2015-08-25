@@ -201,6 +201,7 @@ func (pl *Player) Chain(eventName string, ca *Card, cs *Cards, a []interface{}) 
 		return true
 	})
 
+	pl.Call(trigg(css))
 	if wi := pl.SelectWill(); wi.Uniq != 0 {
 		//pl.MsgPub("{self}选择{method}", Arg{"method": wi.Method})
 		css.ForEach(func(c *Card) bool {
@@ -226,6 +227,7 @@ func (pl *Player) Chain(eventName string, ca *Card, cs *Cards, a []interface{}) 
 	} else {
 		pl.MsgPub("{self}不连锁", nil)
 	}
+	pl.Call(trigg(nil))
 	return false
 }
 

@@ -173,3 +173,16 @@ YGO::touch = (args)->
 YGO::over = ()->
   ExitPage()
   MsgInfo "游戏结束"
+
+YGO::trigg = (args) ->
+  if @trigger
+    for v in @trigger
+      c = Card::Find v
+      if c
+        c.SetClass "card"
+  @trigger = args.uniqs
+  if @trigger
+    for v in @trigger
+      c = Card::Find v
+      if c
+        c.SetClass "card0"

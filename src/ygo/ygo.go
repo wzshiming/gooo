@@ -48,6 +48,8 @@ type YGO struct {
 
 	pending   map[uint]*Card
 	cardevent map[string]map[*Card]Action
+
+	both map[string]bool
 }
 
 func nap(i int) {
@@ -60,10 +62,11 @@ func NewYGO(r *misc.Rooms) *YGO {
 		Events:   eve,
 		Fork:     eve.GetFork(),
 		Room:     r,
-		Cards:    make(map[uint]*Card),
-		Survival: make(map[int]int),
+		Cards:    map[uint]*Card{},
+		Survival: map[int]int{},
 		StartAt:  time.Now(),
-		Players:  make(map[uint]*Player),
+		Players:  map[uint]*Player{},
+		both:     map[string]bool{},
 	}
 
 	yg.Room.ForEach(func(sess *agent.Session) {
@@ -78,6 +81,10 @@ func NewYGO(r *misc.Rooms) *YGO {
 //func (yg *YGO) Dispatch(eventName string, args ...interface{}) {
 //	rego.ERR(eventName, args)
 //}
+
+func (yg *YGO) RegisterBothEvent(eventName string) {
+	yg.both[eventName] = true
+}
 
 func (yg *YGO) Chain(eventName string, ca *Card, pl *Player, args []interface{}) {
 
@@ -100,8 +107,8 @@ func (yg *YGO) Chain(eventName string, ca *Card, pl *Player, args []interface{})
 	if cs.Len() > 0 {
 		//pl := ca.GetSummoner()
 		pl.MsgPub("连锁事件 "+eventName+" {self}", nil)
-
-		if !pl.Chain(eventName, ca, cs, args) {
+		pl.Chain(eventName, ca, cs, args)
+		if yg.both[eventName] {
 			pl.GetTarget().Chain(eventName, ca, cs, args)
 		}
 	}
@@ -190,6 +197,22 @@ func (yg *YGO) Loop() {
 
 	yg.Players[yg.round[0]].MsgPub("游戏开始，{self}先手！", nil)
 	nap(10)
+
+	yg.RegisterBothEvent(Summon)
+	yg.RegisterBothEvent(SummonFlip)
+	yg.RegisterBothEvent(SummonSpecial)
+	yg.RegisterBothEvent(Declaration)
+	yg.RegisterBothEvent(DamageStep)
+	yg.RegisterBothEvent(Flip)
+	yg.RegisterBothEvent(DestroyBeBattle)
+	yg.RegisterBothEvent(Deduct)
+	yg.RegisterBothEvent(Fought)
+	yg.RegisterBothEvent(Expres)
+	yg.RegisterBothEvent(Discard)
+	yg.RegisterBothEvent(Destroy)
+	yg.RegisterBothEvent(Disabled)
+	yg.RegisterBothEvent(UseTrap)
+	yg.RegisterBothEvent(UseMagic)
 loop:
 	for {
 		for _, v := range yg.round {

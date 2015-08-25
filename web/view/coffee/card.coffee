@@ -34,11 +34,13 @@ Card = (@scene, id=0, b=0) ->
   @info.className = "card_text"
   @img = document.createElement('img')
   @element.appendChild @img
-  @img.className = "card"
+  #@img.className = "card"
   @SetFront id
 
   @elementB = document.createElement('img')
-  @elementB.className = "card"
+  #@elementB.className = "card"
+
+  @SetClass "card"
   @SetBack b
   @object = new (THREE.CSS3DDoubleObject)(@element, @elementB)
   @object.position.x = Math.random() * 4000 - 2000
@@ -64,6 +66,10 @@ Card = (@scene, id=0, b=0) ->
 #Card::All = []
 
 Card::Index = {}
+
+Card::SetClass = (name) ->
+  @img.className = name
+  @elementB.className = name
 
 Card::Find = (uniq) ->
   @Index[uniq]

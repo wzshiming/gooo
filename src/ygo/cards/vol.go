@@ -2329,8 +2329,14 @@ func vol(cardBag *ygo.CardVersion) {
 		Lr:      ygo.LR_SpellCaster, // 魔法师
 		Attack:  900,
 		Defense: 1400,
-		//Initialize:    func(ca *ygo.Card) bool {}, // 初始
-		IsValid: false,
+		Initialize: func(ca *ygo.Card) bool {
+			ca.AddEvent(ygo.Deduct, func(tar *ygo.Player) {
+				pl := ca.GetSummoner()
+				pl.ActionDraw(1)
+			})
+			return true
+		}, // 初始
+		IsValid: true,
 	})
 
 	/*52*/
@@ -4456,7 +4462,7 @@ func vol(cardBag *ygo.CardVersion) {
 
 		Initialize: func(ca *ygo.Card) bool {
 			ca.RegisterPay(func(s string) {
-				if s != ygo.Trigger {
+				if s != ygo.UseTrap {
 					return
 				}
 				pl := ca.GetSummoner()
@@ -4559,7 +4565,7 @@ func vol(cardBag *ygo.CardVersion) {
 
 		Initialize: func(ca *ygo.Card) bool {
 			ca.RegisterPay(func(s string) {
-				if s != ygo.Trigger {
+				if s != ygo.UseTrap {
 					return
 				}
 				pl := ca.GetSummoner()
@@ -4605,7 +4611,7 @@ func vol(cardBag *ygo.CardVersion) {
 
 		Initialize: func(ca *ygo.Card) bool {
 			ca.RegisterPay(func(s string) {
-				if s != ygo.Trigger {
+				if s != ygo.UseTrap {
 					return
 				}
 				pl := ca.GetSummoner()
