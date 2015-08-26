@@ -104,13 +104,11 @@ func (yg *YGO) Chain(eventName string, ca *Card, pl *Player, args []interface{})
 			cs.EndPush(v)
 		}
 	})
-	if cs.Len() > 0 {
-		//pl := ca.GetSummoner()
+	if cs.Len() > 0 || yg.both[eventName] {
 		pl.MsgPub("连锁事件 "+eventName+" {self}", nil)
 		pl.Chain(eventName, ca, cs, args)
-		if yg.both[eventName] {
-			pl.GetTarget().Chain(eventName, ca, cs, args)
-		}
+		pl.GetTarget().Chain(eventName, ca, cs, args)
+
 	}
 	yg.EmptyEvent(Chain)
 
@@ -202,15 +200,15 @@ func (yg *YGO) Loop() {
 	yg.RegisterBothEvent(SummonFlip)
 	yg.RegisterBothEvent(SummonSpecial)
 	yg.RegisterBothEvent(Declaration)
-	yg.RegisterBothEvent(DamageStep)
-	yg.RegisterBothEvent(Flip)
-	yg.RegisterBothEvent(DestroyBeBattle)
-	yg.RegisterBothEvent(Deduct)
-	yg.RegisterBothEvent(Fought)
-	yg.RegisterBothEvent(Expres)
-	yg.RegisterBothEvent(Discard)
+	//yg.RegisterBothEvent(DamageStep)
+	//yg.RegisterBothEvent(Flip)
+	//yg.RegisterBothEvent(DestroyBeBattle)
+	//yg.RegisterBothEvent(Deduct)
+	//yg.RegisterBothEvent(Fought)
+	//yg.RegisterBothEvent(Expres)
+	//yg.RegisterBothEvent(Discard)
 	yg.RegisterBothEvent(Destroy)
-	yg.RegisterBothEvent(Disabled)
+	//yg.RegisterBothEvent(Disabled)
 	yg.RegisterBothEvent(UseTrap)
 	yg.RegisterBothEvent(UseMagic)
 loop:

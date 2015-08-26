@@ -89,8 +89,8 @@ func (ca *Card) Dispatch(eventName string, args ...interface{}) {
 	yg := ca.GetSummoner().Game()
 	if Pay != eventName {
 		ca.Events.Dispatch(Pay, eventName)
+		yg.Chain(eventName, ca, ca.GetSummoner(), args)
 	}
-	yg.Chain(eventName, ca, ca.GetSummoner(), args)
 	ca.Events.Dispatch(eventName, args...)
 }
 

@@ -3046,7 +3046,7 @@ func vol(cardBag *ygo.CardVersion) {
 
 		Initialize: func(ca *ygo.Card) bool {
 			ca.RegisterPay(func(s string) {
-				if s == ygo.Onset {
+				if s == ygo.UseMagic {
 					pl := ca.GetSummoner()
 					if c := pl.SelectFor(pl.Hand); c != nil {
 						c.Dispatch(ygo.Cost)
@@ -4462,7 +4462,7 @@ func vol(cardBag *ygo.CardVersion) {
 
 		Initialize: func(ca *ygo.Card) bool {
 			ca.RegisterPay(func(s string) {
-				if s != ygo.UseTrap {
+				if s != ygo.Trigger {
 					return
 				}
 				pl := ca.GetSummoner()
@@ -4513,14 +4513,16 @@ func vol(cardBag *ygo.CardVersion) {
 		Initialize: func(ca *ygo.Card) bool {
 
 			ca.RegisterPay(func(s string) {
-				if s == ygo.UseMagic {
-					pl := ca.GetSummoner()
-					if c := pl.SelectFor(pl.Hand); c != nil {
-						c.Dispatch(ygo.Cost)
-					} else {
-						ca.StopOnce(s)
-					}
+				if s != ygo.Trigger {
+					return
 				}
+				pl := ca.GetSummoner()
+				if c := pl.SelectFor(pl.Hand); c != nil {
+					c.Dispatch(ygo.Cost)
+				} else {
+					ca.StopOnce(s)
+				}
+
 			})
 
 			ca.RegisterOrdinaryTrap(ygo.UseMagic, func(c *ygo.Card) {
@@ -4565,7 +4567,7 @@ func vol(cardBag *ygo.CardVersion) {
 
 		Initialize: func(ca *ygo.Card) bool {
 			ca.RegisterPay(func(s string) {
-				if s != ygo.UseTrap {
+				if s != ygo.Trigger {
 					return
 				}
 				pl := ca.GetSummoner()
@@ -4611,7 +4613,7 @@ func vol(cardBag *ygo.CardVersion) {
 
 		Initialize: func(ca *ygo.Card) bool {
 			ca.RegisterPay(func(s string) {
-				if s != ygo.UseTrap {
+				if s != ygo.Trigger {
 					return
 				}
 				pl := ca.GetSummoner()

@@ -193,37 +193,25 @@ func (pl *Player) Chain(eventName string, ca *Card, cs *Cards, a []interface{}) 
 
 	pl.ResetReplyTime()
 	pl.MsgPub("等待{self}连锁", nil)
-	css := NewCards()
-	cs.ForEach(func(c *Card) bool {
-		if c != ca && c.GetSummoner() == pl {
-			css.EndPush(c)
-		}
-		return true
+	css := cs.Find(func(c *Card) bool {
+		return c != ca && c.GetSummoner() == pl
 	})
 
 	pl.Call(trigg(css))
 	if wi := pl.SelectWill(); wi.Uniq != 0 {
-		//pl.MsgPub("{self}选择{method}", Arg{"method": wi.Method})
-		css.ForEach(func(c *Card) bool {
-			if c.ToUint() != wi.Uniq {
-				return true
-			}
-
+		if c := css.ExistForUniq(wi.Uniq); c != nil {
 			e := func() {
 				pl.MsgPub("{self}连锁{event}", Arg{"self": c.ToUint(), "event": eventName})
-				c.Events.Dispatch(Pay, append(a, eventName)...)
-				c.Events.Dispatch(Trigger, append(a, wi.Method)...)
+				c.Dispatch(Trigger, a...)
 			}
 			if ca.Priority() >= c.Priority() {
 				ca.OnlyOnce(eventName, e, c)
 			} else {
 				e()
 			}
-			return false
-
-		})
-
-		//pl.MsgPub("{self}错误的连锁", nil)
+		} else {
+			pl.MsgPub("{self}错误的连锁", nil)
+		}
 	} else {
 		pl.MsgPub("{self}不连锁", nil)
 	}
