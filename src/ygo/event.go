@@ -6,14 +6,8 @@ func (ca *Card) Init() {
 	ca.effects = []*Card{}
 	//ca.summoner = ca.owner
 	ca.isValid = true
-	ca.OpenEvent(Disabled)
 	//	ca.le = LE
 	ca.registerNormal()
-	if ca.IsMonster() {
-		ca.registerMonster()
-	} else if ca.IsMagicAndTrap() {
-		ca.registerMagicAndTrap()
-	}
 	ca.baseOriginal.Initialize.Call(ca)
 
 }
@@ -28,54 +22,61 @@ func (ca *Card) registerNormal() {
 	// 进入墓地和 移除时 卡牌翻面
 	ca.AddEvent(InExtra, ca.SetFaceUpAttack)
 
-	// 花费
-	ca.AddEvent(Cost, func() {
-		pl := ca.GetSummoner()
-		ca.Dispatch(Disabled)
-		pl.MsgPub("{self}被花费", Arg{"self": ca.ToUint()})
-	})
-
-	// 丢弃
-	ca.AddEvent(Discard, func() {
-		pl := ca.GetSummoner()
-		ca.Dispatch(Disabled)
-		pl.MsgPub("{self}被丢弃", Arg{"self": ca.ToUint()})
-	})
-
-	// 失效
-	ca.AddEvent(Disabled, func() {
-		if ca.isValid {
-			//pl := ca.GetSummoner()
-			ca.isValid = false
-			ca.ToGrave()
-			ca.CloseEvent(Disabled)
-			//pl.MsgPub("{self}失效", Arg{"self": ca.ToUint()})
-		}
-	})
-
-	// 进入墓地和除外
-	ca.AddEvent(InGrave, ca.SetFaceUpAttack)
-	ca.AddEvent(InRemoved, ca.SetFaceUpAttack)
-
-	//	// 离开墓地和除外 初始化
-	//	ca.AddEvent(OutGrave, func() {
-	//		ca.Init()
-	//	})
-
-	//	ca.AddEvent(OutRemoved, func() {
-	//		ca.Init()
-	//	})
-
-	// 被破坏
+	// 破坏
 	ca.AddEvent(Destroy, func(c *Card) {
 		pl := ca.GetSummoner()
 		r := Arg{"self": ca.ToUint()}
 		if c != nil {
 			r["rival"] = c.ToUint()
 		}
-		ca.Dispatch(Disabled)
+		ca.ToGrave()
 		pl.MsgPub("{self}被{rival}破坏", r)
 	})
+
+	// 战斗破坏
+	ca.AddEvent(DestroyBeBattle, func(c *Card) {
+		ca.Dispatch(Destroy, c)
+	})
+
+	// 规则破坏
+	ca.AddEvent(DestroyBeRule, func(c *Card) {
+		pl := ca.GetSummoner()
+		ca.ToGrave()
+		pl.MsgPub("{self}规则破坏", Arg{"self": ca.ToUint()})
+	})
+
+	// 花费
+	ca.AddEvent(Cost, func() {
+		pl := ca.GetSummoner()
+		ca.ToGrave()
+		pl.MsgPub("{self}被花费", Arg{"self": ca.ToUint()})
+	})
+
+	// 丢弃
+	ca.AddEvent(Discard, func() {
+		pl := ca.GetSummoner()
+		ca.ToGrave()
+		pl.MsgPub("{self}被丢弃", Arg{"self": ca.ToUint()})
+	})
+
+	// 使用完毕
+	ca.AddEvent(Depleted, func() {
+		pl := ca.GetSummoner()
+		ca.ToGrave()
+		pl.MsgPub("{self}使用完毕", Arg{"self": ca.ToUint()})
+	})
+
+	// 失效
+	ca.AddEvent(Disabled, func() {
+		if ca.isValid {
+			ca.isValid = false
+			ca.CloseEvent(Disabled)
+		}
+	})
+
+	// 进入墓地和除外
+	ca.AddEvent(InGrave, ca.SetFaceUpAttack)
+	ca.AddEvent(InRemoved, ca.SetFaceUpAttack)
 
 	// 被移除
 	ca.AddEvent(Removed, func() {
@@ -84,28 +85,36 @@ func (ca *Card) registerNormal() {
 		pl.MsgPub("{self}被移除", Arg{"self": ca.ToUint()})
 	})
 
-	// 覆盖
-	ca.AddEvent(Use2, func() {
-		ca.Dispatch(Cover)
-	})
-
-	// 使用
-	ca.AddEvent(Use1, func() {
-		if ca.IsMonster() { // 怪兽
-			ca.Dispatch(Summon)
-		} else {
-			ca.Dispatch(Onset)
-		}
-	})
-
 	// 被抽到手牌
 	ca.AddEvent(InHand, func() {
 		pl := ca.GetSummoner()
 		pl.Call(setFront(ca))
 		pl.Call(exprCard(ca, LE_FaceUpAttack))
 		pl.GetTarget().Call(exprCard(ca, LE_FaceDownAttack))
-
 	})
+
+	// 覆盖
+	ca.AddEvent(Use2, func() {
+		ca.Dispatch(Cover)
+	})
+
+	if ca.IsMonster() {
+		ca.registerMonster()
+		ca.AddEvent(OutMzone, func() {
+			ca.Dispatch(Disabled)
+		})
+		ca.AddEvent(Use1, func() {
+			ca.Dispatch(Summon)
+		})
+	} else if ca.IsMagicAndTrap() {
+		ca.registerMagicAndTrap()
+		ca.AddEvent(OutSzone, func() {
+			ca.Dispatch(Disabled)
+		})
+		ca.AddEvent(Use1, func() {
+			ca.Dispatch(Onset)
+		})
+	}
 }
 
 func (ca *Card) registerMagicAndTrap() {
@@ -141,25 +150,58 @@ func (ca *Card) registerMagic() {
 	})
 }
 
-// 注册一张通常魔法卡
-func (ca *Card) RegisterOrdinaryMagic(f interface{}) {
-	ca.RegisterUnordinaryMagic(f)
-	ca.AddEvent(UseMagic, func() {
-		if ca.IsInSzone() {
-			ca.Dispatch(Disabled)
-		}
-	})
-}
-
 // 注册一张通常魔法卡手动失效
 func (ca *Card) RegisterUnordinaryMagic(f interface{}) {
 	ca.registerMagic()
 	ca.AddEvent(Effect0, f)
 	ca.AddEvent(UseMagic, func() {
 		pl := ca.GetSummoner()
-		if ca.IsInSzone() {
+		if ca.IsValid() {
 			ca.Dispatch(Effect0)
 			pl.MsgPub("发动{self}成功!", Arg{"self": ca.ToUint()})
+		}
+	})
+}
+
+// 注册一张通常魔法卡
+func (ca *Card) RegisterOrdinaryMagic(f interface{}) {
+	ca.RegisterUnordinaryMagic(f)
+	ca.AddEvent(UseMagic, func() {
+		if ca.IsValid() {
+			ca.Dispatch(Depleted)
+		}
+	})
+}
+
+// 注册一个通常的陷阱卡下个回合才能发动的效果
+func (ca *Card) registerTrap(event string, e interface{}) {
+	ca.AddEvent(InSzone, func() {
+		pl := ca.GetSummoner()
+		pl.OnlyOnce(RoundEnd, func() {
+			ca.RegisterGlobalListen(event, e)
+		}, ca, event, e)
+	}, e, event, e)
+
+}
+
+// 注册一张通常的陷阱卡 效果
+func (ca *Card) RegisterUnordinaryTrap(event string, e interface{}) {
+	ca.registerTrap(event, e)
+	ca.AddEvent(Trigger, func() {
+		ca.Dispatch(UseTrap)
+	})
+	ca.AddEvent(UseTrap, func() {
+		if ca.IsValid() {
+			ca.Dispatch(Chain)
+		}
+	})
+}
+
+func (ca *Card) RegisterOrdinaryTrap(event string, e interface{}) {
+	ca.RegisterUnordinaryTrap(event, e)
+	ca.AddEvent(UseTrap, func() {
+		if ca.IsValid() {
+			ca.Dispatch(Depleted)
 		}
 	})
 }
@@ -187,7 +229,7 @@ func (ca *Card) RegisterEquipMagic(a Action, f1 interface{}, f2 interface{}) {
 		pl := ca.GetSummoner()
 		pl.MsgPub("{self}选择装备的目标!", Arg{"self": ca.ToUint()})
 		tar := pl.GetTarget()
-		if c := pl.SelectFor(pl.Mzone, tar.Mzone); c != nil && a.Call(c) {
+		if c := pl.SelectForWarn(pl.Mzone, tar.Mzone, a); c != nil {
 
 			// 装备卡 离开场地时
 			ca.OnlyOnce(Disabled, func() {
@@ -195,13 +237,13 @@ func (ca *Card) RegisterEquipMagic(a Action, f1 interface{}, f2 interface{}) {
 			}, c)
 
 			c.OnlyOnce(Disabled, func() {
-				ca.Dispatch(Disabled)
+				ca.Dispatch(Depleted)
 			}, ca)
 
 			// 监听目标的改变判断目标的改变是否允许
 			c.AddEvent(Change, func() {
 				if !c.IsInMzone() || !a.Call(c) {
-					ca.Dispatch(Disabled)
+					ca.Dispatch(Depleted)
 				}
 			}, ca)
 
@@ -209,7 +251,7 @@ func (ca *Card) RegisterEquipMagic(a Action, f1 interface{}, f2 interface{}) {
 			ca.Dispatch(Effect1, c)
 			pl.MsgPub("{self}装备成功!", Arg{"self": ca.ToUint()})
 		} else {
-			ca.Dispatch(Disabled)
+			ca.Dispatch(DestroyBeRule)
 			pl.MsgPub("选择的目标不合法,{self}被破坏!", Arg{"self": ca.ToUint()})
 		}
 	})
@@ -219,38 +261,6 @@ func (ca *Card) RegisterEquipMagic(a Action, f1 interface{}, f2 interface{}) {
 
 func (ca *Card) RegisterPlaceMagic(f interface{}) {
 	ca.registerMagic()
-}
-
-// 注册一个通常的陷阱卡   下个回合才能发动  以及 连锁的事件
-func (ca *Card) registerTrap(event string, e interface{}) {
-	ca.AddEvent(InSzone, func() {
-		pl := ca.GetSummoner()
-		pl.OnlyOnce(RoundEnd, func() {
-			ca.RegisterGlobalListen(event, e)
-		}, ca, event, e)
-	}, e, event, e)
-
-	ca.AddEvent(Trigger, func() {
-		ca.Dispatch(UseTrap)
-	})
-}
-
-func (ca *Card) RegisterOrdinaryTrap(event string, e interface{}) {
-	ca.RegisterUnordinaryTrap(event, e)
-	ca.AddEvent(UseTrap, func() {
-		if ca.IsInSzone() {
-			ca.Dispatch(Disabled)
-		}
-	})
-}
-
-func (ca *Card) RegisterUnordinaryTrap(event string, e interface{}) {
-	ca.registerTrap(event, e)
-	ca.AddEvent(UseTrap, func() {
-		if ca.IsInSzone() {
-			ca.Dispatch(Chain)
-		}
-	})
 }
 
 func (ca *Card) RegisterPay(f interface{}) {
@@ -285,7 +295,7 @@ func (ca *Card) RegisterFusionMonster(names ...string) {
 					})
 				} else if is.Len() > v {
 					for i := 0; i != v; i++ {
-						tm := pl.SelectForCards(is)
+						tm := pl.SelectForPopup(is)
 						if tm == nil {
 							pl.MsgPub("选择非法目标 {self}, 召唤失败!", Arg{"self": ca.ToUint()})
 							ca.StopOnce(s)
@@ -342,28 +352,25 @@ func (ca *Card) registerMonster() {
 				pl.MsgPub("{self}需要解放{size}只怪兽作为代价", Arg{"self": ca.ToUint(), "size": i})
 			}
 			for k := 0; k < i; {
-				if t := pl.SelectFor(pl.Mzone); t != nil {
+				if t := pl.SelectForWarn(pl.Mzone); t != nil {
 					t.Dispatch(Freedom, ca, &k)
 				} else {
-					ca.Dispatch(Destroy)
 					ca.StopOnce(s)
 					pl.MsgPub("{self}召唤失败，祭品不足!", Arg{"self": ca.ToUint()})
 					return
 				}
 			}
-			if s == Summon {
-				ca.SetFaceUpAttack()
-			}
 		},
 		// 召唤
 		Summon: func() {
-			pl := ca.GetSummoner()
-			ca.ToMzone()
-			ca.SetFaceUpAttack()
-			ca.SetNotCanChange()
-			pl.MsgPub("{self}召唤成功!", Arg{"self": ca.ToUint()})
-			ca.ShowInfo()
-
+			if ca.IsValid() {
+				pl := ca.GetSummoner()
+				ca.ToMzone()
+				ca.SetFaceUpAttack()
+				ca.SetNotCanChange()
+				pl.MsgPub("{self}召唤成功!", Arg{"self": ca.ToUint()})
+				ca.ShowInfo()
+			}
 		},
 		// 覆盖
 		Cover: func() {
@@ -463,24 +470,24 @@ func (ca *Card) registerMonster() {
 				if c.IsAttack() {
 					t := ca.GetAttack() - c.GetAttack()
 					if t > 0 {
-						c.Dispatch(Destroy, ca)
+						c.Dispatch(DestroyBeBattle, ca)
 						tar.ChangeHp(-t)
-						c.Dispatch(Deduct, tar)
+						c.Dispatch(Deduct, c, tar)
 					} else if t < 0 {
-						ca.Dispatch(Destroy, c)
+						ca.Dispatch(DestroyBeBattle, c)
 						pl.ChangeHp(t)
-						ca.Dispatch(Deduct, pl)
+						ca.Dispatch(Deduct, ca, pl)
 					} else {
-						c.Dispatch(Destroy, ca)
-						ca.Dispatch(Destroy, c)
+						c.Dispatch(DestroyBeBattle, ca)
+						ca.Dispatch(DestroyBeBattle, c)
 					}
 				} else if c.IsDefense() {
 					t := ca.GetAttack() - c.GetDefense()
 					if t > 0 {
-						c.Dispatch(Destroy, ca)
+						c.Dispatch(DestroyBeBattle, ca)
 					} else if t < 0 {
 						pl.ChangeHp(t)
-						ca.Dispatch(Deduct, pl)
+						ca.Dispatch(Deduct, ca, pl)
 					}
 				}
 				ca.Dispatch(Fought, c)
@@ -488,7 +495,7 @@ func (ca *Card) registerMonster() {
 			} else {
 				tar := pl.GetTarget()
 				tar.ChangeHp(-ca.GetAttack())
-				ca.Dispatch(Deduct, tar)
+				ca.Dispatch(Deduct, ca, tar)
 				pl.MsgPub("{self}直接攻击了{rival}！", Arg{"self": ca.ToUint()})
 			}
 

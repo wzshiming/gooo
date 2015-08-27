@@ -17,7 +17,7 @@
 		while(ws.msglist.length != 0) {
 			d = ws.msglist.shift()
 			msg = JSON.parse(d.slice(4, d.length));
-			this.event( d.charCodeAt(0), d.charCodeAt(1), d.charCodeAt(2), d.charCodeAt(3), msg );
+			this.Event( d.charCodeAt(0), d.charCodeAt(1), d.charCodeAt(2), d.charCodeAt(3), msg );
 		}
 		ws.msglist = null
 	}
@@ -46,6 +46,25 @@
 
 	ws.Callback = {};
 	ws.i = 0;
+
+	ws.sendlist = null;
+
+	ws.sendloop = function(){
+		while(ws.sendlist.length != 0) {
+			d = ws.sendlist.shift();
+			this.send(d);
+		}
+		ws.sendlist = null
+	}
+	ws.Send = function(b) {
+		if(ws.sendlist == null) {
+			ws.sendlist = []
+			ws.sendlist.push(b)
+			ws.sendloop()
+		}else {
+			ws.sendlist.push(b)
+		}
+	}
 	
 	ws.SendMsg = function(c,msg,func) {
 		if (this.readyState == this.OPEN) { 
@@ -60,14 +79,14 @@
 			c3 = Number(cs[2]);
 			console.log(this.i,c1,c2,c3,msg);
 			var r = (String.fromCharCode(this.i & 0xFF, c1 & 0xFF, c2 & 0xFF, c3 & 0xFF) + msg).toBase64();
-			this.send(r);
+			this.Send(r);
 			if(typeof func == "function"){
 				this.Register(this.i + "," + c,func);
 			}
 		} 
 	};
 	
-	ws.event = function(i, c1, c2, c3, msg){
+	ws.Event = function(i, c1, c2, c3, msg){
 		var n = c1 + "," + c2 + "," +c3;
 		var n2 = i+","+n;
 		if(msg != null && (typeof msg.error == "string") && msg.error != ""){

@@ -200,6 +200,8 @@ func (yg *YGO) Loop() {
 	yg.RegisterBothEvent(SummonFlip)
 	yg.RegisterBothEvent(SummonSpecial)
 	yg.RegisterBothEvent(Declaration)
+	yg.RegisterBothEvent(UseTrap)
+	yg.RegisterBothEvent(UseMagic)
 	//yg.RegisterBothEvent(DamageStep)
 	//yg.RegisterBothEvent(Flip)
 	//yg.RegisterBothEvent(DestroyBeBattle)
@@ -207,10 +209,8 @@ func (yg *YGO) Loop() {
 	//yg.RegisterBothEvent(Fought)
 	//yg.RegisterBothEvent(Expres)
 	//yg.RegisterBothEvent(Discard)
-	yg.RegisterBothEvent(Destroy)
+	//yg.RegisterBothEvent(Destroy)
 	//yg.RegisterBothEvent(Disabled)
-	yg.RegisterBothEvent(UseTrap)
-	yg.RegisterBothEvent(UseMagic)
 loop:
 	for {
 		for _, v := range yg.round {

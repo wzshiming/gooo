@@ -40,13 +40,11 @@ const (
 	DamageStep  = "DamageStep"  // 伤害步骤
 
 	// 怪兽事件
-	Flip            = "Flip"            // 反转
-	Expression      = "Expression"      // 改变表示形式
-	DestroyBeBattle = "DestroyBeBattle" // 战斗破坏
-	Freedom         = "Freedom"         // 解放
-	Deduct          = "Deduct"          // 直接攻击玩家造成伤害
-	Fought          = "Fought"          // 战斗步骤结束对双方怪兽发出
-	Expres          = "Expres"          // 表示形式改变
+	Flip       = "Flip"       // 反转
+	Expression = "Expression" // 改变表示形式
+	Deduct     = "Deduct"     // 直接攻击玩家造成伤害
+	Fought     = "Fought"     // 战斗步骤结束对双方怪兽发出
+	Expres     = "Expres"     // 表示形式改变
 
 	// 卡牌事件
 	InDeck     = In + string(LL_Deck)     // 进入卡组
@@ -68,17 +66,20 @@ const (
 
 	Change = "Change" // 卡牌属性发生变化时
 
-	// 多种失效形式
-	Cost          = "Cost"          // 花费
-	Removed       = "Removed"       // 移除
-	Disabled      = "Disabled"      // 失效
-	Destroy       = "Destroy"       // 破坏 送去墓地
-	DestroyBeRule = "Destroyberule" // 规则破坏
-	Discard       = "Discard"       // 丢弃
+	// 多种进墓地和除外形式
+	Removed         = "Removed"         // 移除
+	Cost            = "Cost"            // 花费
+	Disabled        = "Disabled"        // 失效
+	Destroy         = "Destroy"         // 破坏 送去墓地
+	DestroyBeBattle = "DestroyBeBattle" // 战斗破坏
+	DestroyBeRule   = "DestroyBeRule"   // 规则破坏
+	Discard         = "Discard"         // 丢弃
+	Depleted        = "Depleted"        // 使用完的
+	Freedom         = "Freedom"         // 解放
 
 	// 由卡牌发出
-	UseMagic = "usemagic" // 使用魔法卡
-	UseTrap  = "usetrap"  // 使用陷阱卡
+	UseMagic = "UseMagic" // 使用魔法卡
+	UseTrap  = "UseTrap"  // 使用陷阱卡
 
 	Effect0 = "effect0" // 效果
 	Effect1 = "effect1" // 效果

@@ -204,7 +204,7 @@ func (pl *Player) Chain(eventName string, ca *Card, cs *Cards, a []interface{}) 
 				pl.MsgPub("{self}连锁{event}", Arg{"self": c.ToUint(), "event": eventName})
 				c.Dispatch(Trigger, a...)
 			}
-			if ca.Priority() >= c.Priority() {
+			if ca.Priority() > c.Priority() {
 				ca.OnlyOnce(eventName, e, c)
 			} else {
 				e()
@@ -265,33 +265,40 @@ func (pl *Player) main(lp lp_type) {
 	//pl.ClearCode()
 	pl.ResetWaitTime()
 	for {
-		p := pl.SelectWill()
-		if p.Uniq == 0 {
-			if p.Method == uint(LP_Battle) && lp == LP_Main1 {
+		ca, u := pl.selectForWarn(pl.Hand, pl.Mzone, pl.Szone, func(c *Card) bool {
+			if c.IsInSzone() && c.IsTrap() {
+				return false
+			} else if c.IsInMzone() && !c.IsCanChange() {
+				return false
+			}
+			return true
+		})
+		if ca == nil {
+			if u == uint(LP_Battle) && lp == LP_Main1 {
 				break
-			} else if p.Method == uint(LP_End) {
+			} else if u == uint(LP_End) {
 				if lp == LP_Main1 {
 					pl.StopOnce(MP)
 					pl.StopOnce(BP)
 				}
 				break
 			}
-			if p.Method == 0 {
+			if u == 0 {
 				break
 			}
 			continue
 		}
 
-		if t := pl.Hand.ExistForUniq(p.Uniq); t != nil {
-			if p.Method == uint(LI_Use1) {
-				t.Dispatch(Use1, t)
-			} else if p.Method == uint(LI_Use2) {
-				t.Dispatch(Use2, t)
+		if ca.IsInHand() {
+			if u == uint(LI_Use1) {
+				ca.Dispatch(Use1, ca)
+			} else if u == uint(LI_Use2) {
+				ca.Dispatch(Use2, ca)
 			}
-		} else if t := pl.Mzone.ExistForUniq(p.Uniq); t != nil {
-			t.Dispatch(Expression)
-		} else if t := pl.Szone.ExistForUniq(p.Uniq); t != nil {
-			t.Dispatch(Onset)
+		} else if ca.IsInMzone() {
+			ca.Dispatch(Expression)
+		} else if ca.IsInSzone() {
+			ca.Dispatch(Onset)
 		} else {
 			pl.Msg("非法目标", nil)
 		}
@@ -303,42 +310,39 @@ func (pl *Player) battle(lp lp_type) {
 	//pl.ClearCode()
 	pl.ResetWaitTime()
 	for {
-		i := pl.SelectWill()
-		if i.Uniq == 0 {
-			if i.Method == uint(LP_Main2) {
+		ca, u := pl.selectForWarn(pl.Mzone, func(c *Card) bool {
+			return c.IsCanAttack()
+		})
+		if ca == nil {
+			if u == uint(LP_Main2) {
 				break
-			} else if i.Method == uint(LP_End) {
+			} else if u == uint(LP_End) {
 				pl.StopOnce(MP)
 				break
 			}
-			if i.Method == 0 {
+			if u == 0 {
 				break
 			}
 			continue
 		}
-
-		t1 := pl.Mzone.ExistForUniq(i.Uniq)
-		if t1 == nil || !t1.IsFaceUpAttack() {
+		if !ca.IsInMzone() || !ca.IsFaceUpAttack() {
 			pl.Msg("请选择怪兽区正面攻击表示的怪兽", nil)
 			continue
 		}
-
-		if !t1.IsCanAttack() {
+		if !ca.IsCanAttack() {
 			pl.Msg("当前怪兽不能攻击", nil)
 			continue
 		}
-		if pl.GetTarget().Mzone.Len() != 0 {
+		tar := pl.GetTarget()
+		if tar.Mzone.Len() != 0 {
 			pl.Msg("选择要攻击的目标", nil)
-			if j := pl.SelectWill(); j.Uniq != 0 {
-				t2 := pl.Game().GetCard(j.Uniq)
-				if pl.GetTarget().Mzone.IsExistCard(t2) {
-					t1.Dispatch(Declaration, t2)
-				} else {
-					pl.Msg("请选择对方怪兽区的怪兽", nil)
-				}
+			if c, _ := pl.selectForWarn(tar.Mzone); c.IsInMzone() {
+				ca.Dispatch(Declaration, c)
+			} else {
+				pl.Msg("请选择对方怪兽区的怪兽", nil)
 			}
 		} else {
-			t1.Dispatch(Declaration)
+			ca.Dispatch(Declaration)
 		}
 	}
 
@@ -350,7 +354,7 @@ func (pl *Player) end(lp lp_type) {
 		pl.ResetReplyTime()
 		pl.Msg("请{self}选择丢弃的手牌", nil)
 		for k := 0; k != i; k++ {
-			ca := pl.SelectFor(pl.Hand)
+			ca := pl.SelectForWarn(pl.Hand)
 			if ca == nil {
 				ca = pl.Hand.EndPop()
 			}
@@ -443,6 +447,17 @@ func (pl *Player) ResetWaitTime() {
 	pl.PassTime = pl.WaitTime
 }
 
+func (pl *Player) IsCanSummon() bool {
+	return pl.lastSummonRound < pl.GetRound()
+}
+func (pl *Player) SetCanSummon() {
+	pl.lastSummonRound = 0
+}
+
+func (pl *Player) SetNotCanSummon() {
+	pl.lastSummonRound = pl.GetRound()
+}
+
 func (pl *Player) SelectWill() (p MsgCode) {
 	//pl.ClearCode()
 	pl.CallAll(flashPhases(pl))
@@ -460,94 +475,50 @@ func (pl *Player) SelectWill() (p MsgCode) {
 	return
 }
 
-func (pl *Player) IsCanSummon() bool {
-	return pl.lastSummonRound < pl.GetRound()
+func (pl *Player) Select() (*Card, uint) {
+	p := pl.SelectWill()
+	if p.Uniq != 0 {
+		return pl.Game().GetCard(p.Uniq), p.Method
+	}
+	return nil, p.Method
 }
-func (pl *Player) SetCanSummon() {
-	pl.lastSummonRound = 0
+func (pl *Player) selectForPopup(ci ...interface{}) (c *Card, u uint) {
+	css := NewCards(ci...)
+	if css.Len() == 0 {
+		return
+	}
+	pl.Call(setPick(css, pl))
+	defer pl.Call(setPick(nil, pl))
+	if c, u = pl.Select(); c != nil {
+		if css.IsExistCard(c) {
+			return
+		}
+	}
+	return
+}
+func (pl *Player) SelectForPopup(ci ...interface{}) *Card {
+	c, _ := pl.selectForPopup(ci...)
+	return c
 }
 
-func (pl *Player) SetNotCanSummon() {
-	pl.lastSummonRound = pl.GetRound()
-}
-
-func (pl *Player) Select() (t *Card) {
-	//pl.ClearCode()
-	pl.CallAll(flashPhases(pl))
-	for {
-		select {
-		case <-time.After(time.Second):
-			pl.PassTime -= time.Second
-			if pl.PassTime <= 0 {
-				return
-			}
-		case p := <-pl.GetCode():
-			t = pl.Game().GetCard(p.Uniq)
+func (pl *Player) selectForWarn(ci ...interface{}) (c *Card, u uint) {
+	css := NewCards(ci...)
+	if css.Len() == 0 {
+		return
+	}
+	pl.Call(trigg(css))
+	defer func() {
+		pl.Call(trigg(nil))
+	}()
+	if c, u = pl.Select(); c != nil {
+		if css.IsExistCard(c) {
 			return
 		}
 	}
 	return
 }
 
-func (pl *Player) SelectForCards(ca *Cards) *Card {
-	defer pl.Call(setPick(nil, pl))
-	pl.Call(setPick(ca, pl))
-	//pl.Msg("从下列卡牌选择", nil)
-	if c := pl.Select(); c != nil {
-		for _, v := range *ca {
-			if v == c {
-				return c
-			}
-		}
-	}
-	return nil
-}
-
-//func (pl *Player) SelectFor(cp ...*Group) *Card {
-//	s := []string{}
-//	for _, v := range cp {
-//		s = append(s, v.GetOwner().Name+" "+string(v.GetName()))
-//	}
-
-//	pl.Msg("从下列区域选择卡牌 {c1}", Arg{"c1": s})
-//	cs := NewCards()
-//	for _, v := range cp {
-//		v.ForEach(func(c *Card) bool {
-//			cs.EndPush(c)
-//			return true
-//		})
-//	}
-
-//	return pl.SelectForCards(cs)
-//}
-
-func (pl *Player) SelectFor(ci ...interface{}) *Card {
-	s := []string{}
-	as := []Action{}
-	cp := []*Group{}
-	for _, v := range ci {
-		switch t := v.(type) {
-		case *Group:
-			s = append(s, t.GetOwner().Name+" "+string(t.GetName()))
-			cp = append(cp, t)
-		case Action:
-			as = append(as, t)
-		}
-	}
-
-	pl.Msg("从下列区域选择卡牌 {c1}", Arg{"c1": s})
-	if c := pl.Select(); c != nil {
-
-		for _, v := range cp {
-			if v.IsExistCard(c) {
-				for _, a := range as {
-					if !a.Call(c) {
-						return nil
-					}
-				}
-				return c
-			}
-		}
-	}
-	return nil
+func (pl *Player) SelectForWarn(ci ...interface{}) *Card {
+	c, _ := pl.selectForWarn(ci...)
+	return c
 }

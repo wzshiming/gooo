@@ -6,12 +6,36 @@ import (
 
 type Cards []*Card
 
-func NewCards(css ...*Cards) *Cards {
-	cs := &Cards{}
-	for _, v := range css {
-		cs.Join(v)
+func NewCards(ci ...interface{}) (css *Cards) {
+	css = &Cards{}
+	if len(ci) == 0 {
+		return
 	}
-	return cs
+	as := []Action{}
+	for _, v := range ci {
+		switch t := v.(type) {
+		case *Cards:
+			css.Join(t)
+		case *Group:
+			css.Join(&t.Cards)
+		case func(*Card) bool:
+			as = append(as, (Action)(t))
+		case Action:
+			as = append(as, t)
+		}
+	}
+	if len(as) == 0 {
+		return
+	}
+	css = css.Find(func(c *Card) bool {
+		for _, a := range as {
+			if !a.Call(c) {
+				return false
+			}
+		}
+		return true
+	})
+	return
 }
 
 func (cp *Cards) Join(cs *Cards) {
@@ -26,7 +50,7 @@ func (cp *Cards) Clear() {
 }
 
 func (cp *Cards) Clone() (p *Cards) {
-	p = NewCards()
+	p = &Cards{}
 	c := append(*p, (*cp)...)
 	*p = c
 	return
@@ -133,7 +157,7 @@ func (cp *Cards) ForEach(fun func(*Card) bool) {
 }
 
 func (cp *Cards) Find(fun func(*Card) bool) (cs *Cards) {
-	cs = NewCards()
+	cs = &Cards{}
 	for _, v := range *cp {
 		if fun(v) {
 			cs.EndPush(v)

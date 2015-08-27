@@ -517,7 +517,7 @@ func (ca *Card) ToExtra() {
 func (ca *Card) ToMzone() {
 	pl := ca.GetSummoner()
 	if pl.Mzone.Len() >= 5 {
-		ca.Dispatch(Disabled)
+		ca.Dispatch(DestroyBeRule)
 	} else {
 		pl.Mzone.EndPush(ca)
 	}
@@ -527,7 +527,7 @@ func (ca *Card) ToMzone() {
 func (ca *Card) ToSzone() {
 	pl := ca.GetOwner()
 	if pl.Szone.Len() >= 5 {
-		ca.Dispatch(Disabled)
+		ca.Dispatch(DestroyBeRule)
 	} else {
 		pl.Szone.EndPush(ca)
 	}

@@ -14,10 +14,10 @@ const (
 	LC_RiteMonster                                    //仪式怪兽 蓝色
 	LC_OrdinaryMagic                                  //普通魔法 通常
 	LC_RiteMagic                                      //仪式魔法
-	LC_SustainsMagic                                  //永续魔法 速度2
+	LC_SustainsMagic                                  //永续魔法
 	LC_EquipMagic                                     //装备魔法
 	LC_PlaceMagic                                     //场地魔法
-	LC_RushMagic                                      //速攻魔法
+	LC_RushMagic                                      //速攻魔法 速度2
 	LC_OrdinaryTrap                                   //普通陷阱 速度2
 	LC_SustainsTrap                                   //永续陷阱 速度2
 	LC_ReactionTrap                                   //反击陷阱 速度3
