@@ -51,7 +51,7 @@ type Player struct {
 
 func NewPlayer(yg *YGO) *Player {
 	pl := &Player{
-		Events:    dispatcher.NewForkEvent(yg.Fork),
+		Events:    dispatcher.NewForkEvent(yg.GetFork()),
 		Camp:      1,
 		Hp:        4000,
 		DrawSize:  1,
@@ -100,26 +100,6 @@ func NewPlayer(yg *YGO) *Player {
 
 	pl.AddEvent(RoundBegin, func() {
 		pl.MsgPub("{self}进入第{round}回合", Arg{"round": pl.GetRound()})
-	})
-
-	pl.AddEvent(DP, func() {
-		pl.MsgPub("{self}进入抽牌阶段", nil)
-	})
-
-	pl.AddEvent(SP, func() {
-		pl.MsgPub("{self}进入预备阶段", nil)
-	})
-
-	pl.AddEvent(MP, func() {
-		pl.MsgPub("{self}进入主阶段", nil)
-	})
-
-	pl.AddEvent(BP, func() {
-		pl.MsgPub("{self}进入战斗阶段", nil)
-	})
-
-	pl.AddEvent(EP, func() {
-		pl.MsgPub("{self}进入结束阶段", nil)
 	})
 
 	pl.AddEvent(DP, pl.draw)
@@ -192,7 +172,7 @@ func (pl *Player) Chain(eventName string, ca *Card, cs *Cards, a []interface{}) 
 	pl.CallAll(flashPhases(pl))
 
 	pl.ResetReplyTime()
-	pl.MsgPub("等待{self}连锁", nil)
+	pl.MsgPub("{rival}的{event}事件等待{self}连锁", Arg{"rival": ca.ToUint(), "event": eventName})
 	css := cs.Find(func(c *Card) bool {
 		return c != ca && c.GetSummoner() == pl
 	})
@@ -200,14 +180,14 @@ func (pl *Player) Chain(eventName string, ca *Card, cs *Cards, a []interface{}) 
 	pl.Call(trigg(css))
 	if wi := pl.SelectWill(); wi.Uniq != 0 {
 		if c := css.ExistForUniq(wi.Uniq); c != nil {
-			e := func() {
-				pl.MsgPub("{self}连锁{event}", Arg{"self": c.ToUint(), "event": eventName})
-				c.Dispatch(Trigger, a...)
-			}
 			if ca.Priority() > c.Priority() {
-				ca.OnlyOnce(eventName, e, c)
+				ca.OnlyOnce(eventName, func() {
+					pl.MsgPub("{self}稍后连锁{rival}的{event}事件", Arg{"self": c.ToUint(), "rival": ca.ToUint(), "event": eventName})
+					c.Dispatch(Trigger, a...)
+				}, c)
 			} else {
-				e()
+				pl.MsgPub("{self}优先连锁{rival}的{event}事件", Arg{"self": c.ToUint(), "rival": ca.ToUint(), "event": eventName})
+				c.Dispatch(Trigger, a...)
 			}
 		} else {
 			pl.MsgPub("{self}错误的连锁", nil)
@@ -247,6 +227,7 @@ func (pl *Player) round() (err error) {
 }
 
 func (pl *Player) draw(lp lp_type) {
+	pl.MsgPub("{self}进入抽牌阶段", nil)
 	pl.Phases = lp
 	pl.CallAll(flashPhases(pl))
 
@@ -255,12 +236,14 @@ func (pl *Player) draw(lp lp_type) {
 }
 
 func (pl *Player) standby(lp lp_type) {
+	pl.MsgPub("{self}进入预备阶段", nil)
 	pl.Phases = lp
 	pl.CallAll(flashPhases(pl))
 
 }
 
 func (pl *Player) main(lp lp_type) {
+	pl.MsgPub("{self}进入主阶段", nil)
 	pl.Phases = lp
 	//pl.ClearCode()
 	pl.ResetWaitTime()
@@ -306,12 +289,13 @@ func (pl *Player) main(lp lp_type) {
 }
 
 func (pl *Player) battle(lp lp_type) {
+	pl.MsgPub("{self}进入战斗阶段", nil)
 	pl.Phases = lp
 	//pl.ClearCode()
 	pl.ResetWaitTime()
 	for {
 		ca, u := pl.selectForWarn(pl.Mzone, func(c *Card) bool {
-			return c.IsCanAttack()
+			return c.IsFaceUpAttack() && c.IsCanAttack()
 		})
 		if ca == nil {
 			if u == uint(LP_Main2) {
@@ -349,6 +333,7 @@ func (pl *Player) battle(lp lp_type) {
 }
 
 func (pl *Player) end(lp lp_type) {
+	pl.MsgPub("{self}进入结束阶段", nil)
 	pl.Phases = lp
 	if i := pl.Hand.Len() - pl.MaxSdi; i > 0 {
 		pl.ResetReplyTime()

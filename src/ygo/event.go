@@ -12,9 +12,6 @@ func (ca *Card) Init() {
 
 }
 
-// 事件各种混乱
-// 重新整理
-// 精确到  魔陷卡使用过后  魔陷卡被破坏  怪兽卡被解放破坏  等....
 func (ca *Card) registerNormal() {
 
 	//ca.AddEvent(InDeck, ca.SetFaceDownAttack)
@@ -24,12 +21,13 @@ func (ca *Card) registerNormal() {
 
 	// 破坏
 	ca.AddEvent(Destroy, func(c *Card) {
+
+		ca.ToGrave()
 		pl := ca.GetSummoner()
 		r := Arg{"self": ca.ToUint()}
 		if c != nil {
 			r["rival"] = c.ToUint()
 		}
-		ca.ToGrave()
 		pl.MsgPub("{self}被{rival}破坏", r)
 	})
 
@@ -68,9 +66,9 @@ func (ca *Card) registerNormal() {
 
 	// 失效
 	ca.AddEvent(Disabled, func() {
+		ca.Dispatch(UnegisterGlobalListen)
 		if ca.isValid {
 			ca.isValid = false
-			ca.CloseEvent(Disabled)
 		}
 	})
 
@@ -97,23 +95,16 @@ func (ca *Card) registerNormal() {
 	ca.AddEvent(Use2, func() {
 		ca.Dispatch(Cover)
 	})
+	ca.AddEvent(Use1, func() {
+		ca.Dispatch(Onset)
+	})
 
 	if ca.IsMonster() {
 		ca.registerMonster()
-		ca.AddEvent(OutMzone, func() {
-			ca.Dispatch(Disabled)
-		})
-		ca.AddEvent(Use1, func() {
-			ca.Dispatch(Summon)
-		})
+		ca.AddEvent(OutMzone, Disabled)
 	} else if ca.IsMagicAndTrap() {
 		ca.registerMagicAndTrap()
-		ca.AddEvent(OutSzone, func() {
-			ca.Dispatch(Disabled)
-		})
-		ca.AddEvent(Use1, func() {
-			ca.Dispatch(Onset)
-		})
+		ca.AddEvent(OutSzone, Disabled)
 	}
 }
 
@@ -146,7 +137,7 @@ func (ca *Card) registerMagicAndTrap() {
 
 func (ca *Card) registerMagic() {
 	ca.AddEvent(Onset, func() {
-		ca.Dispatch(UseMagic)
+		ca.Dispatch(UseMagic, ca)
 	})
 }
 
@@ -159,16 +150,24 @@ func (ca *Card) RegisterUnordinaryMagic(f interface{}) {
 		if ca.IsValid() {
 			ca.Dispatch(Effect0)
 			pl.MsgPub("发动{self}成功!", Arg{"self": ca.ToUint()})
+		} else {
+			pl.MsgPub("发动{self}失败!", Arg{"self": ca.ToUint()})
 		}
 	})
 }
 
 // 注册一张通常魔法卡
 func (ca *Card) RegisterOrdinaryMagic(f interface{}) {
-	ca.RegisterUnordinaryMagic(f)
+	ca.registerMagic()
+	ca.AddEvent(Effect0, f)
 	ca.AddEvent(UseMagic, func() {
+		pl := ca.GetSummoner()
 		if ca.IsValid() {
+			ca.Dispatch(Effect0)
+			pl.MsgPub("发动{self}成功!", Arg{"self": ca.ToUint()})
 			ca.Dispatch(Depleted)
+		} else {
+			pl.MsgPub("发动{self}失败!", Arg{"self": ca.ToUint()})
 		}
 	})
 }
@@ -180,28 +179,38 @@ func (ca *Card) registerTrap(event string, e interface{}) {
 		pl.OnlyOnce(RoundEnd, func() {
 			ca.RegisterGlobalListen(event, e)
 		}, ca, event, e)
-	}, e, event, e)
-
+	}, event, e)
+	ca.AddEvent(Trigger, func() {
+		ca.Dispatch(UnegisterGlobalListen)
+		ca.Dispatch(UseTrap)
+	})
 }
 
 // 注册一张通常的陷阱卡 效果
 func (ca *Card) RegisterUnordinaryTrap(event string, e interface{}) {
 	ca.registerTrap(event, e)
-	ca.AddEvent(Trigger, func() {
-		ca.Dispatch(UseTrap)
-	})
+
 	ca.AddEvent(UseTrap, func() {
+		pl := ca.GetSummoner()
 		if ca.IsValid() {
 			ca.Dispatch(Chain)
+			pl.MsgPub("发动{self}成功!", Arg{"self": ca.ToUint()})
+		} else {
+			pl.MsgPub("发动{self}失败!", Arg{"self": ca.ToUint()})
 		}
 	})
 }
 
 func (ca *Card) RegisterOrdinaryTrap(event string, e interface{}) {
-	ca.RegisterUnordinaryTrap(event, e)
+	ca.registerTrap(event, e)
 	ca.AddEvent(UseTrap, func() {
+		pl := ca.GetSummoner()
 		if ca.IsValid() {
+			ca.Dispatch(Chain)
+			pl.MsgPub("发动{self}成功!", Arg{"self": ca.ToUint()})
 			ca.Dispatch(Depleted)
+		} else {
+			pl.MsgPub("发动{self}失败!", Arg{"self": ca.ToUint()})
 		}
 	})
 }
@@ -218,9 +227,14 @@ func (ca *Card) PushChain(f interface{}) {
 func (ca *Card) RegisterGlobalListen(event string, e interface{}) {
 	yg := ca.GetSummoner().Game()
 	yg.AddEvent(event, e, ca)
-	ca.OnlyOnce(Disabled, func() {
+	ca.OnlyOnce(UnegisterGlobalListen, func() {
 		yg.RemoveEvent(event, e, ca)
 	}, e, event)
+}
+
+// 注册全局效果监听 直到收到 失效Disabled
+func (ca *Card) UnegisterGlobalListen() {
+	ca.Dispatch(UnegisterGlobalListen)
 }
 
 // 注册一个装备魔法卡  装备对象判断  装备上动作 装备下动作
@@ -316,7 +330,7 @@ func (ca *Card) RegisterFusionMonster(names ...string) {
 			})
 		},
 		SummonFusion: func() {
-			ca.Dispatch(SummonSpecial)
+			ca.Dispatch(SummonSpecial, ca)
 		},
 	})
 
@@ -324,13 +338,22 @@ func (ca *Card) RegisterFusionMonster(names ...string) {
 
 func (ca *Card) registerMonster() {
 
+	ca.AddEvent(Onset, func() {
+		ca.Dispatch(Summon, ca)
+	})
+	ca.RegisterPay(func(s string) {
+		if s != SummonSpecial && s != SummonFlip && s != Flip && s != Summon {
+			return
+		}
+		ca.SetFaceUpAttack()
+		ca.ShowInfo()
+	})
+
 	ca.AddEvent(SummonSpecial, func() {
 		pl := ca.GetSummoner()
 		ca.ToMzone()
-		ca.SetFaceUpAttack()
 		ca.SetNotCanChange()
 		pl.MsgPub("{self}特殊召唤成功!", Arg{"self": ca.ToUint()})
-		ca.ShowInfo()
 	})
 
 	// 手牌
@@ -366,10 +389,8 @@ func (ca *Card) registerMonster() {
 			if ca.IsValid() {
 				pl := ca.GetSummoner()
 				ca.ToMzone()
-				ca.SetFaceUpAttack()
 				ca.SetNotCanChange()
 				pl.MsgPub("{self}召唤成功!", Arg{"self": ca.ToUint()})
-				ca.ShowInfo()
 			}
 		},
 		// 覆盖
@@ -380,9 +401,6 @@ func (ca *Card) registerMonster() {
 				ca.SetFaceDownDefense()
 				ca.SetNotCanChange()
 				pl.Msg("{self}覆盖成功!", Arg{"self": ca.ToUint()})
-				ca.OnlyOnce(Flip, func() {
-					ca.ShowInfo()
-				})
 			}
 		},
 	})
@@ -405,7 +423,7 @@ func (ca *Card) registerMonster() {
 			pl := ca.GetSummoner()
 			if ca.IsCanChange() {
 				if ca.IsFaceDownDefense() {
-					ca.Dispatch(SummonFlip)
+					ca.Dispatch(SummonFlip, ca)
 				} else if ca.IsFaceUpDefense() {
 					ca.SetFaceUpAttack()
 					pl.MsgPub("{self}变成攻击表示！", Arg{"self": ca.ToUint()})
@@ -425,13 +443,13 @@ func (ca *Card) registerMonster() {
 		// 翻转召唤
 		SummonFlip: func() {
 			pl := ca.GetSummoner()
-			ca.Dispatch(Flip)
 			pl.MsgPub("{self}翻转召唤！", Arg{"self": ca.ToUint()})
 		},
 
 		// 翻转
 		Flip: func() {
-			ca.SetFaceUpAttack()
+			pl := ca.GetSummoner()
+			pl.MsgPub("{self}翻转！", Arg{"self": ca.ToUint()})
 		},
 
 		// 发出战斗宣言

@@ -35,7 +35,6 @@ type Arg map[string]interface{}
 
 type YGO struct {
 	dispatcher.Events
-	Fork     dispatcher.Fork
 	CardVer  *CardVersion
 	Room     *misc.Rooms
 	StartAt  time.Time
@@ -57,10 +56,8 @@ func nap(i int) {
 }
 
 func NewYGO(r *misc.Rooms) *YGO {
-	eve := dispatcher.NewLineEvent()
 	yg := &YGO{
-		Events:   eve,
-		Fork:     eve.GetFork(),
+		Events:   dispatcher.NewLineEvent(),
 		Room:     r,
 		Cards:    map[uint]*Card{},
 		Survival: map[int]int{},
@@ -105,7 +102,6 @@ func (yg *YGO) Chain(eventName string, ca *Card, pl *Player, args []interface{})
 		}
 	})
 	if cs.Len() > 0 || yg.both[eventName] {
-		pl.MsgPub("连锁事件 "+eventName+" {self}", nil)
 		pl.Chain(eventName, ca, cs, args)
 		pl.GetTarget().Chain(eventName, ca, cs, args)
 

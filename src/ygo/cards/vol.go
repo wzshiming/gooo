@@ -48,9 +48,9 @@ func vol(cardBag *ygo.CardVersion) {
 		Attack:  1200,
 		Defense: 1000,
 		Initialize: func(ca *ygo.Card) bool {
-			ca.AddEvent(ygo.Fought, func(tar *ygo.Card) {
-				ca.Dispatch(ygo.Removed)
-				tar.Dispatch(ygo.Removed)
+			ca.AddEvent(ygo.Fought, func(c *ygo.Card) {
+				ca.Dispatch(ygo.Removed, ca)
+				c.Dispatch(ygo.Removed, ca)
 			})
 			return true
 		}, // 初始
@@ -539,7 +539,7 @@ func vol(cardBag *ygo.CardVersion) {
 				pl := ca.GetSummoner()
 				if c := pl.SelectForWarn(pl.Extra); c != nil {
 					if c.IsFusionMonster() {
-						c.Dispatch(ygo.SummonFusion)
+						c.Dispatch(ygo.SummonFusion, ca)
 					}
 				}
 			})
@@ -1257,7 +1257,7 @@ func vol(cardBag *ygo.CardVersion) {
 				e := func() {
 					i++
 					if i == 3 {
-						ca.Dispatch(ygo.Depleted)
+						ca.Dispatch(ygo.Depleted, ca)
 					}
 				}
 				tar.AddEvent(ygo.RoundEnd, e)
@@ -1631,7 +1631,7 @@ func vol(cardBag *ygo.CardVersion) {
 						c.SetSummoner(pl)
 					}
 					c.Init()
-					c.Dispatch(ygo.SummonSpecial)
+					c.Dispatch(ygo.SummonSpecial, ca)
 				} else {
 					ca.Dispatch(ygo.DestroyBeRule)
 				}
@@ -2202,7 +2202,7 @@ func vol(cardBag *ygo.CardVersion) {
 		Defense: 700,
 		Initialize: func(ca *ygo.Card) bool {
 			ca.AddEvent(ygo.Deduct, func(tar *ygo.Player) {
-				tar.Hand.Get(ygo.RandInt(tar.Hand.Len())).Dispatch(ygo.Discard)
+				tar.Hand.Get(ygo.RandInt(tar.Hand.Len())).Dispatch(ygo.Discard, ca)
 			})
 			return true
 		}, // 初始
@@ -3051,7 +3051,7 @@ func vol(cardBag *ygo.CardVersion) {
 				}
 				pl := ca.GetSummoner()
 				if c := pl.SelectForWarn(pl.Hand); c != nil {
-					c.Dispatch(ygo.Cost)
+					c.Dispatch(ygo.Cost, ca)
 				} else {
 					ca.StopOnce(s)
 				}
@@ -3143,7 +3143,7 @@ func vol(cardBag *ygo.CardVersion) {
 				pl := ca.GetSummoner()
 				for i := 0; i != 3; i++ {
 					if c := pl.SelectForWarn(pl.Hand); c != nil {
-						c.Dispatch(ygo.Discard)
+						c.Dispatch(ygo.Discard, ca)
 					}
 				}
 			})
@@ -4519,7 +4519,7 @@ func vol(cardBag *ygo.CardVersion) {
 				}
 				pl := ca.GetSummoner()
 				if c := pl.SelectForWarn(pl.Hand); c != nil {
-					c.Dispatch(ygo.Cost)
+					c.Dispatch(ygo.Cost, ca)
 				} else {
 					ca.StopOnce(s)
 				}
@@ -4616,7 +4616,7 @@ func vol(cardBag *ygo.CardVersion) {
 				}
 				pl := ca.GetSummoner()
 				if c := pl.SelectForWarn(pl.Mzone); c != nil {
-					c.Dispatch(ygo.Cost)
+					c.Dispatch(ygo.Cost, ca)
 				} else {
 					ca.StopOnce(s)
 				}
@@ -4856,7 +4856,7 @@ func vol(cardBag *ygo.CardVersion) {
 				if c.GetSummoner() == pl {
 					ca.PushChain(func() {
 						ca.RegisterGlobalListen(ygo.Deduct, func() {
-							tar.Hand.Get(ygo.RandInt(tar.Hand.Len())).Dispatch(ygo.Discard)
+							tar.Hand.Get(ygo.RandInt(tar.Hand.Len())).Dispatch(ygo.Discard, ca)
 						})
 					})
 				}

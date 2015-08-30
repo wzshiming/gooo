@@ -87,7 +87,7 @@ func (ca *Card) Priority() int {
 
 func (ca *Card) Dispatch(eventName string, args ...interface{}) {
 	yg := ca.GetSummoner().Game()
-	if Pay != eventName {
+	if Pay != eventName && Chain != eventName {
 		ca.Events.Dispatch(Pay, eventName)
 		yg.Chain(eventName, ca, ca.GetSummoner(), args)
 	}
