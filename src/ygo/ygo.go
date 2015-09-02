@@ -11,6 +11,10 @@ import (
 	"github.com/wzshiming/rego/misc"
 )
 
+func Debug(v ...interface{}) {
+	rego.DEBUG(v...)
+}
+
 func RandInt(i int) int {
 	return int(<-rego.LCG) % i
 }
@@ -86,10 +90,29 @@ func (yg *YGO) RegisterBothEvent(eventName string) {
 func (yg *YGO) Chain(eventName string, ca *Card, pl *Player, args []interface{}) {
 
 	if ca != nil {
-		args = append(args, ca)
+		flag := true
+		for _, v := range args {
+			if _, ok := v.(*Card); ok {
+				flag = false
+				break
+			}
+		}
+		if flag {
+			args = append(args, ca)
+		}
 	}
+
 	if pl != nil {
-		args = append(args, pl)
+		flag := true
+		for _, v := range args {
+			if _, ok := v.(*Player); ok {
+				flag = false
+				break
+			}
+		}
+		if flag {
+			args = append(args, pl)
+		}
 	}
 
 	yg.EmptyEvent(Chain)
@@ -103,8 +126,9 @@ func (yg *YGO) Chain(eventName string, ca *Card, pl *Player, args []interface{})
 	})
 	if cs.Len() > 0 || yg.both[eventName] {
 		pl.Chain(eventName, ca, cs, args)
-		pl.GetTarget().Chain(eventName, ca, cs, args)
-
+		if yg.both[eventName] {
+			pl.GetTarget().Chain(eventName, ca, cs, args)
+		}
 	}
 	yg.EmptyEvent(Chain)
 

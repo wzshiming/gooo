@@ -100,6 +100,7 @@ func NewPlayer(yg *YGO) *Player {
 
 	pl.AddEvent(RoundBegin, func() {
 		pl.MsgPub("{self}进入第{round}回合", Arg{"round": pl.GetRound()})
+		pl.SetCanSummon()
 	})
 
 	pl.AddEvent(DP, pl.draw)
@@ -249,7 +250,9 @@ func (pl *Player) main(lp lp_type) {
 	pl.ResetWaitTime()
 	for {
 		ca, u := pl.selectForWarn(pl.Hand, pl.Mzone, pl.Szone, func(c *Card) bool {
-			if c.IsInSzone() && c.IsTrap() {
+			if c.IsInHand() && c.IsMonster() && !pl.IsCanSummon() {
+				return false
+			} else if c.IsInSzone() && c.IsTrap() {
 				return false
 			} else if c.IsInMzone() && !c.IsCanChange() {
 				return false
@@ -274,9 +277,9 @@ func (pl *Player) main(lp lp_type) {
 
 		if ca.IsInHand() {
 			if u == uint(LI_Use1) {
-				ca.Dispatch(Use1, ca)
+				ca.Dispatch(Use1)
 			} else if u == uint(LI_Use2) {
-				ca.Dispatch(Use2, ca)
+				ca.Dispatch(Use2)
 			}
 		} else if ca.IsInMzone() {
 			ca.Dispatch(Expression)
@@ -473,6 +476,10 @@ func (pl *Player) selectForPopup(ci ...interface{}) (c *Card, u uint) {
 		return
 	}
 	pl.Call(setPick(css, pl))
+	css.ForEach(func(c *Card) bool {
+		c.Peek()
+		return true
+	})
 	defer pl.Call(setPick(nil, pl))
 	if c, u = pl.Select(); c != nil {
 		if css.IsExistCard(c) {
@@ -500,7 +507,7 @@ func (pl *Player) selectForWarn(ci ...interface{}) (c *Card, u uint) {
 			return
 		}
 	}
-	return
+	return nil, u
 }
 
 func (pl *Player) SelectForWarn(ci ...interface{}) *Card {

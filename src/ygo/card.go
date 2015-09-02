@@ -54,6 +54,13 @@ type Card struct {
 	isValid         bool
 }
 
+func (ca *Card) Peek() {
+	pl := ca.GetSummoner()
+	pl.Call(setFront(ca))
+	pl.Call(exprCard(ca, LE_FaceUpAttack))
+	pl.GetTarget().Call(exprCard(ca, LE_FaceDownAttack))
+}
+
 func (ca *Card) ShowInfo() {
 	pl := ca.GetSummoner()
 	pl.CallAll(setCardFace(ca, Arg{"攻击力": ca.GetAttack(), "防御力": ca.GetDefense()}))
@@ -116,7 +123,7 @@ func (ca *Card) GetSummoner() *Player {
 // 设置召唤者
 func (ca *Card) SetSummoner(c *Player) {
 	ca.summoner = c
-	ca.Dispatch(Change, ca)
+	ca.Dispatch(Change)
 }
 
 // 获得所有者
@@ -271,7 +278,7 @@ func (ca *Card) IsReactionTrap() bool {
 // 设置类型
 func (ca *Card) SetType(l lc_type) {
 	ca.original.Lc = l
-	ca.Dispatch(Change, ca)
+	ca.Dispatch(Change)
 }
 
 // 获得基础属性
@@ -287,7 +294,7 @@ func (ca *Card) GetAttribute() la_type {
 //  设置属性
 func (ca *Card) SetAttribute(l la_type) {
 	ca.original.La = l
-	ca.Dispatch(Change, ca)
+	ca.Dispatch(Change)
 }
 
 // 获得基础种族
@@ -303,7 +310,7 @@ func (ca *Card) GetRace() lr_type {
 // 设置种族
 func (ca *Card) SetRace(l lr_type) {
 	ca.original.Lr = l
-	ca.Dispatch(Change, ca)
+	ca.Dispatch(Change)
 }
 
 // 获得基础攻击
@@ -322,7 +329,7 @@ func (ca *Card) SetAttack(i int) {
 		i = 0
 	}
 	ca.original.Attack = i
-	ca.Dispatch(Change, ca)
+	ca.Dispatch(Change)
 	pl := ca.GetSummoner()
 	pl.CallAll(setCardFace(ca, Arg{"攻击力": i}))
 }
@@ -343,7 +350,7 @@ func (ca *Card) SetDefense(i int) {
 		i = 0
 	}
 	ca.original.Defense = i
-	ca.Dispatch(Change, ca)
+	ca.Dispatch(Change)
 	pl := ca.GetSummoner()
 	pl.CallAll(setCardFace(ca, Arg{"防御力": i}))
 }
@@ -361,7 +368,7 @@ func (ca *Card) GetLevel() int {
 // 设置等级
 func (ca *Card) SetLevel(i int) {
 	ca.original.Level = i
-	ca.Dispatch(Change, ca)
+	ca.Dispatch(Change)
 }
 
 // 判断能够改变表示形式
@@ -372,7 +379,7 @@ func (ca *Card) IsCanChange() bool {
 // 设置能够改变表示形式
 func (ca *Card) SetCanChange() {
 	ca.lastChangeRound = 0
-	ca.Dispatch(Change, ca)
+	ca.Dispatch(Change)
 }
 
 // 设置不能够改变表示形式

@@ -84,12 +84,7 @@ func (ca *Card) registerNormal() {
 	})
 
 	// 被抽到手牌
-	ca.AddEvent(InHand, func() {
-		pl := ca.GetSummoner()
-		pl.Call(setFront(ca))
-		pl.Call(exprCard(ca, LE_FaceUpAttack))
-		pl.GetTarget().Call(exprCard(ca, LE_FaceDownAttack))
-	})
+	ca.AddEvent(InHand, ca.Peek)
 
 	// 覆盖
 	ca.AddEvent(Use2, func() {
@@ -137,7 +132,7 @@ func (ca *Card) registerMagicAndTrap() {
 
 func (ca *Card) registerMagic() {
 	ca.AddEvent(Onset, func() {
-		ca.Dispatch(UseMagic, ca)
+		ca.Dispatch(UseMagic)
 	})
 }
 
@@ -186,7 +181,7 @@ func (ca *Card) registerTrap(event string, e interface{}) {
 	})
 }
 
-// 注册一张通常的陷阱卡 效果
+// 注册一张不正常的陷阱卡 效果
 func (ca *Card) RegisterUnordinaryTrap(event string, e interface{}) {
 	ca.registerTrap(event, e)
 
@@ -201,6 +196,7 @@ func (ca *Card) RegisterUnordinaryTrap(event string, e interface{}) {
 	})
 }
 
+// 注册一张通常的陷阱卡 效果
 func (ca *Card) RegisterOrdinaryTrap(event string, e interface{}) {
 	ca.registerTrap(event, e)
 	ca.AddEvent(UseTrap, func() {
@@ -309,7 +305,7 @@ func (ca *Card) RegisterFusionMonster(names ...string) {
 					})
 				} else if is.Len() > v {
 					for i := 0; i != v; i++ {
-						tm := pl.SelectForPopup(is)
+						tm := pl.SelectForWarn(is)
 						if tm == nil {
 							pl.MsgPub("选择非法目标 {self}, 召唤失败!", Arg{"self": ca.ToUint()})
 							ca.StopOnce(s)
@@ -330,7 +326,7 @@ func (ca *Card) RegisterFusionMonster(names ...string) {
 			})
 		},
 		SummonFusion: func() {
-			ca.Dispatch(SummonSpecial, ca)
+			ca.Dispatch(SummonSpecial)
 		},
 	})
 
@@ -339,7 +335,7 @@ func (ca *Card) RegisterFusionMonster(names ...string) {
 func (ca *Card) registerMonster() {
 
 	ca.AddEvent(Onset, func() {
-		ca.Dispatch(Summon, ca)
+		ca.Dispatch(Summon)
 	})
 	ca.RegisterPay(func(s string) {
 		if s != SummonSpecial && s != SummonFlip && s != Flip && s != Summon {
@@ -363,7 +359,9 @@ func (ca *Card) registerMonster() {
 			if s != Summon && s != Cover {
 				return
 			}
+
 			pl := ca.GetSummoner()
+			pl.SetNotCanSummon()
 			pl.ResetReplyTime()
 			i := 0
 			if ca.GetLevel() > 6 {
@@ -423,7 +421,7 @@ func (ca *Card) registerMonster() {
 			pl := ca.GetSummoner()
 			if ca.IsCanChange() {
 				if ca.IsFaceDownDefense() {
-					ca.Dispatch(SummonFlip, ca)
+					ca.Dispatch(SummonFlip)
 				} else if ca.IsFaceUpDefense() {
 					ca.SetFaceUpAttack()
 					pl.MsgPub("{self}变成攻击表示！", Arg{"self": ca.ToUint()})
@@ -462,14 +460,13 @@ func (ca *Card) registerMonster() {
 				pl.MsgPub("{self}对{rival}发出战斗宣言！", Arg{"self": ca.ToUint()})
 			}
 
-			var b bool
+			b := false
 			if c != nil {
 				b = c.IsFaceDown()
 				ca.SetFaceUp()
 				if ca.IsInMzone() && c.IsInMzone() {
 					ca.Dispatch(DamageStep, c)
 				}
-
 			} else {
 				if ca.IsInMzone() {
 					ca.Dispatch(DamageStep)
@@ -490,11 +487,11 @@ func (ca *Card) registerMonster() {
 					if t > 0 {
 						c.Dispatch(DestroyBeBattle, ca)
 						tar.ChangeHp(-t)
-						c.Dispatch(Deduct, c, tar)
+						c.Dispatch(Deduct, pl)
 					} else if t < 0 {
 						ca.Dispatch(DestroyBeBattle, c)
 						pl.ChangeHp(t)
-						ca.Dispatch(Deduct, ca, pl)
+						ca.Dispatch(Deduct, tar)
 					} else {
 						c.Dispatch(DestroyBeBattle, ca)
 						ca.Dispatch(DestroyBeBattle, c)
@@ -505,7 +502,7 @@ func (ca *Card) registerMonster() {
 						c.Dispatch(DestroyBeBattle, ca)
 					} else if t < 0 {
 						pl.ChangeHp(t)
-						ca.Dispatch(Deduct, ca, pl)
+						ca.Dispatch(Deduct, tar)
 					}
 				}
 				ca.Dispatch(Fought, c)
@@ -513,7 +510,7 @@ func (ca *Card) registerMonster() {
 			} else {
 				tar := pl.GetTarget()
 				tar.ChangeHp(-ca.GetAttack())
-				ca.Dispatch(Deduct, ca, tar)
+				ca.Dispatch(Deduct, tar)
 				pl.MsgPub("{self}直接攻击了{rival}！", Arg{"self": ca.ToUint()})
 			}
 

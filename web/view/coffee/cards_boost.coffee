@@ -138,6 +138,7 @@ flex = (x,y,a,r,i,l)->
   object.matrix.makeTranslation gridX(x + r / 2 + 0.5 +  (i - l / 2) * 1.2 * z ), gridY(y), i + 1
   object.applyMatrix a
   object.position
+
 #手上的
 Hand =  (@x = 0, @y = 0, @a = 0, @b = 8, @c = 10)->
   @queue = []
@@ -205,6 +206,8 @@ Paging::Pop = (s = null) ->
   else if @up.Length()!=0
     @up.Pop s
   return
+
+
 Paging::Clear = ->
   @down.Clear()
   @show.Clear()
@@ -249,17 +252,17 @@ Pick:: = new cards_boost (i)->
   object.position
 
 
-Pick::Push = (c, s = null)->
-  if c
-    @push c
-    @Update s
-  return
-
-Pick::Pop = (s = null) ->
-  r = @pop this
-  @Update s
-  r
-
-Pick::Clear = () ->
-  while @Length() != 0
-    @Pop().Update()
+#Pick::Push = (c, s = null)->
+#  if c
+#    @push c
+#    @Update s
+#  return
+#
+#Pick::Pop = (s = null) ->
+#  r = @pop this
+#  @Update s
+#  r
+#
+#Pick::Clear = () ->
+#  while @Length() != 0
+#    @Pop().Update()

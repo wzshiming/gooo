@@ -1,4 +1,3 @@
-
 Player = (@scene, @index = 0, @x = 0, @y = 0, @a = 0) ->
   @decks = {}
 
@@ -33,7 +32,7 @@ Player = (@scene, @index = 0, @x = 0, @y = 0, @a = 0) ->
   for k,v of @decks
     if k != "deck"
       mouse.Hint v
-      mouse.Drag v, (c,rio)->
+      mouse.Drag v, (c, rio)->
         WsSelectable c.uniq, rio
       mouse.Lay v
   return
@@ -51,9 +50,12 @@ Player::Join = (u, lay, s = null) ->
         c.FaceDown()
         c.Attack()
     if lay == "deck"
-      c.SetUniq  "#{ @index }_{ @inDeckSize++ }"
-      c.SetFront 0
       c.FaceDown()
+      if c.uniq != 0
+        setTimeout (->
+          c.SetUniq "#{ @index }_{ @inDeckSize++ }"
+          c.SetFront 0
+        ), 500
     else
       c.SetUniq u
     @decks[lay].Push c, s

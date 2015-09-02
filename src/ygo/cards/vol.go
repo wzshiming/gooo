@@ -49,7 +49,7 @@ func vol(cardBag *ygo.CardVersion) {
 		Defense: 1000,
 		Initialize: func(ca *ygo.Card) bool {
 			ca.AddEvent(ygo.Fought, func(c *ygo.Card) {
-				ca.Dispatch(ygo.Removed, ca)
+				ca.Dispatch(ygo.Removed)
 				c.Dispatch(ygo.Removed, ca)
 			})
 			return true
@@ -447,7 +447,7 @@ func vol(cardBag *ygo.CardVersion) {
 				if cs.Len() == 1 {
 					cs.EndPop().Dispatch(ygo.Destroy, ca)
 				} else if cs.Len() > 1 {
-					if c := pl.SelectForPopup(cs); c != nil {
+					if c := pl.SelectForWarn(cs); c != nil {
 						c.Dispatch(ygo.Destroy, ca)
 					}
 				}
@@ -1257,7 +1257,7 @@ func vol(cardBag *ygo.CardVersion) {
 				e := func() {
 					i++
 					if i == 3 {
-						ca.Dispatch(ygo.Depleted, ca)
+						ca.Dispatch(ygo.Depleted)
 					}
 				}
 				tar.AddEvent(ygo.RoundEnd, e)
@@ -4229,8 +4229,22 @@ func vol(cardBag *ygo.CardVersion) {
 		Lr:      ygo.LR_SpellCaster, // 魔法师
 		Attack:  1100,
 		Defense: 1200,
-		//Initialize: func(ca *ygo.Card) bool {}, // 初始
-		IsValid: false,
+		Initialize: func(ca *ygo.Card) bool {
+			ca.AddEvent(ygo.InMzone, func() {
+				ca.AddEvent(ygo.InGrave, func() {
+					pl := ca.GetSummoner()
+					cs := pl.Deck.Find(func(c *ygo.Card) bool {
+						return c.IsMonster() && c.GetDefense() <= 1500
+					})
+					if c := pl.SelectForPopup(cs); c != nil {
+						c.SetFaceUp()
+						c.ToHand()
+					}
+				})
+			})
+			return true
+		}, // 初始
+		IsValid: true,
 	})
 
 	/*96*/
@@ -4851,14 +4865,23 @@ func vol(cardBag *ygo.CardVersion) {
 		Lc:       ygo.LC_SustainsTrap, // 永续陷阱
 
 		Initialize: func(ca *ygo.Card) bool {
+			use := false
 			ca.RegisterUnordinaryTrap(ygo.Deduct, func(tar *ygo.Player, c *ygo.Card) {
 				pl := ca.GetSummoner()
-				if c.GetSummoner() == pl {
-					ca.PushChain(func() {
-						ca.RegisterGlobalListen(ygo.Deduct, func() {
-							tar.Hand.Get(ygo.RandInt(tar.Hand.Len())).Dispatch(ygo.Discard, ca)
+				e := func() {
+					if c.GetSummoner() == pl && pl != tar {
+						tar.Hand.Get(ygo.RandInt(tar.Hand.Len())).Dispatch(ygo.Discard, ca)
+					}
+				}
+				if use {
+					e()
+				} else {
+					if c.GetSummoner() == pl && pl != tar {
+						ca.PushChain(func() {
+							e()
+							use = true
 						})
-					})
+					}
 				}
 			})
 			return true

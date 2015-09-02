@@ -23,6 +23,7 @@ orien = (x,y) ->
 Mouse = ->
   return
 
+# 鼠标点击并移动
 Mouse::Drag = (c,func)->
   f = ((event) ->
     c = event.toElement.hold
@@ -56,7 +57,7 @@ Mouse::Drag = (c,func)->
   c.addEventListener "mousedown", f, false
   return
 
-
+#鼠标悬浮显示资料
 Mouse::Hint = (c) ->
   f1 = ((event)->
     c = event.toElement.hold
@@ -72,6 +73,7 @@ Mouse::Hint = (c) ->
   c.addEventListener "mouseout", f2, false
   return
 
+#鼠标悬浮抖动 对方也能看到
 Mouse::Lay = (c) ->
   f1 = ((event)->
     c = event.toElement.hold
@@ -91,6 +93,7 @@ Mouse::Lay = (c) ->
   c.addEventListener "mouseout", f2, false
   return
 
+#鼠标悬浮抖动
 Mouse::Alone = (c) ->
   f1 = ((event)->
     c = event.toElement.hold
