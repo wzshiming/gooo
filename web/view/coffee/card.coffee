@@ -1,5 +1,3 @@
-
-
 # 永远朝向视口
 Shade = (@scene, t) ->
   @element = document.createElement('div')
@@ -25,8 +23,7 @@ Element = (@scene) ->
 
 
 #双面的卡片
-Card = (@scene, id=0, b=0) ->
-
+Card = (@scene, id = 0, b = 0) ->
   @element = document.createElement('div')
   @infos = {}
   @info = document.createElement('div')
@@ -111,13 +108,13 @@ Card::Placed = ->
     return @hold.Placed(this)
   -1
 
-Card::Nature  = (s=1000)->
+Card::Nature = (s = 1000)->
   t1 = (Math.random() - 0.5) * 10
   t2 = (Math.random() - 0.5) * 10
-  Translate @object,{x:@x + t1,y:@y + t2,z:@z},s
+  Translate @object, {x: @x + t1, y: @y + t2, z: @z}, s
 
   t = (Math.random() - 0.5) * PI / 20
-  Rotate @object,{y:@ry,z:@rz + t},s
+  Rotate @object, {y: @ry, z: @rz + t}, s
 
 #移动至
 Card::Move = (pos, s = 500) ->
@@ -134,7 +131,7 @@ Card::Move = (pos, s = 500) ->
     b = true
   unless b
     return
-  Translate @object,p,s
+  Translate @object, p, s
 
 Card::MoveAdd = (pos, s = 100) ->
   p = {}
@@ -151,9 +148,9 @@ Card::MoveAdd = (pos, s = 100) ->
     p.x += (Math.random() - 0.5) * 10
   if p.y
     p.y += (Math.random() - 0.5) * 10
-  Translate @object,p,s
+  Translate @object, p, s
   t = (Math.random() - 0.5) * PI / 20
-  Rotate @object,{y:@ry,z:@rz + t},s
+  Rotate @object, {y: @ry, z: @rz + t}, s
   #Translate @object, pos, s
   #@Nature s
 
@@ -183,10 +180,10 @@ Card::MoveTo = (pos, s = 500) ->
   if p.y
     p.y += (Math.random() - 0.5) * 10
 
-  Translate @object,p,s
+  Translate @object, p, s
 
   t = (Math.random() - 0.5) * PI / 20
-  Rotate @object,{y:@ry,z:@rz + t},s
+  Rotate @object, {y: @ry, z: @rz + t}, s
   #Translate @object, pos, s
   #@Nature s
   return
@@ -201,16 +198,16 @@ Card::FaceUp = (s = 200) ->
   if @ry == 0
     return
   @ry = 0
-  Rotate @object, { y: @ry }, s
+  Rotate @object, {y: @ry}, s
   #@Nature s
   return
 
 #面朝下
-Card::FaceDown =  (s = 200) ->
+Card::FaceDown = (s = 200) ->
   if @ry == PI
     return
   @ry = PI
-  Rotate @object, { y: @ry }, s
+  Rotate @object, {y: @ry}, s
   #@Nature s
   return
 
@@ -220,40 +217,40 @@ Card::Attack = (s = 200)  ->
     return
   @rz = 0
   t = (Math.random() - 0.5) * PI / 20
-  Rotate @object,{z:@rz + t},s
+  Rotate @object, {z: @rz + t}, s
   #Rotate @object, { z: @rz }, s
   #@Nature s
   return
 
 #防御表示
-Card::Defense =  (s = 200) ->
+Card::Defense = (s = 200) ->
   if @rz == PI / 2
     return
   @rz = PI / 2
   t = (Math.random() - 0.5) * PI / 20
-  Rotate @object,{z:@rz + t},s
+  Rotate @object, {z: @rz + t}, s
   #Rotate @object, { z: @rz }, s
   #@Nature s
   return
 
 Card::Remind = ->
-  this.SetHTML("状态","可以连锁")
+  this.SetHTML("状态", "可以连锁")
   window.setTimeout (->
     this.SetHTML("状态")
-  ),10000
+  ), 10000
 #停止移动
 Card::Stop = ->
   TWEEN.remove @object
   return
 
-Card::addEventListener = (s,f,b) ->
-  #log ["add",s,f,b]
+Card::addEventListener = (s, f, b) ->
+#log ["add",s,f,b]
   @element.addEventListener s, f, b
   @elementB.addEventListener s, f, b
   return
 
-Card::removeEventListener = (s,f,b) ->
-  #log ["remove",s,f,b]
+Card::removeEventListener = (s, f, b) ->
+#log ["remove",s,f,b]
   @element.removeEventListener s, f, b
   @elementB.removeEventListener s, f, b
   return

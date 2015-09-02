@@ -118,6 +118,13 @@ func (pl *Player) Dispatch(eventName string, args ...interface{}) {
 	pl.Events.Dispatch(eventName, args...)
 }
 
+func (pl *Player) Listen(ca *Card, eventName string, callback interface{}, token ...interface{}) {
+	pl.AddEvent(eventName, callback, token...)
+	ca.OnlyOnce(UnegisterGlobalListen, func() {
+		pl.RemoveEvent(eventName, callback, token...)
+	}, eventName, callback, token)
+}
+
 func (pl *Player) Game() *YGO {
 	return pl.game
 }
@@ -244,6 +251,15 @@ func (pl *Player) standby(lp lp_type) {
 }
 
 func (pl *Player) main(lp lp_type) {
+	defer func() {
+		if x := recover(); x != nil {
+			if _, ok := x.(string); ok {
+
+			} else {
+				rego.DebugStack()
+			}
+		}
+	}()
 	pl.MsgPub("{self}进入主阶段", nil)
 	pl.Phases = lp
 	//pl.ClearCode()
@@ -292,6 +308,15 @@ func (pl *Player) main(lp lp_type) {
 }
 
 func (pl *Player) battle(lp lp_type) {
+	defer func() {
+		if x := recover(); x != nil {
+			if _, ok := x.(string); ok {
+
+			} else {
+				rego.DebugStack()
+			}
+		}
+	}()
 	pl.MsgPub("{self}进入战斗阶段", nil)
 	pl.Phases = lp
 	//pl.ClearCode()

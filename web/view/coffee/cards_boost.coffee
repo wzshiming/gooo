@@ -1,5 +1,3 @@
-
-
 gridX = (x) ->
   x * 130 - 1300
 
@@ -29,7 +27,7 @@ cards_boost::Update = (s = @s) ->
 
 cards_boost::Flash = (s = @s) ->
   for v, k in this
-      v.MoveTo @pos(k), s
+    v.MoveTo @pos(k), s
   return
 
 cards_boost::Placed = (u, s = null) ->
@@ -37,7 +35,7 @@ cards_boost::Placed = (u, s = null) ->
   @Update s
   i
 
-cards_boost::Insert = (i,c, s = null) ->
+cards_boost::Insert = (i, c, s = null) ->
   if c
     Cards::Insert.call this, i, c
     for v,k in @event
@@ -69,15 +67,15 @@ cards_boost::Pop = (s = null) ->
   @Update s
   c
 
-cards_boost::addEventListener = (s,f,b) ->
-  l = [s,f,b]
+cards_boost::addEventListener = (s, f, b) ->
+  l = [s, f, b]
   @event.push l
   for v,k in this
     v.addEventListener l...
   return
 
 # 堆在一起的
-Pile =  (@x = 0, @y = 0, @a = 0)->
+Pile = (@x = 0, @y = 0, @a = 0)->
   @queue = []
   @event = []
   @rotation = (new (THREE.Matrix4)).makeRotationZ(@a)
@@ -91,7 +89,7 @@ Pile:: = new cards_boost((i)->
 )
 
 
-Dig =  (@x = 0, @y = 0, @a = 0, @s = 100)->
+Dig = (@x = 0, @y = 0, @a = 0, @s = 100)->
   @queue = []
   @event = []
   @rotation = (new (THREE.Matrix4)).makeRotationZ(@a)
@@ -120,37 +118,36 @@ Dig:: = new cards_boost (i)->
     object.applyMatrix @rotation
     object.position
   else
-    object.matrix.makeTranslation gridX(@x)  + ( i - @Length()/2) * 5 , gridY(@y), 50 + i * 2
+    object.matrix.makeTranslation gridX(@x) + ( i - @Length() / 2) * 5, gridY(@y), 50 + i * 2
     z = 1
     if @Length() > 40
       z = 1 - (@Length() - 40) / @Length()
     object.applyMatrix (new (THREE.Matrix4)).makeRotationZ(@a - (i - @Length() / 2) / 180 * PI * 9 * z)
-    object.position#.multiplyScalar 0.9
-
+    object.position #.multiplyScalar 0.9
 
 
 # 位置 伸缩
-flex = (x,y,a,r,i,l)->
+flex = (x, y, a, r, i, l, h = 1)->
   object = new (THREE.Object3D)
   z = 1
   if l > r
     z = 1 - (l - r) / l
-  object.matrix.makeTranslation gridX(x + r / 2 + 0.5 +  (i - l / 2) * 1.2 * z ), gridY(y), i + 1
+  object.matrix.makeTranslation gridX(x + r / 2 + 0.5 + (i - l / 2) * 1.2 * z), gridY(y), i + h
   object.applyMatrix a
   object.position
 
 #手上的
-Hand =  (@x = 0, @y = 0, @a = 0, @b = 8, @c = 10)->
+Hand = (@x = 0, @y = 0, @a = 0, @b = 8, @c = 10)->
   @queue = []
   @event = []
   @rotation = (new (THREE.Matrix4)).makeRotationZ(@a)
   return
 
 Hand:: = new cards_boost (i)->
-  flex(@x,@y,@rotation,@b,i,@Length())
+  flex(@x, @y, @rotation, @b, i, @Length())
 
 
-Vast =  (@x = 0, @y = 0, @a = 0,@b = 8,@c=10)->
+Vast = (@x = 0, @y = 0, @a = 0, @b = 8, @c = 10)->
   @queue = []
   @event = []
   @rotation = (new (THREE.Matrix4)).makeRotationZ(@a)
@@ -162,48 +159,48 @@ Vast:: = new cards_boost((i)->
 
   if l == parseInt(@Length() / @c)
     z = @Length() % @c
-    flex(@x,@y + l*1.5 ,@rotation,@b,m,z)
+    flex(@x, @y + l * 1.5, @rotation, @b, m, z)
   else
-    flex(@x,@y + l*1.5 ,@rotation,@b,m,@c)
+    flex(@x, @y + l * 1.5, @rotation, @b, m, @c)
 )
 
 
 #可翻页的
-Paging = (@x = 0, @y = 0, @a = 0, @b = 8 ,@c = 10, @l = 8)->
+Paging = (@x = 0, @y = 0, @a = 0, @b = 8, @c = 10, @l = 8)->
   @queue = []
   @event = []
-  @up = new Pile(@x,@y-2,@a)
-  @down = new Pile(@x+@b,@y-2,@a)
-  @show =  new Vast(@x,@y,@a,@b,@c)
+  @up = new Pile(@x, @y - 2, @a)
+  @down = new Pile(@x + @b, @y - 2, @a)
+  @show = new Vast(@x, @y, @a, @b, @c)
   @rotation = (new (THREE.Matrix4)).makeRotationZ(@a)
-  t=this
-  @up.addEventListener "click",(->
+  t = this
+  @up.addEventListener "click", (->
     t.Prev()
-  ),false
-  @down.addEventListener "click",(->
+  ), false
+  @down.addEventListener "click", (->
     t.Next()
-  ),false
+  ), false
   return
 
-Paging::addEventListener = (s,f,b) ->
-  #@up.addEventListener s,f,b
-  #@down.addEventListener s,f,b
-  @show.addEventListener s,f,b
+Paging::addEventListener = (s, f, b) ->
+#@up.addEventListener s,f,b
+#@down.addEventListener s,f,b
+  @show.addEventListener s, f, b
   return
 
 Paging::Push = (c, s = null)->
   if @show.Length() > @c * @l - 1
-    @down.Push c,s
+    @down.Push c, s
   else
-    @show.Push c,s
+    @show.Push c, s
   return
 
 Paging::Pop = (s = null) ->
-  if @down.Length()!=0
+  if @down.Length() != 0
     @down.Pop s
-  else if @show.Length()!=0
+  else if @show.Length() != 0
     @show.Pop s
-  else if @up.Length()!=0
+  else if @up.Length() != 0
     @up.Pop s
   return
 
@@ -225,7 +222,7 @@ Paging::Next = ->
     @show.Push @down.Pop()
 
 #横着铺开的
-Rows =  (@x = 0, @y = 0, @a = 0)->
+Rows = (@x = 0, @y = 0, @a = 0)->
   @queue = []
   @event = []
   @rotation = (new (THREE.Matrix4)).makeRotationZ(@a)
@@ -239,18 +236,30 @@ Rows:: = new cards_boost (i)->
 
 
 # 提示挑选的
-Pick =  (@x = 0, @y = 0, @a = 0)->
+Pick = (@x = 0, @y = 0, @a = 0, @b = 8, @c = 15)->
   @queue = []
   @event = []
   @rotation = (new (THREE.Matrix4)).makeRotationZ(@a)
   return
 
 Pick:: = new cards_boost (i)->
-  object = new (THREE.Object3D)
-  object.matrix.makeTranslation gridX(@x + i * 2), gridY(@y), 1000 + i
-  object.applyMatrix @rotation
-  object.position
+  flex(@x, @y, @rotation, @b, i, @Length(), 500)
 
+Pick::Push = (c, s = null)->
+  if c
+    @push c
+    for v,k in @event
+      c.addEventListener v...
+    @Update s
+  return
+
+Pick::Pop = (s = null) ->
+  c = @pop this
+  if c
+    for v,k in @event
+      c.removeEventListener v...
+  @Update s
+  c
 
 #Pick::Push = (c, s = null)->
 #  if c
@@ -263,6 +272,11 @@ Pick:: = new cards_boost (i)->
 #  @Update s
 #  r
 #
-#Pick::Clear = () ->
+#Pick::Homing = (hold) ->
 #  while @Length() != 0
-#    @Pop().Update()
+#    c = @Pop()
+#    if c.hold
+#      c.Update()
+#    else
+#      hold.Push c
+#  return

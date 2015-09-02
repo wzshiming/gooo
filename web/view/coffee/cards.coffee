@@ -1,5 +1,3 @@
-
-
 # 卡牌组
 Cards = ->
   return
@@ -22,7 +20,7 @@ Cards::Pop = ->
     c.SetHold()
   c
 
-Cards::Insert = (i,c) ->
+Cards::Insert = (i, c) ->
   @splice(i, 0, c)
   c.SetHold this
   return

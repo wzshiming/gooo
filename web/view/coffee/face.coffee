@@ -1,6 +1,4 @@
-
-
-Face =  ->
+Face = ->
   @face = document.createElement "Face"
   container.appendChild @face
   @face.className = "face"
@@ -11,9 +9,9 @@ Face =  ->
   @text = document.createElement('p')
   @face.appendChild @text
 
-#  @phases = document.createElement "phases"
-#  container.appendChild @phases
-#  @phases.className = "phases"
+  #  @phases = document.createElement "phases"
+  #  container.appendChild @phases
+  #  @phases.className = "phases"
 
   @infos = {}
   @info = document.createElement('div')
@@ -40,7 +38,7 @@ Face::SetInput = (name = null, u = null) ->
     b.className = "form-control"
     b.name = name
     b.placeholder = name
-    @SetHTML name,b
+    @SetHTML name, b
   else
     @SetHTML name
   return b
@@ -60,7 +58,7 @@ Face::SetButton = (name = null, func = null) ->
 
 Face::SetHTML = (name = null, value = null) ->
   unless name
-    #log @infos
+#log @infos
     for own k,v of @infos
       @info.removeChild @infos[k]
       delete @infos[k]
@@ -91,14 +89,14 @@ Face::ShowCard = (c) ->
     t = this
     #@text.innerText = c.img.src.innerText
     #console.dir c
-    CardInfo c,(data)->
+    CardInfo c, (data)->
       str = ""
       for own k,v of data
         str += "#{k}: #{v}<br>"
       t.text.innerHTML = str
 
   else
-    #@img.src = " "
+#@img.src = " "
     @img.style.display = "none"
     #@text.innerText = ""
     @text.style.display = "none"

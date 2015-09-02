@@ -27,7 +27,7 @@ Player = (@scene, @index = 0, @x = 0, @y = 0, @a = 0) ->
   @decks.szone = new Rows @x + 6, @y + 4, @a
 
   # 选择
-  @decks.pick = new Pick @x + 6, @y + 1, @a
+  @decks.pick = new Pick @x, @y + 1, @a, 10, 20
 
   for k,v of @decks
     if k != "deck"
@@ -51,11 +51,12 @@ Player::Join = (u, lay, s = null) ->
         c.Attack()
     if lay == "deck"
       c.FaceDown()
-      if c.uniq != 0
-        setTimeout (->
-          c.SetUniq "#{ @index }_{ @inDeckSize++ }"
-          c.SetFront 0
-        ), 500
+      c.SetUniq "#{ @index }_{ @inDeckSize++ }"
+#      if c.uniq != 0
+#        setTimeout (->
+#          c.SetUniq "#{ @index }_{ @inDeckSize++ }"
+#          c.SetFront 0
+#        ), 10
     else
       c.SetUniq u
     @decks[lay].Push c, s

@@ -996,7 +996,9 @@ func vol(cardBag *ygo.CardVersion) {
 			ca.RegisterOrdinaryMagic(func() {
 				pl := ca.GetSummoner()
 				tar := pl.GetTarget()
-				if c := pl.SelectForWarn(tar.Mzone); c != nil && c.IsDefense() {
+				if c := pl.SelectForWarn(tar.Mzone, func(c0 *ygo.Card) bool {
+					return c0.IsDefense()
+				}); c != nil {
 					c.SetFaceUpAttack()
 				}
 			})
@@ -1625,7 +1627,9 @@ func vol(cardBag *ygo.CardVersion) {
 			ca.RegisterOrdinaryMagic(func() {
 				pl := ca.GetSummoner()
 				tar := pl.GetTarget()
-				if c := pl.SelectForWarn(tar.Grave, pl.Grave); c != nil {
+				if c := pl.SelectForWarn(tar.Grave, pl.Grave, func(c0 *ygo.Card) bool {
+					return c0.IsMonster()
+				}); c != nil {
 					if c.GetSummoner() != ca.GetSummoner() {
 						pl := ca.GetSummoner()
 						c.SetSummoner(pl)
@@ -1711,7 +1715,9 @@ func vol(cardBag *ygo.CardVersion) {
 				pl := ca.GetSummoner()
 				tar := pl.GetTarget()
 				for i := 0; i != 2; i++ {
-					if c := pl.SelectForWarn(tar.Grave); c != nil {
+					if c := pl.SelectForWarn(tar.Grave, func(c0 *ygo.Card) bool {
+						return c0.IsMonster()
+					}); c != nil {
 						c.ToRemoved()
 					}
 				}
@@ -2151,8 +2157,10 @@ func vol(cardBag *ygo.CardVersion) {
 		Initialize: func(ca *ygo.Card) bool {
 			ca.RegisterFlip(func() {
 				pl := ca.GetSummoner()
-				c := pl.SelectForWarn(pl.Grave)
-				if c.IsTrap() {
+
+				if c := pl.SelectForWarn(pl.Grave, func(c0 *ygo.Card) bool {
+					return c0.IsTrap()
+				}); c != nil {
 					c.ToHand()
 				}
 			})
@@ -2248,8 +2256,27 @@ func vol(cardBag *ygo.CardVersion) {
 		Lr:      ygo.LR_Fiend, // 恶魔
 		Attack:  1200,
 		Defense: 1000,
-		//Initialize:    func(ca *ygo.Card) bool {}, // 初始
-		IsValid: false,
+		Initialize: func(ca *ygo.Card) bool {
+			ca.RegisterFlip(func() {
+				pl := ca.GetSummoner()
+				cs := ygo.NewCards()
+				for i := 0; i != 5; i++ {
+					if c := pl.Deck.EndPop(); c != nil {
+						cs.EndPush(c)
+					}
+				}
+				for cs.Len() != 0 {
+
+					if c := pl.SelectForPopup(cs); c != nil {
+						pl.Deck.EndPush(c)
+						cs.PickedFor(c)
+					}
+				}
+
+			})
+			return true
+		}, // 初始
+		IsValid: true,
 	})
 
 	/*50*/
@@ -2747,7 +2774,26 @@ func vol(cardBag *ygo.CardVersion) {
 		Lr:      ygo.LR_Machine, // 机械
 		Attack:  800,
 		Defense: 900,
-		//Initialize:    func(ca *ygo.Card) bool {}, // 初始
+		Initialize: func(ca *ygo.Card) bool {
+			ca.RegisterGlobalListen(ygo.SP, func(pl0 *ygo.Player) bool {
+				if pl := ca.GetSummoner(); pl == pl0 {
+					tar := pl.GetTarget()
+					ca.PushChain(func() {
+						ca.Dispatch(ygo.Cost)
+						for i := 0; i != 2; i++ {
+							if c := pl.SelectForWarn(tar.Mzone, pl.Mzone, func(c0 *ygo.Card) bool {
+								return c0.IsFaceUp() && (c0.GetAttack() <= 100)
+							}); c != nil {
+								c.Dispatch(ygo.Destroy, ca)
+							}
+						}
+
+					})
+				}
+				return true
+			})
+			return true
+		}, // 初始
 		IsValid: false,
 	})
 
@@ -2836,8 +2882,9 @@ func vol(cardBag *ygo.CardVersion) {
 		Initialize: func(ca *ygo.Card) bool {
 			ca.RegisterFlip(func() {
 				pl := ca.GetSummoner()
-				c := pl.SelectForWarn(pl.Grave)
-				if c.IsMagic() {
+				if c := pl.SelectForWarn(pl.Grave, func(c0 *ygo.Card) bool {
+					return c0.IsMagic()
+				}); c != nil {
 					c.ToHand()
 				}
 			})
@@ -3050,7 +3097,9 @@ func vol(cardBag *ygo.CardVersion) {
 					return
 				}
 				pl := ca.GetSummoner()
-				if c := pl.SelectForWarn(pl.Hand); c != nil {
+				if c := pl.SelectForWarn(pl.Hand, func(c0 *ygo.Card) bool {
+					return c0 != ca
+				}); c != nil {
 					c.Dispatch(ygo.Cost, ca)
 				} else {
 					ca.StopOnce(s)
@@ -3142,7 +3191,9 @@ func vol(cardBag *ygo.CardVersion) {
 			ca.RegisterOrdinaryMagic(func() {
 				pl := ca.GetSummoner()
 				for i := 0; i != 3; i++ {
-					if c := pl.SelectForWarn(pl.Hand); c != nil {
+					if c := pl.SelectForWarn(pl.Hand, func(c0 *ygo.Card) bool {
+						return c0.IsMonster()
+					}); c != nil {
 						c.Dispatch(ygo.Discard, ca)
 					}
 				}
@@ -4532,7 +4583,9 @@ func vol(cardBag *ygo.CardVersion) {
 					return
 				}
 				pl := ca.GetSummoner()
-				if c := pl.SelectForWarn(pl.Hand); c != nil {
+				if c := pl.SelectForWarn(pl.Hand, func(c0 *ygo.Card) bool {
+					return c0 != ca
+				}); c != nil {
 					c.Dispatch(ygo.Cost, ca)
 				} else {
 					ca.StopOnce(s)
@@ -4783,10 +4836,11 @@ func vol(cardBag *ygo.CardVersion) {
 			ca.RegisterOrdinaryMagic(func() {
 				pl := ca.GetSummoner()
 				tar := pl.GetTarget()
-				if c := pl.SelectForWarn(tar.Mzone); c != nil {
-					if c.IsFaceUp() {
-						c.SetFaceDefense()
-					}
+				if c := pl.SelectForWarn(tar.Mzone, func(c0 *ygo.Card) bool {
+					return c0.IsFaceUp()
+				}); c != nil {
+					c.SetFaceDefense()
+
 				}
 			})
 			return true
@@ -4831,8 +4885,13 @@ func vol(cardBag *ygo.CardVersion) {
 		Lr:      ygo.LR_SpellCaster, // 魔法师
 		Attack:  0,
 		Defense: 100,
-		//Initialize:    func(ca *ygo.Card) bool {}, // 初始
-		IsValid: false,
+		Initialize: func(ca *ygo.Card) bool {
+			ca.AddEvent(ygo.DestroyBeBattle, func() {
+				panic("DestroyBeBattle")
+			})
+			return true
+		}, // 初始
+		IsValid: true,
 	})
 
 	/*109*/

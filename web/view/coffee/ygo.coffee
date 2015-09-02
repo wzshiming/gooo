@@ -11,22 +11,22 @@ YGO = (@scene) ->
 
 YGO::init = (args) ->
   face.SetButton "BP", ->
-    WsSelectable 0,4
+    WsSelectable 0, 4
 
   face.SetButton "MP2", ->
-    WsSelectable 0,5
+    WsSelectable 0, 5
 
   face.SetButton "EP", ->
-    WsSelectable 0,6
+    WsSelectable 0, 6
 
   face.SetButton "Yes", ->
-    WsSelectable 0,10
+    WsSelectable 0, 10
 
   face.SetButton "No", ->
-    WsSelectable 0,11
+    WsSelectable 0, 11
 
   face.SetButton "Defeat", ->
-    WsSelectable 0,666
+    WsSelectable 0, 666
 
   @users = args.users
   @index = args.index
@@ -54,7 +54,7 @@ YGO::init = (args) ->
         y = 0
       @players[i] = new Player(@scene, i, x, y, angle)
       face.SetHTML v.name, "#{v.hp}"
-    #MsgInfo '游戏开始了'
+#MsgInfo '游戏开始了'
 
   else
     MsgErr '初始化游戏错误'
@@ -67,16 +67,23 @@ YGO::remind = (args) ->
     MsgErr "remind err"
 
 YGO::setPick = (args) ->
-  @players[args.master].decks.pick.Clear()
+  pl = @players[args.master]
+  pick = pl.decks.pick
+  while pick.Length() != 0
+    c = pick.Pop()
+    if c.hold
+      c.Update()
+    else
+      pl.Join c.uniq, "deck"
   for v in args.uniqs
-    @players[args.master].Join v, "pick"
+    pl.Join v, "pick"
 
 
 YGO::setCardFace = (args) ->
   c = Card::Find(args.uniq)
   if c
     for own k,v of args.params
-      c.SetHTML k,v
+      c.SetHTML k, v
   else
     MsgErr "setCardFace err"
   return
@@ -106,7 +113,7 @@ YGO::exprCard = (args) ->
     else if (args.expr & 1 << 27) != 0
       c.Defense()
   else
-    #MsgErr "exprCard err"
+#MsgErr "exprCard err"
   return
 
 YGO::flagName = (args) ->
@@ -115,7 +122,7 @@ YGO::flagName = (args) ->
 
 YGO::setFace = (args) ->
   for own k,v of args
-    face.SetHTML k,v
+    face.SetHTML k, v
 
 YGO::message = (args) ->
   for own k,v of args.params
@@ -123,11 +130,11 @@ YGO::message = (args) ->
       args.params[k] = "您"
     c = Card::Find(v)
     if c
-      CardInfo c,(data)->
+      CardInfo c, (data)->
         args.params[k] = " #{data["type"]} 「#{data["name"]}」 "
 
   m = args.message.format args.params
-  face.Msg  m
+  face.Msg m
   return
 
 YGO::flagStep = (args) ->

@@ -1,12 +1,7 @@
-
-
-
-window.StartGame =  ->
-  gui "Game",YGO
+window.StartGame = ->
+  gui "Game", YGO
   return
 
 window.StartNeaten = ->
-
-
-  gui "Manage",Manage
+  gui "Manage", Manage
   return

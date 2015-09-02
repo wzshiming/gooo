@@ -442,6 +442,7 @@ func (ca *Card) registerMonster() {
 		SummonFlip: func() {
 			pl := ca.GetSummoner()
 			pl.MsgPub("{self}翻转召唤！", Arg{"self": ca.ToUint()})
+			ca.Dispatch(Flip)
 		},
 
 		// 翻转

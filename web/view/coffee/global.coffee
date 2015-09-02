@@ -1,4 +1,3 @@
-
 container = null
 face = null
 mouse = null
@@ -10,7 +9,7 @@ InitGlobal = ->
   Card::SetHTML = Face::SetHTML
 
 ExitPage = ->
-  #$('#page').hide()
+#$('#page').hide()
   $('#home').show()
   container.innerHTML = ""
 
@@ -19,15 +18,15 @@ log = (x)->
 
 
 String::format = (params)->
-  @replace /{([^{}]+)}/gm,(match,name) ->"#{params[name]}"
+  @replace /{([^{}]+)}/gm, (match, name) -> "#{params[name]}"
 
 
 tmpCardInfo = []
-CardInfo = (c, f ) ->
+CardInfo = (c, f) ->
   if tmpCardInfo[c.id]
     f(tmpCardInfo[c.id])
   else
-    $.get("/cards/i18n/zh-CN/#{c.id}.json",((data,status)->
+    $.get("/cards/i18n/zh-CN/#{c.id}.json", ((data, status)->
       d = JSON.parse data
       tmpCardInfo[c.id] = d
       f(d)
@@ -35,13 +34,13 @@ CardInfo = (c, f ) ->
 
 CurentTime = ->
   now = new Date();
-  year = now.getFullYear()       #年
-  month = now.getMonth() + 1     #月
-  day = now.getDate()            #日
+  year = now.getFullYear() #年
+  month = now.getMonth() + 1 #月
+  day = now.getDate() #日
 
-  hh = now.getHours()            #时
-  mm = now.getMinutes()          #分
-  ss = now.getSeconds()          #秒
+  hh = now.getHours() #时
+  mm = now.getMinutes() #分
+  ss = now.getSeconds() #秒
   clock = year + "-"
   if(month < 10)
     clock += "0"
@@ -61,7 +60,7 @@ CurentTime = ->
   clock
 
 
-gui =  (id, classs) ->
+gui = (id, classs) ->
   camera = undefined
   scene = undefined
   renderer = undefined
