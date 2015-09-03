@@ -508,7 +508,7 @@ func booster(cardBag *ygo.CardVersion) {
 		Lc:       ygo.LC_FusionMonster, // 融合怪兽
 
 		Level:   6,
-		La:      ygo.LA_Earth,      // 水
+		La:      ygo.LA_Water,      // 水
 		Lr:      ygo.LR_Seaserpent, // 海龙
 		Attack:  2250,
 		Defense: 1900,
@@ -551,7 +551,7 @@ func booster(cardBag *ygo.CardVersion) {
 		Lc:       ygo.LC_EffectMonster, // 效果怪兽
 
 		Level:   4,
-		La:      ygo.LA_Earth, // 暗
+		La:      ygo.LA_Dark,  // 暗
 		Lr:      ygo.LR_Fiend, // 恶魔
 		Attack:  920,
 		Defense: 1930,
@@ -593,7 +593,7 @@ func booster(cardBag *ygo.CardVersion) {
 		Lc:       ygo.LC_EffectMonster, // 效果怪兽
 
 		Level:   4,
-		La:      ygo.LA_Earth, // 暗
+		La:      ygo.LA_Dark,  // 暗
 		Lr:      ygo.LR_Fiend, // 恶魔
 		Attack:  1350,
 		Defense: 1400,
@@ -636,7 +636,7 @@ func booster(cardBag *ygo.CardVersion) {
 		Lc:       ygo.LC_EffectMonster, // 效果怪兽
 
 		Level:   6,
-		La:      ygo.LA_Earth,  // 暗
+		La:      ygo.LA_Dark,   // 暗
 		Lr:      ygo.LR_Zombie, // 不死
 		Attack:  1800,
 		Defense: 2000,
@@ -723,7 +723,7 @@ func booster(cardBag *ygo.CardVersion) {
 		Lc:       ygo.LC_EffectMonster, // 效果怪兽
 
 		Level:   3,
-		La:      ygo.LA_Earth, // 暗
+		La:      ygo.LA_Dark,  // 暗
 		Lr:      ygo.LR_Fiend, // 恶魔
 		Attack:  1250,
 		Defense: 800,
@@ -766,7 +766,7 @@ func booster(cardBag *ygo.CardVersion) {
 		Lc:       ygo.LC_EffectMonster, // 效果怪兽
 
 		Level:   3,
-		La:      ygo.LA_Earth,   // 水
+		La:      ygo.LA_Water,   // 水
 		Lr:      ygo.LR_Warrior, // 战士
 		Attack:  800,
 		Defense: 1300,
@@ -850,7 +850,7 @@ func booster(cardBag *ygo.CardVersion) {
 		Lc:       ygo.LC_EffectMonster, // 效果怪兽
 
 		Level:   3,
-		La:      ygo.LA_Earth,  // 风
+		La:      ygo.LA_Wind,   // 风
 		Lr:      ygo.LR_Insect, // 昆虫
 		Attack:  1000,
 		Defense: 800,
@@ -895,7 +895,7 @@ func booster(cardBag *ygo.CardVersion) {
 		Lc:       ygo.LC_EffectMonster, // 效果怪兽
 
 		Level:   4,
-		La:      ygo.LA_Earth, // 水
+		La:      ygo.LA_Water, // 水
 		Lr:      ygo.LR_None,  // 水
 		Attack:  900,
 		Defense: 1700,
@@ -937,7 +937,7 @@ func booster(cardBag *ygo.CardVersion) {
 		Lc:       ygo.LC_EffectMonster, // 效果怪兽
 
 		Level:   4,
-		La:      ygo.LA_Earth, // 暗
+		La:      ygo.LA_Dark,  // 暗
 		Lr:      ygo.LR_Fiend, // 恶魔
 		Attack:  1800,
 		Defense: 1000,
@@ -1526,7 +1526,7 @@ func booster(cardBag *ygo.CardVersion) {
 		Lc:       ygo.LC_EffectMonster, // 效果怪兽
 
 		Level:   4,
-		La:      ygo.LA_Earth, // 光
+		La:      ygo.LA_Light, // 光
 		Lr:      ygo.LR_Angel, // 天使
 		Attack:  1100,
 		Defense: 1200,
@@ -1635,7 +1635,7 @@ func booster(cardBag *ygo.CardVersion) {
 		Lc:       ygo.LC_EffectMonster, // 效果怪兽
 
 		Level:   4,
-		La:      ygo.LA_Earth, // 光
+		La:      ygo.LA_Light, // 光
 		Lr:      ygo.LR_Angel, // 天使
 		Attack:  1200,
 		Defense: 1000,
@@ -1680,7 +1680,7 @@ func booster(cardBag *ygo.CardVersion) {
 		Lc:       ygo.LC_EffectMonster, // 效果怪兽
 
 		Level:   4,
-		La:      ygo.LA_Earth, // 水
+		La:      ygo.LA_Water, // 水
 		Lr:      ygo.LR_None,  // 水
 		Attack:  1000,
 		Defense: 1100,
@@ -1725,7 +1725,7 @@ func booster(cardBag *ygo.CardVersion) {
 		Lc:       ygo.LC_EffectMonster, // 效果怪兽
 
 		Level:   3,
-		La:      ygo.LA_Earth, // 暗
+		La:      ygo.LA_Dark,  // 暗
 		Lr:      ygo.LR_Fiend, // 恶魔
 		Attack:  1100,
 		Defense: 900,
@@ -1767,7 +1767,7 @@ func booster(cardBag *ygo.CardVersion) {
 		Lc:       ygo.LC_EffectMonster, // 效果怪兽
 
 		Level:   1,
-		La:      ygo.LA_Earth, // 暗
+		La:      ygo.LA_Dark,  // 暗
 		Lr:      ygo.LR_Fiend, // 恶魔
 		Attack:  250,
 		Defense: 350,
@@ -1851,7 +1851,7 @@ func booster(cardBag *ygo.CardVersion) {
 		Lc:       ygo.LC_EffectMonster, // 效果怪兽
 
 		Level:   2,
-		La:      ygo.LA_Earth,   // 暗
+		La:      ygo.LA_Dark,    // 暗
 		Lr:      ygo.LR_Machine, // 机械
 		Attack:  700,
 		Defense: 500,
@@ -1892,7 +1892,7 @@ func booster(cardBag *ygo.CardVersion) {
 		Lc:       ygo.LC_EffectMonster, // 效果怪兽
 
 		Level:   2,
-		La:      ygo.LA_Earth, // 暗
+		La:      ygo.LA_Dark,  // 暗
 		Lr:      ygo.LR_Fiend, // 恶魔
 		Attack:  750,
 		Defense: 700,
@@ -1935,7 +1935,7 @@ func booster(cardBag *ygo.CardVersion) {
 		Lc:       ygo.LC_EffectMonster, // 效果怪兽
 
 		Level:   6,
-		La:      ygo.LA_Earth, // 暗
+		La:      ygo.LA_Dark,  // 暗
 		Lr:      ygo.LR_Fiend, // 恶魔
 		Attack:  2000,
 		Defense: 2100,
@@ -2021,7 +2021,7 @@ func booster(cardBag *ygo.CardVersion) {
 		Lc:       ygo.LC_EffectMonster, // 效果怪兽
 
 		Level:   3,
-		La:      ygo.LA_Earth,   // 暗
+		La:      ygo.LA_Dark,    // 暗
 		Lr:      ygo.LR_Warrior, // 战士
 		Attack:  650,
 		Defense: 900,
@@ -2106,7 +2106,7 @@ func booster(cardBag *ygo.CardVersion) {
 		Lc:       ygo.LC_EffectMonster, // 效果怪兽
 
 		Level:   2,
-		La:      ygo.LA_Earth, // 水
+		La:      ygo.LA_Water, // 水
 		Lr:      ygo.LR_None,  // 水
 		Attack:  750,
 		Defense: 500,
@@ -2140,7 +2140,7 @@ func booster(cardBag *ygo.CardVersion) {
 		Lc:       ygo.LC_FusionMonster, // 融合怪兽
 
 		Level:   5,
-		La:      ygo.LA_Earth, // 水
+		La:      ygo.LA_Water, // 水
 		Lr:      ygo.LR_None,  // 水
 		Attack:  1850,
 		Defense: 1300,
@@ -2419,7 +2419,7 @@ func booster(cardBag *ygo.CardVersion) {
 		Lc:       ygo.LC_EffectMonster, // 效果怪兽
 
 		Level:   6,
-		La:      ygo.LA_Earth,   // 暗
+		La:      ygo.LA_Dark,    // 暗
 		Lr:      ygo.LR_Warrior, // 战士
 		Attack:  1550,
 		Defense: 2500,
@@ -2452,7 +2452,7 @@ func booster(cardBag *ygo.CardVersion) {
 		Name:     "灯之魔精",                 // "La Jinn the Mystical Genie of the Lamp"  "ランプの魔精·ラ·ジーン"
 		Lc:       ygo.LC_OrdinaryMonster, // 通常怪兽
 		Level:    4,
-		La:       ygo.LA_Earth, // 暗
+		La:       ygo.LA_Dark,  // 暗
 		Lr:       ygo.LR_Fiend, // 恶魔
 		Attack:   1800,
 		Defense:  1000,
@@ -2484,7 +2484,7 @@ func booster(cardBag *ygo.CardVersion) {
 		Name:     "地狱的裁判",                // "Trial of Nightmare"  "地獄の裁判"
 		Lc:       ygo.LC_OrdinaryMonster, // 通常怪兽
 		Level:    4,
-		La:       ygo.LA_Earth, // 暗
+		La:       ygo.LA_Dark,  // 暗
 		Lr:       ygo.LR_Fiend, // 恶魔
 		Attack:   1300,
 		Defense:  900,
@@ -2516,7 +2516,7 @@ func booster(cardBag *ygo.CardVersion) {
 		Name:     "第13人的埋葬者",             // "The 13th Grave"  "１３人目の埋葬者"
 		Lc:       ygo.LC_OrdinaryMonster, // 通常怪兽
 		Level:    3,
-		La:       ygo.LA_Earth,  // 暗
+		La:       ygo.LA_Dark,   // 暗
 		Lr:       ygo.LR_Zombie, // 不死
 		Attack:   1200,
 		Defense:  900,
@@ -2548,7 +2548,7 @@ func booster(cardBag *ygo.CardVersion) {
 		Name:     "深渊的冥王",                // "Dark King of the Abyss"  "深淵の冥王"
 		Lc:       ygo.LC_OrdinaryMonster, // 通常怪兽
 		Level:    3,
-		La:       ygo.LA_Earth, // 暗
+		La:       ygo.LA_Dark,  // 暗
 		Lr:       ygo.LR_Fiend, // 恶魔
 		Attack:   1200,
 		Defense:  800,
@@ -2580,7 +2580,7 @@ func booster(cardBag *ygo.CardVersion) {
 		Name:     "水魔道士",                 // "Aqua Madoor"  "アクア·マドール"
 		Lc:       ygo.LC_OrdinaryMonster, // 通常怪兽
 		Level:    4,
-		La:       ygo.LA_Earth,       // 水
+		La:       ygo.LA_Water,       // 水
 		Lr:       ygo.LR_SpellCaster, // 魔法师
 		Attack:   1200,
 		Defense:  2000,
@@ -2612,7 +2612,7 @@ func booster(cardBag *ygo.CardVersion) {
 		Name:     "女夜魔战士",                // "Vishwar Randi"  "ヴィシュワ·ランディー"
 		Lc:       ygo.LC_OrdinaryMonster, // 通常怪兽
 		Level:    3,
-		La:       ygo.LA_Earth,   // 暗
+		La:       ygo.LA_Dark,    // 暗
 		Lr:       ygo.LR_Warrior, // 战士
 		Attack:   900,
 		Defense:  700,
@@ -2644,7 +2644,7 @@ func booster(cardBag *ygo.CardVersion) {
 		Name:     "气象控制员",                // "Weather Control"  "ウェザー·コントロール"
 		Lc:       ygo.LC_OrdinaryMonster, // 通常怪兽
 		Level:    2,
-		La:       ygo.LA_Earth, // 光
+		La:       ygo.LA_Light, // 光
 		Lr:       ygo.LR_Angel, // 天使
 		Attack:   600,
 		Defense:  400,
@@ -2676,7 +2676,7 @@ func booster(cardBag *ygo.CardVersion) {
 		Name:     "水元素",                  // "Water Element"  "ウォーター·エレメント"
 		Lc:       ygo.LC_OrdinaryMonster, // 通常怪兽
 		Level:    3,
-		La:       ygo.LA_Earth, // 水
+		La:       ygo.LA_Water, // 水
 		Lr:       ygo.LR_None,  // 水
 		Attack:   900,
 		Defense:  700,
@@ -2708,7 +2708,7 @@ func booster(cardBag *ygo.CardVersion) {
 		Name:     "石像怪",                  // "Ryu-Kishin"  "ガーゴイル"
 		Lc:       ygo.LC_OrdinaryMonster, // 通常怪兽
 		Level:    3,
-		La:       ygo.LA_Earth, // 暗
+		La:       ygo.LA_Dark,  // 暗
 		Lr:       ygo.LR_Fiend, // 恶魔
 		Attack:   1000,
 		Defense:  500,
@@ -2772,7 +2772,7 @@ func booster(cardBag *ygo.CardVersion) {
 		Name:     "风之番人 精",               // "Djinn the Watcher of the Wind"  "風の番人 ジン"
 		Lc:       ygo.LC_OrdinaryMonster, // 通常怪兽
 		Level:    3,
-		La:       ygo.LA_Earth,       // 风
+		La:       ygo.LA_Wind,        // 风
 		Lr:       ygo.LR_SpellCaster, // 魔法师
 		Attack:   700,
 		Defense:  900,
@@ -2804,7 +2804,7 @@ func booster(cardBag *ygo.CardVersion) {
 		Name:     "格洛斯",                  // "Twin Long Rods #1"  "グロス"
 		Lc:       ygo.LC_OrdinaryMonster, // 通常怪兽
 		Level:    3,
-		La:       ygo.LA_Earth, // 水
+		La:       ygo.LA_Water, // 水
 		Lr:       ygo.LR_None,  // 水
 		Attack:   900,
 		Defense:  700,
@@ -2836,7 +2836,7 @@ func booster(cardBag *ygo.CardVersion) {
 		Name:     "幽灵",                   // "Phantom Ghost"  "ゴースト"
 		Lc:       ygo.LC_OrdinaryMonster, // 通常怪兽
 		Level:    2,
-		La:       ygo.LA_Earth,  // 暗
+		La:       ygo.LA_Dark,   // 暗
 		Lr:       ygo.LR_Zombie, // 不死
 		Attack:   600,
 		Defense:  800,
@@ -2868,7 +2868,7 @@ func booster(cardBag *ygo.CardVersion) {
 		Name:     "萨塔那",                  // "Phantom Dewan"  "サターナ"
 		Lc:       ygo.LC_OrdinaryMonster, // 通常怪兽
 		Level:    2,
-		La:       ygo.LA_Earth,       // 暗
+		La:       ygo.LA_Dark,        // 暗
 		Lr:       ygo.LR_SpellCaster, // 魔法师
 		Attack:   700,
 		Defense:  600,
@@ -2900,7 +2900,7 @@ func booster(cardBag *ygo.CardVersion) {
 		Name:     "邪炎之翼",                 // "Wings of Wicked Flame"  "邪炎の翼"
 		Lc:       ygo.LC_OrdinaryMonster, // 通常怪兽
 		Level:    2,
-		La:       ygo.LA_None, // 炎
+		La:       ygo.LA_Fire, // 炎
 		Lr:       ygo.LR_Pyro, // 炎
 		Attack:   700,
 		Defense:  600,
@@ -2932,7 +2932,7 @@ func booster(cardBag *ygo.CardVersion) {
 		Name:     "大嘴鸟",                  // "Droll Bird"  "スピック"
 		Lc:       ygo.LC_OrdinaryMonster, // 通常怪兽
 		Level:    2,
-		La:       ygo.LA_Earth,     // 风
+		La:       ygo.LA_Wind,      // 风
 		Lr:       ygo.LR_WindBeast, // 鸟兽
 		Attack:   600,
 		Defense:  500,
@@ -2964,7 +2964,7 @@ func booster(cardBag *ygo.CardVersion) {
 		Name:     "神圣之锁",                 // "Mystical Capture Chain"  "聖なる鎖"
 		Lc:       ygo.LC_OrdinaryMonster, // 通常怪兽
 		Level:    2,
-		La:       ygo.LA_Earth, // 光
+		La:       ygo.LA_Light, // 光
 		Lr:       ygo.LR_Angel, // 天使
 		Attack:   700,
 		Defense:  700,
@@ -2996,7 +2996,7 @@ func booster(cardBag *ygo.CardVersion) {
 		Name:     "僵尸鬼灯",                 // "Mech Mole Zombie"  "ゾンビランプ"
 		Lc:       ygo.LC_OrdinaryMonster, // 通常怪兽
 		Level:    2,
-		La:       ygo.LA_Earth,  // 暗
+		La:       ygo.LA_Dark,   // 暗
 		Lr:       ygo.LR_Zombie, // 不死
 		Attack:   500,
 		Defense:  400,
@@ -3028,7 +3028,7 @@ func booster(cardBag *ygo.CardVersion) {
 		Name:     "暗黑植物",                 // "Dark Plant"  "ダーク·プラント"
 		Lc:       ygo.LC_OrdinaryMonster, // 通常怪兽
 		Level:    1,
-		La:       ygo.LA_Earth, // 暗
+		La:       ygo.LA_Dark,  // 暗
 		Lr:       ygo.LR_Plant, // 植物
 		Attack:   300,
 		Defense:  400,
@@ -3220,7 +3220,7 @@ func booster(cardBag *ygo.CardVersion) {
 		Name:     "天使魔女",                 // "Angelwitch"  "エンジェル·魔女"
 		Lc:       ygo.LC_OrdinaryMonster, // 通常怪兽
 		Level:    3,
-		La:       ygo.LA_Earth,       // 暗
+		La:       ygo.LA_Dark,        // 暗
 		Lr:       ygo.LR_SpellCaster, // 魔法师
 		Attack:   800,
 		Defense:  1000,
@@ -3284,7 +3284,7 @@ func booster(cardBag *ygo.CardVersion) {
 		Name:     "鱼战士",                  // "Wow Warrior"  "魚ギョ戦士"
 		Lc:       ygo.LC_OrdinaryMonster, // 通常怪兽
 		Level:    4,
-		La:       ygo.LA_Earth, // 水
+		La:       ygo.LA_Water, // 水
 		Lr:       ygo.LR_Fish,  // 鱼
 		Attack:   1250,
 		Defense:  900,
@@ -3316,7 +3316,7 @@ func booster(cardBag *ygo.CardVersion) {
 		Name:     "龙虾怪",                  // "Zarigun"  "ザリガン"
 		Lc:       ygo.LC_OrdinaryMonster, // 通常怪兽
 		Level:    2,
-		La:       ygo.LA_Earth, // 水
+		La:       ygo.LA_Water, // 水
 		Lr:       ygo.LR_None,  // 水
 		Attack:   600,
 		Defense:  700,
@@ -3412,7 +3412,7 @@ func booster(cardBag *ygo.CardVersion) {
 		Name:     "食命者",                  // "That Which Feeds on Life"  "命を食する者"
 		Lc:       ygo.LC_OrdinaryMonster, // 通常怪兽
 		Level:    4,
-		La:       ygo.LA_Earth, // 暗
+		La:       ygo.LA_Dark,  // 暗
 		Lr:       ygo.LR_Fiend, // 恶魔
 		Attack:   1200,
 		Defense:  1000,
@@ -3508,7 +3508,7 @@ func booster(cardBag *ygo.CardVersion) {
 		Name:     "大白鲨",                  // "Great White"  "グレート·ホワイト"
 		Lc:       ygo.LC_OrdinaryMonster, // 通常怪兽
 		Level:    4,
-		La:       ygo.LA_Earth, // 水
+		La:       ygo.LA_Water, // 水
 		Lr:       ygo.LR_Fish,  // 鱼
 		Attack:   1600,
 		Defense:  800,
@@ -3732,7 +3732,7 @@ func booster(cardBag *ygo.CardVersion) {
 		Name:     "骷髅寺院",                 // "Temple of Skulls"  "髑髏の寺院"
 		Lc:       ygo.LC_OrdinaryMonster, // 通常怪兽
 		Level:    4,
-		La:       ygo.LA_Earth,  // 暗
+		La:       ygo.LA_Dark,   // 暗
 		Lr:       ygo.LR_Zombie, // 不死
 		Attack:   900,
 		Defense:  1300,
@@ -3796,7 +3796,7 @@ func booster(cardBag *ygo.CardVersion) {
 		Name:     "狂战士",                  // "Mystic Clown"  "バーサーカー"
 		Lc:       ygo.LC_OrdinaryMonster, // 通常怪兽
 		Level:    4,
-		La:       ygo.LA_Earth, // 暗
+		La:       ygo.LA_Dark,  // 暗
 		Lr:       ygo.LR_Fiend, // 恶魔
 		Attack:   1500,
 		Defense:  1000,
@@ -3828,7 +3828,7 @@ func booster(cardBag *ygo.CardVersion) {
 		Name:     "复仇的河童",                // "Kappa Avenger"  "復讐のカッパ"
 		Lc:       ygo.LC_OrdinaryMonster, // 通常怪兽
 		Level:    3,
-		La:       ygo.LA_Earth, // 水
+		La:       ygo.LA_Water, // 水
 		Lr:       ygo.LR_None,  // 水
 		Attack:   1200,
 		Defense:  900,
@@ -3860,7 +3860,7 @@ func booster(cardBag *ygo.CardVersion) {
 		Name:     "龟鸟",                   // "Turtle Bird"  "タートル·バード"
 		Lc:       ygo.LC_OrdinaryMonster, // 通常怪兽
 		Level:    6,
-		La:       ygo.LA_Earth, // 水
+		La:       ygo.LA_Water, // 水
 		Lr:       ygo.LR_None,  // 水
 		Attack:   1900,
 		Defense:  1700,
@@ -3892,7 +3892,7 @@ func booster(cardBag *ygo.CardVersion) {
 		Name:     "电子鱼",                  // "Mech Bass"  "サイボーグ·バス"
 		Lc:       ygo.LC_OrdinaryMonster, // 通常怪兽
 		Level:    5,
-		La:       ygo.LA_Earth,   // 水
+		La:       ygo.LA_Water,   // 水
 		Lr:       ygo.LR_Machine, // 机械
 		Attack:   1800,
 		Defense:  1500,
@@ -3924,7 +3924,7 @@ func booster(cardBag *ygo.CardVersion) {
 		Name:     "水陆的帝王",                // "Emperor of the Land and Sea"  "水陸の帝王"
 		Lc:       ygo.LC_OrdinaryMonster, // 通常怪兽
 		Level:    5,
-		La:       ygo.LA_Earth,   // 水
+		La:       ygo.LA_Water,   // 水
 		Lr:       ygo.LR_Reptile, // 爬虫类
 		Attack:   1800,
 		Defense:  1500,
@@ -3988,7 +3988,7 @@ func booster(cardBag *ygo.CardVersion) {
 		Name:     "战神 奥利安",               // "Orion the Battle Kami"  "戦いの神 オリオン"
 		Lc:       ygo.LC_OrdinaryMonster, // 通常怪兽
 		Level:    5,
-		La:       ygo.LA_Earth, // 光
+		La:       ygo.LA_Light, // 光
 		Lr:       ygo.LR_Angel, // 天使
 		Attack:   1800,
 		Defense:  1500,
@@ -4052,7 +4052,7 @@ func booster(cardBag *ygo.CardVersion) {
 		Name:     "诞生的天使",                // "Winged Egg of New Life"  "誕生の天使"
 		Lc:       ygo.LC_OrdinaryMonster, // 通常怪兽
 		Level:    5,
-		La:       ygo.LA_Earth, // 光
+		La:       ygo.LA_Light, // 光
 		Lr:       ygo.LR_Angel, // 天使
 		Attack:   1400,
 		Defense:  1700,
@@ -4084,7 +4084,7 @@ func booster(cardBag *ygo.CardVersion) {
 		Name:     "飞鹰",                   // "Wing Eagle"  "ウイング·イーグル"
 		Lc:       ygo.LC_OrdinaryMonster, // 通常怪兽
 		Level:    5,
-		La:       ygo.LA_Earth,     // 风
+		La:       ygo.LA_Wind,      // 风
 		Lr:       ygo.LR_WindBeast, // 鸟兽
 		Attack:   1800,
 		Defense:  1500,
@@ -4180,7 +4180,7 @@ func booster(cardBag *ygo.CardVersion) {
 		Name:     "彩虹人鱼",                 // "Rainbow Marine Mermaid"  "レインボー·マリン·マーメイド"
 		Lc:       ygo.LC_OrdinaryMonster, // 通常怪兽
 		Level:    5,
-		La:       ygo.LA_Earth, // 水
+		La:       ygo.LA_Water, // 水
 		Lr:       ygo.LR_Fish,  // 鱼
 		Attack:   1550,
 		Defense:  1700,
@@ -4212,7 +4212,7 @@ func booster(cardBag *ygo.CardVersion) {
 		Name:     "美杜莎的亡灵",               // "The Snake Hair"  "メデューサの亡霊"
 		Lc:       ygo.LC_OrdinaryMonster, // 通常怪兽
 		Level:    4,
-		La:       ygo.LA_Earth,  // 暗
+		La:       ygo.LA_Dark,   // 暗
 		Lr:       ygo.LR_Zombie, // 不死
 		Attack:   1500,
 		Defense:  1200,
@@ -4244,7 +4244,7 @@ func booster(cardBag *ygo.CardVersion) {
 		Name:     "牛鬼",                   // "Ushi Oni"  "牛鬼"
 		Lc:       ygo.LC_OrdinaryMonster, // 通常怪兽
 		Level:    6,
-		La:       ygo.LA_Earth, // 暗
+		La:       ygo.LA_Dark,  // 暗
 		Lr:       ygo.LR_Fiend, // 恶魔
 		Attack:   2150,
 		Defense:  1950,
@@ -4308,7 +4308,7 @@ func booster(cardBag *ygo.CardVersion) {
 		Name:     "水母",                   // "Jellyfish"  "海月－ジェリーフィッシュ－"
 		Lc:       ygo.LC_OrdinaryMonster, // 通常怪兽
 		Level:    4,
-		La:       ygo.LA_Earth, // 水
+		La:       ygo.LA_Water, // 水
 		Lr:       ygo.LR_None,  // 水
 		Attack:   1200,
 		Defense:  1500,
@@ -4340,7 +4340,7 @@ func booster(cardBag *ygo.CardVersion) {
 		Name:     "暗魔界的霸王",               // "King of Yamimakai"  "闇魔界の覇王"
 		Lc:       ygo.LC_OrdinaryMonster, // 通常怪兽
 		Level:    5,
-		La:       ygo.LA_Earth, // 暗
+		La:       ygo.LA_Dark,  // 暗
 		Lr:       ygo.LR_Fiend, // 恶魔
 		Attack:   2000,
 		Defense:  1530,
@@ -4372,7 +4372,7 @@ func booster(cardBag *ygo.CardVersion) {
 		Name:     "强化石像怪",                // "Ryu-Kishin Powered"  "ガーゴイル·パワード"
 		Lc:       ygo.LC_OrdinaryMonster, // 通常怪兽
 		Level:    4,
-		La:       ygo.LA_Earth, // 暗
+		La:       ygo.LA_Dark,  // 暗
 		Lr:       ygo.LR_Fiend, // 恶魔
 		Attack:   1600,
 		Defense:  1200,
@@ -4404,7 +4404,7 @@ func booster(cardBag *ygo.CardVersion) {
 		Name:     "电气小子",                 // "Wattkid"  "エレキッズ"
 		Lc:       ygo.LC_OrdinaryMonster, // 通常怪兽
 		Level:    3,
-		La:       ygo.LA_Earth,   // 光
+		La:       ygo.LA_Light,   // 光
 		Lr:       ygo.LR_Thunder, // 雷
 		Attack:   1000,
 		Defense:  500,
@@ -4500,7 +4500,7 @@ func booster(cardBag *ygo.CardVersion) {
 		Name:     "友谊天使",                 // "Shining Friendship"  "フレンドシップ"
 		Lc:       ygo.LC_OrdinaryMonster, // 通常怪兽
 		Level:    4,
-		La:       ygo.LA_Earth, // 光
+		La:       ygo.LA_Light, // 光
 		Lr:       ygo.LR_Angel, // 天使
 		Attack:   1300,
 		Defense:  1100,
@@ -4596,7 +4596,7 @@ func booster(cardBag *ygo.CardVersion) {
 		Name:     "机械猎手",                 // "Mechanicalchaser"  "メカ·ハンター"
 		Lc:       ygo.LC_OrdinaryMonster, // 通常怪兽
 		Level:    4,
-		La:       ygo.LA_Earth,   // 暗
+		La:       ygo.LA_Dark,    // 暗
 		Lr:       ygo.LR_Machine, // 机械
 		Attack:   1850,
 		Defense:  800,
@@ -4628,7 +4628,7 @@ func booster(cardBag *ygo.CardVersion) {
 		Name:     "海鳞蛇",                  // "Giant Red Seasnake"  "シーザリオン"
 		Lc:       ygo.LC_OrdinaryMonster, // 通常怪兽
 		Level:    4,
-		La:       ygo.LA_Earth, // 水
+		La:       ygo.LA_Water, // 水
 		Lr:       ygo.LR_None,  // 水
 		Attack:   1800,
 		Defense:  800,
@@ -4692,7 +4692,7 @@ func booster(cardBag *ygo.CardVersion) {
 		Name:     "橐蜚",                   // "Takuhee"  "タクヒ"
 		Lc:       ygo.LC_OrdinaryMonster, // 通常怪兽
 		Level:    4,
-		La:       ygo.LA_Earth,     // 风
+		La:       ygo.LA_Wind,      // 风
 		Lr:       ygo.LR_WindBeast, // 鸟兽
 		Attack:   1450,
 		Defense:  1000,
@@ -4724,7 +4724,7 @@ func booster(cardBag *ygo.CardVersion) {
 		Name:     "泉之妖精",                 // "Fairy of the Fountain"  "泉の妖精"
 		Lc:       ygo.LC_OrdinaryMonster, // 通常怪兽
 		Level:    4,
-		La:       ygo.LA_Earth, // 水
+		La:       ygo.LA_Water, // 水
 		Lr:       ygo.LR_None,  // 水
 		Attack:   1600,
 		Defense:  1100,
@@ -4756,7 +4756,7 @@ func booster(cardBag *ygo.CardVersion) {
 		Name:     "月光少女",                 // "Maiden of the Moonlight"  "月明かりの乙女"
 		Lc:       ygo.LC_OrdinaryMonster, // 通常怪兽
 		Level:    4,
-		La:       ygo.LA_Earth,       // 光
+		La:       ygo.LA_Light,       // 光
 		Lr:       ygo.LR_SpellCaster, // 魔法师
 		Attack:   1500,
 		Defense:  1300,
@@ -4820,7 +4820,7 @@ func booster(cardBag *ygo.CardVersion) {
 		Name:     "海龙神",                  // "Kairyu-Shin"  "海竜神"
 		Lc:       ygo.LC_OrdinaryMonster, // 通常怪兽
 		Level:    5,
-		La:       ygo.LA_Earth,      // 水
+		La:       ygo.LA_Water,      // 水
 		Lr:       ygo.LR_Seaserpent, // 海龙
 		Attack:   1800,
 		Defense:  1500,
@@ -4852,7 +4852,7 @@ func booster(cardBag *ygo.CardVersion) {
 		Name:     "龙僵尸",                  // "Dragon Zombie"  "ドラゴン·ゾンビ"
 		Lc:       ygo.LC_OrdinaryMonster, // 通常怪兽
 		Level:    3,
-		La:       ygo.LA_Earth,  // 暗
+		La:       ygo.LA_Dark,   // 暗
 		Lr:       ygo.LR_Zombie, // 不死
 		Attack:   1600,
 		Defense:  0,
@@ -4884,7 +4884,7 @@ func booster(cardBag *ygo.CardVersion) {
 		Name:     "神灯魔人",                 // "Lord of the Lamp"  "ランプの魔人"
 		Lc:       ygo.LC_OrdinaryMonster, // 通常怪兽
 		Level:    4,
-		La:       ygo.LA_Earth, // 暗
+		La:       ygo.LA_Dark,  // 暗
 		Lr:       ygo.LR_Fiend, // 恶魔
 		Attack:   1400,
 		Defense:  1200,

@@ -74,8 +74,9 @@ cards_boost::addEventListener = (s, f, b) ->
     v.addEventListener l...
   return
 
+
 # 堆在一起的
-Pile = (@x = 0, @y = 0, @a = 0)->
+Pile = (@x = 0, @y = 0, @a = 0, @h = 1)->
   @queue = []
   @event = []
   @rotation = (new (THREE.Matrix4)).makeRotationZ(@a)
@@ -83,13 +84,13 @@ Pile = (@x = 0, @y = 0, @a = 0)->
 
 Pile:: = new cards_boost((i)->
   object = new (THREE.Object3D)
-  object.matrix.makeTranslation gridX(@x), gridY(@y), i + 1
+  object.matrix.makeTranslation gridX(@x), gridY(@y), @h + i
   object.applyMatrix @rotation
   object.position
 )
 
 
-Dig = (@x = 0, @y = 0, @a = 0, @s = 100)->
+Dig = (@x = 0, @y = 0, @a = 0, @h = 1, @s = 100)->
   @queue = []
   @event = []
   @rotation = (new (THREE.Matrix4)).makeRotationZ(@a)
@@ -114,11 +115,11 @@ Dig = (@x = 0, @y = 0, @a = 0, @s = 100)->
 Dig:: = new cards_boost (i)->
   object = new (THREE.Object3D)
   if @p == 0
-    object.matrix.makeTranslation gridX(@x), gridY(@y), i + 1
+    object.matrix.makeTranslation gridX(@x), gridY(@y), @h + 1
     object.applyMatrix @rotation
     object.position
   else
-    object.matrix.makeTranslation gridX(@x) + ( i - @Length() / 2) * 5, gridY(@y), 50 + i * 2
+    object.matrix.makeTranslation gridX(@x) + ( i - @Length() / 2) * 5, gridY(@y), @h + 50 + i * 2
     z = 1
     if @Length() > 40
       z = 1 - (@Length() - 40) / @Length()

@@ -52,8 +52,7 @@ YGO::init = (args) ->
         angle = PI * 1.5
         x = 0
         y = 0
-      @players[i] = new Player(@scene, i, x, y, angle)
-      face.SetHTML v.name, "#{v.hp}"
+      @players[i] = new Player(@scene, i, x, y, angle, v)
 #MsgInfo '游戏开始了'
 
   else
@@ -171,6 +170,15 @@ YGO::flagStep = (args) ->
       return
     ), 1000)
   return
+YGO::changeHp = (args)->
+  c = Card::Find(args.uniq)
+  if c
+    c.SetHTML "HP", "#{args.hp}"
+
+YGO::setPortrait = (args)->
+  c = Card::Find(args.uniq)
+  if c
+    c.SetPortrait args.desk
 
 YGO::touch = (args)->
   c = Card::Find(args.uniq)

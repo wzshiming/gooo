@@ -84,7 +84,6 @@ func (cv *CardVersion) Deck(cp *Group, player *Player, deck []uint) {
 		if t != nil {
 			c := t.Make(player)
 			cp.EndPush(c)
-			player.Game().RegisterCards(c)
 		}
 	}
 }

@@ -46,6 +46,7 @@ const (
 	Deduct     = "Deduct"     // 直接攻击玩家造成伤害
 	Fought     = "Fought"     // 战斗步骤结束对双方怪兽发出
 	Expres     = "Expres"     // 表示形式改变
+	FaceUp     = "FaceUp"     // 表侧表示
 
 	// 卡牌事件
 	InDeck     = In + string(LL_Deck)     // 进入卡组

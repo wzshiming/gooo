@@ -168,4 +168,6 @@ const (
 	LL_OverLay = "overLay" //
 	LL_Fzone   = "fzone"   //
 	LL_Pzone   = "pzone"   //
+
+	LL_Portrait = "portrait" // 玩家头像
 )

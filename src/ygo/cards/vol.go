@@ -574,7 +574,7 @@ func vol(cardBag *ygo.CardVersion) {
 		Lc:       ygo.LC_FusionMonster, // 融合怪兽
 
 		Level:   7,
-		La:      ygo.LA_Earth,  // 风
+		La:      ygo.LA_Wind,   // 风
 		Lr:      ygo.LR_Dragon, // 龙
 		Attack:  2600,
 		Defense: 2100,
@@ -625,7 +625,7 @@ func vol(cardBag *ygo.CardVersion) {
 		Lc:       ygo.LC_EffectMonster, // 效果怪兽
 
 		Level:   5,
-		La:      ygo.LA_Earth, // 暗
+		La:      ygo.LA_Dark,  // 暗
 		Lr:      ygo.LR_Fiend, // 恶魔
 		Attack:  1380,
 		Defense: 1930,
@@ -1256,17 +1256,12 @@ func vol(cardBag *ygo.CardVersion) {
 				pl := ca.GetSummoner()
 				tar := pl.GetTarget()
 				i := 0
-				e := func() {
+				ca.RegisterGlobalListen(ygo.RoundEnd, func() {
 					i++
-					if i == 3 {
+					if i == 6 {
 						ca.Dispatch(ygo.Depleted)
 					}
-				}
-				tar.AddEvent(ygo.RoundEnd, e)
-				ca.AddEvent(ygo.Disabled, func() {
-					tar.RemoveEvent(ygo.RoundEnd, e)
 				})
-
 				tar.Mzone.ForEach(func(c *ygo.Card) bool {
 					c.SetFaceUp()
 					return true
@@ -1308,7 +1303,7 @@ func vol(cardBag *ygo.CardVersion) {
 		Lc:       ygo.LC_FusionMonster, // 融合怪兽
 
 		Level:   6,
-		La:      ygo.LA_Earth,   // 风
+		La:      ygo.LA_Wind,    // 风
 		Lr:      ygo.LR_Machine, // 机械
 		Attack:  1850,
 		Defense: 1700,
@@ -1354,7 +1349,7 @@ func vol(cardBag *ygo.CardVersion) {
 		Lc:       ygo.LC_EffectMonster, // 效果怪兽
 
 		Level:   2,
-		La:      ygo.LA_Earth, // 光
+		La:      ygo.LA_Light, // 光
 		Lr:      ygo.LR_Angel, // 天使
 		Attack:  900,
 		Defense: 400,
@@ -1790,7 +1785,7 @@ func vol(cardBag *ygo.CardVersion) {
 		Lc:       ygo.LC_FusionMonster, // 融合怪兽
 
 		Level:   4,
-		La:      ygo.LA_Earth,       // 暗
+		La:      ygo.LA_Dark,        // 暗
 		Lr:      ygo.LR_SpellCaster, // 魔法师
 		Attack:  1300,
 		Defense: 1100,
@@ -1827,7 +1822,7 @@ func vol(cardBag *ygo.CardVersion) {
 		Lc:       ygo.LC_FusionMonster, // 融合怪兽
 
 		Level:   4,
-		La:      ygo.LA_Earth,     // 风
+		La:      ygo.LA_Wind,      // 风
 		Lr:      ygo.LR_WindBeast, // 鸟兽
 		Attack:  1300,
 		Defense: 900,
@@ -1864,7 +1859,7 @@ func vol(cardBag *ygo.CardVersion) {
 		Lc:       ygo.LC_FusionMonster, // 融合怪兽
 
 		Level:   3,
-		La:      ygo.LA_Earth,  // 暗
+		La:      ygo.LA_Dark,   // 暗
 		Lr:      ygo.LR_Zombie, // 不死
 		Attack:  1200,
 		Defense: 900,
@@ -1901,7 +1896,7 @@ func vol(cardBag *ygo.CardVersion) {
 		Lc:       ygo.LC_FusionMonster, // 融合怪兽
 
 		Level:   3,
-		La:      ygo.LA_Earth,   // 风
+		La:      ygo.LA_Wind,    // 风
 		Lr:      ygo.LR_Warrior, // 战士
 		Attack:  1200,
 		Defense: 900,
@@ -1938,7 +1933,7 @@ func vol(cardBag *ygo.CardVersion) {
 		Lc:       ygo.LC_FusionMonster, // 融合怪兽
 
 		Level:   5,
-		La:      ygo.LA_Earth, // 水
+		La:      ygo.LA_Water, // 水
 		Lr:      ygo.LR_Fish,  // 鱼
 		Attack:  1900,
 		Defense: 1600,
@@ -2060,7 +2055,7 @@ func vol(cardBag *ygo.CardVersion) {
 		Lc:       ygo.LC_EffectMonster, // 效果怪兽
 
 		Level:   6,
-		La:      ygo.LA_Earth,     // 风
+		La:      ygo.LA_Wind,      // 风
 		Lr:      ygo.LR_WindBeast, // 鸟兽
 		Attack:  1950,
 		Defense: 2100,
@@ -2150,14 +2145,13 @@ func vol(cardBag *ygo.CardVersion) {
 		Lc:       ygo.LC_EffectMonster, // 效果怪兽
 
 		Level:   2,
-		La:      ygo.LA_Earth, // 暗
+		La:      ygo.LA_Dark,  // 暗
 		Lr:      ygo.LR_Fiend, // 恶魔
 		Attack:  900,
 		Defense: 400,
 		Initialize: func(ca *ygo.Card) bool {
 			ca.RegisterFlip(func() {
 				pl := ca.GetSummoner()
-
 				if c := pl.SelectForWarn(pl.Grave, func(c0 *ygo.Card) bool {
 					return c0.IsTrap()
 				}); c != nil {
@@ -2204,7 +2198,7 @@ func vol(cardBag *ygo.CardVersion) {
 		Lc:       ygo.LC_EffectMonster, // 效果怪兽
 
 		Level:   3,
-		La:      ygo.LA_Earth,       // 光
+		La:      ygo.LA_Light,       // 光
 		Lr:      ygo.LR_SpellCaster, // 魔法师
 		Attack:  1000,
 		Defense: 700,
@@ -2252,7 +2246,7 @@ func vol(cardBag *ygo.CardVersion) {
 		Lc:       ygo.LC_EffectMonster, // 效果怪兽
 
 		Level:   4,
-		La:      ygo.LA_Earth, // 暗
+		La:      ygo.LA_Dark,  // 暗
 		Lr:      ygo.LR_Fiend, // 恶魔
 		Attack:  1200,
 		Defense: 1000,
@@ -2307,7 +2301,7 @@ func vol(cardBag *ygo.CardVersion) {
 		Lc:       ygo.LC_FusionMonster, // 融合怪兽
 
 		Level:   9,
-		La:      ygo.LA_Earth,                 // 暗
+		La:      ygo.LA_Dark,                  // 暗
 		Lr:      ygo.LR_Dragon | ygo.LR_Fiend, // 龙
 		Attack:  3200,
 		Defense: 2500,
@@ -2352,7 +2346,7 @@ func vol(cardBag *ygo.CardVersion) {
 		Lc:       ygo.LC_EffectMonster, // 效果怪兽
 
 		Level:   4,
-		La:      ygo.LA_Earth,       // 暗
+		La:      ygo.LA_Dark,        // 暗
 		Lr:      ygo.LR_SpellCaster, // 魔法师
 		Attack:  900,
 		Defense: 1400,
@@ -2392,7 +2386,7 @@ func vol(cardBag *ygo.CardVersion) {
 		Lc:       ygo.LC_FusionMonster, // 融合怪兽
 
 		Level:   6,
-		La:      ygo.LA_Earth, // 水
+		La:      ygo.LA_Water, // 水
 		Lr:      ygo.LR_None,  // 水
 		Attack:  2100,
 		Defense: 1800,
@@ -2468,7 +2462,7 @@ func vol(cardBag *ygo.CardVersion) {
 		Lc:       ygo.LC_EffectMonster, // 效果怪兽
 
 		Level:   7,
-		La:      ygo.LA_Earth,   // 光
+		La:      ygo.LA_Light,   // 光
 		Lr:      ygo.LR_Thunder, // 雷
 		Attack:  2600,
 		Defense: 2200,
@@ -2511,7 +2505,7 @@ func vol(cardBag *ygo.CardVersion) {
 		Lc:       ygo.LC_EffectMonster, // 效果怪兽
 
 		Level:   7,
-		La:      ygo.LA_Earth,       // 风
+		La:      ygo.LA_Wind,        // 风
 		Lr:      ygo.LR_SpellCaster, // 魔法师
 		Attack:  2400,
 		Defense: 2200,
@@ -2554,7 +2548,7 @@ func vol(cardBag *ygo.CardVersion) {
 		Lc:       ygo.LC_EffectMonster, // 效果怪兽
 
 		Level:   7,
-		La:      ygo.LA_Earth, // 水
+		La:      ygo.LA_Water, // 水
 		Lr:      ygo.LR_None,  // 水
 		Attack:  2500,
 		Defense: 2400,
@@ -2595,12 +2589,15 @@ func vol(cardBag *ygo.CardVersion) {
 		Lc:       ygo.LC_EffectMonster, // 效果怪兽
 
 		Level:   1,
-		La:      ygo.LA_Earth,       // 暗
+		La:      ygo.LA_Dark,        // 暗
 		Lr:      ygo.LR_SpellCaster, // 魔法师
 		Attack:  400,
 		Defense: 300,
-		//Initialize:    func(ca *ygo.Card) bool {}, // 初始
-		IsValid: false,
+		Initialize: func(ca *ygo.Card) bool {
+			ca.SetCanDirect()
+			return true
+		}, // 初始
+		IsValid: true,
 	})
 
 	/*58*/
@@ -2645,8 +2642,22 @@ func vol(cardBag *ygo.CardVersion) {
 		Lr:      ygo.LR_Machine, // 机械
 		Attack:  250,
 		Defense: 300,
-		//Initialize:    func(ca *ygo.Card) bool {}, // 初始
-		IsValid: false,
+		Initialize: func(ca *ygo.Card) bool {
+			ca.AddEvent(ygo.Fought, func(c *ygo.Card) {
+				if c.RaceIsMachine() {
+					return
+				}
+				i := 0
+				c.RegisterGlobalListen(ygo.RoundEnd, func() {
+					i++
+					if i == 6 {
+						c.Dispatch(ygo.Destroy, ca)
+					}
+				})
+			})
+			return true
+		}, // 初始
+		IsValid: true,
 	})
 
 	/*59*/
@@ -2686,8 +2697,11 @@ func vol(cardBag *ygo.CardVersion) {
 		Lr:      ygo.LR_Insect, // 昆虫
 		Attack:  300,
 		Defense: 350,
-		//Initialize:    func(ca *ygo.Card) bool {}, // 初始
-		IsValid: false,
+		Initialize: func(ca *ygo.Card) bool {
+			ca.SetCanDirect()
+			return true
+		}, // 初始
+		IsValid: true,
 	})
 
 	/*60*/
@@ -2723,12 +2737,15 @@ func vol(cardBag *ygo.CardVersion) {
 		Lc:       ygo.LC_EffectMonster, // 效果怪兽
 
 		Level:   1,
-		La:      ygo.LA_Earth, // 水
+		La:      ygo.LA_Water, // 水
 		Lr:      ygo.LR_None,  // 水
 		Attack:  300,
 		Defense: 250,
-		//Initialize:    func(ca *ygo.Card) bool {}, // 初始
-		IsValid: false,
+		Initialize: func(ca *ygo.Card) bool {
+			ca.SetCanDirect()
+			return true
+		}, // 初始
+		IsValid: true,
 	})
 
 	/*61*/
@@ -2775,26 +2792,30 @@ func vol(cardBag *ygo.CardVersion) {
 		Attack:  800,
 		Defense: 900,
 		Initialize: func(ca *ygo.Card) bool {
-			ca.RegisterGlobalListen(ygo.SP, func(pl0 *ygo.Player) bool {
-				if pl := ca.GetSummoner(); pl == pl0 {
-					tar := pl.GetTarget()
-					ca.PushChain(func() {
-						ca.Dispatch(ygo.Cost)
-						for i := 0; i != 2; i++ {
-							if c := pl.SelectForWarn(tar.Mzone, pl.Mzone, func(c0 *ygo.Card) bool {
-								return c0.IsFaceUp() && (c0.GetAttack() <= 100)
-							}); c != nil {
-								c.Dispatch(ygo.Destroy, ca)
+			e := func() {
+				ca.RegisterIgnitionSelector(ygo.SP, func(pl0 *ygo.Player) bool {
+					if pl := ca.GetSummoner(); pl == pl0 {
+						ca.PushChain(func() {
+							tar := pl.GetTarget()
+							ca.Dispatch(ygo.Cost)
+							for i := 0; i != 2; i++ {
+								if c := pl.SelectForWarn(tar.Mzone, pl.Mzone, func(c0 *ygo.Card) bool {
+									return c0.IsFaceUp() && (c0.GetAttack() <= 1000)
+								}); c != nil {
+									c.Dispatch(ygo.Destroy, ca)
+								}
 							}
-						}
 
-					})
-				}
-				return true
-			})
+						})
+					}
+					return true
+				})
+			}
+			ca.AddEvent(ygo.FaceUp, e)
+
 			return true
 		}, // 初始
-		IsValid: false,
+		IsValid: true,
 	})
 
 	/*62*/
@@ -2830,12 +2851,15 @@ func vol(cardBag *ygo.CardVersion) {
 		Lc:       ygo.LC_EffectMonster, // 效果怪兽
 
 		Level:   2,
-		La:      ygo.LA_Earth,   // 暗
+		La:      ygo.LA_Dark,    // 暗
 		Lr:      ygo.LR_Machine, // 机械
 		Attack:  500,
 		Defense: 400,
-		//Initialize:    func(ca *ygo.Card) bool {}, // 初始
-		IsValid: false,
+		Initialize: func(ca *ygo.Card) bool {
+			ca.SetCanDirect()
+			return true
+		}, // 初始
+		IsValid: true,
 	})
 
 	/*63*/
@@ -2875,7 +2899,7 @@ func vol(cardBag *ygo.CardVersion) {
 		Lc:       ygo.LC_EffectMonster, // 效果怪兽
 
 		Level:   1,
-		La:      ygo.LA_Earth,       // 光
+		La:      ygo.LA_Light,       // 光
 		Lr:      ygo.LR_SpellCaster, // 魔法师
 		Attack:  300,
 		Defense: 400,
@@ -2931,8 +2955,11 @@ func vol(cardBag *ygo.CardVersion) {
 		Lr:      ygo.LR_Plant, // 植物
 		Attack:  400,
 		Defense: 500,
-		//Initialize:    func(ca *ygo.Card) bool {}, // 初始
-		IsValid: false,
+		Initialize: func(ca *ygo.Card) bool {
+			ca.SetCanDirect()
+			return true
+		}, // 初始
+		IsValid: true,
 	})
 
 	/*65*/
@@ -2976,8 +3003,16 @@ func vol(cardBag *ygo.CardVersion) {
 		Lr:      ygo.LR_Thunder, // 雷
 		Attack:  850,
 		Defense: 800,
-		//Initialize:    func(ca *ygo.Card) bool {}, // 初始
-		IsValid: false,
+		Initialize: func(ca *ygo.Card) bool {
+			ca.AddEvent(ygo.Fought, func(c *ygo.Card) {
+				if c.RaceIsMachine() {
+					return
+				}
+				c.SetSizeRoundNotCanAttack(1)
+			})
+			return true
+		}, // 初始
+		IsValid: true,
 	})
 
 	/*66*/
@@ -3017,8 +3052,11 @@ func vol(cardBag *ygo.CardVersion) {
 		Lr:      ygo.LR_Warrior, // 战士
 		Attack:  350,
 		Defense: 300,
-		//Initialize:    func(ca *ygo.Card) bool {}, // 初始
-		IsValid: false,
+		Initialize: func(ca *ygo.Card) bool {
+			ca.SetCanDirect()
+			return true
+		}, // 初始
+		IsValid: true,
 	})
 
 	/*67*/
@@ -3295,8 +3333,20 @@ func vol(cardBag *ygo.CardVersion) {
 		Lr:      ygo.LR_Warrior, // 战士
 		Attack:  1800,
 		Defense: 1500,
-		//Initialize:    func(ca *ygo.Card) bool {}, // 初始
-		IsValid: false,
+		Initialize: func(ca *ygo.Card) bool {
+			ca.RegisterMzoneArea(func(c *ygo.Card) {
+				if c.GetName() == "野蛮人1号" {
+					ca.SetAttack(ca.GetAttack() + 500)
+				}
+			}, func(c *ygo.Card) {
+				if c.GetName() == "野蛮人1号" {
+					ca.SetAttack(ca.GetAttack() - 500)
+				}
+			})
+			return true
+
+		}, // 初始
+		IsValid: true,
 	})
 
 	/*73*/
@@ -3332,7 +3382,7 @@ func vol(cardBag *ygo.CardVersion) {
 		Lc:       ygo.LC_EffectMonster, // 效果怪兽
 
 		Level:   3,
-		La:      ygo.LA_None, // 炎
+		La:      ygo.LA_Fire, // 炎
 		Lr:      ygo.LR_Pyro, // 炎
 		Attack:  200,
 		Defense: 1800,
@@ -3380,12 +3430,25 @@ func vol(cardBag *ygo.CardVersion) {
 		Lc:       ygo.LC_EffectMonster, // 效果怪兽
 
 		Level:   3,
-		La:      ygo.LA_Earth, // 暗
+		La:      ygo.LA_Dark,  // 暗
 		Lr:      ygo.LR_Fiend, // 恶魔
 		Attack:  1000,
 		Defense: 600,
-		//Initialize:    func(ca *ygo.Card) bool {}, // 初始
-		IsValid: false,
+		Initialize: func(ca *ygo.Card) bool {
+			ca.AddEvent(ygo.InMzone, func() {
+				ca.AddEvent(ygo.InGrave, func() {
+					pl := ca.GetSummoner()
+					cs := pl.Deck.Find(func(c *ygo.Card) bool {
+						return c.IsMonster() && c.GetDefense() <= 1500
+					})
+					if c := pl.SelectForPopup(cs); c != nil {
+						c.ToHand()
+					}
+				})
+			})
+			return true
+		}, // 初始
+		IsValid: true,
 	})
 
 	/*75*/
@@ -3467,7 +3530,7 @@ func vol(cardBag *ygo.CardVersion) {
 		Lc:       ygo.LC_EffectMonster, // 效果怪兽
 
 		Level:   1,
-		La:      ygo.LA_Earth, // 暗
+		La:      ygo.LA_Dark,  // 暗
 		Lr:      ygo.LR_Fiend, // 恶魔
 		Attack:  300,
 		Defense: 200,
@@ -3501,7 +3564,7 @@ func vol(cardBag *ygo.CardVersion) {
 		Lc:       ygo.LC_FusionMonster, // 融合怪兽
 
 		Level:   7,
-		La:      ygo.LA_Earth,  // 风
+		La:      ygo.LA_Wind,   // 风
 		Lr:      ygo.LR_Dragon, // 龙
 		Attack:  2400,
 		Defense: 2000,
@@ -3546,7 +3609,7 @@ func vol(cardBag *ygo.CardVersion) {
 		Lc:       ygo.LC_EffectMonster, // 效果怪兽
 
 		Level:   5,
-		La:      ygo.LA_Earth, // 水
+		La:      ygo.LA_Water, // 水
 		Lr:      ygo.LR_None,  // 水
 		Attack:  1000,
 		Defense: 2000,
@@ -3627,7 +3690,7 @@ func vol(cardBag *ygo.CardVersion) {
 		Lc:       ygo.LC_EffectMonster, // 效果怪兽
 
 		Level:   3,
-		La:      ygo.LA_Earth,   // 风
+		La:      ygo.LA_Wind,    // 风
 		Lr:      ygo.LR_Warrior, // 战士
 		Attack:  900,
 		Defense: 700,
@@ -3718,12 +3781,23 @@ func vol(cardBag *ygo.CardVersion) {
 		Lc:       ygo.LC_EffectMonster, // 效果怪兽
 
 		Level:   5,
-		La:      ygo.LA_Earth,  // 暗
+		La:      ygo.LA_Dark,   // 暗
 		Lr:      ygo.LR_Zombie, // 不死
 		Attack:  1600,
 		Defense: 1300,
-		//Initialize:    func(ca *ygo.Card) bool {}, // 初始
-		IsValid: false,
+		Initialize: func(ca *ygo.Card) bool {
+			ca.RegisterGraveArea(func(c *ygo.Card) {
+				if c.IsMonster() {
+					ca.SetAttack(ca.GetAttack() + 100)
+				}
+			}, func(c *ygo.Card) {
+				if c.IsMonster() {
+					ca.SetAttack(ca.GetAttack() - 100)
+				}
+			})
+			return true
+		}, // 初始
+		IsValid: true,
 	})
 
 	/*83*/
@@ -3761,12 +3835,32 @@ func vol(cardBag *ygo.CardVersion) {
 		Lc:       ygo.LC_EffectMonster, // 效果怪兽
 
 		Level:   5,
-		La:      ygo.LA_Earth,   // 光
+		La:      ygo.LA_Light,   // 光
 		Lr:      ygo.LR_Thunder, // 雷
 		Attack:  1600,
 		Defense: 1500,
-		//Initialize:    func(ca *ygo.Card) bool {}, // 初始
-		IsValid: false,
+		Initialize: func(ca *ygo.Card) bool {
+			ca.AddEvent(ygo.InHand, func() {
+				ca.RegisterIgnitionSelector(ygo.MP, func(pl0 *ygo.Player) {
+					pl := ca.GetSummoner()
+					if pl == pl0 {
+						ca.PushChain(func() {
+							ca.Dispatch(ygo.Cost)
+							for i := 0; i != 2; i++ {
+								if c := pl.SelectForPopup(pl.Deck, func(c0 *ygo.Card) bool {
+									return c0.GetId() == ca.GetId()
+								}); c != nil {
+									c.ToHand()
+								}
+							}
+						})
+					}
+				})
+			})
+			ca.AddEvent(ygo.OutHand, ygo.UnegisterGlobalListen)
+			return true
+		}, // 初始
+		IsValid: true,
 	})
 
 	/*84*/
@@ -3807,7 +3901,7 @@ func vol(cardBag *ygo.CardVersion) {
 		Lc:       ygo.LC_EffectMonster, // 效果怪兽
 
 		Level:   4,
-		La:      ygo.LA_Earth,   // 光
+		La:      ygo.LA_Light,   // 光
 		Lr:      ygo.LR_Thunder, // 雷
 		Attack:  1500,
 		Defense: 1300,
@@ -3866,12 +3960,27 @@ func vol(cardBag *ygo.CardVersion) {
 		Lc:       ygo.LC_EffectMonster, // 效果怪兽
 
 		Level:   2,
-		La:      ygo.LA_Earth, // 光
+		La:      ygo.LA_Light, // 光
 		Lr:      ygo.LR_Angel, // 天使
 		Attack:  500,
 		Defense: 700,
-		//Initialize:    func(ca *ygo.Card) bool {}, // 初始
-		IsValid: false,
+		Initialize: func(ca *ygo.Card) bool {
+			ca.RegisterAllMzoneHalo(func(c *ygo.Card) {
+				if c.AttrIsLight() {
+					c.SetAttack(c.GetAttack() + 500)
+					ca.OnlyOnce(ygo.Disabled, func() {
+						c.SetAttack(c.GetAttack() - 500)
+					}, c)
+				} else if c.AttrIsDark() {
+					c.SetAttack(c.GetAttack() - 400)
+					ca.OnlyOnce(ygo.Disabled, func() {
+						c.SetAttack(c.GetAttack() + 400)
+					}, c)
+				}
+			})
+			return true
+		}, // 初始
+		IsValid: true,
 	})
 
 	/*86*/
@@ -3900,7 +4009,7 @@ func vol(cardBag *ygo.CardVersion) {
 		Lc:       ygo.LC_FusionMonster, // 融合怪兽
 
 		Level:   5,
-		La:      ygo.LA_Earth,       // 光
+		La:      ygo.LA_Light,       // 光
 		Lr:      ygo.LR_SpellCaster, // 魔法师
 		Attack:  1750,
 		Defense: 1500,
@@ -3981,7 +4090,7 @@ func vol(cardBag *ygo.CardVersion) {
 		Lc:       ygo.LC_EffectMonster, // 效果怪兽
 
 		Level:   4,
-		La:      ygo.LA_Earth,   // 暗
+		La:      ygo.LA_Dark,    // 暗
 		Lr:      ygo.LR_Machine, // 机械
 		Attack:  1400,
 		Defense: 1300,
@@ -4025,8 +4134,17 @@ func vol(cardBag *ygo.CardVersion) {
 		Lr:      ygo.LR_Rock,  // 岩石
 		Attack:  600,
 		Defense: 300,
-		//Initialize:    func(ca *ygo.Card) bool {}, // 初始
-		IsValid: false,
+		Initialize: func(ca *ygo.Card) bool {
+			ca.RegisterHandArea(func() {
+				ca.SetAttack(ca.GetAttack() + 300)
+				ca.SetDefense(ca.GetDefense() + 300)
+			}, func() {
+				ca.SetAttack(ca.GetAttack() - 300)
+				ca.SetDefense(ca.GetDefense() - 300)
+			})
+			return true
+		}, // 初始
+		IsValid: true,
 	})
 
 	/*90*/
@@ -4061,12 +4179,27 @@ func vol(cardBag *ygo.CardVersion) {
 		Lc:       ygo.LC_EffectMonster, // 效果怪兽
 
 		Level:   2,
-		La:      ygo.LA_Earth, // 水
+		La:      ygo.LA_Water, // 水
 		Lr:      ygo.LR_None,  // 水
 		Attack:  550,
 		Defense: 500,
-		//Initialize:    func(ca *ygo.Card) bool {}, // 初始
-		IsValid: false,
+		Initialize: func(ca *ygo.Card) bool {
+			ca.RegisterAllMzoneHalo(func(c *ygo.Card) {
+				if c.AttrIsWater() {
+					c.SetAttack(c.GetAttack() + 500)
+					ca.OnlyOnce(ygo.Disabled, func() {
+						c.SetAttack(c.GetAttack() - 500)
+					}, c)
+				} else if c.AttrIsFire() {
+					c.SetAttack(c.GetAttack() - 400)
+					ca.OnlyOnce(ygo.Disabled, func() {
+						c.SetAttack(c.GetAttack() + 400)
+					}, c)
+				}
+			})
+			return true
+		}, // 初始
+		IsValid: true,
 	})
 
 	/*91*/
@@ -4105,8 +4238,23 @@ func vol(cardBag *ygo.CardVersion) {
 		Lr:      ygo.LR_Beast, // 兽
 		Attack:  300,
 		Defense: 250,
-		//Initialize:    func(ca *ygo.Card) bool {}, // 初始
-		IsValid: false,
+		Initialize: func(ca *ygo.Card) bool {
+			ca.RegisterAllMzoneHalo(func(c *ygo.Card) {
+				if c.AttrIsEarth() {
+					c.SetAttack(c.GetAttack() + 500)
+					ca.OnlyOnce(ygo.Disabled, func() {
+						c.SetAttack(c.GetAttack() - 500)
+					}, c)
+				} else if c.AttrIsWind() {
+					c.SetAttack(c.GetAttack() - 400)
+					ca.OnlyOnce(ygo.Disabled, func() {
+						c.SetAttack(c.GetAttack() + 400)
+					}, c)
+				}
+			})
+			return true
+		}, // 初始
+		IsValid: true,
 	})
 
 	/*92*/
@@ -4142,12 +4290,21 @@ func vol(cardBag *ygo.CardVersion) {
 		Lc:       ygo.LC_EffectMonster, // 效果怪兽
 
 		Level:   4,
-		La:      ygo.LA_Earth,       // 暗
+		La:      ygo.LA_Dark,        // 暗
 		Lr:      ygo.LR_SpellCaster, // 魔法师
 		Attack:  2000,
 		Defense: 800,
-		//Initialize:    func(ca *ygo.Card) bool {}, // 初始
-		IsValid: false,
+		Initialize: func(ca *ygo.Card) bool {
+			ca.RegisterPay(func(s string) {
+				if s != ygo.Declaration {
+					return
+				}
+				pl := ca.GetSummoner()
+				pl.ChangeHp(-1000)
+			})
+			return true
+		}, // 初始
+		IsValid: true,
 	})
 
 	/*93*/
@@ -4233,8 +4390,19 @@ func vol(cardBag *ygo.CardVersion) {
 		Lr:      ygo.LR_Warrior, // 战士
 		Attack:  1550,
 		Defense: 1800,
-		//Initialize:    func(ca *ygo.Card) bool {}, // 初始
-		IsValid: false,
+		Initialize: func(ca *ygo.Card) bool {
+			ca.RegisterMzoneArea(func(c *ygo.Card) {
+				if c.GetName() == "野蛮人2号" {
+					ca.SetAttack(ca.GetAttack() + 500)
+				}
+			}, func(c *ygo.Card) {
+				if c.GetName() == "野蛮人2号" {
+					ca.SetAttack(ca.GetAttack() - 500)
+				}
+			})
+			return true
+		}, // 初始
+		IsValid: true,
 	})
 
 	/*95*/
@@ -4276,7 +4444,7 @@ func vol(cardBag *ygo.CardVersion) {
 		Lc:       ygo.LC_EffectMonster, // 效果怪兽
 
 		Level:   4,
-		La:      ygo.LA_Earth,       // 暗
+		La:      ygo.LA_Dark,        // 暗
 		Lr:      ygo.LR_SpellCaster, // 魔法师
 		Attack:  1100,
 		Defense: 1200,
@@ -4334,8 +4502,23 @@ func vol(cardBag *ygo.CardVersion) {
 		Lr:      ygo.LR_Beast, // 兽
 		Attack:  600,
 		Defense: 550,
-		//Initialize:    func(ca *ygo.Card) bool {}, // 初始
-		IsValid: false,
+		Initialize: func(ca *ygo.Card) bool {
+			ca.RegisterAllMzoneHalo(func(c *ygo.Card) {
+				if c.AttrIsFire() {
+					c.SetAttack(c.GetAttack() + 500)
+					ca.OnlyOnce(ygo.Disabled, func() {
+						c.SetAttack(c.GetAttack() - 500)
+					}, c)
+				} else if c.AttrIsWater() {
+					c.SetAttack(c.GetAttack() - 400)
+					ca.OnlyOnce(ygo.Disabled, func() {
+						c.SetAttack(c.GetAttack() + 400)
+					}, c)
+				}
+			})
+			return true
+		}, // 初始
+		IsValid: true,
 	})
 
 	/*97*/
@@ -4370,12 +4553,27 @@ func vol(cardBag *ygo.CardVersion) {
 		Lc:       ygo.LC_EffectMonster, // 效果怪兽
 
 		Level:   2,
-		La:      ygo.LA_Earth,  // 风
+		La:      ygo.LA_Wind,   // 风
 		Lr:      ygo.LR_Insect, // 昆虫
 		Attack:  600,
 		Defense: 700,
-		//Initialize:    func(ca *ygo.Card) bool {}, // 初始
-		IsValid: false,
+		Initialize: func(ca *ygo.Card) bool {
+			ca.RegisterAllMzoneHalo(func(c *ygo.Card) {
+				if c.AttrIsWind() {
+					c.SetAttack(c.GetAttack() + 500)
+					ca.OnlyOnce(ygo.Disabled, func() {
+						c.SetAttack(c.GetAttack() - 500)
+					}, c)
+				} else if c.AttrIsEarth() {
+					c.SetAttack(c.GetAttack() - 400)
+					ca.OnlyOnce(ygo.Disabled, func() {
+						c.SetAttack(c.GetAttack() + 400)
+					}, c)
+				}
+			})
+			return true
+		}, // 初始
+		IsValid: true,
 	})
 
 	/*98*/
@@ -4404,7 +4602,7 @@ func vol(cardBag *ygo.CardVersion) {
 		Lc:       ygo.LC_FusionMonster, // 融合怪兽
 
 		Level:   7,
-		La:      ygo.LA_Earth,   // 光
+		La:      ygo.LA_Light,   // 光
 		Lr:      ygo.LR_Thunder, // 雷
 		Attack:  2800,
 		Defense: 2100,
@@ -4447,12 +4645,27 @@ func vol(cardBag *ygo.CardVersion) {
 		Lc:       ygo.LC_EffectMonster, // 效果怪兽
 
 		Level:   2,
-		La:      ygo.LA_Earth,       // 暗
+		La:      ygo.LA_Dark,        // 暗
 		Lr:      ygo.LR_SpellCaster, // 魔法师
 		Attack:  550,
 		Defense: 500,
-		//Initialize:    func(ca *ygo.Card) bool {}, // 初始
-		IsValid: false,
+		Initialize: func(ca *ygo.Card) bool {
+			ca.RegisterAllMzoneHalo(func(c *ygo.Card) {
+				if c.AttrIsDark() {
+					c.SetAttack(c.GetAttack() + 500)
+					ca.OnlyOnce(ygo.Disabled, func() {
+						c.SetAttack(c.GetAttack() - 500)
+					}, c)
+				} else if c.AttrIsLight() {
+					c.SetAttack(c.GetAttack() - 400)
+					ca.OnlyOnce(ygo.Disabled, func() {
+						c.SetAttack(c.GetAttack() + 400)
+					}, c)
+				}
+			})
+			return true
+		}, // 初始
+		IsValid: true,
 	})
 
 	/*100*/
@@ -4488,7 +4701,7 @@ func vol(cardBag *ygo.CardVersion) {
 		Lc:       ygo.LC_EffectMonster, // 效果怪兽
 
 		Level:   7,
-		La:      ygo.LA_Earth,   // 暗
+		La:      ygo.LA_Dark,    // 暗
 		Lr:      ygo.LR_Machine, // 机械
 		Attack:  2600,
 		Defense: 2200,
@@ -4881,13 +5094,18 @@ func vol(cardBag *ygo.CardVersion) {
 		Lc:       ygo.LC_EffectMonster, // 效果怪兽
 
 		Level:   1,
-		La:      ygo.LA_Earth,       // 光
+		La:      ygo.LA_Light,       // 光
 		Lr:      ygo.LR_SpellCaster, // 魔法师
 		Attack:  0,
 		Defense: 100,
 		Initialize: func(ca *ygo.Card) bool {
 			ca.AddEvent(ygo.DestroyBeBattle, func() {
-				panic("DestroyBeBattle")
+				pl := ca.GetSummoner()
+				tar := pl.GetTarget()
+				tar.Mzone.ForEach(func(c *ygo.Card) bool {
+					c.SetNotCanAttack()
+					return true
+				})
 			})
 			return true
 		}, // 初始
@@ -5111,7 +5329,7 @@ func vol(cardBag *ygo.CardVersion) {
 		Name:     "单摆刃拷问机械",              // "Pendulum Machine"  "振り子刃の拷問機械"
 		Lc:       ygo.LC_OrdinaryMonster, // 通常怪兽
 		Level:    6,
-		La:       ygo.LA_Earth,   // 暗
+		La:       ygo.LA_Dark,    // 暗
 		Lr:       ygo.LR_Machine, // 机械
 		Attack:   1750,
 		Defense:  2000,
@@ -5175,7 +5393,7 @@ func vol(cardBag *ygo.CardVersion) {
 		Name:     "黑魔术师",                 // "Dark Magician"  "ブラック·マジシャン"
 		Lc:       ygo.LC_OrdinaryMonster, // 通常怪兽
 		Level:    7,
-		La:       ygo.LA_Earth,       // 暗
+		La:       ygo.LA_Dark,        // 暗
 		Lr:       ygo.LR_SpellCaster, // 魔法师
 		Attack:   2500,
 		Defense:  2100,
@@ -5305,7 +5523,7 @@ func vol(cardBag *ygo.CardVersion) {
 		Name:     "圣精灵",                  // "Mystical Elf"  "ホーリー·エルフ"
 		Lc:       ygo.LC_OrdinaryMonster, // 通常怪兽
 		Level:    4,
-		La:       ygo.LA_Earth,       // 光
+		La:       ygo.LA_Light,       // 光
 		Lr:       ygo.LR_SpellCaster, // 魔法师
 		Attack:   800,
 		Defense:  2000,
@@ -5337,7 +5555,7 @@ func vol(cardBag *ygo.CardVersion) {
 		Name:     "大炮鸟",                  // "Tyhone"  "タイホーン"
 		Lc:       ygo.LC_OrdinaryMonster, // 通常怪兽
 		Level:    4,
-		La:       ygo.LA_Earth,     // 风
+		La:       ygo.LA_Wind,      // 风
 		Lr:       ygo.LR_WindBeast, // 鸟兽
 		Attack:   1200,
 		Defense:  1400,
@@ -5401,7 +5619,7 @@ func vol(cardBag *ygo.CardVersion) {
 		Name:     "诅咒之龙",                 // "Curse of Dragon"  "カース·オブ·ドラゴン"
 		Lc:       ygo.LC_OrdinaryMonster, // 通常怪兽
 		Level:    5,
-		La:       ygo.LA_Earth,  // 暗
+		La:       ygo.LA_Dark,   // 暗
 		Lr:       ygo.LR_Dragon, // 龙
 		Attack:   2000,
 		Defense:  1500,
@@ -5497,7 +5715,7 @@ func vol(cardBag *ygo.CardVersion) {
 		Name:     "魔人 死亡撒旦",              // "Witty Phantom"  "魔人デスサタン"
 		Lc:       ygo.LC_OrdinaryMonster, // 通常怪兽
 		Level:    4,
-		La:       ygo.LA_Earth, // 暗
+		La:       ygo.LA_Dark,  // 暗
 		Lr:       ygo.LR_Fiend, // 恶魔
 		Attack:   1400,
 		Defense:  1300,
@@ -5529,7 +5747,7 @@ func vol(cardBag *ygo.CardVersion) {
 		Name:     "竖琴精灵",                 // "Spirit of the Harp"  "ハープの精"
 		Lc:       ygo.LC_OrdinaryMonster, // 通常怪兽
 		Level:    4,
-		La:       ygo.LA_Earth, // 光
+		La:       ygo.LA_Light, // 光
 		Lr:       ygo.LR_Angel, // 天使
 		Attack:   800,
 		Defense:  2000,
@@ -5561,7 +5779,7 @@ func vol(cardBag *ygo.CardVersion) {
 		Name:     "魔人 泰拉",                // "Terra the Terrible"  "魔人 テラ"
 		Lc:       ygo.LC_OrdinaryMonster, // 通常怪兽
 		Level:    4,
-		La:       ygo.LA_Earth, // 暗
+		La:       ygo.LA_Dark,  // 暗
 		Lr:       ygo.LR_Fiend, // 恶魔
 		Attack:   1200,
 		Defense:  1300,
@@ -5593,7 +5811,7 @@ func vol(cardBag *ygo.CardVersion) {
 		Name:     "恍惚的人鱼",                // "Enchanting Mermaid"  "恍惚の人魚"
 		Lc:       ygo.LC_OrdinaryMonster, // 通常怪兽
 		Level:    3,
-		La:       ygo.LA_Earth, // 水
+		La:       ygo.LA_Water, // 水
 		Lr:       ygo.LR_Fish,  // 鱼
 		Attack:   1200,
 		Defense:  900,
@@ -5625,7 +5843,7 @@ func vol(cardBag *ygo.CardVersion) {
 		Name:     "炎之魔神",                 // "Fireyarou"  "炎の魔神"
 		Lc:       ygo.LC_OrdinaryMonster, // 通常怪兽
 		Level:    4,
-		La:       ygo.LA_None, // 炎
+		La:       ygo.LA_Fire, // 炎
 		Lr:       ygo.LR_Pyro, // 炎
 		Attack:   1300,
 		Defense:  1000,
@@ -5657,7 +5875,7 @@ func vol(cardBag *ygo.CardVersion) {
 		Name:     "尖刺海龙",                 // "Spike Seadra"  "スパイクシードラ"
 		Lc:       ygo.LC_OrdinaryMonster, // 通常怪兽
 		Level:    5,
-		La:       ygo.LA_Earth,      // 水
+		La:       ygo.LA_Water,      // 水
 		Lr:       ygo.LR_Seaserpent, // 海龙
 		Attack:   1600,
 		Defense:  1300,
@@ -5689,7 +5907,7 @@ func vol(cardBag *ygo.CardVersion) {
 		Name:     "天空猎手",                 // "Skull Red Bird"  "スカイ·ハンター"
 		Lc:       ygo.LC_OrdinaryMonster, // 通常怪兽
 		Level:    4,
-		La:       ygo.LA_Earth,     // 风
+		La:       ygo.LA_Wind,      // 风
 		Lr:       ygo.LR_WindBeast, // 鸟兽
 		Attack:   1550,
 		Defense:  1200,
@@ -5785,7 +6003,7 @@ func vol(cardBag *ygo.CardVersion) {
 		Name:     "下级龙",                  // "Lesser Dragon"  "レッサー·ドラゴン"
 		Lc:       ygo.LC_OrdinaryMonster, // 通常怪兽
 		Level:    4,
-		La:       ygo.LA_Earth,  // 风
+		La:       ygo.LA_Wind,   // 风
 		Lr:       ygo.LR_Dragon, // 龙
 		Attack:   1200,
 		Defense:  1000,
@@ -5817,7 +6035,7 @@ func vol(cardBag *ygo.CardVersion) {
 		Name:     "女夜魔骑士",                // "Succubus Knight"  "サキュバス·ナイト"
 		Lc:       ygo.LC_OrdinaryMonster, // 通常怪兽
 		Level:    5,
-		La:       ygo.LA_Earth,   // 暗
+		La:       ygo.LA_Dark,    // 暗
 		Lr:       ygo.LR_Warrior, // 战士
 		Attack:   1650,
 		Defense:  1300,
@@ -5849,7 +6067,7 @@ func vol(cardBag *ygo.CardVersion) {
 		Name:     "被封印者的右足",              // "Right Leg of the Forbidden One"  "封印されし者の右足"
 		Lc:       ygo.LC_OrdinaryMonster, // 通常怪兽
 		Level:    1,
-		La:       ygo.LA_Earth,       // 暗
+		La:       ygo.LA_Dark,        // 暗
 		Lr:       ygo.LR_SpellCaster, // 魔法师
 		Attack:   200,
 		Defense:  300,
@@ -5881,7 +6099,7 @@ func vol(cardBag *ygo.CardVersion) {
 		Name:     "被封印者的左足",              // "Left Leg of the Forbidden One"  "封印されし者の左足"
 		Lc:       ygo.LC_OrdinaryMonster, // 通常怪兽
 		Level:    1,
-		La:       ygo.LA_Earth,       // 暗
+		La:       ygo.LA_Dark,        // 暗
 		Lr:       ygo.LR_SpellCaster, // 魔法师
 		Attack:   200,
 		Defense:  300,
@@ -5913,7 +6131,7 @@ func vol(cardBag *ygo.CardVersion) {
 		Name:     "小天使",                  // "Petit Angel"  "プチテンシ"
 		Lc:       ygo.LC_OrdinaryMonster, // 通常怪兽
 		Level:    3,
-		La:       ygo.LA_Earth, // 光
+		La:       ygo.LA_Light, // 光
 		Lr:       ygo.LR_Angel, // 天使
 		Attack:   600,
 		Defense:  900,
@@ -6009,7 +6227,7 @@ func vol(cardBag *ygo.CardVersion) {
 		Name:     "鸭人",                   // "Kurama"  "ドレイク"
 		Lc:       ygo.LC_OrdinaryMonster, // 通常怪兽
 		Level:    3,
-		La:       ygo.LA_Earth,     // 风
+		La:       ygo.LA_Wind,      // 风
 		Lr:       ygo.LR_WindBeast, // 鸟兽
 		Attack:   800,
 		Defense:  800,
@@ -6041,7 +6259,7 @@ func vol(cardBag *ygo.CardVersion) {
 		Name:     "睡眠之子",                 // "Nemuriko"  "眠り子"
 		Lc:       ygo.LC_OrdinaryMonster, // 通常怪兽
 		Level:    3,
-		La:       ygo.LA_Earth,       // 暗
+		La:       ygo.LA_Dark,        // 暗
 		Lr:       ygo.LR_SpellCaster, // 魔法师
 		Attack:   800,
 		Defense:  700,
@@ -6073,7 +6291,7 @@ func vol(cardBag *ygo.CardVersion) {
 		Name:     "死亡之足",                 // "The Drdek"  "デス·フット"
 		Lc:       ygo.LC_OrdinaryMonster, // 通常怪兽
 		Level:    3,
-		La:       ygo.LA_Earth, // 暗
+		La:       ygo.LA_Dark,  // 暗
 		Lr:       ygo.LR_Fiend, // 恶魔
 		Attack:   700,
 		Defense:  800,
@@ -6105,7 +6323,7 @@ func vol(cardBag *ygo.CardVersion) {
 		Name:     "愤怒的海王",                // "The Furious Sea King"  "怒りの海王"
 		Lc:       ygo.LC_OrdinaryMonster, // 通常怪兽
 		Level:    3,
-		La:       ygo.LA_Earth, // 水
+		La:       ygo.LA_Water, // 水
 		Lr:       ygo.LR_None,  // 水
 		Attack:   800,
 		Defense:  700,
@@ -6137,7 +6355,7 @@ func vol(cardBag *ygo.CardVersion) {
 		Name:     "生命之沙漏",                // "Hourglass of Life"  "命の砂時計"
 		Lc:       ygo.LC_OrdinaryMonster, // 通常怪兽
 		Level:    2,
-		La:       ygo.LA_Earth, // 光
+		La:       ygo.LA_Light, // 光
 		Lr:       ygo.LR_Angel, // 天使
 		Attack:   700,
 		Defense:  600,
@@ -6169,7 +6387,7 @@ func vol(cardBag *ygo.CardVersion) {
 		Name:     "小精怪",                  // "Feral Imp"  "グレムリン"
 		Lc:       ygo.LC_OrdinaryMonster, // 通常怪兽
 		Level:    4,
-		La:       ygo.LA_Earth, // 暗
+		La:       ygo.LA_Dark,  // 暗
 		Lr:       ygo.LR_Fiend, // 恶魔
 		Attack:   1300,
 		Defense:  1400,
@@ -6233,7 +6451,7 @@ func vol(cardBag *ygo.CardVersion) {
 		Name:     "守城的翼龙",                // "Winged Dragon, Guardian of the Fortress #1"  "砦を守る翼竜"
 		Lc:       ygo.LC_OrdinaryMonster, // 通常怪兽
 		Level:    4,
-		La:       ygo.LA_Earth,  // 风
+		La:       ygo.LA_Wind,   // 风
 		Lr:       ygo.LR_Dragon, // 龙
 		Attack:   1400,
 		Defense:  1200,
@@ -6329,7 +6547,7 @@ func vol(cardBag *ygo.CardVersion) {
 		Name:     "独眼盾龙",                 // "One-Eyed Shield Dragon"  "一眼の盾竜"
 		Lc:       ygo.LC_OrdinaryMonster, // 通常怪兽
 		Level:    3,
-		La:       ygo.LA_Earth,  // 风
+		La:       ygo.LA_Wind,   // 风
 		Lr:       ygo.LR_Dragon, // 龙
 		Attack:   700,
 		Defense:  1300,
@@ -6425,7 +6643,7 @@ func vol(cardBag *ygo.CardVersion) {
 		Name:     "恶魔召唤",                 // "Summoned Skull"  "デーモンの召喚"
 		Lc:       ygo.LC_OrdinaryMonster, // 通常怪兽
 		Level:    6,
-		La:       ygo.LA_Earth, // 暗
+		La:       ygo.LA_Dark,  // 暗
 		Lr:       ygo.LR_Fiend, // 恶魔
 		Attack:   2500,
 		Defense:  1200,
@@ -6521,7 +6739,7 @@ func vol(cardBag *ygo.CardVersion) {
 		Name:     "暗黑拿破仑",                // "Meda Bat"  "D·ナポレオン"
 		Lc:       ygo.LC_OrdinaryMonster, // 通常怪兽
 		Level:    2,
-		La:       ygo.LA_Earth, // 暗
+		La:       ygo.LA_Dark,  // 暗
 		Lr:       ygo.LR_Fiend, // 恶魔
 		Attack:   800,
 		Defense:  400,
@@ -6585,7 +6803,7 @@ func vol(cardBag *ygo.CardVersion) {
 		Name:     "卡库塔斯",                 // "Akihiron"  "カクタス"
 		Lc:       ygo.LC_OrdinaryMonster, // 通常怪兽
 		Level:    5,
-		La:       ygo.LA_Earth, // 水
+		La:       ygo.LA_Water, // 水
 		Lr:       ygo.LR_None,  // 水
 		Attack:   1700,
 		Defense:  1400,
@@ -6649,7 +6867,7 @@ func vol(cardBag *ygo.CardVersion) {
 		Name:     "神圣人偶",                 // "Rogue Doll"  "ホーリー·ドール"
 		Lc:       ygo.LC_OrdinaryMonster, // 通常怪兽
 		Level:    4,
-		La:       ygo.LA_Earth,       // 光
+		La:       ygo.LA_Light,       // 光
 		Lr:       ygo.LR_SpellCaster, // 魔法师
 		Attack:   1600,
 		Defense:  1000,
@@ -6681,7 +6899,7 @@ func vol(cardBag *ygo.CardVersion) {
 		Name:     "魔加农",                  // "Mabarrel"  "マキャノン"
 		Lc:       ygo.LC_OrdinaryMonster, // 通常怪兽
 		Level:    5,
-		La:       ygo.LA_Earth, // 暗
+		La:       ygo.LA_Dark,  // 暗
 		Lr:       ygo.LR_Fiend, // 恶魔
 		Attack:   1700,
 		Defense:  1400,
@@ -6745,7 +6963,7 @@ func vol(cardBag *ygo.CardVersion) {
 		Name:     "甲化海星",                 // "Armored Starfish"  "アーマード·スターフィッシュ"
 		Lc:       ygo.LC_OrdinaryMonster, // 通常怪兽
 		Level:    4,
-		La:       ygo.LA_Earth, // 水
+		La:       ygo.LA_Water, // 水
 		Lr:       ygo.LR_None,  // 水
 		Attack:   850,
 		Defense:  1400,
@@ -6809,7 +7027,7 @@ func vol(cardBag *ygo.CardVersion) {
 		Name:     "杀人蜂",                  // "Killer Needle"  "キラー·ビー"
 		Lc:       ygo.LC_OrdinaryMonster, // 通常怪兽
 		Level:    4,
-		La:       ygo.LA_Earth,  // 风
+		La:       ygo.LA_Wind,   // 风
 		Lr:       ygo.LR_Insect, // 昆虫
 		Attack:   1200,
 		Defense:  1000,
@@ -6841,7 +7059,7 @@ func vol(cardBag *ygo.CardVersion) {
 		Name:     "神鱼",                   // "Bottom Dweller"  "神魚"
 		Lc:       ygo.LC_OrdinaryMonster, // 通常怪兽
 		Level:    5,
-		La:       ygo.LA_Earth, // 水
+		La:       ygo.LA_Water, // 水
 		Lr:       ygo.LR_Fish,  // 鱼
 		Attack:   1650,
 		Defense:  1700,
@@ -6873,7 +7091,7 @@ func vol(cardBag *ygo.CardVersion) {
 		Name:     "耳天使",                  // "Ocubeam"  "エンゼル·イヤーズ"
 		Lc:       ygo.LC_OrdinaryMonster, // 通常怪兽
 		Level:    5,
-		La:       ygo.LA_Earth, // 光
+		La:       ygo.LA_Light, // 光
 		Lr:       ygo.LR_Angel, // 天使
 		Attack:   1550,
 		Defense:  1650,
@@ -6905,7 +7123,7 @@ func vol(cardBag *ygo.CardVersion) {
 		Name:     "死之沉默天使 多玛",            // "Doma The Angel of Silence"  "死の沈黙の天使 ドマ"
 		Lc:       ygo.LC_OrdinaryMonster, // 通常怪兽
 		Level:    5,
-		La:       ygo.LA_Earth, // 暗
+		La:       ygo.LA_Dark,  // 暗
 		Lr:       ygo.LR_Angel, // 天使
 		Attack:   1600,
 		Defense:  1400,
@@ -6969,7 +7187,7 @@ func vol(cardBag *ygo.CardVersion) {
 		Name:     "莫林芬",                  // "Morinphen"  "モリンフェン"
 		Lc:       ygo.LC_OrdinaryMonster, // 通常怪兽
 		Level:    5,
-		La:       ygo.LA_Earth, // 暗
+		La:       ygo.LA_Dark,  // 暗
 		Lr:       ygo.LR_Fiend, // 恶魔
 		Attack:   1550,
 		Defense:  1300,
@@ -7001,7 +7219,7 @@ func vol(cardBag *ygo.CardVersion) {
 		Name:     "古代精灵",                 // "Ancient Elf"  "エンシェント·エルフ"
 		Lc:       ygo.LC_OrdinaryMonster, // 通常怪兽
 		Level:    4,
-		La:       ygo.LA_Earth,       // 光
+		La:       ygo.LA_Light,       // 光
 		Lr:       ygo.LR_SpellCaster, // 魔法师
 		Attack:   1450,
 		Defense:  1200,
@@ -7065,7 +7283,7 @@ func vol(cardBag *ygo.CardVersion) {
 		Name:     "绝对鸟",                  // "Fiend Reflection#1"  "アブソリューター"
 		Lc:       ygo.LC_OrdinaryMonster, // 通常怪兽
 		Level:    4,
-		La:       ygo.LA_Earth,     // 风
+		La:       ygo.LA_Wind,      // 风
 		Lr:       ygo.LR_WindBeast, // 鸟兽
 		Attack:   1300,
 		Defense:  1400,
@@ -7097,7 +7315,7 @@ func vol(cardBag *ygo.CardVersion) {
 		Name:     "舌鱼",                   // "Tongyo"  "舌魚"
 		Lc:       ygo.LC_OrdinaryMonster, // 通常怪兽
 		Level:    4,
-		La:       ygo.LA_Earth, // 水
+		La:       ygo.LA_Water, // 水
 		Lr:       ygo.LR_Fish,  // 鱼
 		Attack:   1350,
 		Defense:  800,
@@ -7161,7 +7379,7 @@ func vol(cardBag *ygo.CardVersion) {
 		Name:     "鹰身女郎",                 // "Harpie Lady"  "ハーピィ·レディ"
 		Lc:       ygo.LC_OrdinaryMonster, // 通常怪兽
 		Level:    4,
-		La:       ygo.LA_Earth,     // 风
+		La:       ygo.LA_Wind,      // 风
 		Lr:       ygo.LR_WindBeast, // 鸟兽
 		Attack:   1300,
 		Defense:  1400,
@@ -7193,7 +7411,7 @@ func vol(cardBag *ygo.CardVersion) {
 		Name:     "乌鸦天狗",                 // "Crow Goblin"  "カラス天狗"
 		Lc:       ygo.LC_OrdinaryMonster, // 通常怪兽
 		Level:    5,
-		La:       ygo.LA_Earth,     // 风
+		La:       ygo.LA_Wind,      // 风
 		Lr:       ygo.LR_WindBeast, // 鸟兽
 		Attack:   1850,
 		Defense:  1600,
@@ -7322,7 +7540,7 @@ func vol(cardBag *ygo.CardVersion) {
 		Name:     "暗黑兔",                  // "Dark Rabbit"  "ダーク·ラビット"
 		Lc:       ygo.LC_OrdinaryMonster, // 通常怪兽
 		Level:    4,
-		La:       ygo.LA_Earth, // 暗
+		La:       ygo.LA_Dark,  // 暗
 		Lr:       ygo.LR_Beast, // 兽
 		Attack:   1100,
 		Defense:  1500,
@@ -7386,7 +7604,7 @@ func vol(cardBag *ygo.CardVersion) {
 		Name:     "魔法幽灵",                 // "Magical Ghost"  "マジカル·ゴースト"
 		Lc:       ygo.LC_OrdinaryMonster, // 通常怪兽
 		Level:    4,
-		La:       ygo.LA_Earth,  // 暗
+		La:       ygo.LA_Dark,   // 暗
 		Lr:       ygo.LR_Zombie, // 不死
 		Attack:   1300,
 		Defense:  1400,
@@ -7450,7 +7668,7 @@ func vol(cardBag *ygo.CardVersion) {
 		Name:     "海之龙王",                 // "Sea King Dragon"  "海の竜王"
 		Lc:       ygo.LC_OrdinaryMonster, // 通常怪兽
 		Level:    6,
-		La:       ygo.LA_Earth,      // 水
+		La:       ygo.LA_Water,      // 水
 		Lr:       ygo.LR_Seaserpent, // 海龙
 		Attack:   2000,
 		Defense:  1700,
@@ -7546,7 +7764,7 @@ func vol(cardBag *ygo.CardVersion) {
 		Name:     "苍翼冠鸟",                 // "Blue-Winged Crown"  "冠を戴く蒼き翼"
 		Lc:       ygo.LC_OrdinaryMonster, // 通常怪兽
 		Level:    4,
-		La:       ygo.LA_Earth,     // 风
+		La:       ygo.LA_Wind,      // 风
 		Lr:       ygo.LR_WindBeast, // 鸟兽
 		Attack:   1600,
 		Defense:  1200,
@@ -7578,7 +7796,7 @@ func vol(cardBag *ygo.CardVersion) {
 		Name:     "暴雨怪",                  // "Violent Rain"  "スコール"
 		Lc:       ygo.LC_OrdinaryMonster, // 通常怪兽
 		Level:    4,
-		La:       ygo.LA_Earth, // 水
+		La:       ygo.LA_Water, // 水
 		Lr:       ygo.LR_None,  // 水
 		Attack:   1550,
 		Defense:  800,
@@ -7610,7 +7828,7 @@ func vol(cardBag *ygo.CardVersion) {
 		Name:     "电击蜗牛",                 // "Bolt Escargot"  "ボルト·エスカルゴ"
 		Lc:       ygo.LC_OrdinaryMonster, // 通常怪兽
 		Level:    5,
-		La:       ygo.LA_Earth,   // 水
+		La:       ygo.LA_Water,   // 水
 		Lr:       ygo.LR_Thunder, // 雷
 		Attack:   1400,
 		Defense:  1500,
@@ -7642,7 +7860,7 @@ func vol(cardBag *ygo.CardVersion) {
 		Name:     "小鬼",                   // "Horn Imp"  "インプ"
 		Lc:       ygo.LC_OrdinaryMonster, // 通常怪兽
 		Level:    4,
-		La:       ygo.LA_Earth, // 暗
+		La:       ygo.LA_Dark,  // 暗
 		Lr:       ygo.LR_Fiend, // 恶魔
 		Attack:   1300,
 		Defense:  1000,
@@ -7674,7 +7892,7 @@ func vol(cardBag *ygo.CardVersion) {
 		Name:     "杰米亚之神",                // "Lord of Zemia"  "ゼミアの神"
 		Lc:       ygo.LC_OrdinaryMonster, // 通常怪兽
 		Level:    4,
-		La:       ygo.LA_Earth, // 暗
+		La:       ygo.LA_Dark,  // 暗
 		Lr:       ygo.LR_Fiend, // 恶魔
 		Attack:   1300,
 		Defense:  1000,
@@ -7738,7 +7956,7 @@ func vol(cardBag *ygo.CardVersion) {
 		Name:     "铠武者僵尸",                // "Armored Zombie"  "鎧武者ゾンビ"
 		Lc:       ygo.LC_OrdinaryMonster, // 通常怪兽
 		Level:    3,
-		La:       ygo.LA_Earth,  // 暗
+		La:       ygo.LA_Dark,   // 暗
 		Lr:       ygo.LR_Zombie, // 不死
 		Attack:   1500,
 		Defense:  0,
@@ -7802,7 +8020,7 @@ func vol(cardBag *ygo.CardVersion) {
 		Name:     "铁球巨人",                 // "Giganto"  "ギガント"
 		Lc:       ygo.LC_OrdinaryMonster, // 通常怪兽
 		Level:    5,
-		La:       ygo.LA_Earth,   // 暗
+		La:       ygo.LA_Dark,    // 暗
 		Lr:       ygo.LR_Machine, // 机械
 		Attack:   1700,
 		Defense:  1800,
@@ -7834,7 +8052,7 @@ func vol(cardBag *ygo.CardVersion) {
 		Name:     "钢铁之心",                 // "Ancient Tool"  "アイアン·ハート"
 		Lc:       ygo.LC_OrdinaryMonster, // 通常怪兽
 		Level:    5,
-		La:       ygo.LA_Earth,   // 暗
+		La:       ygo.LA_Dark,    // 暗
 		Lr:       ygo.LR_Machine, // 机械
 		Attack:   1700,
 		Defense:  1400,
@@ -7866,7 +8084,7 @@ func vol(cardBag *ygo.CardVersion) {
 		Name:     "暗黑奇美拉",                // "Dark Chimera"  "ダーク·キメラ"
 		Lc:       ygo.LC_OrdinaryMonster, // 通常怪兽
 		Level:    5,
-		La:       ygo.LA_Earth, // 暗
+		La:       ygo.LA_Dark,  // 暗
 		Lr:       ygo.LR_Fiend, // 恶魔
 		Attack:   1610,
 		Defense:  1460,
@@ -7930,7 +8148,7 @@ func vol(cardBag *ygo.CardVersion) {
 		Name:     "水之舞女",                 // "Water Omotics"  "水の踊り子"
 		Lc:       ygo.LC_OrdinaryMonster, // 通常怪兽
 		Level:    4,
-		La:       ygo.LA_Earth, // 水
+		La:       ygo.LA_Water, // 水
 		Lr:       ygo.LR_None,  // 水
 		Attack:   1400,
 		Defense:  1200,
@@ -8154,7 +8372,7 @@ func vol(cardBag *ygo.CardVersion) {
 		Name:     "兵主部",                  // "Hyosube"  "ひょうすべ"
 		Lc:       ygo.LC_OrdinaryMonster, // 通常怪兽
 		Level:    4,
-		La:       ygo.LA_Earth, // 水
+		La:       ygo.LA_Water, // 水
 		Lr:       ygo.LR_None,  // 水
 		Attack:   1500,
 		Defense:  900,
@@ -8186,7 +8404,7 @@ func vol(cardBag *ygo.CardVersion) {
 		Name:     "宝贝龙",                  // "Baby Dragon"  "ベビードラゴン"
 		Lc:       ygo.LC_OrdinaryMonster, // 通常怪兽
 		Level:    3,
-		La:       ygo.LA_Earth,  // 风
+		La:       ygo.LA_Wind,   // 风
 		Lr:       ygo.LR_Dragon, // 龙
 		Attack:   1200,
 		Defense:  700,
@@ -8218,7 +8436,7 @@ func vol(cardBag *ygo.CardVersion) {
 		Name:     "暗黑之龙王",                // "Blackland Fire Dragon"  "暗黒の竜王"
 		Lc:       ygo.LC_OrdinaryMonster, // 通常怪兽
 		Level:    4,
-		La:       ygo.LA_Earth,  // 暗
+		La:       ygo.LA_Dark,   // 暗
 		Lr:       ygo.LR_Dragon, // 龙
 		Attack:   1500,
 		Defense:  800,
@@ -8282,7 +8500,7 @@ func vol(cardBag *ygo.CardVersion) {
 		Name:     "暗道化师 扎奇",              // "Saggi the Dark Clown"  "闇·道化師のサギー"
 		Lc:       ygo.LC_OrdinaryMonster, // 通常怪兽
 		Level:    3,
-		La:       ygo.LA_Earth,       // 暗
+		La:       ygo.LA_Dark,        // 暗
 		Lr:       ygo.LR_SpellCaster, // 魔法师
 		Attack:   600,
 		Defense:  1500,
@@ -8314,7 +8532,7 @@ func vol(cardBag *ygo.CardVersion) {
 		Name:     "无脸幻想师",                // "Illusionist Faceless Mage"  "幻想師·ノー·フェイス"
 		Lc:       ygo.LC_OrdinaryMonster, // 通常怪兽
 		Level:    5,
-		La:       ygo.LA_Earth,       // 暗
+		La:       ygo.LA_Dark,        // 暗
 		Lr:       ygo.LR_SpellCaster, // 魔法师
 		Attack:   1200,
 		Defense:  2200,
@@ -8442,7 +8660,7 @@ func vol(cardBag *ygo.CardVersion) {
 		Name:     "彩虹鱼",                  // "7 Colored Fish"  "レインボー·フィッシュ"
 		Lc:       ygo.LC_OrdinaryMonster, // 通常怪兽
 		Level:    4,
-		La:       ygo.LA_Earth, // 水
+		La:       ygo.LA_Water, // 水
 		Lr:       ygo.LR_Fish,  // 鱼
 		Attack:   1800,
 		Defense:  800,
@@ -8474,7 +8692,7 @@ func vol(cardBag *ygo.CardVersion) {
 		Name:     "高等女祭司",                // "Lady of Faith"  "ハイ·プリーステス"
 		Lc:       ygo.LC_OrdinaryMonster, // 通常怪兽
 		Level:    3,
-		La:       ygo.LA_Earth,       // 光
+		La:       ygo.LA_Light,       // 光
 		Lr:       ygo.LR_SpellCaster, // 魔法师
 		Attack:   1100,
 		Defense:  800,
@@ -8506,7 +8724,7 @@ func vol(cardBag *ygo.CardVersion) {
 		Name:     "真红眼黑龙",                // "Red-Eyes B. Dragon"  "真紅眼の黒竜"
 		Lc:       ygo.LC_OrdinaryMonster, // 通常怪兽
 		Level:    7,
-		La:       ygo.LA_Earth,  // 暗
+		La:       ygo.LA_Dark,   // 暗
 		Lr:       ygo.LR_Dragon, // 龙
 		Attack:   2400,
 		Defense:  2000,

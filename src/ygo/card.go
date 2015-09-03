@@ -23,6 +23,13 @@ type CardOriginal struct {
 
 }
 
+func NewNoneCardOriginal() *CardOriginal {
+	return &CardOriginal{
+		IsValid: true,
+		Lc:      LC_None,
+	}
+}
+
 func (co *CardOriginal) Make(pl *Player) *Card {
 	c := &Card{
 		Events:       dispatcher.NewForkEvent(pl.GetFork()),
@@ -33,25 +40,25 @@ func (co *CardOriginal) Make(pl *Player) *Card {
 	}
 	c.InitUint()
 	c.Init()
+	pl.Game().RegisterCards(c)
 	return c
 }
 
 type Card struct {
 	dispatcher.Events
 	rego.Unique
+	isValid      bool
 	baseOriginal *CardOriginal
 	original     CardOriginal
 	place        *Group  // 所在位置
-	target       *Card   // 目标卡牌
-	effects      []*Card // 对此卡牌影响的卡牌
 	summoner     *Player // 召唤者
 	owner        *Player // 所有者
 	le           le_type // 表示形式
 	//怪兽卡 属性
-	counter         int // 计数器
-	lastAttackRound int // 最后攻击回合
-	lastChangeRound int // 最后改变表示形式回合
-	isValid         bool
+	counter         int  // 计数器
+	lastAttackRound int  // 最后攻击回合
+	lastChangeRound int  // 最后改变表示形式回合
+	direct          bool // 直接攻击玩家
 }
 
 func (ca *Card) Peek() {
@@ -59,6 +66,16 @@ func (ca *Card) Peek() {
 	pl.Call(setFront(ca))
 	pl.Call(exprCard(ca, LE_FaceUpAttack))
 	pl.GetTarget().Call(exprCard(ca, LE_FaceDownAttack))
+}
+func (ca *Card) IsCanDirect() bool {
+	return ca.direct
+}
+func (ca *Card) SetCanDirect() {
+	ca.direct = true
+}
+
+func (ca *Card) SetNotDirect() {
+	ca.direct = false
 }
 
 func (ca *Card) ShowInfo() {
@@ -96,7 +113,9 @@ func (ca *Card) Dispatch(eventName string, args ...interface{}) {
 	yg := ca.GetSummoner().Game()
 	if Pay != eventName && Chain != eventName {
 		ca.Events.Dispatch(Pay, eventName)
-		yg.Chain(eventName, ca, ca.GetSummoner(), args)
+		if ca.Events.IsOpen(eventName) {
+			yg.Chain(eventName, ca, ca.GetSummoner(), args)
+		}
 	}
 	ca.Events.Dispatch(eventName, args...)
 }
@@ -275,6 +294,11 @@ func (ca *Card) IsReactionTrap() bool {
 	return (ca.GetType() & LC_ReactionTrap) != 0
 }
 
+// 是特殊作用卡牌
+func (ca *Card) IsNone() bool {
+	return ca.GetType() == LC_None
+}
+
 // 设置类型
 func (ca *Card) SetType(l lc_type) {
 	ca.original.Lc = l
@@ -402,13 +426,18 @@ func (ca *Card) SetNotCanAttack() {
 	ca.lastAttackRound = ca.GetSummoner().GetRound()
 }
 
+// 设置不能够数攻击
+func (ca *Card) SetSizeRoundNotCanAttack(i int) {
+	ca.lastAttackRound = ca.GetSummoner().GetRound() + i
+}
+
 // 设置表示形式
 func (ca *Card) setLE(l le_type) {
 	ca.le = l
 	pl := ca.GetSummoner()
 	pl.Dispatch(Expres, ca)
 	pl.CallAll(exprCard(ca, l))
-	if ca.IsFaceUp() {
+	if ca.IsFaceUp() && ca.GetId() != 0 {
 		pl.CallAll(setFront(ca))
 	}
 }
@@ -601,6 +630,12 @@ func (ca *Card) IsInSzone() bool {
 func (ca *Card) IsInRemoved() bool {
 	p := ca.GetPlace()
 	return p != nil && p.GetName() == LL_Removed
+}
+
+// 是头像
+func (ca *Card) IsPortrait() bool {
+	p := ca.GetPlace()
+	return p != nil && p.GetName() == LL_Portrait
 }
 
 //战士族

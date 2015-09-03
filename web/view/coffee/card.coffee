@@ -77,6 +77,9 @@ Card::SetUniq = (uniq) ->
   @Index[@uniq] = this
   return
 
+Card::SetPortrait = (id) ->
+  @id = 0
+  @img.src = "/cards/derivate/" + id + ".jpg"
 
 #设置正面
 Card::SetFront = (@id) ->

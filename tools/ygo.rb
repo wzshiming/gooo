@@ -40,12 +40,12 @@ end
 
 $las = {
     "地"=>"Earth",
-    "水"=>"Earth",
-    "火"=>"Earth",
-    "风"=>"Earth",
-    "光"=>"Earth",
-    "暗"=>"Earth",
-    "神"=>"Earth"
+    "水"=>"Water",
+    "炎"=>"Fire",
+    "风"=>"Wind",
+    "光"=>"Light",
+    "暗"=>"Dark",
+    "神"=>"Devine"
 }
 
 def la n

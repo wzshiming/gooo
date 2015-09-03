@@ -103,6 +103,20 @@ func setPick(cs *Cards, pl *Player) (string, interface{}) {
 
 }
 
+func changeHp(t *Card, hp int) (string, interface{}) {
+	return "changeHp", map[string]interface{}{
+		"uniq": t.ToUint(),
+		"hp":   hp,
+	}
+}
+
+func setPortrait(t *Card, d int) (string, interface{}) {
+	return "setPortrait", map[string]interface{}{
+		"uniq": t.ToUint(),
+		"desk": d,
+	}
+}
+
 func setCardFace(t *Card, a Arg) (string, interface{}) {
 	return "setCardFace", map[string]interface{}{
 		"uniq":   t.ToUint(),

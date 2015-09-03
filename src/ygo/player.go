@@ -35,13 +35,17 @@ type Player struct {
 	Deck    *Group // 卡组 40 ~ 60
 	Hand    *Group // 手牌
 	Extra   *Group // 额外卡组 <= 15 融合怪物 同调怪物 超量怪物
-	Side    *Group // 副卡组 <= 15
 	Removed *Group // 排除卡
 	Grave   *Group // 墓地
 	Mzone   *Group // 怪物卡区 5
 	Szone   *Group // 魔法卡陷阱卡区 5
 	Field   *Group // 场地卡
 
+	// 特殊区
+	Side     *Group // 副卡组 <= 15 不参与游戏
+	Portrait *Group // 玩家头像
+
+	// 其他的
 	lastSummonRound int // 最后召唤回合
 	//	pending   map[uint]*Card
 	//	cardevent map[string][]*Card
@@ -53,7 +57,7 @@ func NewPlayer(yg *YGO) *Player {
 	pl := &Player{
 		Events:    dispatcher.NewForkEvent(yg.GetFork()),
 		Camp:      1,
-		Hp:        4000,
+		Hp:        0,
 		DrawSize:  1,
 		MaxHp:     ^uint(0),
 		MaxSdi:    6,
@@ -97,7 +101,7 @@ func NewPlayer(yg *YGO) *Player {
 	pl.Mzone = NewGroup(pl, LL_Mzone)
 	pl.Szone = NewGroup(pl, LL_Szone)
 	pl.Field = NewGroup(pl, LL_Field)
-
+	pl.Portrait = NewGroup(pl, LL_Portrait)
 	pl.AddEvent(RoundBegin, func() {
 		pl.MsgPub("{self}进入第{round}回合", Arg{"round": pl.GetRound()})
 		pl.SetCanSummon()
@@ -180,7 +184,11 @@ func (pl *Player) Chain(eventName string, ca *Card, cs *Cards, a []interface{}) 
 	pl.CallAll(flashPhases(pl))
 
 	pl.ResetReplyTime()
-	pl.MsgPub("{rival}的{event}事件等待{self}连锁", Arg{"rival": ca.ToUint(), "event": eventName})
+	if ca != nil {
+		pl.MsgPub("{self}的{event}事件等待{self}连锁", Arg{"self": ca.ToUint(), "event": eventName})
+	} else {
+		pl.MsgPub("{self}的{event}事件等待{self}连锁", Arg{"event": eventName})
+	}
 	css := cs.Find(func(c *Card) bool {
 		return c != ca && c.GetSummoner() == pl
 	})
@@ -188,7 +196,10 @@ func (pl *Player) Chain(eventName string, ca *Card, cs *Cards, a []interface{}) 
 	pl.Call(trigg(css))
 	if wi := pl.SelectWill(); wi.Uniq != 0 {
 		if c := css.ExistForUniq(wi.Uniq); c != nil {
-			if ca.Priority() > c.Priority() {
+			if ca == nil {
+				pl.MsgPub("{self}触发{event}事件", Arg{"self": c.ToUint(), "event": eventName})
+				c.Dispatch(Trigger, a...)
+			} else if ca.Priority() > c.Priority() {
 				ca.OnlyOnce(eventName, func() {
 					pl.MsgPub("{self}稍后连锁{rival}的{event}事件", Arg{"self": c.ToUint(), "rival": ca.ToUint(), "event": eventName})
 					c.Dispatch(Trigger, a...)
@@ -268,7 +279,7 @@ func (pl *Player) main(lp lp_type) {
 		ca, u := pl.selectForWarn(pl.Hand, pl.Mzone, pl.Szone, func(c *Card) bool {
 			if c.IsInHand() && c.IsMonster() && !pl.IsCanSummon() {
 				return false
-			} else if c.IsInSzone() && c.IsTrap() {
+			} else if c.IsInSzone() && (c.IsTrap() || c.IsFaceUp()) {
 				return false
 			} else if c.IsInMzone() && !c.IsCanChange() {
 				return false
@@ -337,18 +348,13 @@ func (pl *Player) battle(lp lp_type) {
 			}
 			continue
 		}
-		if !ca.IsInMzone() || !ca.IsFaceUpAttack() {
-			pl.Msg("请选择怪兽区正面攻击表示的怪兽", nil)
-			continue
-		}
-		if !ca.IsCanAttack() {
-			pl.Msg("当前怪兽不能攻击", nil)
-			continue
-		}
+
 		tar := pl.GetTarget()
 		if tar.Mzone.Len() != 0 {
 			pl.Msg("选择要攻击的目标", nil)
-			if c, _ := pl.selectForWarn(tar.Mzone); c.IsInMzone() {
+			if c, _ := pl.selectForWarn(tar.Mzone, tar.Portrait, func(c0 *Card) bool {
+				return !(c0.IsPortrait() && !ca.IsCanDirect())
+			}); c != nil {
 				ca.Dispatch(Declaration, c)
 			} else {
 				pl.Msg("请选择对方怪兽区的怪兽", nil)
@@ -380,6 +386,15 @@ func (pl *Player) init() {
 	pl.ActionDraw(5)
 }
 
+func (pl *Player) InitPlayer(u int) {
+	if pl.Portrait.Len() > 0 {
+		return
+	}
+	c := NewNoneCardOriginal().Make(pl)
+	pl.Portrait.EndPush(c)
+	pl.CallAll(setPortrait(c, u))
+}
+
 func (pl *Player) initDeck(a []uint, b []uint) {
 	if pl.Deck.Len() > 0 {
 		return
@@ -405,7 +420,10 @@ func (pl *Player) ChangeHp(i int) {
 	if pl.Hp < 0 {
 		pl.Fail()
 	} else {
-		pl.CallAll(setFace(map[string]interface{}{pl.Name: pl.Hp}))
+		pl.Portrait.ForEach(func(c *Card) bool {
+			pl.CallAll(changeHp(c, pl.Hp))
+			return true
+		})
 	}
 
 }

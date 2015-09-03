@@ -168,9 +168,12 @@ func (yg *YGO) GetPlayerForIndex(i int) *Player {
 }
 
 func (yg *YGO) Loop() {
-
-	nap(1) // 初始化
-
+	defer func() {
+		if x := recover(); x != nil {
+			rego.DebugStack()
+		}
+	}()
+	nap(1) // 服务端初始化
 	for k, _ := range yg.Players {
 		yg.round = append(yg.round, k)
 	}
@@ -181,7 +184,7 @@ func (yg *YGO) Loop() {
 		yg.Players[v].Index = k
 		yg.Players[v].game = yg
 		yg.Players[v].RoundSize = 0
-		yg.Players[v].Name = fmt.Sprintf("player %d", k)
+		yg.Players[v].Name = fmt.Sprintf("玩家%d", k)
 	}
 
 	nap(1) // 客户端初始化
@@ -198,39 +201,38 @@ func (yg *YGO) Loop() {
 		yg.Players[v].Call("init", gi)
 	}
 
+	nap(10) // 界面初始化
+	i := 31
+	for _, v := range yg.round {
+		i++
+		yg.Players[v].InitPlayer(i)
+	}
+
 	nap(10) // 牌组初始化
 	for _, v := range yg.round {
 		var s struct {
 			Deck proto.Deck `json:"deck"`
 		}
 		yg.Players[v].Session.Data.DeJson(&s)
-		//rego.INFO(string(yg.Players[v].Session.Data.Bytes()))
 		yg.Players[v].initDeck(s.Deck.GetMain(), s.Deck.GetExtra())
 	}
 
 	nap(20) // 手牌初始化
 	for _, v := range yg.round {
 		yg.Players[v].init()
+		yg.Players[v].ChangeHp(4000)
 	}
 
-	yg.Players[yg.round[0]].MsgPub("游戏开始，{self}先手！", nil)
-	nap(10)
-
+	//必要连锁初始化
 	yg.RegisterBothEvent(Summon)
 	yg.RegisterBothEvent(SummonFlip)
 	yg.RegisterBothEvent(SummonSpecial)
 	yg.RegisterBothEvent(Declaration)
 	yg.RegisterBothEvent(UseTrap)
 	yg.RegisterBothEvent(UseMagic)
-	//yg.RegisterBothEvent(DamageStep)
-	//yg.RegisterBothEvent(Flip)
-	//yg.RegisterBothEvent(DestroyBeBattle)
-	//yg.RegisterBothEvent(Deduct)
-	//yg.RegisterBothEvent(Fought)
-	//yg.RegisterBothEvent(Expres)
-	//yg.RegisterBothEvent(Discard)
-	//yg.RegisterBothEvent(Destroy)
-	//yg.RegisterBothEvent(Disabled)
+
+	nap(10) // 游戏开始
+	yg.Players[yg.round[0]].MsgPub("游戏开始，{self}先手！", nil)
 loop:
 	for {
 		for _, v := range yg.round {

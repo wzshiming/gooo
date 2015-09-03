@@ -3,9 +3,10 @@ package ygo
 func (ca *Card) Init() {
 	ca.Empty()
 	ca.original = *ca.baseOriginal
-	ca.effects = []*Card{}
+	//ca.effects = []*Card{}
 	//ca.summoner = ca.owner
 	ca.isValid = true
+	ca.SetNotDirect()
 	//	ca.le = LE
 	ca.registerNormal()
 	ca.baseOriginal.Initialize.Call(ca)
@@ -164,6 +165,13 @@ func (ca *Card) RegisterOrdinaryMagic(f interface{}) {
 		} else {
 			pl.MsgPub("发动{self}失败!", Arg{"self": ca.ToUint()})
 		}
+	})
+}
+func (ca *Card) RegisterIgnitionSelector(event string, f interface{}) {
+	ca.RegisterGlobalListen(event, f)
+	ca.AddEvent(Trigger, func() {
+		ca.Dispatch(UnegisterGlobalListen)
+		ca.Dispatch(Chain)
 	})
 }
 
@@ -329,7 +337,6 @@ func (ca *Card) RegisterFusionMonster(names ...string) {
 			ca.Dispatch(SummonSpecial)
 		},
 	})
-
 }
 
 func (ca *Card) registerMonster() {
@@ -352,6 +359,12 @@ func (ca *Card) registerMonster() {
 		pl.MsgPub("{self}特殊召唤成功!", Arg{"self": ca.ToUint()})
 	})
 
+	e0 := func() {
+		ca.Dispatch(FaceUp)
+	}
+	ca.AddEvent(Flip, e0)
+	ca.AddEvent(Summon, e0)
+	ca.AddEvent(SummonSpecial, e0)
 	// 手牌
 	ca.Range(InHand, OutHand, Arg{
 		// 代价
@@ -454,7 +467,9 @@ func (ca *Card) registerMonster() {
 		// 发出战斗宣言
 		Declaration: func(c *Card) {
 			pl := ca.GetSummoner()
-
+			if c != nil && c.IsPortrait() {
+				c = nil
+			}
 			if c != nil {
 				pl.MsgPub("{self}对{rival}发出战斗宣言！", Arg{"self": ca.ToUint(), "rival": c.ToUint()})
 			} else {
@@ -519,4 +534,80 @@ func (ca *Card) registerMonster() {
 			ca.SetNotCanChange()
 		},
 	})
+}
+
+func (ca *Card) RegisterAllMzoneHalo(f interface{}) {
+	ca.AddEvent(Effect0, f)
+	e0 := func(c *Card) bool {
+		ca.Dispatch(Effect0, c)
+		return true
+	}
+	e := func() {
+		pl := ca.GetSummoner()
+		tar := pl.GetTarget()
+		cs := NewCards(tar.Mzone, pl.Mzone)
+		cs.ForEach(e0)
+		ca.RegisterGlobalListen(InMzone, e0)
+	}
+	ca.AddEvent(FaceUp, e)
+}
+
+func (ca *Card) RegisterMzoneArea(f0 interface{}, f1 interface{}) {
+	ca.AddEvent(Effect0, f0)
+	ca.AddEvent(Effect1, f1)
+	e0 := func(c *Card) bool {
+		ca.Dispatch(Effect0, c)
+		return true
+	}
+	e1 := func(c *Card) bool {
+		ca.Dispatch(Effect1, c)
+		return true
+	}
+	e := func() {
+		pl := ca.GetSummoner()
+		pl.Mzone.ForEach(e0)
+		ca.RegisterGlobalListen(InMzone, e0)
+		ca.RegisterGlobalListen(OutMzone, e1)
+	}
+	ca.AddEvent(FaceUp, e)
+}
+
+func (ca *Card) RegisterHandArea(f0 interface{}, f1 interface{}) {
+	ca.AddEvent(Effect0, f0)
+	ca.AddEvent(Effect1, f1)
+	e0 := func(c *Card) bool {
+		ca.Dispatch(Effect0, c)
+		return true
+	}
+	e1 := func(c *Card) bool {
+		ca.Dispatch(Effect1, c)
+		return true
+	}
+	e := func() {
+		pl := ca.GetSummoner()
+		pl.Hand.ForEach(e0)
+		ca.RegisterGlobalListen(InHand, e0)
+		ca.RegisterGlobalListen(OutHand, e1)
+	}
+	ca.AddEvent(FaceUp, e)
+}
+
+func (ca *Card) RegisterGraveArea(f0 interface{}, f1 interface{}) {
+	ca.AddEvent(Effect0, f0)
+	ca.AddEvent(Effect1, f1)
+	e0 := func(c *Card) bool {
+		ca.Dispatch(Effect0, c)
+		return true
+	}
+	e1 := func(c *Card) bool {
+		ca.Dispatch(Effect1, c)
+		return true
+	}
+	e := func() {
+		pl := ca.GetSummoner()
+		pl.Hand.ForEach(e0)
+		ca.RegisterGlobalListen(InGrave, e0)
+		ca.RegisterGlobalListen(OutGrave, e1)
+	}
+	ca.AddEvent(FaceUp, e)
 }
