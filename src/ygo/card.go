@@ -113,7 +113,7 @@ func (ca *Card) Dispatch(eventName string, args ...interface{}) {
 	yg := ca.GetSummoner().Game()
 	if Pay != eventName && Chain != eventName {
 		ca.Events.Dispatch(Pay, eventName)
-		if ca.Events.IsOpen(eventName) {
+		if ca.IsOpen(eventName) {
 			yg.Chain(eventName, ca, ca.GetSummoner(), args)
 		}
 	}
@@ -141,6 +141,7 @@ func (ca *Card) GetSummoner() *Player {
 
 // 设置召唤者
 func (ca *Card) SetSummoner(c *Player) {
+	ca.IsCanAttack()
 	ca.summoner = c
 	ca.Dispatch(Change)
 }

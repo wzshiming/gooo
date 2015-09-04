@@ -39,29 +39,29 @@ func (ca *Card) registerNormal() {
 
 	// 规则破坏
 	ca.AddEvent(DestroyBeRule, func(c *Card) {
-		pl := ca.GetSummoner()
 		ca.ToGrave()
+		pl := ca.GetSummoner()
 		pl.MsgPub("{self}规则破坏", Arg{"self": ca.ToUint()})
 	})
 
 	// 花费
 	ca.AddEvent(Cost, func() {
-		pl := ca.GetSummoner()
 		ca.ToGrave()
+		pl := ca.GetSummoner()
 		pl.MsgPub("{self}被花费", Arg{"self": ca.ToUint()})
 	})
 
 	// 丢弃
 	ca.AddEvent(Discard, func() {
-		pl := ca.GetSummoner()
 		ca.ToGrave()
+		pl := ca.GetSummoner()
 		pl.MsgPub("{self}被丢弃", Arg{"self": ca.ToUint()})
 	})
 
 	// 使用完毕
 	ca.AddEvent(Depleted, func() {
-		pl := ca.GetSummoner()
 		ca.ToGrave()
+		pl := ca.GetSummoner()
 		pl.MsgPub("{self}使用完毕", Arg{"self": ca.ToUint()})
 	})
 
@@ -91,13 +91,23 @@ func (ca *Card) registerNormal() {
 	ca.AddEvent(Use2, func() {
 		ca.Dispatch(Cover)
 	})
+	// 使用
 	ca.AddEvent(Use1, func() {
 		ca.Dispatch(Onset)
 	})
+	e := func() {
+		ca.Dispatch(Disabled)
+	}
 
+	ca.AddEvent(InGrave, e)
+	ca.AddEvent(InRemoved, e)
 	if ca.IsMonster() {
 		ca.registerMonster()
-		ca.AddEvent(OutMzone, Disabled)
+		ca.AddEvent(InSzone, e)
+		ca.AddEvent(InMzone, func() {
+			ca.AddEvent(InHand, e)
+			ca.AddEvent(InDeck, e)
+		})
 	} else if ca.IsMagicAndTrap() {
 		ca.registerMagicAndTrap()
 		ca.AddEvent(OutSzone, Disabled)
@@ -374,7 +384,6 @@ func (ca *Card) registerMonster() {
 			}
 
 			pl := ca.GetSummoner()
-			pl.SetNotCanSummon()
 			pl.ResetReplyTime()
 			i := 0
 			if ca.GetLevel() > 6 {
@@ -394,6 +403,7 @@ func (ca *Card) registerMonster() {
 					return
 				}
 			}
+			pl.SetNotCanSummon()
 		},
 		// 召唤
 		Summon: func() {

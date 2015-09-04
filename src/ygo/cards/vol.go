@@ -1255,20 +1255,29 @@ func vol(cardBag *ygo.CardVersion) {
 			ca.RegisterUnordinaryMagic(func() {
 				pl := ca.GetSummoner()
 				tar := pl.GetTarget()
-				i := 0
-				ca.RegisterGlobalListen(ygo.RoundEnd, func() {
-					i++
-					if i == 6 {
-						ca.Dispatch(ygo.Depleted)
-					}
-				})
 				tar.Mzone.ForEach(func(c *ygo.Card) bool {
 					c.SetFaceUp()
 					return true
 				})
-				ca.RegisterGlobalListen(ygo.Declaration, func(c *ygo.Card) {
-					if c.GetSummoner() == tar {
-						c.StopOnce(ygo.Declaration)
+				i := 0
+
+				ca.RegisterGlobalListen(ygo.BP, func(pl0 *ygo.Player) {
+					if tar != pl0 {
+						return
+					}
+					tar.Mzone.ForEach(func(c *ygo.Card) bool {
+						c.SetNotCanAttack()
+						return true
+					})
+				})
+
+				ca.RegisterGlobalListen(ygo.RoundEnd, func(pl0 *ygo.Player) {
+					if tar != pl0 {
+						return
+					}
+					i++
+					if i >= 3 {
+						ca.Dispatch(ygo.Depleted)
 					}
 				})
 			})
@@ -1631,8 +1640,6 @@ func vol(cardBag *ygo.CardVersion) {
 					}
 					c.Init()
 					c.Dispatch(ygo.SummonSpecial, ca)
-				} else {
-					ca.Dispatch(ygo.DestroyBeRule)
 				}
 			})
 			return true
@@ -2648,9 +2655,12 @@ func vol(cardBag *ygo.CardVersion) {
 					return
 				}
 				i := 0
-				c.RegisterGlobalListen(ygo.RoundEnd, func() {
+				c.RegisterGlobalListen(ygo.RoundEnd, func(pl0 *ygo.Player) {
+					if c.GetSummoner() != pl0 {
+						return
+					}
 					i++
-					if i == 6 {
+					if i >= 3 {
 						c.Dispatch(ygo.Destroy, ca)
 					}
 				})
@@ -3857,7 +3867,6 @@ func vol(cardBag *ygo.CardVersion) {
 					}
 				})
 			})
-			ca.AddEvent(ygo.OutHand, ygo.UnegisterGlobalListen)
 			return true
 		}, // 初始
 		IsValid: true,
@@ -4350,8 +4359,37 @@ func vol(cardBag *ygo.CardVersion) {
 		Lr:      ygo.LR_Warrior, // 战士
 		Attack:  1250,
 		Defense: 800,
-		//Initialize:    func(ca *ygo.Card) bool {}, // 初始
-		IsValid: false,
+		Initialize: func(ca *ygo.Card) bool {
+			ca.AddEvent(ygo.FaceUp, func() {
+				var e func()
+				e = func() {
+					ca.RegisterGlobalListen(ygo.SP, func(pl0 *ygo.Player) {
+						pl := ca.GetSummoner()
+						if pl != pl0 {
+							return
+						}
+						pl.ChangeHp(-300)
+					})
+
+					ca.RegisterIgnitionSelector(ygo.EP, func(pl0 *ygo.Player) {
+						pl := ca.GetSummoner()
+						if pl != pl0 {
+							return
+						}
+						ca.PushChain(func() {
+							pl.ChangeHp(-500)
+							tar := pl.GetTarget()
+							ca.SetSummoner(tar)
+							ca.ToMzone()
+							e()
+						})
+					})
+				}
+				e()
+			})
+			return true
+		}, // 初始
+		IsValid: true,
 	})
 
 	/*94*/
@@ -4705,8 +4743,31 @@ func vol(cardBag *ygo.CardVersion) {
 		Lr:      ygo.LR_Machine, // 机械
 		Attack:  2600,
 		Defense: 2200,
-		//Initialize:    func(ca *ygo.Card) bool {}, // 初始
-		IsValid: false,
+		Initialize: func(ca *ygo.Card) bool {
+			r := 0
+			var e func()
+			e = func() {
+				ca.RegisterIgnitionSelector(ygo.MP, func(pl0 *ygo.Player) {
+					pl := ca.GetSummoner()
+					if pl == pl0 && r != pl.GetRound() {
+						tar := pl.GetTarget()
+						ca.PushChain(func() {
+							if ygo.RandInt(3) <= 1 {
+								if c := pl.SelectForWarn(tar.Mzone); c != nil {
+									c.Dispatch(ygo.Destroy, ca)
+								}
+							}
+							r = pl.GetRound()
+							e()
+						})
+					}
+				})
+			}
+			ca.AddEvent(ygo.FaceUp, e)
+			return true
+
+		}, // 初始
+		IsValid: true,
 	})
 
 	/*101*/
@@ -5247,10 +5308,14 @@ func vol(cardBag *ygo.CardVersion) {
 			ca.RegisterEquipMagic(func(c *ygo.Card) bool {
 				return !c.RaceIsMachine()
 			}, func(c *ygo.Card) {
-				ca.CloseEvent(ygo.Declaration)
-			}, func(c *ygo.Card) {
-				ca.OpenEvent(ygo.Declaration)
-			})
+				ca.RegisterGlobalListen(ygo.BP, func(pl0 *ygo.Player) {
+					pl := c.GetSummoner()
+					if pl != pl0 {
+						return
+					}
+					c.SetNotCanAttack()
+				})
+			}, func(c *ygo.Card) {})
 			return true
 		}, // 初始
 		IsValid: true,

@@ -11,32 +11,6 @@ import (
 	"github.com/wzshiming/rego/misc"
 )
 
-func Debug(v ...interface{}) {
-	rego.DEBUG(v...)
-}
-
-func RandInt(i int) int {
-	return int(<-rego.LCG) % i
-}
-
-type Action func(ca *Card) bool
-
-func (ac Action) IsExits() bool {
-	if ac != nil {
-		return true
-	}
-	return false
-}
-
-func (ac Action) Call(ca *Card) bool {
-	if ac != nil {
-		return ac(ca)
-	}
-	return false
-}
-
-type Arg map[string]interface{}
-
 type YGO struct {
 	dispatcher.Events
 	CardVer  *CardVersion
@@ -52,11 +26,8 @@ type YGO struct {
 	pending   map[uint]*Card
 	cardevent map[string]map[*Card]Action
 
-	both map[string]bool
-}
-
-func nap(i int) {
-	time.Sleep(time.Second * time.Duration(i) / 10)
+	both  map[string]bool
+	multi map[string]bool
 }
 
 func NewYGO(r *misc.Rooms) *YGO {
@@ -68,6 +39,7 @@ func NewYGO(r *misc.Rooms) *YGO {
 		StartAt:  time.Now(),
 		Players:  map[uint]*Player{},
 		both:     map[string]bool{},
+		multi:    map[string]bool{},
 	}
 
 	yg.Room.ForEach(func(sess *agent.Session) {
@@ -85,6 +57,10 @@ func NewYGO(r *misc.Rooms) *YGO {
 
 func (yg *YGO) RegisterBothEvent(eventName string) {
 	yg.both[eventName] = true
+}
+
+func (yg *YGO) RegisterMultiEvent(eventName string) {
+	yg.multi[eventName] = true
 }
 
 func (yg *YGO) Chain(eventName string, ca *Card, pl *Player, args []interface{}) {
@@ -230,9 +206,25 @@ func (yg *YGO) Loop() {
 	yg.RegisterBothEvent(Declaration)
 	yg.RegisterBothEvent(UseTrap)
 	yg.RegisterBothEvent(UseMagic)
+	yg.RegisterMultiEvent(DP)
+	yg.RegisterMultiEvent(SP)
+	yg.RegisterMultiEvent(MP)
+	yg.RegisterMultiEvent(EP)
 
 	nap(10) // 游戏开始
-	yg.Players[yg.round[0]].MsgPub("游戏开始，{self}先手！", nil)
+
+	pl := yg.GetPlayerForIndex(0)
+	pl.MsgPub("游戏开始，{self}先手！", nil)
+	if pl.Portrait.Len() == 1 {
+		ca := pl.Portrait.Get(0)
+		ca.RegisterGlobalListen(Declaration, func(c *Card) {
+			if c.GetSummoner() == pl {
+				c.StopOnce(Declaration)
+			}
+			ca.Dispatch(UnegisterGlobalListen)
+		})
+	}
+
 loop:
 	for {
 		for _, v := range yg.round {

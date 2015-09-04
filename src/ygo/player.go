@@ -106,6 +106,10 @@ func NewPlayer(yg *YGO) *Player {
 		pl.MsgPub("{self}进入第{round}回合", Arg{"round": pl.GetRound()})
 		pl.SetCanSummon()
 	})
+	pl.AddEvent(RoundEnd, func() {
+		pl.MsgPub("{self}结束第{round}回合", Arg{"round": pl.GetRound()})
+		pl.SetCanSummon()
+	})
 
 	pl.AddEvent(DP, pl.draw)
 	pl.AddEvent(SP, pl.standby)
@@ -118,7 +122,9 @@ func NewPlayer(yg *YGO) *Player {
 
 func (pl *Player) Dispatch(eventName string, args ...interface{}) {
 	yg := pl.Game()
-	yg.Chain(eventName, nil, pl, append(args))
+	if pl.IsOpen(eventName) {
+		yg.Chain(eventName, nil, pl, append(args))
+	}
 	pl.Events.Dispatch(eventName, args...)
 }
 
@@ -177,44 +183,73 @@ func (pl *Player) ForEachPlayer(fun func(p *Player)) {
 func (pl *Player) Chain(eventName string, ca *Card, cs *Cards, a []interface{}) bool {
 	t := pl.Phases
 	defer func() {
+		if x := recover(); x != nil {
+			if _, ok := x.(string); ok {
+
+			} else {
+				rego.DebugStack()
+			}
+		}
+	}()
+	defer func() {
 		pl.Phases = t
 		pl.CallAll(flashPhases(pl))
 	}()
+	yg := pl.Game()
 	pl.Phases = LP_Chain
 	pl.CallAll(flashPhases(pl))
 
 	pl.ResetReplyTime()
-	if ca != nil {
-		pl.MsgPub("{self}的{event}事件等待{self}连锁", Arg{"self": ca.ToUint(), "event": eventName})
-	} else {
-		pl.MsgPub("{self}的{event}事件等待{self}连锁", Arg{"event": eventName})
-	}
-	css := cs.Find(func(c *Card) bool {
-		return c != ca && c.GetSummoner() == pl
-	})
 
-	pl.Call(trigg(css))
-	if wi := pl.SelectWill(); wi.Uniq != 0 {
-		if c := css.ExistForUniq(wi.Uniq); c != nil {
-			if ca == nil {
-				pl.MsgPub("{self}触发{event}事件", Arg{"self": c.ToUint(), "event": eventName})
-				c.Dispatch(Trigger, a...)
-			} else if ca.Priority() > c.Priority() {
-				ca.OnlyOnce(eventName, func() {
-					pl.MsgPub("{self}稍后连锁{rival}的{event}事件", Arg{"self": c.ToUint(), "rival": ca.ToUint(), "event": eventName})
-					c.Dispatch(Trigger, a...)
-				}, c)
-			} else {
-				pl.MsgPub("{self}优先连锁{rival}的{event}事件", Arg{"self": c.ToUint(), "rival": ca.ToUint(), "event": eventName})
-				c.Dispatch(Trigger, a...)
-			}
-		} else {
-			pl.MsgPub("{self}错误的连锁", nil)
+	for {
+		if pl.IsOutTime() {
+			break
 		}
-	} else {
-		pl.MsgPub("{self}不连锁", nil)
+		cs0 := cs.Find(func(c *Card) bool {
+			return c != ca && c.GetSummoner() == pl
+		})
+		if cs0.Len() == 0 {
+			cs1 := pl.Szone.Find(func(c *Card) bool {
+				return c.IsFaceDown()
+			})
+			if cs1.Len() == 0 {
+				break
+			} else {
+				cs0.EndPush(NewNoneCardOriginal().Make(pl))
+			}
+		}
+		if ca != nil {
+			pl.MsgPub("{rival}的{event}事件等待{self}连锁", Arg{"rival": ca.ToUint(), "event": eventName})
+		} else {
+			pl.MsgPub("{event}事件等待{self}连锁", Arg{"event": eventName})
+		}
+		c, u := pl.selectForWarn(cs, cs0)
+		if c == nil {
+			if u == LI_No {
+				break
+			}
+			continue
+		}
+
+		if ca == nil {
+			pl.MsgPub("{self}触发{event}事件", Arg{"self": c.ToUint(), "event": eventName})
+			c.Dispatch(Trigger, a...)
+		} else if ca.Priority() > c.Priority() {
+			ca.OnlyOnce(eventName, func() {
+				pl.MsgPub("{self}稍后连锁{rival}的{event}事件", Arg{"self": c.ToUint(), "rival": ca.ToUint(), "event": eventName})
+				c.Dispatch(Trigger, a...)
+			}, c)
+		} else {
+			pl.MsgPub("{self}优先连锁{rival}的{event}事件", Arg{"self": c.ToUint(), "rival": ca.ToUint(), "event": eventName})
+			c.Dispatch(Trigger, a...)
+		}
+
+		if !yg.multi[eventName] {
+			break
+		}
+		cs.PickedFor(c)
 	}
-	pl.Call(trigg(nil))
+
 	return false
 }
 
@@ -234,14 +269,14 @@ func (pl *Player) round() (err error) {
 	}()
 	pl.RoundSize++
 	pl.CallAll(flagName(pl))
-	pl.Dispatch(RoundBegin, pl)
+	pl.Dispatch(RoundBegin)
 	pl.Dispatch(DP, LP_Draw)
 	pl.Dispatch(SP, LP_Standby)
 	pl.Dispatch(MP, LP_Main1)
 	pl.Dispatch(BP, LP_Battle)
 	pl.Dispatch(MP, LP_Main2)
 	pl.Dispatch(EP, LP_End)
-	pl.Dispatch(RoundEnd, pl)
+	pl.Dispatch(RoundEnd)
 	return
 }
 
@@ -277,8 +312,14 @@ func (pl *Player) main(lp lp_type) {
 	pl.ResetWaitTime()
 	for {
 		ca, u := pl.selectForWarn(pl.Hand, pl.Mzone, pl.Szone, func(c *Card) bool {
-			if c.IsInHand() && c.IsMonster() && !pl.IsCanSummon() {
-				return false
+			if c.IsInHand() && c.IsMonster() {
+				if !pl.IsCanSummon() {
+					return false
+				} else if c.GetLevel() >= 7 && pl.Mzone.Len() < 2 {
+					return false
+				} else if c.GetLevel() >= 5 && pl.Mzone.Len() < 1 {
+					return false
+				}
 			} else if c.IsInSzone() && (c.IsTrap() || c.IsFaceUp()) {
 				return false
 			} else if c.IsInMzone() && !c.IsCanChange() {
@@ -313,6 +354,7 @@ func (pl *Player) main(lp lp_type) {
 		} else if ca.IsInSzone() {
 			ca.Dispatch(Onset)
 		} else {
+			Debug(ca)
 			pl.Msg("非法目标", nil)
 		}
 	}
@@ -465,7 +507,9 @@ func (pl *Player) Call(method string, reply interface{}) error {
 func (pl *Player) CallAll(method string, reply interface{}) error {
 	return pl.Game().CallAll(method, reply)
 }
-
+func (pl *Player) IsOutTime() bool {
+	return pl.PassTime == 0
+}
 func (pl *Player) OutTime() {
 	pl.PassTime = 0
 }

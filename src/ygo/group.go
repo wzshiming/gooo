@@ -41,11 +41,8 @@ func (cp *Group) EndPush(c *Card) {
 }
 
 func (cp *Group) Insert(c *Card, index int) {
-	if c.place != nil {
-		c.place.PickedFor(c)
-	}
+	c.Placed()
 	c.GetSummoner().CallAll(moveCard(c, cp.GetName()))
-
 	c.place = cp
 	cp.Cards.Insert(c, index)
 	c.Dispatch(In + string(cp.GetName()))
@@ -71,12 +68,14 @@ func (cp *Group) Remove(index int) (c *Card) {
 func (cp *Group) PickedForUniq(uniq uint) (c *Card) {
 	c = cp.Cards.PickedForUniq(uniq)
 	if c != nil {
+		c.place = nil
 		c.Dispatch(Out + string(cp.GetName()))
 	}
 	return
 }
 
 func (cp *Group) PickedFor(c *Card) {
-	cp.Cards.PickedFor(c)
-	c.Dispatch(Out + string(cp.GetName()))
+	if c != nil {
+		cp.PickedForUniq(c.ToUint())
+	}
 }
