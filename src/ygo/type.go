@@ -91,10 +91,10 @@ const (
 	LE_Attack                                  // 攻击状态
 	LE_Defense                                 // 守备状态
 
-	LE_FaceUpAttack    = LE_FaceUp | LE_Attack    // 表侧
-	LE_FaceDownAttack  = LE_FaceDown | LE_Attack  //
-	LE_FaceUpDefense   = LE_FaceUp | LE_Defense   // 侧面
-	LE_FaceDownDefense = LE_FaceDown | LE_Defense // 里侧
+	LE_FaceUpAttack    = LE_FaceUp | LE_Attack    // 朝上攻击
+	LE_FaceDownAttack  = LE_FaceDown | LE_Attack  // 朝下攻击
+	LE_FaceUpDefense   = LE_FaceUp | LE_Defense   // 朝上防御
+	LE_FaceDownDefense = LE_FaceDown | LE_Defense // 朝下防御
 
 	LE_ad = LE_Attack | LE_Defense
 	LE_fd = LE_FaceUp | LE_FaceDown
@@ -138,17 +138,17 @@ const (
 type lp_type uint32
 
 const (
-	LP_None lp_type = 0
+	//LP_None lp_type = 0
+	LP_Chain   lp_type = iota // 连锁
+	LP_Draw                   // 抽牌
+	LP_Standby                // 预备
+	LP_Main1                  // 主阶段1
+	LP_Battle                 // 战斗
+	LP_Main2                  // 主阶段2
+	LP_End                    // 结束
 
-	LP_Draw      lp_type = iota // 抽牌
-	LP_Standby                  // 预备
-	LP_Main1                    // 主阶段1
-	LP_Battle                   // 战斗
-	LP_Main2                    // 主阶段2
-	LP_End                      // 结束
-	LP_Chain                    // 连锁
-	LP_Damage                   // 战斗
-	LP_DamageCal                // 战斗计算
+	LP_Damage    // 战斗
+	LP_DamageCal // 战斗计算
 )
 
 // 卡牌放置位置 Locations

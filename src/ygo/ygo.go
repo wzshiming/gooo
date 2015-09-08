@@ -217,12 +217,17 @@ func (yg *YGO) Loop() {
 	pl.MsgPub("游戏开始，{self}先手！", nil)
 	if pl.Portrait.Len() == 1 {
 		ca := pl.Portrait.Get(0)
-		ca.RegisterGlobalListen(Declaration, func(c *Card) {
-			if c.GetSummoner() == pl {
-				c.StopOnce(Declaration)
-			}
-			ca.Dispatch(UnegisterGlobalListen)
+		ca.RegisterGlobalListen(BP, func(tar *Player) {
+
+			tar.Mzone.ForEach(func(c *Card) bool {
+				c.SetNotCanAttack()
+				return true
+			})
 		})
+		ca.RegisterGlobalListen(RoundEnd, func() {
+			ca.UnregisterGlobalListen()
+		})
+
 	}
 
 loop:

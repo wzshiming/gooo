@@ -67,7 +67,7 @@ func (ca *Card) registerNormal() {
 
 	// 失效
 	ca.AddEvent(Disabled, func() {
-		ca.Dispatch(UnegisterGlobalListen)
+		ca.UnregisterGlobalListen()
 		if ca.isValid {
 			ca.isValid = false
 		}
@@ -99,9 +99,9 @@ func (ca *Card) registerNormal() {
 		ca.Dispatch(Disabled)
 	}
 
-	ca.AddEvent(InGrave, e)
-	ca.AddEvent(InRemoved, e)
 	if ca.IsMonster() {
+		ca.AddEvent(InGrave, e)
+		ca.AddEvent(InRemoved, e)
 		ca.registerMonster()
 		ca.AddEvent(InSzone, e)
 		ca.AddEvent(InMzone, func() {
@@ -180,7 +180,7 @@ func (ca *Card) RegisterOrdinaryMagic(f interface{}) {
 func (ca *Card) RegisterIgnitionSelector(event string, f interface{}) {
 	ca.RegisterGlobalListen(event, f)
 	ca.AddEvent(Trigger, func() {
-		ca.Dispatch(UnegisterGlobalListen)
+		ca.UnregisterGlobalListen()
 		ca.Dispatch(Chain)
 	})
 }
@@ -194,7 +194,7 @@ func (ca *Card) registerTrap(event string, e interface{}) {
 		}, ca, event, e)
 	}, event, e)
 	ca.AddEvent(Trigger, func() {
-		ca.Dispatch(UnegisterGlobalListen)
+		ca.UnregisterGlobalListen()
 		ca.Dispatch(UseTrap)
 	})
 }
@@ -241,14 +241,14 @@ func (ca *Card) PushChain(f interface{}) {
 func (ca *Card) RegisterGlobalListen(event string, e interface{}) {
 	yg := ca.GetSummoner().Game()
 	yg.AddEvent(event, e, ca)
-	ca.OnlyOnce(UnegisterGlobalListen, func() {
+	ca.OnlyOnce(UnregisterGlobalListen, func() {
 		yg.RemoveEvent(event, e, ca)
 	}, e, event)
 }
 
 // 注册全局效果监听 直到收到 失效Disabled
-func (ca *Card) UnegisterGlobalListen() {
-	ca.Dispatch(UnegisterGlobalListen)
+func (ca *Card) UnregisterGlobalListen() {
+	ca.Dispatch(UnregisterGlobalListen)
 }
 
 // 注册一个装备魔法卡  装备对象判断  装备上动作 装备下动作

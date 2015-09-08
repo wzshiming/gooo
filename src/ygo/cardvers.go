@@ -64,6 +64,10 @@ func (cv *CardVersion) Register(co *CardOriginal) error {
 	cv.List[co.Id] = co
 	cv.nameReg += fmt.Sprintf("~~~%s~~~", co.Name)
 	cv.nameList[co.Name] = co
+
+	//os.MkdirAll("./img", 0666)
+	//exec.Command("cp", fmt.Sprintf("../web/static/cards/img/%v.jpg", co.Id), fmt.Sprintf("./img/%v.jpg", co.Id)).Start()
+
 	return nil
 }
 
