@@ -3,9 +3,10 @@ package main
 import (
 	//"encoding/base64"
 	"errors"
-	"github.com/wzshiming/rego"
 	"net/http"
 	"time"
+
+	"github.com/wzshiming/base"
 )
 
 type HttpConn struct {
@@ -82,7 +83,7 @@ loop:
 		return errors.New("HttpConn.Close: close")
 	}
 	ret = append(ret, hstr(t))
-	r := rego.EnJson(ret)
+	r := base.EnJson(ret)
 	ht.write.Write(r.Bytes())
 	return nil
 }

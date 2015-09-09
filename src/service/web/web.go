@@ -9,11 +9,11 @@ import (
 	"github.com/gorilla/websocket"
 	"github.com/martini-contrib/render"
 	"github.com/martini-contrib/sessions"
-	"github.com/wzshiming/rego"
-	"github.com/wzshiming/rego/agent"
-	"github.com/wzshiming/rego/agent/defaul"
-	"github.com/wzshiming/rego/cfg"
-	"github.com/wzshiming/rego/route"
+	"github.com/wzshiming/base"
+	"github.com/wzshiming/server/agent"
+	"github.com/wzshiming/server/agent/defaul"
+	"github.com/wzshiming/server/cfg"
+	"github.com/wzshiming/server/route"
 )
 
 var upgrader = websocket.Upgrader{
@@ -98,7 +98,7 @@ func run(ag *agent.Agent) {
 		for k, v := range r.Form {
 			b[k] = v[0]
 		}
-		reg := rego.EnJson(b).Bytes()
+		reg := base.EnJson(b).Bytes()
 		reg = append([]byte{0, c1, c2, c3}, reg...)
 
 		if s, ok := session.Get("_id").(uint); ok {
@@ -122,7 +122,7 @@ func run(ag *agent.Agent) {
 		w.Write([]byte("The page not found"))
 	})
 
-	rego.NOTICE("Start from ")
+	base.NOTICE("Start from ")
 	m.RunOnAddr(fmt.Sprintf(":%d", cfg.Self.ClientPort))
 }
 

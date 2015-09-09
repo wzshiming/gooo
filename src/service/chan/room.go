@@ -3,24 +3,24 @@ package main
 import (
 	"errors"
 
-	"github.com/wzshiming/rego"
 	//"fmt"
 	"service/proto"
 	"time"
-	"ygo"
-	"ygo/cards"
 
-	"github.com/wzshiming/rego/agent"
-	"github.com/wzshiming/rego/misc"
+	"github.com/wzshiming/base"
+	"github.com/wzshiming/server/agent"
+	"github.com/wzshiming/server/rooms"
+	cards "github.com/wzshiming/ygo_cards"
+	ygo "github.com/wzshiming/ygo_core"
 	//"ygo/defaul"
 )
 
 var cardBag = cards.CardBag_test
 
 type Room struct {
-	room      *misc.Rooms
+	room      *rooms.Rooms
 	gameList  map[uint]*ygo.YGO
-	saveQuery map[string]*rego.EncodeBytes
+	saveQuery map[string]*base.EncodeBytes
 }
 type dataUniq struct {
 	Uniq uint `json:"__YGOGame__,string"`
@@ -28,9 +28,9 @@ type dataUniq struct {
 
 func NewRoom() *Room {
 	r := Room{
-		room:      misc.NewRooms("YGORooms"),
+		room:      rooms.NewRooms("YGORooms"),
 		gameList:  make(map[uint]*ygo.YGO),
-		saveQuery: make(map[string]*rego.EncodeBytes),
+		saveQuery: make(map[string]*base.EncodeBytes),
 	}
 	go r.Games()
 	return &r
@@ -38,7 +38,7 @@ func NewRoom() *Room {
 
 func (r *Room) YGOGame(sesss ...*agent.Session) {
 	uniq := sesss[0].ToUint()
-	room := misc.NewRooms("YGOGame")
+	room := rooms.NewRooms("YGOGame")
 	for _, v := range sesss {
 		head := r.room.Head(v)
 		v.LockSession()
@@ -50,8 +50,8 @@ func (r *Room) YGOGame(sesss ...*agent.Session) {
 		} else {
 			v.UnlockSession(&agent.Response{
 				Head: head,
-				Data: rego.SumJson(rego.EnJson(dataUniq{uniq}), res),
-				Response: rego.EnJson(map[string]string{
+				Data: base.SumJson(base.EnJson(dataUniq{uniq}), res),
+				Response: base.EnJson(map[string]string{
 					"status": "init",
 				}),
 			})
@@ -93,7 +93,7 @@ func (r *Room) CardFind(args agent.Request, reply *agent.Response) error {
 	args.Request.DeJson(&gr)
 	b := r.saveQuery[gr.Query]
 	if b == nil {
-		b = rego.EnJson(cardBag.Find(gr.Query, true))
+		b = base.EnJson(cardBag.Find(gr.Query, true))
 		r.saveQuery[gr.Query] = b
 	}
 
@@ -115,22 +115,22 @@ func (r *Room) MatchCompetitors(args agent.Request, reply *agent.Response) error
 	Trans := i18n.TranslationsForLocale(d.Language)
 
 	// 判断是否登入
-	//	if id := misc.GetFromRoom(args.Session, "Users"); id == 0 {
+	//	if id := rooms.GetFromRoom(args.Session, "Users"); id == 0 {
 	//		return errors.New(Trans.Value("chan.nologin"))
 	//	}
 
 	// 判断是否在队列中
-	if id := misc.GetFromRoom(args.Session, "YGORooms"); id != 0 {
+	if id := rooms.GetFromRoom(args.Session, "YGORooms"); id != 0 {
 		return errors.New(Trans.Value("chan.hasjoined"))
 	}
 
 	// 判断是否在游戏中
-	if id := misc.GetFromRoom(args.Session, "YGOGame"); id != 0 {
+	if id := rooms.GetFromRoom(args.Session, "YGOGame"); id != 0 {
 		return errors.New(Trans.Value("chan.hasjoined"))
 	}
 
 	// 储存牌组
-	id := uint64(misc.GetFromRoom(args.Session, "Users"))
+	id := uint64(rooms.GetFromRoom(args.Session, "Users"))
 	deck := GetDeck(id)
 	//rego.INFO(deck)
 	if len(deck) == 0 || len(deck[0].Main) == 0 {
@@ -140,7 +140,7 @@ func (r *Room) MatchCompetitors(args agent.Request, reply *agent.Response) error
 	if ret, err := r.room.Join(args.Session, args.Head); err != nil {
 		return errors.New(Trans.Value("chan.joinfail"))
 	} else {
-		reply.Data = rego.SumJson(ret, rego.EnJson(struct {
+		reply.Data = base.SumJson(ret, base.EnJson(struct {
 			Deck proto.Deck `json:"deck"`
 		}{deck[0]}))
 	}
@@ -157,7 +157,7 @@ func (r *Room) StopMatch(args agent.Request, reply *agent.Response) error {
 	Trans := i18n.TranslationsForLocale(d.Language)
 
 	// 判断是否登入
-	if id := misc.GetFromRoom(args.Session, "Users"); id == 0 {
+	if id := rooms.GetFromRoom(args.Session, "Users"); id == 0 {
 		return errors.New(Trans.Value("chan.nologin"))
 	}
 
@@ -208,15 +208,15 @@ func (r *Room) GameGetDeck(args agent.Request, reply *agent.Response) error {
 	//Trans := i18n.TranslationsForLocale(d.Language)
 
 	// 判断是否登入
-	id := uint64(misc.GetFromRoom(args.Session, "Users"))
-	//if id := misc.GetFromRoom(args.Session, "Users"); id == 0 {
+	id := uint64(rooms.GetFromRoom(args.Session, "Users"))
+	//if id := rooms.GetFromRoom(args.Session, "Users"); id == 0 {
 	//return errors.New(Trans.Value("chan.nologin"))
 	//}
 	// 获取卡组
 	odecks := GetDeck(id)
 
 	//rego.INFO(odecks)
-	reply.Response = rego.EnJson(odecks)
+	reply.Response = base.EnJson(odecks)
 	return nil
 
 }
@@ -231,8 +231,8 @@ func (r *Room) GameSetDeck(args agent.Request, reply *agent.Response) error {
 	gr := proto.Deck{}
 	args.Request.DeJson(&gr)
 	// 判断是否登入
-	id := uint64(misc.GetFromRoom(args.Session, "Users"))
-	//if id := misc.GetFromRoom(args.Session, "Users"); id == 0 {
+	id := uint64(rooms.GetFromRoom(args.Session, "Users"))
+	//if id := rooms.GetFromRoom(args.Session, "Users"); id == 0 {
 	//return errors.New(Trans.Value("chan.nologin"))
 	//}
 	//gr.UserId = id

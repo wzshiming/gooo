@@ -1,9 +1,10 @@
 package main
 
 import (
-	"github.com/wzshiming/rego/cfg"
-	"github.com/wzshiming/rego/dbs"
 	"service/proto"
+
+	"github.com/wzshiming/dbs"
+	"github.com/wzshiming/server/cfg"
 )
 
 var db dbs.DB

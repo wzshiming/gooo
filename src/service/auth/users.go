@@ -2,27 +2,28 @@ package main
 
 import (
 	"errors"
-	"github.com/wzshiming/rego"
-	"github.com/wzshiming/rego/agent"
-	"github.com/wzshiming/rego/misc"
 	"service/proto"
 	"time"
+
+	"github.com/wzshiming/base"
+	"github.com/wzshiming/server/agent"
+	"github.com/wzshiming/server/rooms"
 )
 
 type Users struct {
-	room *misc.Rooms
+	room *rooms.Rooms
 }
 
 func NewUsers() *Users {
 	r := Users{
-		room: misc.NewRooms("Users"),
+		room: rooms.NewRooms("Users"),
 	}
 	i := 0
 	tick := time.Tick(time.Second * 10)
 	go func() {
 		for {
 			<-tick
-			rego.NOTICE(r.room.Len())
+			base.NOTICE(r.room.Len())
 			i++
 			r.room.BroadcastPush(map[string]interface{}{
 				"hello": "world",

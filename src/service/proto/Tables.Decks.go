@@ -1,8 +1,9 @@
 package proto
 
 import (
-	"github.com/wzshiming/rego/dbs"
 	"time"
+
+	"github.com/wzshiming/dbs"
 )
 
 type Deck struct {
