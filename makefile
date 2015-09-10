@@ -12,8 +12,7 @@ GO            := go
 GIT           := git
 ECHO          := echo
 ECHO_DATE     := echo `date +%R:%S`
-
-
+FLAGS         := -ldflags "-H windowsgui"
 
 .PHONY:  all build makefile test run clean_pkg clean number_build number_build_record
 
@@ -30,6 +29,7 @@ build: number_build build_ number_build_record
 build_: shutdown coffee
 	@$(GO) install -v github.com/wzshiming/server/...
 	@$(GO) install -v service/...
+	@$(MV) ./bin/resoud ./client/resoud
 
 test:
 	@$(GO) test github.com/wzshiming/...
