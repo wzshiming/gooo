@@ -19,13 +19,15 @@
         {
             "type": "Auth",
             "host": "127.0.0.1",
-            "port": 40001
+            "port": 40001,
+            "db": "Users"
         },
         {
             "type": "Chan",
             "host": "127.0.0.1",
             "port": 40002,
-            "name": "channel_1"
+            "name": "channel_1",
+            "db": "Decks"
         }
     ],
     "dbs": {

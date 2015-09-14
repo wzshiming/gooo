@@ -4,8 +4,8 @@ import (
 	"service/proto"
 	"time"
 
-	"github.com/wzshiming/dbs"
 	"github.com/wzshiming/server/cfg"
+	"github.com/wzshiming/server/dbs"
 )
 
 var db dbs.DB
@@ -23,6 +23,9 @@ func GetDeck(id uint64) (odecks []proto.Deck) {
 		db.Where(&proto.Card{DeckId: odecks[k].Id, InPos: proto.InMain}).Find(&odecks[k].Main)
 		db.Where(&proto.Card{DeckId: odecks[k].Id, InPos: proto.InExtra}).Find(&odecks[k].Extra)
 		db.Where(&proto.Card{DeckId: odecks[k].Id, InPos: proto.InSide}).Find(&odecks[k].Side)
+	}
+	if len(odecks) == 0 && id != 0 {
+		return GetDeck(0)
 	}
 	return
 }
@@ -59,6 +62,5 @@ func DelDeck(id uint64, name string) {
 		db.Where(&proto.Card{DeckId: odeck.Id}).Delete(&proto.Card{})
 		db.Delete(&odeck)
 	}
-
 	return
 }

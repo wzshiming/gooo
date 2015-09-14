@@ -3,8 +3,8 @@ package main
 import (
 	"service/proto"
 
-	"github.com/wzshiming/dbs"
 	"github.com/wzshiming/server/cfg"
+	"github.com/wzshiming/server/dbs"
 )
 
 var db dbs.DB

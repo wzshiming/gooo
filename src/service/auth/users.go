@@ -3,9 +3,7 @@ package main
 import (
 	"errors"
 	"service/proto"
-	"time"
 
-	"github.com/wzshiming/base"
 	"github.com/wzshiming/server/agent"
 	"github.com/wzshiming/server/rooms"
 )
@@ -18,23 +16,25 @@ func NewUsers() *Users {
 	r := Users{
 		room: rooms.NewRooms("Users"),
 	}
-	i := 0
-	tick := time.Tick(time.Second * 10)
-	go func() {
-		for {
-			<-tick
-			base.NOTICE(r.room.Len())
-			i++
-			r.room.BroadcastPush(map[string]interface{}{
-				"hello": "world",
-				"index": i,
-			}, nil)
-		}
-	}()
+	//	i := 0
+	//	tick := time.Tick(time.Second * 10)
+	//	go func() {
+	//		for {
+	//			<-tick
+	//			base.NOTICE(r.room.Len())
+	//			i++
+	//			r.room.BroadcastPush(map[string]interface{}{
+	//				"hello": "world",
+	//				"index": i,
+	//			}, nil)
+	//		}
+	//	}()
 	return &r
 }
 
 func (r *Users) Register(args agent.Request, reply *agent.Response) error {
+	args.Begin()
+	defer args.End(reply)
 	var p proto.RegisterRequest
 	args.Request.DeJson(&p)
 	var d struct {
@@ -65,6 +65,8 @@ func (r *Users) Register(args agent.Request, reply *agent.Response) error {
 }
 
 func (r *Users) LogIn(args agent.Request, reply *agent.Response) error {
+	args.Begin()
+	defer args.End(reply)
 	var p proto.RegisterRequest
 	args.Request.DeJson(&p)
 	var d struct {
@@ -102,6 +104,8 @@ func (r *Users) LogIn(args agent.Request, reply *agent.Response) error {
 }
 
 func (r *Users) ChangePwd(args agent.Request, reply *agent.Response) error {
+	args.Begin()
+	defer args.End(reply)
 	var p proto.ChangePwdRequest
 	args.Request.DeJson(&p)
 	var d struct {
@@ -140,6 +144,8 @@ func (r *Users) ChangePwd(args agent.Request, reply *agent.Response) error {
 }
 
 func (r *Users) Unregister(args agent.Request, reply *agent.Response) error {
+	args.Begin()
+	defer args.End(reply)
 	var p proto.UnregisterRequest
 	args.Request.DeJson(&p)
 	var d struct {
@@ -173,6 +179,8 @@ func (r *Users) Unregister(args agent.Request, reply *agent.Response) error {
 }
 
 func (r *Users) LogOut(args agent.Request, reply *agent.Response) error {
+	args.Begin()
+	defer args.End(reply)
 	var d struct {
 		Language string
 	}

@@ -9,7 +9,7 @@ var ser *server.Server
 
 func init() {
 	cfg.TakeConf()
-	dbconn(cfg.Whole.Dbs["Users"])
+	dbconn(cfg.Whole.Dbs[cfg.Self.DB])
 	ser = cfg.Self.Server()
 }
 

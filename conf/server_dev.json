@@ -10,7 +10,7 @@
         {
             "type": "Conn",
             "host": "127.0.0.1",
-            "port": 50012,
+            "port": 50021,
             "clientport": 3006,
             "name": "web",
             "bin": "devconn"
@@ -20,13 +20,15 @@
         {
             "type": "Auth",
             "host": "127.0.0.1",
-            "port": 40011
+            "port": 40001,
+            "db": "Users"
         },
         {
             "type": "Chan",
             "host": "127.0.0.1",
-            "port": 40012,
-            "name": "channel_1"
+            "port": 40002,
+            "name": "channel_1",
+            "db": "Decks"
         }
     ],
     "dbs": {

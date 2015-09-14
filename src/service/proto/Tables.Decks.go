@@ -3,7 +3,7 @@ package proto
 import (
 	"time"
 
-	"github.com/wzshiming/dbs"
+	"github.com/wzshiming/server/dbs"
 )
 
 type Deck struct {
