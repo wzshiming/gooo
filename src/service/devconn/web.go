@@ -83,37 +83,37 @@ func run(ag *agent.Agent) {
 		ag.Join(agent.NewConnWeb(conn))
 	})
 
-	m.Get("/conn/:code", func(w http.ResponseWriter, r *http.Request, params martini.Params, session sessions.Session) {
-		var user *agent.User
-		var conn *HttpConn
-		c1, c2, c3, err := rec.Map(params["code"])
-		if err != nil {
-			return
-		}
-		b := make(map[string]string, 16)
-		r.ParseForm()
-		for k, v := range r.Form {
-			b[k] = v[0]
-		}
-		reg := base.EnJson(b).Bytes()
-		reg = append([]byte{0, c1, c2, c3}, reg...)
+	//	m.Get("/conn/:code", func(w http.ResponseWriter, r *http.Request, params martini.Params, session sessions.Session) {
+	//		var user *agent.User
+	//		var conn *HttpConn
+	//		c1, c2, c3, err := rec.Map(params["code"])
+	//		if err != nil {
+	//			return
+	//		}
+	//		b := make(map[string]string, 16)
+	//		r.ParseForm()
+	//		for k, v := range r.Form {
+	//			b[k] = v[0]
+	//		}
+	//		reg := base.EnJson(b).Bytes()
+	//		reg = append([]byte{0, c1, c2, c3}, reg...)
 
-		if s, ok := session.Get("_id").(uint); ok {
-			user = ag.Get(s)
-			if user != nil {
-				conn, ok = user.Conn.(*HttpConn)
-				if !ok {
-					return
-				}
-				conn.Refresh(w, r, reg)
-				return
-			}
-		}
-		conn = NewHttpConn(16)
-		user = ag.JoinSync(conn)
-		session.Set("_id", user.ToUint())
-		conn.Refresh(w, r, reg)
-	})
+	//		if s, ok := session.Get("_id").(uint); ok {
+	//			user = ag.Get(s)
+	//			if user != nil {
+	//				conn, ok = user.Conn.(*HttpConn)
+	//				if !ok {
+	//					return
+	//				}
+	//				conn.Refresh(w, r, reg)
+	//				return
+	//			}
+	//		}
+	//		conn = NewHttpConn(16)
+	//		user = ag.JoinSync(conn)
+	//		session.Set("_id", user.ToUint())
+	//		conn.Refresh(w, r, reg)
+	//	})
 
 	m.NotFound(func(w http.ResponseWriter, r *http.Request) {
 		w.Write([]byte("The page not found"))

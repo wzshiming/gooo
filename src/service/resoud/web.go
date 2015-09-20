@@ -61,7 +61,7 @@ func runWeb(addr string, port uint) {
 	ag := agent.NewAgent(1, func(user *agent.User, msg []byte) (err error) {
 		defer base.PanicErr(&err)
 		user.SetDeadline(time.Now().Add(time.Second * 60 * 60))
-		user.Refresh()
+		//user.Refresh()
 		ser.WriteMsg(msg)
 		var data []byte
 		data, err = ser.ReadMsg()

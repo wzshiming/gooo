@@ -2,6 +2,7 @@ package main
 
 import (
 	"github.com/wzshiming/server"
+	"github.com/wzshiming/server/agent"
 	"github.com/wzshiming/server/cfg"
 )
 
@@ -14,6 +15,7 @@ func init() {
 }
 
 func main() {
+	ser.Register(agent.NewLeave(nil))
 	ser.Register(NewUsers())
 	ser.Start()
 }
