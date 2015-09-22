@@ -1,6 +1,7 @@
 package main
 
 import (
+	"errors"
 	"fmt"
 
 	//"fmt"
@@ -40,7 +41,7 @@ func NewRoom() *Room {
 	return &r
 }
 
-func (r *Room) YGOGame(sesss ...*agent.Session) {
+func (r *Room) YGOGame(sesss []*agent.Session) {
 	uniq := sesss[0].ToUint()
 	room := r.roomGame.GetChild(fmt.Sprint(uniq))
 
@@ -51,12 +52,13 @@ func (r *Room) YGOGame(sesss ...*agent.Session) {
 			code = r.roomMatc.Leave(v)
 			room.Join(v, code.Head)
 			v.Data.Set("gameYGO", room.Name())
-
+			base.INFO(v.Rooms.Data())
 			return
 		})
 	}
+	time.Sleep(time.Second)
 
-	room.BroadcastPush(map[string]string{
+	room.Broadcast(map[string]string{
 		"status": "init",
 	})
 	game := ygo.NewYGO(room)
@@ -67,6 +69,7 @@ func (r *Room) YGOGame(sesss ...*agent.Session) {
 		v.Mutex(func() {
 			r.roomGame.ToParent(v)
 			room.Leave(v)
+			v.Data.Del("gameYGO")
 		})
 	}
 	delete(r.gameList, room.Name())
@@ -82,10 +85,10 @@ func (r *Room) Games() {
 			"inHallNum":  r.roomHall.Len(),
 			"inMatchNum": size,
 		}
-		r.roomHall.BroadcastPush(msg)
+		r.roomHall.Broadcast(msg)
 		if size >= 2 {
 			if g := r.roomMatc.GroupFromSize(2); g != nil {
-				go r.YGOGame(g...)
+				go r.YGOGame(g)
 			}
 		}
 	}
@@ -271,13 +274,18 @@ func (r *Room) GameRegister(args agent.Request, reply *agent.Response) error {
 
 func (r *Room) GameCardActionSelectable(args agent.Request, reply *agent.Response) error {
 	args.Mutex(reply, func() {
-		r.GameBC(args, reply, func(game *ygo.YGO, sess *agent.Session) error {
+		err := r.GameBC(args, reply, func(game *ygo.YGO, sess *agent.Session) error {
 			ar := proto.SelectableRequest{}
 			args.Request.DeJson(&ar)
 			game.GetPlayer(sess).AddCode(ar.Uniq, ar.Method)
 			return nil
 		})
-		reply.ReplyError("")
+		if err != nil {
+			reply.ReplyError(err.Error())
+		} else {
+			reply.ReplyError("")
+		}
+
 	})
 	return nil
 }
@@ -289,20 +297,14 @@ func (r *Room) GameBC(args agent.Request, reply *agent.Response, bc func(*ygo.YG
 	args.Session.Data.Get("gameYGO", &name)
 
 	if name == "" {
-		reply.ReplyError("auth.nogame1")
-		base.ERR("auth.nogame1")
-		return nil
+		return errors.New("auth.nogame1")
 	}
 	game := r.gameList[name]
 	if game == nil {
-		reply.ReplyError("auth.nogame2")
-		base.ERR("auth.nogame2")
-		return nil
+		return errors.New("auth.nogame2")
 	}
 	if !game.Room.IsExist(args.Session) {
-		reply.ReplyError("auth.nogame3")
-		base.ERR("auth.nogame3")
-		return nil
+		return errors.New("auth.nogame3")
 	}
 
 	return bc(game, args.Session)

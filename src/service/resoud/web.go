@@ -63,17 +63,24 @@ func runWeb(addr string, port uint) {
 		user.SetDeadline(time.Now().Add(time.Second * 60 * 60))
 		//user.Refresh()
 		ser.WriteMsg(msg)
-		var data []byte
-		data, err = ser.ReadMsg()
-		if err != nil {
-			return
-		}
-		user.WriteMsg(data)
+
 		return
 
 	}, func(user *agent.User) {
 		os.Exit(0)
 	})
+
+	go func() {
+		for {
+			var data []byte
+			data, err = ser.ReadMsg()
+			if err != nil {
+				return
+			}
+			Conn.WriteMsg(data)
+		}
+		os.Exit(0)
+	}()
 	//martini.Env = martini.Prod
 	m := martini.Classic()
 
