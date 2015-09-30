@@ -101,6 +101,10 @@ func (r *Users) LogIn(args agent.Request, reply *agent.Response) error {
 			reply.ReplyError("auth.pwderr")
 			return
 		}
+		if r.room.Get(uint(ouser.Id)) != nil {
+			reply.ReplyError("auth.useruseing")
+			return
+		}
 		args.Session.Data.Set("username", ouser.Username)
 		// 用户登入
 		r.room.JoinFrom(uint(ouser.Id), args.Session, args.Head)

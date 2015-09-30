@@ -49,6 +49,7 @@ func runWeb(addr string, port uint) {
 	}
 	cfg := defaul.DefCfg{}
 	base.NewEncodeBytes(b[4:]).DeJson(&cfg)
+	//base.INFO(cfg)
 	for _, v := range cfg.Agents {
 		if v.Name == "fs" {
 			go runSync(v)

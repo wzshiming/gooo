@@ -1,15 +1,21 @@
 package proto
 
-import (
-	"time"
+import "time"
 
-	"github.com/wzshiming/server/dbs"
-)
+type DecksInfo struct {
+	Id     uint64 `json:"-";gorm:"primary_key"`
+	UserId uint64 `json:"-";sql:"unique_index"`
+	List   []Deck `json:"list"`
+	Def    uint64 `json:"def"`
+	Exi    int    `json:"Exi"`
+	Max    int    `json:"max"`
+}
 
 type Deck struct {
-	Id        uint64    `json:"-"`
-	UserId    uint64    `json:"-";sql:"index"`
-	Name      string    `json:"name";sql:"type:varchar(64);not null;index"`
+	Id     uint64 `json:"id";gorm:"primary_key"`
+	UserId uint64 `json:"-";sql:"index"`
+	//DecksId uint64 `json:"-";sql:"index"`
+	//Name      string    `json:"name";sql:"type:varchar(64);not null;index"`
 	Main      []Card    `json:"main"`
 	Extra     []Card    `json:"extra"`
 	Side      []Card    `json:"side"`
@@ -35,21 +41,12 @@ func (s *Deck) GetExtra() (r []uint) {
 	return
 }
 
-func (s *Deck) CreateTable(db *dbs.DB) {
-	db.CreateTable(s)
-	db.CreateTable(&Card{})
-}
-
-func (s *Deck) DropTable(db *dbs.DB) {
-	db.DropTable(s)
-}
-
 type Card struct {
-	Id     uint64 `json:"-"`
-	DeckId uint64 `json:"-";sql:"index:idx_deckid_index"`
-	Index  uint   `json:"id";sql:"index:idx_deckid_index"`
+	Id     uint64 `json:"-";gorm:"primary_key"`
+	DeckId uint64 `json:"-";sql:"index:idx_deckid_index_inpos"`
+	Index  uint   `json:"id";sql:"index:idx_deckid_index_inpos"`
 	Size   uint   `json:"size"`
-	InPos  InPos  `json:"-";sql:"index:idx_deckid_index"`
+	InPos  InPos  `json:"-";sql:"index:idx_deckid_index_inpos"`
 }
 
 type InPos uint

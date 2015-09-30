@@ -29,7 +29,7 @@ type Room struct {
 func NewRoom() *Room {
 	h := agent.NewRoom("Hall")
 	m := agent.NewRoom("Matc")
-	g := agent.NewRoom("Game")
+	g := h.GetChild("Game")
 	r := Room{
 		roomMatc:  m,
 		roomHall:  h,
@@ -47,9 +47,8 @@ func (r *Room) YGOGame(sesss []*agent.Session) {
 
 	for _, v := range sesss {
 		v.Mutex(func() {
-			code := r.roomHall.Leave(v)
-			r.roomGame.Join(v, code.Head)
-			code = r.roomMatc.Leave(v)
+			r.roomHall.ToChild(v, "Game")
+			code := r.roomMatc.Leave(v)
 			room.Join(v, code.Head)
 			v.Data.Set("gameYGO", room.Name())
 			base.INFO(v.Rooms.Data())
@@ -136,14 +135,11 @@ func (r *Room) MatchCompetitors(args agent.Request, reply *agent.Response) error
 		}
 
 		// 储存牌组
-		var deck proto.Deck
-		decks := GetDeck(id0)
-		if len(decks) == 0 {
+		deck := GetDef(id0)
+		if deck.Id == 0 {
 			reply.ReplyError("auth.deckerr")
 			return
 		}
-
-		deck = decks[0]
 		args.Session.Data.Set("deck", deck)
 		// 加入队列
 		r.roomMatc.Join(args.Session, args.Head)
@@ -196,29 +192,29 @@ func (r *Room) GameNewDeck(args agent.Request, reply *agent.Response) error {
 		}
 		gr.UserId = id
 		gr.UpdatedAt = time.Now()
-		SetDeck(id, gr.Name, gr)
+		NewDeck(id)
 		reply.ReplyError("")
 	})
 	return nil
 
 }
 
-func (r *Room) GameDelDeck(args agent.Request, reply *agent.Response) error {
-	args.Mutex(reply, func() {
+//func (r *Room) GameDelDeck(args agent.Request, reply *agent.Response) error {
+//	args.Mutex(reply, func() {
 
-		gr := proto.Deck{}
-		args.Request.DeJson(&gr)
-		// 判断是否登入
-		id := uint64(args.Session.RoomsUniq("Users"))
-		if id == 0 {
-			reply.ReplyError("auth.nologin")
-			return
-		}
-		DelDeck(id, gr.Name)
-		reply.ReplyError("")
-	})
-	return nil
-}
+//		gr := proto.Deck{}
+//		args.Request.DeJson(&gr)
+//		// 判断是否登入
+//		id := uint64(args.Session.RoomsUniq("Users"))
+//		if id == 0 {
+//			reply.ReplyError("auth.nologin")
+//			return
+//		}
+//		//DelDeck(id, gr.Name)
+//		reply.ReplyError("")
+//	})
+//	return nil
+//}
 
 func (r *Room) GameGetDeck(args agent.Request, reply *agent.Response) error {
 	args.Mutex(reply, func() {
@@ -230,7 +226,7 @@ func (r *Room) GameGetDeck(args agent.Request, reply *agent.Response) error {
 			return
 		}
 		// 获取卡组
-		odecks := GetDeck(uint64(id))
+		odecks := GetDecks(uint64(id))
 		reply.Reply(odecks)
 	})
 	return nil
@@ -251,10 +247,9 @@ func (r *Room) GameSetDeck(args agent.Request, reply *agent.Response) error {
 		gr.UserId = id
 
 		if len(gr.Main) == 0 && len(gr.Extra) == 0 && len(gr.Side) == 0 {
-			DelDeck(id, gr.Name)
+			//DelDeck(id, gr.Id)
 		} else {
-			SetDeck(id, gr.Name, gr)
-			gr.UpdatedAt = time.Now()
+			SetDeck(id, gr.Id, gr)
 		}
 		reply.ReplyError("")
 	})
@@ -282,10 +277,7 @@ func (r *Room) GameCardActionSelectable(args agent.Request, reply *agent.Respons
 		})
 		if err != nil {
 			reply.ReplyError(err.Error())
-		} else {
-			reply.ReplyError("")
 		}
-
 	})
 	return nil
 }
