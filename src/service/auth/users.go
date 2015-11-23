@@ -87,14 +87,14 @@ func (r *Users) LogIn(args agent.Request, reply *agent.Response) error {
 		// 向数据库查询用户
 		var ouser proto.User
 		if err := db.Where(&proto.User{Username: p.Username}).First(&ouser).Error; err != nil {
-			reply.ReplyError("auth.usernotexists")
+			reply.ReplyError("auth.pwderr")
 			return
 
 		}
 
 		// 判断用户 账号密码是否正确
 		if ouser.Username != p.Username {
-			reply.ReplyError("auth.usernotexists")
+			reply.ReplyError("auth.pwderr")
 			return
 		}
 		if ouser.Password != p.Password {
@@ -105,9 +105,13 @@ func (r *Users) LogIn(args agent.Request, reply *agent.Response) error {
 			reply.ReplyError("auth.useruseing")
 			return
 		}
+		
 		args.Session.Data.Set("username", ouser.Username)
+		args.Session.Data.Set("userid", ouser.Id)
+
 		// 用户登入
 		r.room.JoinFrom(uint(ouser.Id), args.Session, args.Head)
+		
 		reply.ReplyError("")
 	})
 
@@ -134,13 +138,13 @@ func (r *Users) ChangePwd(args agent.Request, reply *agent.Response) error {
 		// 检查用户是否存在
 		var ouser proto.User
 		if err := db.Where(&proto.User{Username: p.Username}).First(&ouser).Error; err != nil {
-			reply.ReplyError("auth.usernotexists")
+			reply.ReplyError("auth.pwderr")
 			return
 		}
 
 		// 判断用户 账号密码是否正确
 		if ouser.Username != p.Username {
-			reply.ReplyError("auth.usernotexists")
+			reply.ReplyError("auth.pwderr")
 			return
 		}
 
@@ -170,13 +174,13 @@ func (r *Users) Unregister(args agent.Request, reply *agent.Response) error {
 		// 检查用户是否存在
 		var ouser proto.User
 		if err := db.Where(&proto.User{Username: p.Username}).First(&ouser).Error; err != nil {
-			reply.ReplyError("auth.usernotexists")
+			reply.ReplyError("auth.pwderr")
 			return
 		}
 
 		// 判断用户 账号密码是否正确
 		if ouser.Username != p.Username {
-			reply.ReplyError("auth.usernotexists")
+			reply.ReplyError("auth.pwderr")
 			return
 		}
 		if ouser.Password != p.Password {

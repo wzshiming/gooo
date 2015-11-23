@@ -1,7 +1,5 @@
 package proto
 
-import ()
-
 type GameInitRequest struct {
 }
 
@@ -21,12 +19,12 @@ type GameInitResponse struct {
 	Users []PlayerInit `json:"users"`
 }
 
-type SelectDeckRequest struct {
-	ID uint `json:"id"`
-}
+//type SelectDeckRequest struct {
+//	ID uint `json:"id"`
+//}
 
-type SelectDeckResponse struct {
-	Deck  []uint `json:"deck"`
-	Extra []uint `json:"extra"`
-	Side  []uint `json:"side"`
-}
+//type SelectDeckResponse struct {
+//	Deck  []uint `json:"deck"`
+//	Extra []uint `json:"extra"`
+//	Side  []uint `json:"side"`
+//}

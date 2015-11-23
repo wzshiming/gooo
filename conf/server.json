@@ -3,16 +3,9 @@
         {
 			"type": "Conn",
             "host": "127.0.0.1",
-            "port": 50001,
-            "clientport": 3007,
+            "port": 50005,
+            "clientport": 3008,
             "name": "tcp"
-        },
-        {
-            "type": "Filesd",
-            "host": "127.0.0.1",
-            "port": 50002,
-            "clientport": 3009,
-            "name": "fs"
         }
     ],
     "apps": [

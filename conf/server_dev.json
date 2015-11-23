@@ -3,17 +3,9 @@
         {
 			"type": "Conn",
             "host": "127.0.0.1",
-            "port": 50011,
-            "clientport": 3007,
+            "port": 50031,
+            "clientport": 3008,
             "name": "tcp"
-        },
-        {
-            "type": "Conn",
-            "host": "127.0.0.1",
-            "port": 50021,
-            "clientport": 3006,
-            "name": "web",
-            "bin": "devconn"
         }
     ],
     "apps": [

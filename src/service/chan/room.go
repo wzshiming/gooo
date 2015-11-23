@@ -11,8 +11,9 @@ import (
 	"github.com/wzshiming/base"
 	"github.com/wzshiming/server/agent"
 
-	cards "github.com/wzshiming/ygo_cards"
 	ygo "github.com/wzshiming/ygo_core"
+	cards "github.com/wzshiming/ygo_core/ygo_cards"
+
 	//"ygo/defaul"
 )
 
@@ -24,6 +25,7 @@ type Room struct {
 	roomGame  *agent.Room
 	gameList  map[string]*ygo.YGO
 	saveQuery map[string]*base.EncodeBytes
+	timer     *base.Timer
 }
 
 func NewRoom() *Room {
@@ -36,12 +38,14 @@ func NewRoom() *Room {
 		roomGame:  g,
 		gameList:  map[string]*ygo.YGO{},
 		saveQuery: map[string]*base.EncodeBytes{},
+		timer:     base.NewTimer(time.Second),
 	}
+	go r.timer.Start()
 	go r.Games()
 	return &r
 }
 
-func (r *Room) YGOGame(sesss []*agent.Session) {
+func (r *Room) YGOGameReady(sesss []*agent.Session) {
 	uniq := sesss[0].ToUint()
 	room := r.roomGame.GetChild(fmt.Sprint(uniq))
 
@@ -49,29 +53,40 @@ func (r *Room) YGOGame(sesss []*agent.Session) {
 		v.Mutex(func() {
 			r.roomHall.ToChild(v, "Game")
 			code := r.roomMatc.Leave(v)
-			room.Join(v, code.Head)
+			room.Join(v, nil)
+			v.Push(map[string]string{
+				"status": "init",
+			}, code.Head)
 			v.Data.Set("gameYGO", room.Name())
-			base.INFO(v.Rooms.Data())
+			//base.INFO(v.Rooms.Data())
 			return
 		})
 	}
-	time.Sleep(time.Second)
-
-	room.Broadcast(map[string]string{
-		"status": "init",
-	})
 	game := ygo.NewYGO(room)
 	r.gameList[room.Name()] = game
 	game.CardVer = cardBag
-	game.Loop()
-	for _, v := range sesss {
-		v.Mutex(func() {
-			r.roomGame.ToParent(v)
-			room.Leave(v)
-			v.Data.Del("gameYGO")
+	r.timer.NewNode(time.Second*10, func() {
+		if !room.IsReady() {
+			game.GameOver()
+		}
+	})
+}
+
+func (r *Room) YGOGamePlay(yg *ygo.YGO) {
+	yg.Loop()
+	r.YGOGameOver(yg)
+}
+
+func (r *Room) YGOGameOver(yg *ygo.YGO) {
+
+	yg.Room.ForEach(func(s *agent.Session) {
+		s.Mutex(func() {
+			r.roomGame.ToParent(s)
+			yg.Room.Leave(s)
+			s.Data.Del("gameYGO")
 		})
-	}
-	delete(r.gameList, room.Name())
+	})
+	delete(r.gameList, yg.Room.Name())
 }
 
 func (r *Room) Games() {
@@ -87,7 +102,7 @@ func (r *Room) Games() {
 		r.roomHall.Broadcast(msg)
 		if size >= 2 {
 			if g := r.roomMatc.GroupFromSize(2); g != nil {
-				go r.YGOGame(g)
+				r.YGOGameReady(g)
 			}
 		}
 	}
@@ -111,35 +126,51 @@ func (r *Room) CardFind(args agent.Request, reply *agent.Response) error {
 	return nil
 }
 
+// 搜索卡牌
+func (r *Room) CardFilter(args agent.Request, reply *agent.Response) error {
+	args.Mutex(reply, func() {
+		var gr struct {
+			Name string `json:"name"`
+		}
+		args.Request.DeJson(&gr)
+		reply.Reply(cardBag.Filter(gr.Name))
+	})
+	return nil
+}
+
 // 匹配游戏
 func (r *Room) MatchCompetitors(args agent.Request, reply *agent.Response) error {
 	args.Mutex(reply, func() {
 
 		// 判断是否登入
 		id0 := uint64(args.Session.RoomsUniq("Users"))
-		if id0 == 0 {
-			reply.ReplyError("auth.nologin")
-			return
-		}
+		//		if id0 == 0 {
+		//			reply.ReplyError("chan.nologin")
+		//			return
+		//		}
 
 		// 判断是否在队列中
 		if id := r.roomMatc.Uniq(args.Session); id != 0 {
-			reply.ReplyError("auth.hasjoined")
+			reply.ReplyError("chan.hasjoined")
 			return
 		}
 
 		// 判断是否在游戏中
 		if id := r.roomGame.Uniq(args.Session); id != 0 {
-			reply.ReplyError("auth.hasjoined")
+			reply.ReplyError("chan.hasjoined")
 			return
 		}
 
 		// 储存牌组
+		if id0 == 0 {
+			id0 = 1
+		}
 		deck := GetDef(id0)
 		if deck.Id == 0 {
-			reply.ReplyError("auth.deckerr")
+			reply.ReplyError("chan.deckerr")
 			return
 		}
+
 		args.Session.Data.Set("deck", deck)
 		// 加入队列
 		r.roomMatc.Join(args.Session, args.Head)
@@ -153,10 +184,10 @@ func (r *Room) StopMatch(args agent.Request, reply *agent.Response) error {
 	args.Mutex(reply, func() {
 
 		// 判断是否登入
-		if id := args.Session.RoomsUniq("Users"); id == 0 {
-			reply.ReplyError("auth.nologin")
-			return
-		}
+		//		if id := args.Session.RoomsUniq("Users"); id == 0 {
+		//			reply.ReplyError("chan.nologin")
+		//			return
+		//		}
 
 		// 退出队列
 		r.roomMatc.Leave(args.Session)
@@ -165,38 +196,123 @@ func (r *Room) StopMatch(args agent.Request, reply *agent.Response) error {
 	return nil
 }
 
+// 大厅右下角 显示人数的
 func (r *Room) InfoRegister(args agent.Request, reply *agent.Response) error {
 	args.Mutex(reply, func() {
 
-		if id := args.Session.RoomsUniq("Users"); id == 0 {
-			reply.ReplyError("auth.nologin")
-			return
-
-		}
+		//if id := args.Session.RoomsUniq("Users"); id == 0 {
+		//	reply.ReplyError("chan.nologin")
+		//	return
+		//}
 		r.roomHall.Join(args.Session, args.Head)
 		reply.ReplyError("")
 	})
 	return nil
 }
 
-func (r *Room) GameNewDeck(args agent.Request, reply *agent.Response) error {
+//func (r *Room) GameNewDeck(args agent.Request, reply *agent.Response) error {
+//	args.Mutex(reply, func() {
+
+//		gr := proto.Deck{}
+//		args.Request.DeJson(&gr)
+//		// 判断是否登入
+//		id := uint64(args.Session.RoomsUniq("Users"))
+//		if id == 0 {
+//			reply.ReplyError("chan.nologin")
+//			return
+//		}
+//		gr.UserId = id
+//		gr.UpdatedAt = time.Now()
+//		NewDeck(id)
+//		reply.ReplyError("")
+//	})
+//	return nil
+
+//}
+
+//保存卡组使用名字做索引
+func (r *Room) SaveDeckForName(args agent.Request, reply *agent.Response) error {
+	args.Mutex(reply, func() {
+		var gr struct {
+			Name string       `json:"name"`
+			Deck []proto.Card `json:"main"`
+		}
+
+		args.Request.DeJson(&gr)
+		//base.INFO(gr)
+		// 判断是否登入
+		id := uint64(args.Session.RoomsUniq("Users"))
+
+		//		if id == 0 {
+		//			reply.ReplyError("chan.nologin")
+		//			return
+		//		}
+		if id == 0 {
+			id = 1
+		}
+		SetDeck(id, gr.Name, gr.Deck)
+		reply.ReplyError("")
+	})
+	return nil
+}
+
+//获取卡组数量和名字
+func (r *Room) GetDecksInfo(args agent.Request, reply *agent.Response) error {
 	args.Mutex(reply, func() {
 
 		gr := proto.Deck{}
 		args.Request.DeJson(&gr)
 		// 判断是否登入
 		id := uint64(args.Session.RoomsUniq("Users"))
+		//		if id == 0 {
+		//			reply.ReplyError("chan.nologin")
+		//			return
+		//		}
 		if id == 0 {
-			reply.ReplyError("auth.nologin")
-			return
+			id = 1
 		}
-		gr.UserId = id
-		gr.UpdatedAt = time.Now()
-		NewDeck(id)
+		odeck := GetDecks(id)
+		base.INFO(odeck)
+		reply.Reply(odeck)
+		//reply.ReplyError("")
+	})
+	return nil
+}
+
+//重命名卡组
+func (r *Room) RenameDeck(args agent.Request, reply *agent.Response) error {
+	args.Mutex(reply, func() {
+
+		gr := proto.Deck{}
+		args.Request.DeJson(&gr)
+		// 判断是否登入
+		//id := uint64(args.Session.RoomsUniq("Users"))
+		//		if id == 0 {
+		//			reply.ReplyError("chan.nologin")
+		//			return
+		//		}
+
 		reply.ReplyError("")
 	})
 	return nil
+}
 
+//获取卡组使用名字做索引
+func (r *Room) GetDeckForName(args agent.Request, reply *agent.Response) error {
+	args.Mutex(reply, func() {
+
+		gr := proto.Deck{}
+		args.Request.DeJson(&gr)
+		// 判断是否登入
+		//id := uint64(args.Session.RoomsUniq("Users"))
+		//		if id == 0 {
+		//			reply.ReplyError("chan.nologin")
+		//			return
+		//		}
+
+		reply.ReplyError("")
+	})
+	return nil
 }
 
 //func (r *Room) GameDelDeck(args agent.Request, reply *agent.Response) error {
@@ -207,7 +323,7 @@ func (r *Room) GameNewDeck(args agent.Request, reply *agent.Response) error {
 //		// 判断是否登入
 //		id := uint64(args.Session.RoomsUniq("Users"))
 //		if id == 0 {
-//			reply.ReplyError("auth.nologin")
+//			reply.ReplyError("chan.nologin")
 //			return
 //		}
 //		//DelDeck(id, gr.Name)
@@ -216,52 +332,57 @@ func (r *Room) GameNewDeck(args agent.Request, reply *agent.Response) error {
 //	return nil
 //}
 
-func (r *Room) GameGetDeck(args agent.Request, reply *agent.Response) error {
-	args.Mutex(reply, func() {
+//func (r *Room) GameGetDeck(args agent.Request, reply *agent.Response) error {
+//	args.Mutex(reply, func() {
 
-		// 判断是否登入
-		id := args.Session.RoomsUniq("Users")
-		if id == 0 {
-			reply.ReplyError("auth.nologin")
-			return
-		}
-		// 获取卡组
-		odecks := GetDecks(uint64(id))
-		reply.Reply(odecks)
-	})
-	return nil
+//		// 判断是否登入
+//		id := args.Session.RoomsUniq("Users")
+//		if id == 0 {
+//			reply.ReplyError("chan.nologin")
+//			return
+//		}
+//		// 获取卡组
+//		odecks := GetDecks(uint64(id))
+//		reply.Reply(odecks)
+//	})
+//	return nil
 
-}
+//}
 
-func (r *Room) GameSetDeck(args agent.Request, reply *agent.Response) error {
-	args.Mutex(reply, func() {
+//func (r *Room) GameSetDeck(args agent.Request, reply *agent.Response) error {
+//	args.Mutex(reply, func() {
 
-		gr := proto.Deck{}
-		args.Request.DeJson(&gr)
-		// 判断是否登入
-		id := uint64(args.Session.RoomsUniq("Users"))
-		if id == 0 {
-			reply.ReplyError("auth.nologin")
-			return
-		}
-		gr.UserId = id
+//		gr := proto.Deck{}
+//		args.Request.DeJson(&gr)
+//		// 判断是否登入
+//		id := uint64(args.Session.RoomsUniq("Users"))
+//		if id == 0 {
+//			reply.ReplyError("chan.nologin")
+//			return
+//		}
+//		gr.UserId = id
 
-		if len(gr.Main) == 0 && len(gr.Extra) == 0 && len(gr.Side) == 0 {
-			//DelDeck(id, gr.Id)
-		} else {
-			SetDeck(id, gr.Id, gr)
-		}
-		reply.ReplyError("")
-	})
-	return nil
-}
+//		if len(gr.Main) == 0 && len(gr.Extra) == 0 && len(gr.Side) == 0 {
+//			//DelDeck(id, gr.Id)
+//		} else {
+//			SetDeck(id, gr.Id, gr)
+//		}
+//		reply.ReplyError("")
+//	})
+//	return nil
+//}
 
 func (r *Room) GameRegister(args agent.Request, reply *agent.Response) error {
 	args.Mutex(reply, func() {
 		r.GameBC(args, reply, func(game *ygo.YGO, sess *agent.Session) error {
 			game.Room.SetHead(sess, args.Head)
+
+			if game.Room.IsReady() {
+				go r.YGOGamePlay(game)
+			}
 			return nil
 		})
+
 		reply.ReplyError("")
 	})
 	return nil
@@ -289,14 +410,14 @@ func (r *Room) GameBC(args agent.Request, reply *agent.Response, bc func(*ygo.YG
 	args.Session.Data.Get("gameYGO", &name)
 
 	if name == "" {
-		return errors.New("auth.nogame1")
+		return errors.New("chan.nogame")
 	}
 	game := r.gameList[name]
 	if game == nil {
-		return errors.New("auth.nogame2")
+		return errors.New("chan.nogame")
 	}
 	if !game.Room.IsExist(args.Session) {
-		return errors.New("auth.nogame3")
+		return errors.New("chan.nogame")
 	}
 
 	return bc(game, args.Session)

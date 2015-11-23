@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"service/proto"
 
 	"github.com/wzshiming/server/cfg"
@@ -18,10 +19,11 @@ func dbconn(us cfg.DbConfig) (err error) {
 }
 
 func getDecks(userid uint64) (r proto.DecksInfo, err error) {
-	err = db.Where(&proto.DecksInfo{UserId: userid}).Find(&r).Error
+	err = db.Where(&proto.DecksInfo{UserId: userid}).First(&r).Error
 	return
 }
 
+// 用户第一次游戏创建卡组信息
 func NewDecks(userid uint64) {
 	_, err := getDecks(userid)
 	if err == nil {
@@ -29,103 +31,90 @@ func NewDecks(userid uint64) {
 	}
 	b := proto.DecksInfo{
 		UserId: userid,
-		Exi:    0,
-		Max:    1,
-		Def:    0,
+		Def:    fmt.Sprint("Deck", 1),
 	}
 	db.Create(&b)
 	NewDeck(userid)
 	return
 }
 
+// 给用户添加新的卡组
 func NewDeck(userid uint64) {
-	var odecks proto.DecksInfo
-	if err := db.Where(&proto.DecksInfo{UserId: userid}).Find(&odecks).Error; err != nil {
+	odecks, err := getDecks(userid)
+	if err != nil {
 		return
 	}
-	if odecks.Exi < odecks.Max {
-		db.Save(&proto.Deck{
-			UserId: userid,
-			Main: []proto.Card{
-				proto.Card{
-					Size:  1,
-					Index: 0,
-					InPos: proto.InMain,
-				},
-			},
-		})
-	}
+	odecks.Max++
+	db.Save(&proto.Deck{
+		UserId: userid,
+		Name:   fmt.Sprint("Deck", odecks.Max),
+	})
+	db.Save(odecks)
 	return
 }
 
+// 获得默认卡组
 func GetDef(userid uint64) (p proto.Deck) {
 	d, err := getDecks(userid)
 	if err != nil {
 		return
 	}
-	if d.Def == 0 {
-		b := GetDecks(userid)
-		if len(b.List) != 0 {
-			return b.List[0]
-		}
-	}
-	return GetDeck(d.Def)
+
+	return GetDeck(userid, d.Def)
 }
 
-func SetDef(userid uint64, deckid uint64) {
-	d, err := getDecks(userid)
-	if err != nil {
-		return
-	}
-	d.Def = deckid
-	db.Save(&d)
-}
+//func SetDef(userid uint64, deckid uint64) {
+//	d, err := getDecks(userid)
+//	if err != nil {
+//		return
+//	}
+//	d.Def = deckid
+//	db.Save(&d)
+//}
 
 func GetDecks(userid uint64) (odecks proto.DecksInfo) {
-	if err := db.Where(&proto.DecksInfo{UserId: userid}).Find(&odecks).Error; err != nil {
+	if userid == 0 {
+		return
+	}
+	if err := db.Where(&proto.DecksInfo{UserId: userid}).First(&odecks).Error; err != nil {
 		NewDecks(userid)
-		if err := db.Where(&proto.DecksInfo{UserId: userid}).Find(&odecks).Error; err != nil {
+		if err := db.Where(&proto.DecksInfo{UserId: userid}).First(&odecks).Error; err != nil {
 			return
 		}
 	}
 
 	db.Where(&proto.Deck{UserId: odecks.UserId}).Find(&odecks.List)
 	for k, v := range odecks.List {
-		db.Where(&proto.Card{DeckId: v.Id, InPos: proto.InMain}).Find(&odecks.List[k].Main)
-		db.Where(&proto.Card{DeckId: v.Id, InPos: proto.InExtra}).Find(&odecks.List[k].Extra)
-		db.Where(&proto.Card{DeckId: v.Id, InPos: proto.InSide}).Find(&odecks.List[k].Side)
+		db.Where(&proto.Card{DeckId: v.Id}).Find(&odecks.List[k].Main)
 	}
+
 	return
 }
 
-func GetDeck(deckid uint64) (d proto.Deck) {
-	db.Where(&proto.Deck{Id: deckid}).Find(&d)
+func GetDeck(userid uint64, name string) (odeck proto.Deck) {
+	if userid == 0 {
+		return
+	}
+	if err := db.Where(&proto.Deck{UserId: userid, Name: name}).First(&odeck).Error; err != nil {
+		return
+	}
+	db.Where(&proto.Card{DeckId: odeck.Id}).Find(&odeck.Main)
 	return
 }
 
-func SetDeck(userid uint64, deckid uint64, gr proto.Deck) {
+func SetDeck(userid uint64, name string, cas []proto.Card) {
+	if userid == 0 {
+		return
+	}
 	var odeck proto.Deck
-	for k, _ := range gr.Main {
-		gr.Main[k].InPos = proto.InMain
-	}
 
-	for k, _ := range gr.Extra {
-		gr.Extra[k].InPos = proto.InExtra
-	}
-
-	for k, _ := range gr.Side {
-		gr.Side[k].InPos = proto.InSide
-	}
-
-	gr.UserId = userid
-	if err := db.Where(&proto.Deck{Id: deckid, UserId: userid}).First(&odeck).Error; err != nil || odeck.Id != deckid {
+	if err := db.Where(&proto.Deck{UserId: userid, Name: name}).First(&odeck).Error; err != nil {
 		return
 	}
 
-	//db.Where(&proto.Card{DeckId: odeck.Id, Index: 0}).Delete(&proto.Card{})
 	db.Where(&proto.Card{DeckId: odeck.Id}).Delete(&proto.Card{})
-
-	db.Save(&gr)
+	odeck.Main = cas
+	db.Save(&odeck)
 
 	return
 }
