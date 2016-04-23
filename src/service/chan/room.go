@@ -11,8 +11,8 @@ import (
 	"github.com/wzshiming/base"
 	"github.com/wzshiming/server/agent"
 
+	cards "github.com/wzshiming/ygo_cards"
 	ygo "github.com/wzshiming/ygo_core"
-	cards "github.com/wzshiming/ygo_core/ygo_cards"
 
 	//"ygo/defaul"
 )
@@ -41,11 +41,11 @@ func NewRoom() *Room {
 		timer:     base.NewTimer(time.Second),
 	}
 	go r.timer.Start()
-	go r.Games()
+	go r.games()
 	return &r
 }
 
-func (r *Room) YGOGameReady(sesss []*agent.Session) {
+func (r *Room) gameReady(sesss []*agent.Session) {
 	uniq := sesss[0].ToUint()
 	room := r.roomGame.GetChild(fmt.Sprint(uniq))
 
@@ -62,9 +62,34 @@ func (r *Room) YGOGameReady(sesss []*agent.Session) {
 			return
 		})
 	}
+
 	game := ygo.NewYGO(room)
+	for _, v := range sesss {
+
+		vc := v
+
+		var id uint
+		vc.Data.Get("userid", &id)
+		var name string
+		vc.Data.Get("username", &name)
+		var deck proto.Deck
+		vc.Data.Get("deck", &deck)
+
+		yd := ygo.NewDeck()
+		for _, c := range deck.Main {
+			yd.MainAddCard(c.Index, c.Size)
+		}
+		//		p := game.GetPlayer(vc)
+		//		//game.InitForPlayer()
+		//		p.Name = name
+		//		p.Id = id
+		//		p.Decks = yd
+
+		game.InitForPlayer(vc, id, name, yd)
+	}
+
 	r.gameList[room.Name()] = game
-	game.CardVer = cardBag
+	game.SetCardVer(cardBag)
 	r.timer.NewNode(time.Second*10, func() {
 		if !room.IsReady() {
 			game.GameOver()
@@ -72,12 +97,39 @@ func (r *Room) YGOGameReady(sesss []*agent.Session) {
 	})
 }
 
-func (r *Room) YGOGamePlay(yg *ygo.YGO) {
+//func (r *Room) gameReady(sesss []*agent.Session) {
+//	uniq := sesss[0].ToUint()
+//	room := r.roomGame.GetChild(fmt.Sprint(uniq))
+
+//	for _, v := range sesss {
+//		v.Mutex(func() {
+//			r.roomHall.ToChild(v, "Game")
+//			code := r.roomMatc.Leave(v)
+//			room.Join(v, nil)
+//			v.Push(map[string]string{
+//				"status": "init",
+//			}, code.Head)
+//			v.Data.Set("gameYGO", room.Name())
+//			//base.INFO(v.Rooms.Data())
+//			return
+//		})
+//	}
+//	game := ygo.NewYGO(room)
+//	r.gameList[room.Name()] = game
+//	game.CardVer = cardBag
+//	r.timer.NewNode(time.Second*10, func() {
+//		if !room.IsReady() {
+//			game.GameOver()
+//		}
+//	})
+//}
+
+func (r *Room) gamePlay(yg *ygo.YGO) {
 	yg.Loop()
-	r.YGOGameOver(yg)
+	r.gameOver(yg)
 }
 
-func (r *Room) YGOGameOver(yg *ygo.YGO) {
+func (r *Room) gameOver(yg *ygo.YGO) {
 
 	yg.Room.ForEach(func(s *agent.Session) {
 		s.Mutex(func() {
@@ -89,51 +141,60 @@ func (r *Room) YGOGameOver(yg *ygo.YGO) {
 	delete(r.gameList, yg.Room.Name())
 }
 
-func (r *Room) Games() {
+func (r *Room) games() {
 	tick := time.Tick(time.Second * 1)
+
+	var ogn, ohn, omn int
+
 	for {
 		<-tick
-		size := r.roomMatc.Len()
-		msg := map[string]int{
-			"inGameNum":  len(r.gameList),
-			"inHallNum":  r.roomHall.Len(),
-			"inMatchNum": size,
+
+		gn := len(r.gameList)
+		hn := r.roomHall.Len()
+		mn := r.roomMatc.Len()
+
+		if gn != ogn || hn != ohn || mn != omn {
+			msg := map[string]int{
+				"inGameNum":  gn,
+				"inHallNum":  hn,
+				"inMatchNum": mn,
+			}
+			r.roomHall.Broadcast(msg)
+			ogn = gn
+			ohn = hn
+			omn = mn
 		}
-		r.roomHall.Broadcast(msg)
-		if size >= 2 {
+
+		if mn >= 2 {
 			if g := r.roomMatc.GroupFromSize(2); g != nil {
-				r.YGOGameReady(g)
+				r.gameReady(g)
 			}
 		}
 	}
 }
 
 // 搜索卡牌
-func (r *Room) CardFind(args agent.Request, reply *agent.Response) error {
-	args.Mutex(reply, func() {
+//func (r *Room) CardFind(args agent.Request, reply *agent.Response) error {
+//	args.Mutex(reply, func() {
 
-		var gr struct {
-			Query string `json:"query"`
-		}
-		args.Request.DeJson(&gr)
-		b := r.saveQuery[gr.Query]
-		if b == nil {
-			b = base.EnJson(cardBag.Find(gr.Query, true))
-			r.saveQuery[gr.Query] = b
-		}
-		reply.ReplyEncode(b)
-	})
-	return nil
-}
+//		var gr struct {
+//			Query string `json:"query"`
+//		}
+//		args.Request.DeJson(&gr)
+//		b := r.saveQuery[gr.Query]
+//		if b == nil {
+//			b = base.EnJson(cardBag.Find(gr.Query, true))
+//			r.saveQuery[gr.Query] = b
+//		}
+//		reply.ReplyEncode(b)
+//	})
+//	return nil
+//}
 
 // 搜索卡牌
-func (r *Room) CardFilter(args agent.Request, reply *agent.Response) error {
+func (r *Room) CardAll(args agent.Request, reply *agent.Response) error {
 	args.Mutex(reply, func() {
-		var gr struct {
-			Name string `json:"name"`
-		}
-		args.Request.DeJson(&gr)
-		reply.Reply(cardBag.Filter(gr.Name))
+		reply.Reply(cardBag.AllIsValid())
 	})
 	return nil
 }
@@ -272,7 +333,7 @@ func (r *Room) GetDecksInfo(args agent.Request, reply *agent.Response) error {
 			id = 1
 		}
 		odeck := GetDecks(id)
-		base.INFO(odeck)
+		//base.INFO(odeck)
 		reply.Reply(odeck)
 		//reply.ReplyError("")
 	})
@@ -374,11 +435,11 @@ func (r *Room) GetDeckForName(args agent.Request, reply *agent.Response) error {
 
 func (r *Room) GameRegister(args agent.Request, reply *agent.Response) error {
 	args.Mutex(reply, func() {
-		r.GameBC(args, reply, func(game *ygo.YGO, sess *agent.Session) error {
+		r.gameBC(args, reply, func(game *ygo.YGO, sess *agent.Session) error {
 			game.Room.SetHead(sess, args.Head)
 
 			if game.Room.IsReady() {
-				go r.YGOGamePlay(game)
+				go r.gamePlay(game)
 			}
 			return nil
 		})
@@ -390,10 +451,10 @@ func (r *Room) GameRegister(args agent.Request, reply *agent.Response) error {
 
 func (r *Room) GameCardActionSelectable(args agent.Request, reply *agent.Response) error {
 	args.Mutex(reply, func() {
-		err := r.GameBC(args, reply, func(game *ygo.YGO, sess *agent.Session) error {
+		err := r.gameBC(args, reply, func(game *ygo.YGO, sess *agent.Session) error {
 			ar := proto.SelectableRequest{}
 			args.Request.DeJson(&ar)
-			game.GetPlayer(sess).AddCode(ar.Uniq, ar.Method)
+			game.AddCodeForPlayer(sess, ar.Uniq, ar.Method)
 			return nil
 		})
 		if err != nil {
@@ -403,7 +464,7 @@ func (r *Room) GameCardActionSelectable(args agent.Request, reply *agent.Respons
 	return nil
 }
 
-func (r *Room) GameBC(args agent.Request, reply *agent.Response, bc func(*ygo.YGO, *agent.Session) error) error {
+func (r *Room) gameBC(args agent.Request, reply *agent.Response, bc func(*ygo.YGO, *agent.Session) error) error {
 
 	var name string
 

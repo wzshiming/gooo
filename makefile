@@ -8,20 +8,21 @@ CP            := cp -rf
 CD            := cd
 MAKE          := make
 MKDIR         := mkdir -p
-GO            := if [ -z $$GOPATH ]; then export GOPATH=`pwd` ;fi && go
+GO            := if [ -z $$GOPATH ]; then export GOPATH=`pwd` ; export GOBIN=`pwd`/bin ;fi && go
 GIT           := git
 ECHO          := echo
 ECHO_DATE     := echo `date +%R:%S`
 FLAGS         := -ldflags "-H windowsgui"
 REM           := 1>/dev/null 2>&1
 
-.PHONY:  all build makefile test run clean_pkg clean number_build number_build_record
+.PHONY:  all build makefile test run clean_pkg clean_bin clean number_build number_build_record
 
 default: build run
 
 all: clean info test build clean_pkg run
 
-build: number_build dev number_build_record 
+build: number_build dev number_build_record  
+
 
 dev: clean_bin
 	@$(ECHO_DATE) Dev...
@@ -32,7 +33,7 @@ prod: clean_bin
 	@$(ECHO_DATE) Prod...
 	@$(GO) install -v github.com/wzshiming/server/...
 	@$(GO) install -v service/...
-	
+
 test:
 	@$(GO) test github.com/wzshiming/...
 	@$(GO) test service/...
@@ -48,6 +49,8 @@ run: shutdown
 run_prod:
 	@$(ECHO_DATE) Prod Running...
 	@$(CD) $(BUILD_DIR) && ./master 
+
+shut: shutdown
 
 shutdown: 
 	@$(ECHO_DATE) Shutdown...
@@ -75,7 +78,3 @@ number_build_record: number_build.txt
 
 get: 
 	@$(GO) get -v service/...
-	
-
-
-

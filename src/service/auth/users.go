@@ -16,25 +16,29 @@ func NewUsers() *Users {
 	r := Users{
 		room: agent.NewRoom("Users"),
 	}
-	i := 0
+	//i := 0
+	o := 0
 	tick := time.Tick(time.Second * 5)
 	go func() {
 		for {
 			<-tick
-			base.NOTICE("User size:", r.room.Len())
-			i++
-			r.room.ForEach(func(sess *agent.Session) {
-				sess.Mutex(func() {
+			if o != r.room.Len() {
+				base.NOTICE("User size:", r.room.Len())
+				o = r.room.Len()
+			}
+			//			i++
+			//			r.room.ForEach(func(sess *agent.Session) {
+			//				sess.Mutex(func() {
 
-					i := 0
-					sess.Data.Get("size", &i)
-					i++
-					sess.Data.Set("size", i)
+			//					i := 0
+			//					sess.Data.Get("size", &i)
+			//					i++
+			//					sess.Data.Set("size", i)
 
-					//base.INFO(sess.Rooms.Data())
-					//sess.PushForm(map[string]int{"a": d.Size}, r.room.Head(sess))
-				})
-			})
+			//					//base.INFO(sess.Rooms.Data())
+			//					//sess.PushForm(map[string]int{"a": d.Size}, r.room.Head(sess))
+			//				})
+			//			})
 		}
 	}()
 	return &r
@@ -105,13 +109,13 @@ func (r *Users) LogIn(args agent.Request, reply *agent.Response) error {
 			reply.ReplyError("auth.useruseing")
 			return
 		}
-		
+
 		args.Session.Data.Set("username", ouser.Username)
 		args.Session.Data.Set("userid", ouser.Id)
 
 		// 用户登入
 		r.room.JoinFrom(uint(ouser.Id), args.Session, args.Head)
-		
+
 		reply.ReplyError("")
 	})
 
@@ -160,40 +164,40 @@ func (r *Users) ChangePwd(args agent.Request, reply *agent.Response) error {
 	return nil
 }
 
-func (r *Users) Unregister(args agent.Request, reply *agent.Response) error {
-	args.Mutex(reply, func() {
-		var p proto.UnregisterRequest
-		args.Request.DeJson(&p)
+//func (r *Users) Unregister(args agent.Request, reply *agent.Response) error {
+//	args.Mutex(reply, func() {
+//		var p proto.UnregisterRequest
+//		args.Request.DeJson(&p)
 
-		// 判断用户是否登入
-		if !r.room.IsExist(args.Session) {
-			reply.ReplyError("auth.nologin")
-			return
-		}
+//		// 判断用户是否登入
+//		if !r.room.IsExist(args.Session) {
+//			reply.ReplyError("auth.nologin")
+//			return
+//		}
 
-		// 检查用户是否存在
-		var ouser proto.User
-		if err := db.Where(&proto.User{Username: p.Username}).First(&ouser).Error; err != nil {
-			reply.ReplyError("auth.pwderr")
-			return
-		}
+//		// 检查用户是否存在
+//		var ouser proto.User
+//		if err := db.Where(&proto.User{Username: p.Username}).First(&ouser).Error; err != nil {
+//			reply.ReplyError("auth.pwderr")
+//			return
+//		}
 
-		// 判断用户 账号密码是否正确
-		if ouser.Username != p.Username {
-			reply.ReplyError("auth.pwderr")
-			return
-		}
-		if ouser.Password != p.Password {
-			reply.ReplyError("auth.pwderr")
-			return
-		}
+//		// 判断用户 账号密码是否正确
+//		if ouser.Username != p.Username {
+//			reply.ReplyError("auth.pwderr")
+//			return
+//		}
+//		if ouser.Password != p.Password {
+//			reply.ReplyError("auth.pwderr")
+//			return
+//		}
 
-		// 删除用户
-		db.Delete(ouser)
-		reply.ReplyError("")
-	})
-	return nil
-}
+//		// 删除用户
+//		db.Delete(ouser)
+//		reply.ReplyError("")
+//	})
+//	return nil
+//}
 
 func (r *Users) LogOut(args agent.Request, reply *agent.Response) error {
 	args.Mutex(reply, func() {

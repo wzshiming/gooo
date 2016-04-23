@@ -8,17 +8,6 @@ type SelectableRequest struct {
 	Method uint `json:"method"`
 }
 
-type PlayerInit struct {
-	Hp   int    `json:"hp"`
-	Name string `json:"name"`
-}
-
-type GameInitResponse struct {
-	// user 表示当前游戏中 卡片的id
-	Index int          `json:"index"` //自身的索引
-	Users []PlayerInit `json:"users"`
-}
-
 //type SelectDeckRequest struct {
 //	ID uint `json:"id"`
 //}
